@@ -1,0 +1,103 @@
+{
+  "announcement.thedungeon.open_dungeon" : "A new dungeon has been opened",
+  "announcement.thedungeon.seconds_left" : "%s seconds left until dungeon collapse",
+  "announcement.thedungeon.minutes_left" : "%s minutes left until dungeon collapse",
+
+  "message.thedungeon.view_time_closed" : "The dungeon is closed",
+  "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the gamerules",
+  "message.thedungeon.view_time_seconds" : "%s seconds left until dungeon collapse",
+  "message.thedungeon.view_time_minutes" : "%s minutes and %s seconds left until dungeon collapse",
+
+  "message.thedungeon.equipped_wrong_armor" : "You feel the armor hurt your skin as you rush to take it off",
+
+  "message.thedungeon.dungeon_portal.non_dungeon_items": "You are carrying items that don't belong in the dungeon",
+  "message.thedungeon.dungeon_portal.dungeon_closed": "The dungeon is closed",
+
+  "jei.thedungeon.infusion_recipe_title" : "In World Infusion",
+
+  "advancements.thedungeon.root.title" : "The Dungeon",
+  "advancements.thedungeon.root.description" : "All things dungeneering",
+  "advancements.thedungeon.dungeon_essence_shard.title" : "A Piece Of Dungeon",
+  "advancements.thedungeon.dungeon_essence_shard.description" : "You can feel it resonating with something",
+  "advancements.thedungeon.infused_alloy.title" : "Infused Alloying",
+  "advancements.thedungeon.infused_alloy.description" : "A strong metal but quite heavy",
+
+  "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
+  "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
+  "creativetab.thedungeon.dungeon_blocks" : "Dungeon Blocks",
+
+  "entity.thedungeon.test_dummy" : "Test Dummy",
+  "entity.thedungeon.death_knight" : "Death Knight",
+  "entity.thedungeon.skeleton_knight" : "Skeleton Knight",
+  "entity.thedungeon.cave_goblin" : "Cave Goblin",
+
+  "item.thedungeon.dungeon_item": "Dungeon Attuned Item",
+
+  "item.thedungeon.tooltip.full_set_bonus": "Full Set Bonus:",
+
+  "item.thedungeon.infused_alloy_helmet": "Infused Alloy Helmet",
+  "item.thedungeon.infused_alloy_chestplate": "Infused Alloy Chestplate",
+  "item.thedungeon.infused_alloy_leggings": "Infused Alloy Leggings",
+  "item.thedungeon.infused_alloy_boots": "Infused Alloy Boots",
+  "item.thedungeon.infused_alloy_armor.set_bonus": "+%s Max Health",
+
+  "item.thedungeon.scholar_helmet" : "Dungeon Scholar's Helmet",
+  "item.thedungeon.scholar_chestplate" : "Dungeon Scholar's Chestplate",
+  "item.thedungeon.scholar_leggings" : "Dungeon Scholar's Leggings",
+  "item.thedungeon.scholar_boots" : "Dungeon Scholar's Boots",
+  "item.thedungeon.scholar_armor.set_bonus" : "+%s Speed",
+
+  "item.thedungeon.shattered_portal_core": "Shattered Portal Core",
+  "item.thedungeon.portal_core": "Portal Core",
+  "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
+  "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
+
+  "item.thedungeon.dungeon_clock": "Dungeon Clock",
+  "item.thedungeon.test_dummy": "Infused Test Dummy",
+
+  "item.thedungeon.dungeon_debug_tool": "Dungeon Debug Tool",
+  "item.thedungeon.dungeon_debug_tool.use": "Dungeon Regenerated",
+  "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
+
+  "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
+  "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
+  "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
+
+  "block.thedungeon.dungeon_portal" : "Dungeon Portal",
+  "block.thedungeon.dungeon_portal_unstable" : "Unstable Dungeon Portal",
+
+  "block.thedungeon.infused_dirt" : "Infused Dirt",
+  "block.thedungeon.infused_clay" : "Infused Clay",
+  "block.thedungeon.infused_sand" : "Infused Sand",
+  "block.thedungeon.infused_gravel" : "Infused Gravel",
+
+  "block.thedungeon.infused_stone" : "Infused Stone",
+  "block.thedungeon.infused_deepslate" : "Infused Deepslate",
+  "block.thedungeon.infused_stone_bricks" : "Infused Stone Bricks",
+
+  "block.thedungeon.infused_netherrack" : "Infused Netherrack",
+  "block.thedungeon.infused_soul_sand" : "Infused Soul Sand",
+  "block.thedungeon.infused_soul_soil" : "Infused Soul Soil",
+
+  "block.thedungeon.infused_end_stone" : "Infused End Stone",
+  "block.thedungeon.infused_end_stone_bricks" : "Infused End Stone Bricks",
+
+  "block.thedungeon.infused_glass" : "Infused Glass",
+  "block.thedungeon.infused_thread": "Infused Thread",
+
+  "death.attack.thedungeon.unstable_portal":"%1$s tried to use an unstable portal",
+  "death.attack.thedungeon.dungeon_reset":"%1$s was consumed by the dungeon",
+
+  "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
+
+
+  "attribute.thedungeon.title.hand" : "When Held:",
+  "attribute.thedungeon.title.mainhand" : "When In Main Hand:",
+  "attribute.thedungeon.title.offhand" : "When In Off Hand:",
+  "attribute.thedungeon.title.armor" : "When Equipped:",
+  "attribute.thedungeon.title.full_armor_set" : "Full Set Bonus:",
+
+  "attribute.thedungeon.name.generic.incoming_damage_reduction" : "Incoming Damage Reduction",
+  "attribute.thedungeon.name.generic.mob_reach" : "Mob Reach",
+  "attribute.thedungeon.name.generic.enemy_aggro" : "Enemy Aggro"
+}

@@ -1,0 +1,24 @@
+//TODO
+
+weapons waxing moon blade and waning moon blade (combine to full moon blade that combines abilities)
+
+achievement description for when player tries to take non dungeon item (Only the Attuned may pass. The realm devours all else.)
+
+Corrupted Gear
+- High-tier dungeon gear slowly corrupts the player, granting power (e.g., +50% damage) but causing debuffs can be Cleansed to remove or reduce debuffs.
+
+Dungeon Pets
+
+A hidden mini-boss who was once the dungeon’s keeper. Defeating him unlocks a secret "Creator’s Forge" to craft OP gear.
+
+Temporary Portal: Starter portals that only grant single access, forcing players to scavenge quickly in the dungeon for better gear to build a permanent portal.
+
+Essencebound Armor
+    Full Set Bonus: Absorbs 1 shard from inventory to negate a lethal hit (60s cooldown).
+
+Soulbound Totem
+    Single-use item that prevents item loss on death (consumed)
+
+Castle Mobs:
+    SkeletalKnight
+    ShadeKnight

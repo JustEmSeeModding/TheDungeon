@@ -1,0 +1,10 @@
+{
+  "type": "thedungeon:dungeon_infusion",
+  "ingredient": {
+    "item": "minecraft:deepslate"
+  },
+  "result": {
+    "count": 1,
+    "id": "thedungeon:infused_deepslate"
+  }
+}

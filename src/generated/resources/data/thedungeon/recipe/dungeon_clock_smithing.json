@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "thedungeon:infused_alloy_ingot"
+  },
+  "base": {
+    "item": "minecraft:clock"
+  },
+  "result": {
+    "count": 1,
+    "id": "thedungeon:dungeon_clock"
+  },
+  "template": {
+    "item": "thedungeon:dungeon_essence_shard"
+  }
+}

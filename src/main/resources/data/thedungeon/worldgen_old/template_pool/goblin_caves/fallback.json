@@ -1,0 +1,34 @@
+{
+  "name": "the_dungeon:goblin_caves/halls",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "the_dungeon:goblin_caves/halls/stone_cave_end_fallback",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "the_dungeon:goblin_caves/halls/stone_cave_elevation_end_top_fallback",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "the_dungeon:goblin_caves/halls/stone_cave_elevation_end_bottom_fallback",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}
+

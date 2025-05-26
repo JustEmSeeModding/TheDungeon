@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "thedungeon:block/dungeon_portal_unstable"
+  }
+}

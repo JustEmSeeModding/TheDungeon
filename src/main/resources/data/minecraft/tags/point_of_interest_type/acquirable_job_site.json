@@ -1,0 +1,9 @@
+{
+  "replacable": false,
+  "values" : [
+    {
+      "id": "thedungeon:portal_poi",
+      "required" : false
+    }
+  ]
+}

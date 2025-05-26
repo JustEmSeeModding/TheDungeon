@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "thedungeon:block/dungeon_portal_unstable"
+    }
+  }
+}

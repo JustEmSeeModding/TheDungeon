@@ -1,0 +1,90 @@
+package net.emsee.thedungeon.events;
+
+import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
+import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+
+
+public final class ModDungeonDimensionEvents {
+    public static void PlayerTeleportDungeon(Player player, int portalID) {
+        Level level = player.level();
+        if (!level.isClientSide) {
+            ServerPlayer serverPlayer = (ServerPlayer) player;
+            MinecraftServer server = level.getServer();
+            assert server!=null;
+
+            BlockPos teleportPos;
+            ResourceKey<Level> resourceKey;
+
+            boolean returnFromDungeon = player.level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY);
+            if (returnFromDungeon) {
+                teleportPos = serverPlayer.getRespawnPosition();
+                if (teleportPos == null) {
+                    teleportPos = server.overworld().getSharedSpawnPos();
+                }
+                resourceKey = serverPlayer.getRespawnDimension();
+            } else {
+                if (!player.isCreative() && !CheckInventory(player)) return;
+                //teleportPos = GlobalDungeonManager.centerPos.above(3);
+                teleportPos = GlobalDungeonManager.getPortalPosition(server, portalID).above(2);
+                resourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
+
+            }
+
+            ServerLevel portalDimension = server.getLevel(resourceKey);
+
+            teleport(player, portalDimension, teleportPos);
+            setPlayerGameMode(player, returnFromDungeon);
+        }
+    }
+
+    private static boolean CheckInventory(Player player) {
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.getCount() == 0) continue;
+            if (!(stack.getItem() instanceof IDungeonCarryItem ||
+                    (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof  IDungeonCarryItem))) {
+                player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items"), false);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void teleport(Player player, ServerLevel portalDimension, BlockPos teleportPos) {
+        if (portalDimension != null/* && !eventPlayer.isPassenger()*/) {
+            player.teleportTo(portalDimension, teleportPos.getX() + .5, teleportPos.getY(), teleportPos.getZ() + .5, RelativeMovement.ALL, player.getYRot(), player.getXRot());
+            player.removeAllEffects();
+            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0), player);
+            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, 5), player);
+            player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 5), player);
+        }
+    }
+
+    public static void setPlayerGameMode(Player player, boolean returnFromDungeon) {
+        if (player instanceof ServerPlayer serverPlayer && !player.isCreative()) {
+            if (returnFromDungeon) {
+                int gameMode = player.getData(ModAttachmentTypes.SAVED_GAMEMODE);
+                serverPlayer.setGameMode(GameType.byId(gameMode));
+            } else {
+                player.setData(ModAttachmentTypes.SAVED_GAMEMODE, serverPlayer.gameMode.getGameModeForPlayer().getId());
+                serverPlayer.setGameMode(GameType.ADVENTURE);
+            }
+
+        }
+    }
+}

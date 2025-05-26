@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "thedungeon:dungeon_essence_shard"
+    }
+  ],
+  "result": {
+    "components": {
+      "patchouli:book": "thedungeon:dungeon_guide"
+    },
+    "count": 1,
+    "id": "patchouli:guide_book"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "thedungeon:thedungeon/root",
+  "criteria": {
+    "pickup_dungeon_essence_shard": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thedungeon:dungeon_essence_shard"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.thedungeon.dungeon_essence_shard.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thedungeon:dungeon_essence_shard"
+    },
+    "title": {
+      "translate": "advancements.thedungeon.dungeon_essence_shard.title"
+    }
+  },
+  "requirements": [
+    [
+      "pickup_dungeon_essence_shard"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

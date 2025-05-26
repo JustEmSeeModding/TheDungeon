@@ -1,0 +1,13 @@
+{
+  "placement" : {
+    "type" : "minecraft:random_spread",
+    "salt": 173829143,
+    "separation": 8,
+    "spacing": 34,
+    "spread_type": "triangular"
+  },
+  "structures" : [{
+    "structure" : "the_dungeon:goblin_caves",
+    "weight" : 1
+  }]
+}

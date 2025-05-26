@@ -1,0 +1,7 @@
+{
+  "name": "Dungeoneering Logbook",
+  "landing_text": "Welcome to The Dungeon",
+  "version": 1,
+  "creative_tab": "thedungeon:dungeon_tools_tab",
+  "use_resource_pack": true
+}

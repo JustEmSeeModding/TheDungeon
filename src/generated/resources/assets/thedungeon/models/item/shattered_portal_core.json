@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thedungeon:item/shattered_portal_core"
+  }
+}

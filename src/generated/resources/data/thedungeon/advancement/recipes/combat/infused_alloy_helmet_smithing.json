@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_infused_alloy_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thedungeon:infused_alloy_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "thedungeon:infused_alloy_helmet_smithing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_infused_alloy_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "thedungeon:infused_alloy_helmet_smithing"
+    ]
+  }
+}

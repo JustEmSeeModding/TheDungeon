@@ -1,0 +1,16 @@
+{
+  "name": "the_dungeon:goblin_caves/spawns",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "name" : "goblin_caves/spawns/stone_cave_spawn",
+        "location": "the_dungeon:goblin_caves/spawns/stone_cave_spawn",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

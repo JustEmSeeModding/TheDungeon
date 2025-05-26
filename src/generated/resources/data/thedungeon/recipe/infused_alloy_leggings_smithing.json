@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "thedungeon:infused_alloy_ingot"
+  },
+  "base": {
+    "item": "minecraft:iron_leggings"
+  },
+  "result": {
+    "count": 1,
+    "id": "thedungeon:infused_alloy_leggings"
+  },
+  "template": {
+    "item": "thedungeon:dungeon_essence_shard"
+  }
+}

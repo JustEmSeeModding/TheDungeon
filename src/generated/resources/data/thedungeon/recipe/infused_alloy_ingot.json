@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thedungeon:dungeon_essence_shard"
+    },
+    {
+      "item": "thedungeon:dungeon_essence_shard"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thedungeon:infused_alloy_ingot"
+  }
+}
