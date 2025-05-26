@@ -18,5 +18,8 @@ public final class ModModelLayers {
             TheDungeon.resourceLocation("skeleton_knight"), "main");
 
     public static final ModelLayerLocation CAVE_GOBLIN = new ModelLayerLocation(
-            TheDungeon.resourceLocation("cave_goblin"), "main");;
+            TheDungeon.resourceLocation("cave_goblin"), "main");
+
+    public static final ModelLayerLocation SHADOW_GOBLIN = new ModelLayerLocation(
+            TheDungeon.resourceLocation("shadow_goblin"), "main");
 }

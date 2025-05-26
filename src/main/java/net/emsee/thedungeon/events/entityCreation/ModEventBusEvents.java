@@ -10,6 +10,7 @@ import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightModel;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightModel;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
+import net.emsee.thedungeon.entity.custom.goblin.ShadowGoblinEntity;
 import net.emsee.thedungeon.entity.custom.knight.DeathKnightEntity;
 import net.emsee.thedungeon.entity.custom.knight.SkeletonKnightEntity;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,6 +26,7 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.DEATH_KNIGHT, DeathKnightModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SKELETON_KNIGHT, SkeletonKnightModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_GOBLIN, CaveGoblinModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SHADOW_GOBLIN, CaveGoblinModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -33,5 +35,6 @@ public class ModEventBusEvents {
         event.put(ModEntities.DEATH_KNIGHT.get(), DeathKnightEntity.createAttributes().build());
         event.put(ModEntities.SKELETON_KNIGHT.get(), SkeletonKnightEntity.createAttributes().build());
         event.put(ModEntities.CAVE_GOBLIN.get(), CaveGoblinEntity.createAttributes().build());
+        event.put(ModEntities.SHADOW_GOBLIN.get(), ShadowGoblinEntity.createAttributes().build());
     }
 }

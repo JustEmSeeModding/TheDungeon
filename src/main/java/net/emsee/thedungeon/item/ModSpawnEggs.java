@@ -28,6 +28,10 @@ public final class ModSpawnEggs {
             () -> new DeferredSpawnEggItem(ModEntities.CAVE_GOBLIN, 0x808080, 0xB1B1B1,
                     new Item.Properties()));
 
+    public static final DeferredItem<Item> SHADOW_GOBLIN_SPAWN_EGG = ITEMS.register("shadow_goblin_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.SHADOW_GOBLIN, 0x000000, 0xB1B1B1,
+                    new Item.Properties()));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
