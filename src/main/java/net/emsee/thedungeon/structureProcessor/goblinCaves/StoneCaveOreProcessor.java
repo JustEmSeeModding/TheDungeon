@@ -24,15 +24,16 @@ public class StoneCaveOreProcessor extends StructureProcessor {
 
     public static final MapCodec<StoneCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final Map<Block, Integer> defaultMap = Map.of(
-            Blocks.STONE,250,
-            Blocks.ANDESITE,250,
-            Blocks.COBBLESTONE,250,
-            Blocks.TUFF,250,
-            Blocks.GOLD_ORE, 10,
-            Blocks.COAL_ORE, 6,
-            Blocks.IRON_ORE, 4,
-            Blocks.DIAMOND_ORE, 2);
+    private final Map<Block, Integer> defaultMap = Util.make(Maps.newHashMap(), (map) -> {
+        map.put(Blocks.STONE, 250);
+        map.put(Blocks.ANDESITE, 250);
+        map.put(Blocks.COBBLESTONE, 250);
+        map.put(Blocks.TUFF, 250);
+        map.put(Blocks.GOLD_ORE, 10);
+        map.put(Blocks.COAL_ORE, 6);
+        map.put(Blocks.IRON_ORE, 4);
+        map.put(Blocks.DIAMOND_ORE,2);
+    });
 
     private final Map<Block, Map<Block, Integer>> replacements = Util.make(Maps.newHashMap(), (map) -> {
         map.put(Blocks.STONE, defaultMap);

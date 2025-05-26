@@ -16,34 +16,39 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class GildedCaveOreProcessor extends StructureProcessor {
-    public static final GildedCaveOreProcessor INSTANCE = new GildedCaveOreProcessor();
+public class StoneToDeepslateCaveProcessor extends StructureProcessor {
+    public static final StoneToDeepslateCaveProcessor INSTANCE = new StoneToDeepslateCaveProcessor();
 
-    public static final MapCodec<GildedCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<StoneToDeepslateCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+
 
     private final Map<Block, Integer> defaultMap = Util.make(Maps.newHashMap(), (map) -> {
-        map.put(Blocks.BLACKSTONE, 10);
-        map.put(Blocks.GILDED_BLACKSTONE, 1);
+        map.put(Blocks.DEEPSLATE,500);
+        map.put(Blocks.COBBLED_DEEPSLATE,500);
+        map.put(Blocks.DEEPSLATE_GOLD_ORE, 10);
+        map.put(Blocks.DEEPSLATE_COAL_ORE, 6);
+        map.put(Blocks.DEEPSLATE_IRON_ORE, 4);
+        map.put(Blocks.DEEPSLATE_DIAMOND_ORE, 2);
     });
 
     private final Map<Block, Map<Block, Integer>> replacements = Util.make(Maps.newHashMap(), (map) -> {
-        map.put(Blocks.BLACKSTONE, defaultMap);
+        map.put(Blocks.STONE, defaultMap);
     });
 
-    private GildedCaveOreProcessor() {}
+    private StoneToDeepslateCaveProcessor() {}
 
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());
-        Map <Block, Integer> options = this.replacements.get(relativeBlockInfo.state().getBlock());
+        Block oldBlock = relativeBlockInfo.state().getBlock();
+        Map <Block, Integer> options = this.replacements.get(oldBlock);
         if (options == null)
             return relativeBlockInfo;
         Block block = ListAndArrayUtils.getRandomFromWeightedMapI(options, randomsource);
-        if (block == null) {
+        if (block == null || block == oldBlock) {
             return relativeBlockInfo;
         } else {
             BlockState blockstate = relativeBlockInfo.state();
