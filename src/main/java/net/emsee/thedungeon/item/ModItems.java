@@ -57,8 +57,8 @@ public final class ModItems {
     public static final DeferredItem<DungeonScholarArmorItem> SCHOLAR_BOOTS = ITEMS.register("scholar_boots",
             () -> new DungeonScholarArmorItem(ModArmorMaterials.DUNGEON_SCHOLAR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
 
-    //public static final DeferredItem<DungeonDiggerItem> TEST_TOOL = ITEMS.register("test_tool",
-    //        () ->new DungeonDiggerItem(Tiers.DIAMOND, BlockTags.MINEABLE_WITH_PICKAXE, new Item.Properties().durability(100)));
+    public static final DeferredItem<DungeonDiggerItem> TEST_TOOL = ITEMS.register("test_tool",
+            () ->new DungeonDiggerItem(Tiers.DIAMOND, BlockTags.MINEABLE_WITH_PICKAXE, new Item.Properties().durability(100)));
 
 
     public static void register(IEventBus eventBus) {

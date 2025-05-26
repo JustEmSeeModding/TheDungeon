@@ -45,8 +45,11 @@ public class GridRoom {
     protected final List<MobSpawnRules> spawnRules = new ArrayList<>();
     protected final StructureProcessorList structureProcessors = new StructureProcessorList(new ArrayList<>());
 
+    // for when the room is the same, but it requires a different equals and hash
+    protected final int differentiationID;
+
     // constructor
-    public GridRoom(int gridWidth, int gridHeight) {
+    public GridRoom(int gridWidth, int gridHeight, int ID) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
 
@@ -63,6 +66,12 @@ public class GridRoom {
         connections.put(GridRoomUtils.Connection.west, 0);
         connections.put(GridRoomUtils.Connection.up, 0);
         connections.put(GridRoomUtils.Connection.down, 0);
+
+        differentiationID=ID;
+    }
+
+    public GridRoom(int gridWidth, int gridHeight) {
+        this (gridWidth, gridHeight, 0);
     }
 
     public GridRoom(GridRoomCollection collection) {
@@ -421,7 +430,7 @@ public class GridRoom {
 
 
     public GridRoom getCopy() {
-        return new GridRoom(gridWidth, gridHeight).
+        return new GridRoom(gridWidth, gridHeight, differentiationID).
                 setSizeHeight(northSizeScale, eastSizeScale, heightScale).
                 setOffsets(connectionOffsets).
                 setConnectionTags(connectionTags).
@@ -456,7 +465,8 @@ public class GridRoom {
                             overrideEndChance == otherRoom.overrideEndChance &&
                             doOverrideEndChance == otherRoom.doOverrideEndChance &&
                             ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
-                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list());
+                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
+                            differentiationID == otherRoom.differentiationID;
         }
         return false;
     }
@@ -481,6 +491,7 @@ public class GridRoom {
         result = 31 * result + (doOverrideEndChance ? 1 : 0);
         result = 31 * result + spawnRules.hashCode();
         result = 31 * result + structureProcessors.list().hashCode();
+        result = 31 * result + differentiationID;
         return result;
     }
 

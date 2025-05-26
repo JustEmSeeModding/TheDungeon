@@ -286,7 +286,7 @@ public final class GlobalDungeonManager {
             tempList.add(saveData.removeFromProgressQueue());
         }
         saveData.addToProgressQueue(dungeon);
-        saveData.addAllToQueue(tempList);
+        saveData.addAllToProgressQueue(tempList);
     }
 
     public static void GenerateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
@@ -297,12 +297,12 @@ public final class GlobalDungeonManager {
     }
 
     public static boolean isOpen(DungeonSaveData saveData) {
-        return saveData.isProgressQueueEmpty() && saveData.getDungeonOpen();
+        return saveData.isProgressQueueEmpty() && saveData.isDungeonOpen();
     }
 
     public static boolean isOpen(MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        return saveData.isProgressQueueEmpty() && saveData.getDungeonOpen();
+        return saveData.isProgressQueueEmpty() && saveData.isDungeonOpen();
     }
 
     public static BlockPos getPortalPosition(MinecraftServer server, int portalID) {

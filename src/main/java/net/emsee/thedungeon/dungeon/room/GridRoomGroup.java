@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon.room;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,8 +12,14 @@ public class GridRoomGroup extends GridRoom {
     protected Map<GridRoom, Integer> gridRooms = new HashMap<>();
 
     //constructor
+    public GridRoomGroup(int gridWidth, int gridHeight, int ID) {
+        super(gridWidth, gridHeight, ID);
+    }
     public GridRoomGroup(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
+    }
+    public GridRoomGroup(GridRoomCollection collection) {
+        super(collection);
     }
 
     //construction methods
@@ -83,7 +90,7 @@ public class GridRoomGroup extends GridRoom {
 
     @Override
     public GridRoom getCopy() {
-        return new GridRoomGroup(gridWidth, gridHeight).
+        return new GridRoomGroup(gridWidth, gridHeight, differentiationID).
                 setRoomMap(gridRooms).
                 setSizeHeight(northSizeScale, eastSizeScale, heightScale).
                 setOffsets(connectionOffsets).
@@ -118,7 +125,8 @@ public class GridRoomGroup extends GridRoom {
                             overrideEndChance == otherGroup.overrideEndChance &&
                             doOverrideEndChance == otherGroup.doOverrideEndChance &&
                             ListAndArrayUtils.listEquals(spawnRules, otherGroup.spawnRules) &&
-                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherGroup.structureProcessors.list());
+                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherGroup.structureProcessors.list()) &&
+                            differentiationID == otherGroup.differentiationID;
         }
         return false;
     }
@@ -144,6 +152,7 @@ public class GridRoomGroup extends GridRoom {
         result = 31 * result + (doOverrideEndChance ? 1 : 0);
         result = 31 * result + (spawnRules != null ? spawnRules.hashCode() : 0);
         result = 31 * result + (structureProcessors != null ? structureProcessors.list().hashCode() : 0);
+        result = 31 * result + differentiationID;
         return result;
     }
 
