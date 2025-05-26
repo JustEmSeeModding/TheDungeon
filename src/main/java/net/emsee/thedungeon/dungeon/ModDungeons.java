@@ -73,8 +73,8 @@ public final class ModDungeons {
             11,
             11,
             new GoblinCavesGridRoomCollection())
-            .setDepth(20)
-            .setRoomEndChance(.02f)
+            .setDepth(25)
+            .setRoomEndChance(.01f)
             .setMaxFloorHeight(12)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));//*/
 

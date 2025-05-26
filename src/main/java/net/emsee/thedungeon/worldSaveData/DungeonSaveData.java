@@ -27,12 +27,14 @@ public final class DungeonSaveData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
+        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("DungeonData saving");
         tag.put("DungeonData", dungeonData.SerializeNBT());
         return tag;
     }
 
     private static DungeonSaveData load(CompoundTag nbt, HolderLookup.Provider provider) {
+        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("DungeonData Loading");
         DungeonSaveData data = new DungeonSaveData();
         data.dungeonData.DeserializeNBT(nbt.getCompound("DungeonData"));
         return data;
@@ -63,10 +65,6 @@ public final class DungeonSaveData extends SavedData {
     public void SetLastSecondAnnouncement(long lastSecondAnnouncement) {
         dungeonData.SetLastSecondAnnouncement(lastSecondAnnouncement);
         setDirty();
-    }
-
-    public static DungeonSaveData Get(ServerLevel serverLevel) {
-        return Get(serverLevel.getServer());
     }
 
     public static DungeonSaveData Get(MinecraftServer server) {
@@ -115,18 +113,18 @@ public final class DungeonSaveData extends SavedData {
         return toReturn;
     }
 
-    public Dungeon pollFromQueue() {
+    public Dungeon pollFromProgressQueue() {
         Dungeon toReturn = dungeonData.getDungeonProgresQueue().poll();
         setDirty();
         return toReturn;
     }
 
-    public void addAllToQueue(List<Dungeon> list) {
+    public void addAllToProgressQueue(List<Dungeon> list) {
         dungeonData.getDungeonProgresQueue().addAll(list);
         setDirty();
     }
 
-    public boolean getDungeonOpen() {
+    public boolean isDungeonOpen() {
         return dungeonData.getDungeonOpen();
     }
 

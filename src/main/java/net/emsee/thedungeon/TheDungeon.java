@@ -28,11 +28,11 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(TheDungeon.MOD_ID)
 public final class TheDungeon
 {
     public enum DebugMode {
+        //TEMP(-1);
         ALL(100),
         GENERIC(2),
         IMPORTANT_ONLY(1),

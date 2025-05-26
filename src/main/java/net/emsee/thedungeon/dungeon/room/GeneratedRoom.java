@@ -19,6 +19,8 @@ import java.util.*;
 import static net.emsee.thedungeon.TheDungeon.LOGGER;
 
 public final class GeneratedRoom {
+    static final int maxRandomRoomTries = 10;
+
     private final GridRoom room;
 
     private BlockPos placedWorldPos;
@@ -336,23 +338,26 @@ public final class GeneratedRoom {
 
     private GeneratedRoom generateHorizontalRoom(GridDungeonGenerator generator, Map<GridRoomUtils.Connection, Integer> connections, GridRoomUtils.Connection
             connection, Random random) {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("{}: generating room at {}", this, connection);
-        if (connections.get(connection)<=0) {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("{}: room does not have connection", this);
+        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+            LOGGER.info("{}: generating room at {}", this, connection);
+        if (connections.get(connection) <= 0) {
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: room does not have connection", this);
             return null;
         }
 
         Vec3i offsets = getPlacedArrayOffset(connection);
-        if (offsets==null) return null;
+        if (offsets == null) return null;
 
         if (placedArrayX + offsets.getX() < 0 || placedArrayZ + offsets.getZ() < 0 || placedArrayX + offsets.getX() > generator.getOccupationArray().length - 1 || placedArrayZ + offsets.getZ() > generator.getOccupationArray().length - 1 || placedWorldPos == null) {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("{}: tried to generate room out of bounds", this);
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: tried to generate room out of bounds", this);
             return null;
         }
 
-
         if (generator.getOccupationArray()[placedArrayX + offsets.getX()][placedArrayY + offsets.getY()][placedArrayZ + offsets.getZ()] != GridDungeonGenerator.Occupation.available) {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("{}: tried to generate room in occupied space", this);
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: tried to generate room in occupied space", this);
             return null;
         }
 
@@ -361,7 +366,6 @@ public final class GeneratedRoom {
             if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
                 LOGGER.info("{}: tried to generate room outside of floor limit, placing fallback", this);
             generator.RoomConnectionFail(room.getConnectionTag(connection, placedRotation), this, connection);
-            //generator.PlaceFallbackAt(placedArrayX + offsets.getX(), placedArrayY + offsets.getY(), placedArrayZ + offsets.getZ(), placedWorldPos.offset(new Vec3i(offsets.getX() * Width(), offsets.getY() * Height(), offsets.getZ() * Width())));
             return null;
         }
 
@@ -370,12 +374,25 @@ public final class GeneratedRoom {
             roomEndChance = GetOverrideEndChance();
         }
 
-        if (random.nextFloat() > roomEndChance) {
+        if (random.nextFloat() <= roomEndChance) {
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: room ended, placing fallback", this);
+            generator.RoomConnectionFail(room.getConnectionTag(connection, placedRotation), this, connection);
+            return null;
+        }
+
+        int triesLeft = maxRandomRoomTries;
+
+        while (triesLeft>0) {
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: trying placement, tries left: {}", this, triesLeft);
+
             GridRoom targetGridRoom = generator.GetRandomRoomByConnection(GridRoomUtils.getOppositeConnection(connection), room.getConnectionTag(connection, placedRotation), random);
             if (targetGridRoom == null) {
-                generator.RoomConnectionFail(room.getConnectionTag(connection, placedRotation), this, connection);
-                //generator.PlaceFallbackAt(placedArrayX + xOffset, placedArrayY + yOffset, placedArrayZ + zOffset, placedWorldPos.offset(new Vec3i(xOffset * Width(), yOffset * Height(), zOffset * Width())));
-                return null;
+                if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                    LOGGER.info("{}: found no new room", this);
+                triesLeft--;
+                continue;
             }
             List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(GridRoomUtils.getOppositeConnection(connection), room.getConnectionTag(connection, placedRotation), generator.getConnectionRules());
             Rotation randomRoomRotation = ListAndArrayUtils.getRandomFromList(allowedRoomRotations, random);
@@ -384,29 +401,26 @@ public final class GeneratedRoom {
 
             if (generatedRoom == null || !generatedRoom.generated) {
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-                    LOGGER.info("{}: placement returned failure, placing fallback", this);
-                generator.RoomConnectionFail(room.getConnectionTag(connection, placedRotation), this, connection);
-                //generator.PlaceFallbackAt(placedArrayX + xOffset, placedArrayY + yOffset, placedArrayZ + zOffset, placedWorldPos.offset(new Vec3i(xOffset * Width(), yOffset * Height(), zOffset * Width())));
-                return null;
+                    LOGGER.info("{}: placement returned failure", this);
+                triesLeft--;
+                continue;
             }
 
             if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
                 LOGGER.info("{}: placement success, placed ({})", this, targetGridRoom);
             return generatedRoom;
-        } else {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-                LOGGER.info("{}: room ended, placing fallback", this);
-            generator.RoomConnectionFail(room.getConnectionTag(connection, placedRotation), this, connection);
-            //generator.PlaceFallbackAt(placedArrayX + xOffset, placedArrayY + yOffset, placedArrayZ + zOffset, placedWorldPos.offset(new Vec3i(xOffset * Width(), yOffset * Height(), zOffset * Width())));
-            return null;
         }
+        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+            LOGGER.info("{}: out of tries, placing fallback", this);
+        generator.RoomConnectionFail(room.getConnectionTag(connection, placedRotation), this, connection);
+        return null;
     }
 
 
     private GeneratedRoom generateUpRoom(GridDungeonGenerator generator, Map<GridRoomUtils.Connection, Integer> connections, Random random) {
         if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
             LOGGER.info("{}: generating room at {}", this, GridRoomUtils.Connection.up);
-        if (connections.get(GridRoomUtils.Connection.up)<=0) {
+        if (connections.get(GridRoomUtils.Connection.up) <= 0) {
             if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
                 LOGGER.info("{}: room does not have connection", this);
             return null;
@@ -417,12 +431,14 @@ public final class GeneratedRoom {
         int zOffset = -offsets.getZ();
 
         if (placedArrayY + room.getRotatedEastSizeScale(placedRotation) < 0 || placedArrayY + room.getRotatedNorthSizeScale(placedRotation) > generator.getOccupationArray().length - 1) {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("{}: tried to generate room out of bounds", this);
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: tried to generate room out of bounds", this);
             return null;
         }
 
         if (generator.getOccupationArray()[placedArrayX + xOffset][placedArrayY + room.getHeightScale()][placedArrayZ + zOffset] != GridDungeonGenerator.Occupation.available) {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("{}: tried to generate room in occupied space", this);
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: tried to generate room in occupied space", this);
             return null;
         }
 
@@ -439,9 +455,27 @@ public final class GeneratedRoom {
             roomEndChance = GetOverrideEndChance();
         }
 
-        if (random.nextFloat() > roomEndChance) {
+        if (random.nextFloat() <= roomEndChance) {
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: room ended, placing fallback", this);
+            generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.up, placedRotation), this, GridRoomUtils.Connection.up);
+            return null;
+        }
+
+        int triesLeft = maxRandomRoomTries;
+
+        while (triesLeft > 0) {
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: trying placement, tries left: {}", this, triesLeft);
 
             GridRoom targetGridRoom = generator.GetRandomRoomByConnection(GridRoomUtils.Connection.down, room.getConnectionTag(GridRoomUtils.Connection.up, placedRotation), random);
+            if (targetGridRoom == null) {
+                if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                    LOGGER.info("{}: found no new room", this);
+                triesLeft--;
+                continue;
+            }
+
             Rotation randomRoomRotation;
             if (room.canUpDownRotate() && targetGridRoom.canUpDownRotate()) {
                 List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(GridRoomUtils.Connection.down, room.getConnectionTag(GridRoomUtils.Connection.up, placedRotation), generator.getConnectionRules());
@@ -451,22 +485,21 @@ public final class GeneratedRoom {
 
             if (generatedRoom == null || !generatedRoom.generated) {
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-                    LOGGER.info("{}: placement returned failure, placing fallback", this);
-                generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.up, placedRotation), this, GridRoomUtils.Connection.up);
-                //generator.PlaceFallbackAt(placedArrayX + xOffset, placedArrayY + room.GetHeightScale(), placedArrayZ + zOffset, placedWorldPos.offset(xOffset * Width(), Height() * room.GetHeightScale(), zOffset * Width()));
-                return null;
+                    LOGGER.info("{}: placement returned failure", this);
+                triesLeft--;
+                continue;
             }
 
             if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
                 LOGGER.info("{}: placement success, placed ({})", this, targetGridRoom);
             return generatedRoom;
-        } else {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-                LOGGER.info("{}: room ended, placing fallback", this);
-            generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.up, placedRotation), this, GridRoomUtils.Connection.up);
-            //generator.PlaceFallbackAt(placedArrayX + xOffset, placedArrayY + room.GetHeightScale(), placedArrayZ + zOffset, placedWorldPos.offset(xOffset * Width(), Height() * room.GetHeightScale(), zOffset * Width()));
-            return null;
         }
+
+        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+            LOGGER.info("{}: out of tries, placing fallback", this);
+        generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.up, placedRotation), this, GridRoomUtils.Connection.up);
+        return null;
+
     }
 
 
@@ -500,14 +533,23 @@ public final class GeneratedRoom {
         }
 
         if (random.nextFloat() > roomEndChance) {
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+                LOGGER.info("{}: room ended, placing fallback", this);
+            generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.down, placedRotation), this, GridRoomUtils.Connection.down);
+            return null;
+        }
+
+
+        int triesLeft = maxRandomRoomTries;
+
+        while (triesLeft > 0) {
             GridRoom targetGridRoom = generator.GetRandomRoomByConnection(GridRoomUtils.Connection.up, room.getConnectionTag(GridRoomUtils.Connection.down, placedRotation), random);
 
             if (generator.getDungeon().IsDownGenerationDisabled() || Math.abs(placedArrayY - targetGridRoom.getHeightScale() - generator.getDungeon().GetDungeonDepth()) > generator.getDungeon().GetMaxFloorHeightFromCenterOffset()) {
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-                    LOGGER.info("{}: tried to generate room outside of floor limit, placing fallback", this);
-                generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.down, placedRotation), this, GridRoomUtils.Connection.down);
-                //generator.PlaceFallbackAt(placedArrayX, placedArrayY - 1, placedArrayZ, placedWorldPos.below(Height()));
-                return null;
+                    LOGGER.info("{}: tried to generate room outside of floor limit", this);
+                triesLeft--;
+                continue;
             }
 
             Rotation randomRoomRotation = placedRotation;
@@ -518,22 +560,19 @@ public final class GeneratedRoom {
             GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY - 1, placedArrayZ + zOffset, placedWorldPos.offset(xOffset * width(), -height(), zOffset * width()), randomRoomRotation, GridRoomUtils.Connection.up, random);
             if (generatedRoom == null || !generatedRoom.generated) {
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-                    LOGGER.info("{}: placement returned failure, placing fallback", this);
-                generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.down, placedRotation), this, GridRoomUtils.Connection.down);
-                //generator.PlaceFallbackAt(placedArrayX + xOffset, placedArrayY - 1, placedArrayZ + zOffset, placedWorldPos.offset(xOffset * Width(), -Height(), zOffset * Width()));
-                return null;
+                    LOGGER.info("{}: placement returned failure", this);
+                triesLeft--;
+                continue;
             }
 
             if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
                 LOGGER.info("{}: placement success, placed ({})", this, targetGridRoom);
             return generatedRoom;
-        } else {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-                LOGGER.info("{}: room ended, placing fallback", this);
-            generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.down, placedRotation), this, GridRoomUtils.Connection.down);
-            //generator.PlaceFallbackAt(placedArrayX + xOffset, placedArrayY - 1, placedArrayZ + zOffset, placedWorldPos.offset(xOffset * Width(), -Height(), zOffset * Width()));
-            return null;
         }
+        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
+            LOGGER.info("{}: out of tries, placing fallback", this);
+        generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.down, placedRotation), this, GridRoomUtils.Connection.down);
+        return null;
     }
 
     @Override

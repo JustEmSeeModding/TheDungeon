@@ -10,7 +10,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
@@ -23,6 +22,7 @@ public abstract class GridRoomCollection {
     private final List<FailRule> failRules = new ArrayList<>();
     /** the vector stands for: (min, max, totalPlaced)*/
     private final Map<GridRoom, Vec3i> requiredPlacements = new HashMap<>();
+    private final Map<List<GridRoom>, Vec3i> requiredListPlacements = new HashMap<>();
     private GridRoom fallbackGridRoom = null;
     private GridRoom startingRoom = null;
     private final int roomWidth;
@@ -51,11 +51,11 @@ public abstract class GridRoomCollection {
         return this;
     }
 
-    @Deprecated
-    private GridRoomCollection SetRooms(List<GridRoom> rooms) {
-        //allGridRooms.clear();
-        //allGridRooms.addAll(rooms);
-        return null;
+    public GridRoomCollection addRooms(List<GridRoom> rooms) {
+        for (GridRoom room : rooms) {
+            addRoom(room);
+        }
+        return this;
     }
 
     public GridRoomCollection setStartingRoom(GridRoom gridRoom) {
@@ -71,14 +71,14 @@ public abstract class GridRoomCollection {
     /**
      * the minimum and maximum times a room has to generate
      */
-    public GridRoomCollection addRequiredRoom(int requiredAmount, int maxAmount, GridRoom gridRoom) {
-        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", gridRoom, gridRoom.getGridWidth(), gridRoom.getGridHeight(), this, roomWidth, roomHeight);
+    public GridRoomCollection addRequiredRoom(int requiredAmount, int maxAmount, GridRoom room) {
+        if (room.getGridWidth() != roomWidth || room.getGridHeight() != roomHeight) {
+            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", room, room.getGridWidth(), room.getGridHeight(), this, roomWidth, roomHeight);
             return this;
         }
 
-        addRoom(gridRoom);
-        requiredPlacements.put(gridRoom, new Vec3i(requiredAmount, maxAmount, 0));
+        addRoom(room);
+        requiredPlacements.put(room, new Vec3i(requiredAmount, maxAmount, 0));
 
         return this;
     }
@@ -91,10 +91,21 @@ public abstract class GridRoomCollection {
         return addRequiredRoom(requiredAmount, -1, room);
     }
 
-    private GridRoomCollection setRequiredRooms(Map<GridRoom, Vec3i> map) {
-        requiredPlacements.clear();
-        requiredPlacements.putAll(map);
+    /**
+     * same as addRequiredRoom but when a single room in the list is placed it counts
+     */
+    public GridRoomCollection addRequiredRoomsOf(int requiredAmount, int maxAmount, List<GridRoom> rooms) {
+        requiredListPlacements.put(rooms, new Vec3i(requiredAmount, maxAmount, 0));
+        for (GridRoom room : rooms)
+            addRoom(room);
         return this;
+    }
+
+    /**
+     * same as addRequiredRoom but when a single room in the list is placed it counts
+     */
+    public GridRoomCollection addRequiredRoomsOf(int requiredAmount, List<GridRoom> rooms) {
+        return addRequiredRoomsOf(requiredAmount, -1, rooms);
     }
 
     public GridRoomCollection setFallback(GridRoom fallbackGridRoom) {
@@ -106,26 +117,6 @@ public abstract class GridRoomCollection {
             TheDungeon.LOGGER.error("fallbackRoom ({}) is a large grid room in RoomCollection ({})", fallbackGridRoom, this);
             return this;
         }
-        this.fallbackGridRoom = fallbackGridRoom;
-        return this;
-    }
-
-    private GridRoomCollection setConnectionRules(List<ConnectionRule> rules) {
-        connectionRules.clear();
-        connectionRules.addAll(rules);
-        return this;
-    }
-
-    private GridRoomCollection setFailRules(List<FailRule> rules) {
-        failRules.clear();
-        failRules.addAll(rules);
-        return this;
-    }
-
-    /**
-     * only use if you know what you are doing
-     */
-    public GridRoomCollection forceSetFallback(GridRoom fallbackGridRoom) {
         this.fallbackGridRoom = fallbackGridRoom;
         return this;
     }
@@ -226,6 +217,17 @@ public abstract class GridRoomCollection {
                     allowed = false;
                 }
             }
+            if (allowed)
+                for (List<GridRoom> rooms : requiredListPlacements.keySet()) {
+                    if (rooms.contains(room)) {
+                        Vec3i constraints = requiredListPlacements.get(rooms);
+                        // Skip if no maximum (y == -1)
+                        if (constraints.getY() != -1 && constraints.getZ() >= constraints.getY()) {
+                            allowed = false;
+                            break;
+                        }
+                    }
+                }
             if (allowed) {
                 toReturn.put(room, room.getWeight());
             }
@@ -235,12 +237,15 @@ public abstract class GridRoomCollection {
 
     public abstract GridRoomCollection getCopy();
 
+    // check if the placed room was a requiredRoom
     public void updatePlacedRequirements(GridRoom placed) {
-        //TheDungeon.LOGGER.warn("required called" + placed);
-        //TheDungeon.LOGGER.warn("required list +" + ListAndArrayUtils.mapToString(requiredPlacements));
         if (requiredPlacements.containsKey(placed)) {
-            //TheDungeon.LOGGER.warn("placed required");
             requiredPlacements.put(placed, requiredPlacements.get(placed).offset(0, 0, 1));
+            return;
+        }
+        for (List<GridRoom> rooms : requiredListPlacements.keySet()) {
+            if (rooms.contains(placed))
+                requiredListPlacements.put(rooms, requiredListPlacements.get(rooms).offset(0,0,1));
         }
     }
 
@@ -253,6 +258,10 @@ public abstract class GridRoomCollection {
     public boolean requiredRoomsDone() {
         for (GridRoom room : requiredPlacements.keySet()) {
             if (requiredPlacements.get(room).getX() > requiredPlacements.get(room).getZ())
+                return false;
+        }
+        for (List<GridRoom> rooms : requiredListPlacements.keySet()) {
+            if (requiredListPlacements.get(rooms).getX() > requiredListPlacements.get(rooms).getZ())
                 return false;
         }
         return true;

@@ -24,7 +24,15 @@ public class StoneCaveOreProcessor extends StructureProcessor {
 
     public static final MapCodec<StoneCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final Map<Block, Integer> defaultMap = Map.of(Blocks.STONE,500, Blocks.GOLD_ORE, 4,  Blocks.IRON_ORE, 3, Blocks.DIAMOND_ORE, 1);
+    private final Map<Block, Integer> defaultMap = Map.of(
+            Blocks.STONE,250,
+            Blocks.ANDESITE,250,
+            Blocks.COBBLESTONE,250,
+            Blocks.TUFF,250,
+            Blocks.GOLD_ORE, 10,
+            Blocks.COAL_ORE, 6,
+            Blocks.IRON_ORE, 4,
+            Blocks.DIAMOND_ORE, 2);
 
     private final Map<Block, Map<Block, Integer>> replacements = Util.make(Maps.newHashMap(), (map) -> {
         map.put(Blocks.STONE, defaultMap);
@@ -32,6 +40,7 @@ public class StoneCaveOreProcessor extends StructureProcessor {
 
     private StoneCaveOreProcessor() {}
 
+    @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());
         Block oldBlock = relativeBlockInfo.state().getBlock();
