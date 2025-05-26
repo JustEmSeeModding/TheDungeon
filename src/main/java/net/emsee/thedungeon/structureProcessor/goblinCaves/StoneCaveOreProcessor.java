@@ -38,8 +38,20 @@ public class StoneCaveOreProcessor extends StructureProcessor {
         map.put(Blocks.STONE, defaultMap);
     });
 
-    private StoneCaveOreProcessor() {}
+    /****
+ * Constructs a singleton instance of the StoneCaveOreProcessor.
+ *
+ * This private constructor prevents external instantiation.
+ */
+private StoneCaveOreProcessor() {}
 
+    /**
+     * Replaces certain blocks during structure placement with randomly selected alternatives based on weighted probabilities.
+     *
+     * If the original block has defined replacement options, selects a replacement block according to configured weights and preserves relevant block state properties (such as stair orientation and slab type). Returns the original block info if no replacement is applicable.
+     *
+     * @return a new StructureBlockInfo with the replacement block state, or the original if no replacement occurs
+     */
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());

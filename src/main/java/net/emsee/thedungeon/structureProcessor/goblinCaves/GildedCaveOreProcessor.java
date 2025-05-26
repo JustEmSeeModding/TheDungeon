@@ -31,8 +31,20 @@ public class GildedCaveOreProcessor extends StructureProcessor {
         map.put(Blocks.BLACKSTONE, defaultMap);
     });
 
-    private GildedCaveOreProcessor() {}
+    /**
+ * Constructs a singleton instance of GildedCaveOreProcessor.
+ *
+ * This private constructor enforces the singleton pattern, preventing external instantiation.
+ */
+private GildedCaveOreProcessor() {}
 
+    /**
+     * Replaces certain blocks during structure placement with weighted alternatives, preserving relevant block state properties.
+     *
+     * If the block at the given position has defined replacement options, randomly selects a replacement based on weights and applies it, copying over stair and slab properties if present. If no replacement is applicable, returns the original block info unchanged.
+     *
+     * @return a new StructureBlockInfo with the replaced block state if applicable; otherwise, the original StructureBlockInfo
+     */
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());

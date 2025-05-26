@@ -65,8 +65,20 @@ public class StoneToGildedCaveProcessor extends StructureProcessor {
         map.put(Blocks.SPRUCE_WALL_SIGN, Map.of(Blocks.DARK_OAK_WALL_SIGN,1));
     });
 
-    private StoneToGildedCaveProcessor() {}
+    /**
+ * Constructs a singleton instance of the processor.
+ *
+ * This private constructor prevents external instantiation.
+ */
+private StoneToGildedCaveProcessor() {}
 
+    /****
+     * Processes a structure block during placement, replacing certain stone or spruce wood blocks with blackstone, gilded blackstone, or dark oak variants.
+     *
+     * If the block type has defined replacements, selects a replacement based on weighted randomness and preserves relevant block state properties such as orientation and slab/stair type.
+     *
+     * @return a new StructureBlockInfo with the replacement block state if applicable; otherwise, the original StructureBlockInfo
+     */
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());

@@ -275,8 +275,10 @@ public final class GlobalDungeonManager {
         }
     }
 
-    /**
-     * adds to the start of the generation queue
+    /****
+     * Inserts a dungeon at the front of the progress queue, preserving the order of existing dungeons.
+     *
+     * @param dungeon the dungeon to add to the front of the queue
      */
     public static void AddToQueueFront(Dungeon dungeon, MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
@@ -289,6 +291,11 @@ public final class GlobalDungeonManager {
         saveData.addAllToProgressQueue(tempList);
     }
 
+    /**
+     * Adds a copy of the specified dungeon to the progress queue, optionally cleaning up existing dungeons first.
+     *
+     * @param selectedDungeonID the ID of the dungeon to generate
+     */
     public static void GenerateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
@@ -296,15 +303,33 @@ public final class GlobalDungeonManager {
         saveData.addToProgressQueue(getDungeonByID(selectedDungeonID).GetCopy());
     }
 
+    /**
+     * Determines whether the dungeon is currently open and no dungeons are in progress.
+     *
+     * @param saveData the dungeon save data to check
+     * @return true if the dungeon is open and the progress queue is empty; false otherwise
+     */
     public static boolean isOpen(DungeonSaveData saveData) {
         return saveData.isProgressQueueEmpty() && saveData.isDungeonOpen();
     }
 
+    /**
+     * Determines whether the dungeon is currently open and no dungeons are in the progress queue.
+     *
+     * @param server the Minecraft server instance
+     * @return true if the dungeon is open and the progress queue is empty; false otherwise
+     */
     public static boolean isOpen(MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         return saveData.isProgressQueueEmpty() && saveData.isDungeonOpen();
     }
 
+    /**
+     * Retrieves the portal position for the specified portal ID.
+     *
+     * @param portalID the ID of the portal to retrieve
+     * @return the portal position if the ID is valid; otherwise, returns the dungeon center position
+     */
     public static BlockPos getPortalPosition(MinecraftServer server, int portalID) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (portalID >= saveData.portalPositionAmount() || portalID < 0) {
