@@ -99,8 +99,8 @@ public final class DungeonNBTData {
         dungeonProgressQueue.clear();
         while (tag.contains("dungeonProgressQueue" + i)) {
             Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue" + i));
-            if (addCleanupToStart && i == 0 && toAdd != ModDungeons.CLEANUP) {
-                dungeonProgressQueue.add(ModDungeons.CLEANUP.GetCopy());
+            if (addCleanupToStart && i == 0 && toAdd != ModDungeons.CLEANUP_OLD) {
+                dungeonProgressQueue.add(ModDungeons.CLEANUP_OLD.GetCopy());
             }
             dungeonProgressQueue.add(toAdd.GetCopy());
             i++;

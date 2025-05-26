@@ -9,8 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +19,6 @@ public class DungeonScholarArmorItem extends DungeonArmorItem{
     private final double movementSpeedBonus = .005d;
     private final double setMovementSpeedBonus = .0075d;
     private final double bootsStepBonus = .5d;
-
 
 
     public DungeonScholarArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class DungeonItem extends Item implements IDungeonCarryItem {
-    public static final Component DUNGEON_ITEM_HOVER_MESSAGE = Component.translatable("item.thedungeon.dungeon_item").withStyle(ChatFormatting.DARK_PURPLE);
 
     public DungeonItem(Item.Properties pProperties) {
         super(pProperties.rarity(Rarity.RARE));

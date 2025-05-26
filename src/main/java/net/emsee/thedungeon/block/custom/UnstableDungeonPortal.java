@@ -115,8 +115,8 @@ public class UnstableDungeonPortal extends DungeonBlock implements IDungeonCarry
         return level.getRecipeManager().getRecipeFor(ModRecipes.DUNGEON_INFUSION_TYPE.get(), new DungeonInfusionRecipeInput(new ItemStack(item)), level);
     }
 
-    @Override
+    /*@Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
         return 15;
-    }
+    }*/
 }

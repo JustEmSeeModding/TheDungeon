@@ -26,29 +26,10 @@ public class InfusedAlloyArmorItem extends DungeonArmorItem{
         super(material, type, properties);
     }
 
-    /*@Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-
-        tooltipComponents.add(Component.empty());
-        tooltipComponents.add(fullSetBonusHeader);
-        tooltipComponents.add(Component.translatable("item.thedungeon.infused_alloy_armor.set_bonus", (int)setHealthBonus).withStyle(beneficialModifier));
-    }*/
-
     @Override
     public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers() {
         return super.getDefaultAttributeModifiers()
                 .withModifierAdded(Attributes.MOVEMENT_SPEED, new AttributeModifier(TheDungeon.resourceLocation("infused_alloy.speed."+type.getName()), speedPenalty, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()))
                 .withModifierAdded(Attributes.MAX_HEALTH, new AttributeModifier(TheDungeon.resourceLocation("infused_alloy.max_health_boost"), setHealthBonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(EquipmentSlot.BODY));
     }
-
-    /*@Override
-    protected void onFullSetEquipped(LivingEntity entity) {
-        Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH)).addOrUpdateTransientModifier(new AttributeModifier(TheDungeon.resourceLocation("infused_alloy.max_health_boost"), setHealthBonus, AttributeModifier.Operation.ADD_VALUE));
-    }
-
-    @Override
-    protected void onFullSetUnEquipped(LivingEntity entity) {
-        Objects.requireNonNull(entity.getAttribute(Attributes.MAX_HEALTH)).removeModifier(TheDungeon.resourceLocation("infused_alloy.max_health_boost"));
-    }*/
 }

@@ -23,6 +23,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_CLOCK);
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
+                        output.accept(ModItems.INFUSED_CHISEL);
                         output.accept(ModItems.INFUSED_ALLOY_HELMET);
                         output.accept(ModItems.INFUSED_ALLOY_CHESTPLATE);
                         output.accept(ModItems.INFUSED_ALLOY_LEGGINGS);

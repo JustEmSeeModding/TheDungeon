@@ -4,18 +4,19 @@ import com.google.common.collect.Maps;
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
+import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AdventureModePredicate;
-import net.minecraft.world.item.DiggerItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class DungeonDiggerItem extends DiggerItem implements IDungeonCarryItem, IDungeonToolTips {
+public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
     // List of blocks this tool can break
     protected static Map<Block,Block> getBreakableBlocks() {
         return
@@ -62,8 +64,14 @@ public class DungeonDiggerItem extends DiggerItem implements IDungeonCarryItem, 
                 });
     }
 
-    public DungeonDiggerItem(Tier tier, TagKey<Block> blocks, Properties properties) {
-        super(tier, blocks, properties.stacksTo(1).component(DataComponents.CAN_BREAK, createAdventureCheck(tier, blocks)));
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+        tooltipComponents.add(DUNGEON_ITEM_HOVER_MESSAGE);
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+    }
+
+    public DungeonPickaxeItem(Tier tier, Properties properties) {
+        super(tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier, BlockTags.MINEABLE_WITH_PICKAXE)));
     }
 
     @Override
@@ -76,9 +84,6 @@ public class DungeonDiggerItem extends DiggerItem implements IDungeonCarryItem, 
     private static AdventureModePredicate createAdventureCheck(Tier tier, TagKey<Block> blocks) {
         List<BlockPredicate> predicates = new ArrayList<>();
         Collection<Block> breakables = new ArrayList<>(getBreakableBlocks().keySet());
-        for (Block block : getBreakableBlocks().keySet()) {
-            isThisCorrectToolForDrops(tier, blocks, block.defaultBlockState());
-        }
         BlockPredicate predicate = BlockPredicate.Builder.block()
                 .of(breakables)
                 .build();
@@ -94,15 +99,17 @@ public class DungeonDiggerItem extends DiggerItem implements IDungeonCarryItem, 
         Level level = player.level();
         if (level instanceof ServerLevel serverLevel) {
             BlockPos pos = event.getPos();
+            ItemStack stack = player.getMainHandItem();
             BlockState oldState = event.getState();
             Block replaceBlock = getBreakableBlocks().get(oldState.getBlock());
             BlockEntity blockentity = oldState.hasBlockEntity() ? level.getBlockEntity(pos) : null;
             List<ItemStack> drops = new ArrayList<>();
-            if (!oldState.requiresCorrectToolForDrops() || isCorrectToolForDrops(player.getMainHandItem(), oldState))
+            if (!oldState.requiresCorrectToolForDrops() || isCorrectToolForDrops(stack, oldState))
                 drops = Block.getDrops(oldState, serverLevel, pos, blockentity);
             for (ItemStack drop : drops)
                 player.getInventory().placeItemBackInInventory(drop);
             level.setBlockAndUpdate(pos, replaceBlock.defaultBlockState());
+            stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
     }
 

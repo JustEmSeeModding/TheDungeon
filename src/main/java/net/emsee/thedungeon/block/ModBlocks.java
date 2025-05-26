@@ -26,11 +26,11 @@ public final class ModBlocks {
 
     public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL = registerBlock("dungeon_portal",
             () -> new DungeonPortal(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops()));
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
 
     public static final DeferredBlock<UnstableDungeonPortal> DUNGEON_PORTAL_UNSTABLE = registerBlock("dungeon_portal_unstable",
             () -> new UnstableDungeonPortal(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops()));
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
 
     public static final DeferredBlock<Block> INFUSED_DIRT = registerBlock("infused_dirt",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)));
