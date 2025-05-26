@@ -61,6 +61,13 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('/', Items.STICK)
                 .unlockedBy("has_infused_alloy", has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.INFUSED_CHISEL.get(), 1)
+                .pattern(" *")
+                .pattern("/ ")
+                .define('*', ModItems.INFUSED_ALLOY_INGOT.get())
+                .define('/', Items.STICK)
+                .unlockedBy("has_infused_alloy", has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.PORTAL_CORE.get(), 1)
                 .pattern("^o^")
                 .pattern("#*#")

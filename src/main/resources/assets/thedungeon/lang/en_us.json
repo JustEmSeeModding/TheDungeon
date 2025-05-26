@@ -37,9 +37,12 @@
   "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
   "item.thedungeon.shadow_goblin_spawn_egg" :"Shadow Goblin Spawn Egg",
 
-  "item.thedungeon.dungeon_item": "Dungeon Attuned Item",
+  "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
 
   "item.thedungeon.tooltip.full_set_bonus": "Full Set Bonus:",
+
+  "item.thedungeon.infused_dagger": "Infused Dagger",
+  "item.thedungeon.infused_chisel": "Infused Chisel",
 
   "item.thedungeon.infused_alloy_helmet": "Infused Alloy Helmet",
   "item.thedungeon.infused_alloy_chestplate": "Infused Alloy Chestplate",

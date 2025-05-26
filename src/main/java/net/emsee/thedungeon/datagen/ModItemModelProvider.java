@@ -36,10 +36,14 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SCHOLAR_LEGGINGS.asItem());
         basicItem(ModItems.SCHOLAR_BOOTS.asItem());
 
+        withExistingParent(ModItems.INFUSED_DAGGER.getId().getPath(), TheDungeon.resourceLocation("item/dagger"));
+        withExistingParent(ModItems.INFUSED_CHISEL.getId().getPath(), TheDungeon.resourceLocation("item/chisel"));
+
         withExistingParent(ModSpawnEggs.DEATH_KNIGHT_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.SKELETON_KNIGHT_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+
     }
 
     private void basicSingleTextureBlockItem(DeferredBlock<?> block) {

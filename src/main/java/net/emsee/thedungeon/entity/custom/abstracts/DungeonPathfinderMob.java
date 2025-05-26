@@ -2,7 +2,7 @@ package net.emsee.thedungeon.entity.custom.abstracts;
 
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
-import net.emsee.thedungeon.item.custom.DungeonSwordItem;
+import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -62,10 +62,19 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
                         source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
                         source.is(DamageTypes.GENERIC_KILL)
         ) return false;
+        if (
+                source.is(DamageTypes.ARROW) ||
+                source.is(DamageTypes.TRIDENT) ||
+                source.is(DamageTypes.FIREWORKS) ||
+                source.is(DamageTypes.MOB_PROJECTILE) ||
+                source.is(DamageTypes.PLAYER_EXPLOSION) ||
+                source.is(DamageTypes.THROWN) ||
+                source.is(DamageTypes.MAGIC)
+        ) return true;
         if (source.getEntity() instanceof LivingEntity livingEntity) {
             ItemStack mainHandStack = livingEntity.getItemBySlot(EquipmentSlot.MAINHAND);
             if (mainHandStack.isEmpty()) return false;
-            if (mainHandStack.getItem() instanceof DungeonSwordItem) return false;
+            if (mainHandStack.getItem() instanceof IDungeonWeapon) return false;
         }
         return true;
     }
