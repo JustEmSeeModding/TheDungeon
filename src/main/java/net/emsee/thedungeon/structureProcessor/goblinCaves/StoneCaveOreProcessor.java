@@ -31,8 +31,9 @@ public class StoneCaveOreProcessor extends StructureProcessor {
         map.put(Blocks.TUFF, 250);
         map.put(Blocks.GOLD_ORE, 10);
         map.put(Blocks.COAL_ORE, 6);
-        map.put(Blocks.IRON_ORE, 4);
-        map.put(Blocks.DIAMOND_ORE,2);
+        map.put(Blocks.COPPER_ORE, 2);
+        map.put(Blocks.IRON_ORE, 3);
+        map.put(Blocks.DIAMOND_ORE,1);
     });
 
     private final Map<Block, Map<Block, Integer>> replacements = Util.make(Maps.newHashMap(), (map) -> {
