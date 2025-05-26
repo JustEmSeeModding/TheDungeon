@@ -24,6 +24,13 @@ public final class DungeonNBTData {
     private boolean isTiming = true;
     private final List<BlockPos> portalPositions = new ArrayList<>();
 
+    /**
+     * Serializes the current dungeon state and related metadata into a CompoundTag.
+     *
+     * The serialized data includes timing fields, open and timing status, the contents of the dungeon progress and passive queues, and all portal positions.
+     *
+     * @return a CompoundTag containing all relevant dungeon state information
+     */
     public CompoundTag SerializeNBT() {
         if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("Serializing:");
         CompoundTag toReturn = new CompoundTag();
@@ -68,6 +75,13 @@ public final class DungeonNBTData {
         return toReturn;
     }
 
+    /**
+     * Restores the dungeon state from the provided CompoundTag.
+     *
+     * Reads and sets all internal fields, including timing values, open and timing flags, dungeon progress and passive queues, and portal positions, based on the serialized data in the tag. Existing queues and position lists are cleared before repopulation. If configured, a cleanup dungeon may be added at the start of the progress queue.
+     *
+     * @param tag the CompoundTag containing serialized dungeon data
+     */
     public void DeserializeNBT(CompoundTag tag) {
         if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("Deserializing:");
         lastExecutionTime = tag.getLong("lastExecutionTime");
@@ -111,6 +125,11 @@ public final class DungeonNBTData {
         if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("portalPositions: {}", portalPositions);
     }
 
+    /**
+     * Returns the timestamp of the last dungeon execution.
+     *
+     * @return the last execution time in milliseconds
+     */
     public long GetLastExecutionTime() {
         return lastExecutionTime;
     }

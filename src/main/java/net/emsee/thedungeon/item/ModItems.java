@@ -61,6 +61,11 @@ public final class ModItems {
             () ->new DungeonDiggerItem(Tiers.DIAMOND, BlockTags.MINEABLE_WITH_PICKAXE, new Item.Properties().durability(100)));
 
 
+    /****
+     * Registers all custom items and spawn eggs with the provided event bus.
+     *
+     * @param eventBus the event bus to register items and spawn eggs with
+     */
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
         ModSpawnEggs.register(eventBus);

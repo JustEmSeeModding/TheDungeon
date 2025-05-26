@@ -19,7 +19,8 @@ public final class ModDungeons {
             47,
             47,
             new CleanupGridRoomCollection())
-            .setDepth(6)
+            .setDepth(7)
+            .setMaxFloorHeight(15)
             .setRoomEndChance(0)
             .IsUtilDungeon(true));//*/
 

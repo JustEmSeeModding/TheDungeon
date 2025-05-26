@@ -46,26 +46,9 @@ public class StoneToGildedCaveProcessor extends StructureProcessor {
         map.put(Blocks.MOSSY_COBBLESTONE_WALL, Map.of(Blocks.BLACKSTONE_WALL,1));
         map.put(Blocks.CHISELED_STONE_BRICKS, Map.of(Blocks.CHISELED_POLISHED_BLACKSTONE,1));
         map.put(Blocks.CRACKED_STONE_BRICKS, Map.of(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS,1));
-        map.put(Blocks.SPRUCE_LOG, Map.of(Blocks.DARK_OAK_LOG,1));
-        map.put(Blocks.SPRUCE_WOOD, Map.of(Blocks.DARK_OAK_WOOD,1));
-        map.put(Blocks.STRIPPED_SPRUCE_LOG, Map.of(Blocks.STRIPPED_DARK_OAK_LOG,1));
-        map.put(Blocks.STRIPPED_SPRUCE_WOOD, Map.of(Blocks.STRIPPED_DARK_OAK_WOOD,1));
-        map.put(Blocks.SPRUCE_SLAB, Map.of(Blocks.DARK_OAK_SLAB,1));
-        map.put(Blocks.SPRUCE_STAIRS, Map.of(Blocks.DARK_OAK_STAIRS,1));
-        map.put(Blocks.SPRUCE_PLANKS, Map.of(Blocks.DARK_OAK_PLANKS,1));
-        map.put(Blocks.SPRUCE_FENCE, Map.of(Blocks.DARK_OAK_FENCE,1));
-        map.put(Blocks.SPRUCE_FENCE_GATE, Map.of(Blocks.DARK_OAK_FENCE_GATE,1));
-        map.put(Blocks.SPRUCE_DOOR, Map.of(Blocks.DARK_OAK_DOOR,1));
-        map.put(Blocks.SPRUCE_TRAPDOOR, Map.of(Blocks.DARK_OAK_TRAPDOOR,1));
-        map.put(Blocks.SPRUCE_BUTTON, Map.of(Blocks.DARK_OAK_BUTTON,1));
-        map.put(Blocks.SPRUCE_PRESSURE_PLATE, Map.of(Blocks.DARK_OAK_PRESSURE_PLATE,1));
-        map.put(Blocks.SPRUCE_HANGING_SIGN, Map.of(Blocks.DARK_OAK_HANGING_SIGN,1));
-        map.put(Blocks.SPRUCE_WALL_HANGING_SIGN, Map.of(Blocks.DARK_OAK_WALL_HANGING_SIGN,1));
-        map.put(Blocks.SPRUCE_SIGN, Map.of(Blocks.DARK_OAK_SIGN,1));
-        map.put(Blocks.SPRUCE_WALL_SIGN, Map.of(Blocks.DARK_OAK_WALL_SIGN,1));
     });
 
-    private StoneToGildedCaveProcessor() {}
+private StoneToGildedCaveProcessor() {}
 
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
