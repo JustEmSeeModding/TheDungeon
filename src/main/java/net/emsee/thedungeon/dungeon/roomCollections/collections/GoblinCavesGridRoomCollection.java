@@ -18,6 +18,11 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.List;
 
 public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
+    /****
+     * Constructs a Goblin Caves grid room collection with predefined spawn rooms, dens, biome-specific rooms, and wall rules.
+     *
+     * Initializes the collection with an 11x11 grid, adds required spawn and den rooms at specific coordinates, includes biome-themed room groups for stone and gilded caves, and sets up wall validation rules with appropriate structure processors.
+     */
     public GoblinCavesGridRoomCollection() {
         super(11, 11);
         //SetFallback(new GridRoom(11, 11).ResourceLocation(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "castle/fallback")))
@@ -62,6 +67,14 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
         ;
     }
 
+    /**
+     * Returns a list of spawn room definitions for the goblin caves dungeon.
+     *
+     * Each room is 11x11 in size, configured with a north connection, rotation allowed, and a biome-specific structure processor.
+     * One room is tagged for the "stone_caves" biome using the stone cave processor, and the other for the "gilded_caves" biome using the gilded cave processor.
+     *
+     * @return a list containing two biome-specific spawn rooms
+     */
     private static List<GridRoom> spawnRooms() {
         return List.of(
                 new GridRoom(11, 11)
@@ -88,6 +101,14 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
         );
     }
 
+    /**
+     * Returns a list of den rooms configured for the goblin caves dungeon, each with spawn rules for goblin entities.
+     *
+     * The returned list contains two 11x11 den rooms with specific size, connection offsets, rotation allowance, and structure processors.
+     * One room is tagged for the "stone_caves" biome and spawns cave goblins; the other is tagged for the "gilded_caves" biome and spawns shadow goblins.
+     *
+     * @return a list of den rooms with associated goblin spawn rules for use in dungeon generation
+     */
     private static List<GridRoom> dens() {
         return List.of(
                 new GridRoom(11, 11)
@@ -127,6 +148,13 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
         );
     }
 
+    /**
+     * Returns a list of grid rooms and room groups themed for the stone caves biome.
+     *
+     * The returned list includes weighted room groups and individual rooms with various layouts, connection configurations, and structure processors for generating stone cave environments.
+     *
+     * @return a list of stone caves biome grid rooms and groups
+     */
     private static List<GridRoom> stone_caves_biome() {
         return List.of(
                 i_stone().withWeight(60),
@@ -179,6 +207,13 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
 
         );
     }
+    /**
+     * Returns a list of grid rooms and room groups themed for the gilded caves biome.
+     *
+     * The returned list includes weighted room groups and individual rooms, each configured with the "gilded_caves" tag, specific resource locations, connection settings, rotation allowance, and the StoneToGildedCaveProcessor for structure processing.
+     *
+     * @return a list of GridRoom instances representing the gilded caves biome layout options
+     */
     private static List<GridRoom> gilded_caves_biome() {
         return List.of(
                 i_gilded().withWeight(45),
@@ -305,6 +340,13 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                 );
     }
+    /**
+     * Creates a group of large T-shaped rooms themed for the gilded caves biome.
+     *
+     * The group contains two rooms with distinct layouts, both configured for gilded cave generation, supporting rotation and horizontal connections, and using the StoneToGildedCaveProcessor.
+     *
+     * @return a GridRoomGroup representing large T-shaped gilded cave rooms
+     */
     private static GridRoomGroup t_large_gilded() {
         return ((GridRoomGroup) new GridRoomGroup(11, 11).setSizeHeight(3, 3, 1).horizontalConnections(1, 1, 0, 1).setAllConnectionTags("gilded_caves").doAllowRotation())
                 .addRoom(new GridRoom(11, 11)
@@ -385,6 +427,13 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE));
     }
+    /**
+     * Creates a group of "I"-shaped gilded cave rooms for dungeon generation.
+     *
+     * The group contains multiple room variants with horizontal connections, all tagged for the "gilded_caves" biome and configured to allow rotation. Each room uses the StoneToGildedCaveProcessor to apply gilded cave features, and rooms are assigned different weights for random selection.
+     *
+     * @return a GridRoomGroup containing weighted "I"-shaped gilded cave rooms
+     */
     private static GridRoomGroup i_gilded() {
         return ((GridRoomGroup) new GridRoomGroup(11, 11).horizontalConnections(1, 0, 1, 0).setAllConnectionTags("gilded_caves").doAllowRotation())
                 .addRoom(new GridRoom(11, 11)
@@ -478,6 +527,13 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE));
     }
+    /**
+     * Creates a group of L-shaped grid rooms themed for the gilded caves biome.
+     *
+     * The group contains two rooms with distinct layouts, both supporting horizontal connections, rotation, and using the StoneToGildedCaveProcessor to apply gilded cave features.
+     *
+     * @return a GridRoomGroup containing L-shaped gilded cave rooms
+     */
     private static GridRoomGroup l_gilded() {
         return ((GridRoomGroup) new GridRoomGroup(11, 11).horizontalConnections(1, 1, 0, 0).setAllConnectionTags("gilded_caves").doAllowRotation())
                 .addRoom(new GridRoom(11, 11)
@@ -514,6 +570,11 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
     }
 
 
+    /****
+     * Creates and returns a new instance of {@code GoblinCavesGridRoomCollection} with the same configuration.
+     *
+     * @return a fresh copy of this grid room collection
+     */
     @Override
     public GridRoomCollection getCopy() {
         return new GoblinCavesGridRoomCollection();

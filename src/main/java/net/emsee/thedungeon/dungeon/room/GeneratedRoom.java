@@ -336,6 +336,16 @@ public final class GeneratedRoom {
                         finishedConnections.getOrDefault(GridRoomUtils.Connection.down, false);
     }
 
+    /**
+     * Attempts to generate and place a connected room in a specified horizontal direction, retrying up to a maximum number of attempts.
+     *
+     * Selects a random compatible room and rotation that matches the required connection, ensuring placement is within bounds, unoccupied, and adheres to floor height and end chance constraints. If all attempts fail or constraints are not met, triggers fallback handling and returns null.
+     *
+     * @param connections a map of available connections and their counts for this room
+     * @param connection the horizontal direction in which to generate the connected room
+     * @param random the random number generator used for selection and chance calculations
+     * @return the newly generated connected room, or null if generation fails or is not possible
+     */
     private GeneratedRoom generateHorizontalRoom(GridDungeonGenerator generator, Map<GridRoomUtils.Connection, Integer> connections, GridRoomUtils.Connection
             connection, Random random) {
         if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
@@ -417,6 +427,16 @@ public final class GeneratedRoom {
     }
 
 
+    /**
+     * Attempts to generate and place a connected room above the current room in the dungeon grid.
+     *
+     * Selects a suitable room with a downward connection, checks placement constraints (bounds, occupation, floor limits, and end chance), and retries up to a maximum number of attempts if placement fails. If all attempts fail or constraints are not met, triggers fallback handling and returns null.
+     *
+     * @param generator the dungeon generator managing room placement and occupation
+     * @param connections a map of available connection counts by direction for the current room
+     * @param random the random instance used for deterministic selection and placement
+     * @return the newly generated connected room above, or null if placement was unsuccessful
+     */
     private GeneratedRoom generateUpRoom(GridDungeonGenerator generator, Map<GridRoomUtils.Connection, Integer> connections, Random random) {
         if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
             LOGGER.info("{}: generating room at {}", this, GridRoomUtils.Connection.up);
@@ -503,6 +523,16 @@ public final class GeneratedRoom {
     }
 
 
+    /**
+     * Attempts to generate and place a connected room below the current room, retrying up to a maximum number of attempts.
+     *
+     * Selects a random compatible room for the downward connection, checks placement validity, and tries allowed rotations if applicable.
+     * If placement fails after all attempts or if generation is not possible due to bounds, occupation, or floor limits, triggers fallback handling.
+     *
+     * @param connections a map of available connection counts by direction
+     * @param random the random instance used for deterministic selection
+     * @return the newly generated connected room below, or null if generation fails
+     */
     private GeneratedRoom generateDownRoom(GridDungeonGenerator generator, Map<GridRoomUtils.Connection, Integer> connections, Random random) {
         if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
             LOGGER.info("{}: generating room at {}", this, GridRoomUtils.Connection.down);
@@ -575,6 +605,11 @@ public final class GeneratedRoom {
         return null;
     }
 
+    /**
+     * Returns a string representation of this GeneratedRoom, including its underlying room.
+     *
+     * @return a string describing the GeneratedRoom and its associated GridRoom
+     */
     @Override
     public String toString() {
         return "GeneratedRoom:" + room;

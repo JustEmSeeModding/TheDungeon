@@ -11,18 +11,46 @@ public class GridRoomGroup extends GridRoom {
     /** Weighted map */
     protected Map<GridRoom, Integer> gridRooms = new HashMap<>();
 
-    //constructor
+    /**
+     * Constructs a GridRoomGroup with the specified grid dimensions and differentiation ID.
+     *
+     * @param gridWidth the width of the grid
+     * @param gridHeight the height of the grid
+     * @param ID the differentiation ID for this group
+     */
     public GridRoomGroup(int gridWidth, int gridHeight, int ID) {
         super(gridWidth, gridHeight, ID);
     }
+    /**
+     * Constructs a GridRoomGroup with the specified grid width and height.
+     *
+     * @param gridWidth the width of the grid
+     * @param gridHeight the height of the grid
+     */
     public GridRoomGroup(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
     }
+    /**
+     * Constructs a GridRoomGroup using the properties of the given GridRoomCollection.
+     *
+     * The group's configuration is initialized based on the provided collection.
+     *
+     * @param collection the GridRoomCollection whose properties are used to initialize the group
+     */
     public GridRoomGroup(GridRoomCollection collection) {
         super(collection);
     }
 
-    //construction methods
+    /**
+     * Adds a new simple room to the group with the specified resource location and weight.
+     *
+     * The new room inherits the group's size, offsets, connection tags, connections, rotation permissions,
+     * generation priority, end chance override, and spawn rules.
+     *
+     * @param recourseLocation the resource location identifier for the new room
+     * @param Weight the weight to assign to the new room in the group
+     * @return this group instance for method chaining
+     */
     public GridRoomGroup addSimpleRoom(String recourseLocation, int Weight) {
         addRoom(
                 new GridRoom(gridWidth, gridHeight).withResourceLocation(recourseLocation).withWeight(weight).
@@ -88,6 +116,11 @@ public class GridRoomGroup extends GridRoom {
         return null;
     }
 
+    /**
+     * Creates a deep copy of this GridRoomGroup, including all properties and contained rooms.
+     *
+     * @return a new GridRoomGroup instance with identical configuration and room mappings
+     */
     @Override
     public GridRoom getCopy() {
         return new GridRoomGroup(gridWidth, gridHeight, differentiationID).
@@ -104,6 +137,14 @@ public class GridRoomGroup extends GridRoom {
                 .setStructureProcessors(structureProcessors);
     }
 
+    /****
+     * Determines whether this `GridRoomGroup` is equal to another object.
+     *
+     * Two `GridRoomGroup` instances are considered equal if all relevant fields match, including grid dimensions, resource location, connections, weights, rotation flags, size scales, contained rooms and their weights, offsets, tags, generation priority, override flags, spawn rules, structure processors, and differentiation ID.
+     *
+     * @param other the object to compare with this group
+     * @return true if the specified object is a `GridRoomGroup` with identical properties; false otherwise
+     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof GridRoomGroup otherGroup) {
@@ -131,6 +172,11 @@ public class GridRoomGroup extends GridRoom {
         return false;
     }
 
+    /****
+     * Computes a hash code for this GridRoomGroup based on all significant fields, ensuring consistency with the equals method.
+     *
+     * @return the hash code representing this GridRoomGroup
+     */
     @Override
     public int hashCode() {
         int result = 17;

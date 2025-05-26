@@ -37,7 +37,12 @@ public abstract class GridRoomCollection {
         this.instance=this;
     }
 
-    // construction methods
+    /****
+     * Adds a room to the collection if its dimensions match the collection's required width and height.
+     *
+     * @param gridRoom the room to add
+     * @return this collection instance for method chaining
+     */
 
 
     public GridRoomCollection addRoom(GridRoom gridRoom) {
@@ -51,6 +56,12 @@ public abstract class GridRoomCollection {
         return this;
     }
 
+    /**
+     * Adds multiple rooms to the collection, validating each for dimension compatibility.
+     *
+     * @param rooms the list of rooms to add
+     * @return this collection instance for method chaining
+     */
     public GridRoomCollection addRooms(List<GridRoom> rooms) {
         for (GridRoom room : rooms) {
             addRoom(room);
@@ -58,6 +69,12 @@ public abstract class GridRoomCollection {
         return this;
     }
 
+    /**
+     * Sets the starting room for the collection if its dimensions match the collection's required width and height.
+     *
+     * @param gridRoom the room to set as the starting room; ignored if null or if its dimensions do not match
+     * @return this collection instance for chaining
+     */
     public GridRoomCollection setStartingRoom(GridRoom gridRoom) {
         if (gridRoom == null) return this;
         if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight) {
@@ -68,8 +85,15 @@ public abstract class GridRoomCollection {
         return this;
     }
 
-    /**
-     * the minimum and maximum times a room has to generate
+    /****
+     * Adds a room to the collection with specified minimum and maximum placement requirements.
+     *
+     * The room will be considered required and must be placed at least `requiredAmount` times and at most `maxAmount` times during dungeon generation. The room must match the collection's dimensions; otherwise, it is not added.
+     *
+     * @param requiredAmount the minimum number of times the room must be placed
+     * @param maxAmount the maximum number of times the room can be placed
+     * @param room the room to add with placement constraints
+     * @return this collection instance for chaining
      */
     public GridRoomCollection addRequiredRoom(int requiredAmount, int maxAmount, GridRoom room) {
         if (room.getGridWidth() != roomWidth || room.getGridHeight() != roomHeight) {
@@ -85,14 +109,23 @@ public abstract class GridRoomCollection {
 
 
     /**
-     * the minimum times a room has to generate, has no maximum
+     * Adds a required room with a minimum placement count and no maximum constraint.
+     *
+     * @param requiredAmount the minimum number of times the room must be placed
+     * @param room the room to be added as required
+     * @return this collection for chaining
      */
     public GridRoomCollection addRequiredRoom(int requiredAmount, GridRoom room) {
         return addRequiredRoom(requiredAmount, -1, room);
     }
 
     /**
-     * same as addRequiredRoom but when a single room in the list is placed it counts
+     * Adds a group of rooms with shared placement constraints, where placing any one room counts toward the group's required and maximum placement totals.
+     *
+     * @param requiredAmount the minimum number of placements required for the group
+     * @param maxAmount the maximum number of placements allowed for the group
+     * @param rooms the list of rooms to be tracked collectively for placement requirements
+     * @return this collection instance for method chaining
      */
     public GridRoomCollection addRequiredRoomsOf(int requiredAmount, int maxAmount, List<GridRoom> rooms) {
         requiredListPlacements.put(rooms, new Vec3i(requiredAmount, maxAmount, 0));
@@ -102,12 +135,25 @@ public abstract class GridRoomCollection {
     }
 
     /**
-     * same as addRequiredRoom but when a single room in the list is placed it counts
+     * Adds a group of rooms with a shared minimum required placement count.
+     * When any room in the list is placed, it counts toward fulfilling the group's requirement.
+     *
+     * @param requiredAmount the minimum number of times any room in the group must be placed
+     * @param rooms the list of rooms sharing the placement requirement
+     * @return this collection for chaining
      */
     public GridRoomCollection addRequiredRoomsOf(int requiredAmount, List<GridRoom> rooms) {
         return addRequiredRoomsOf(requiredAmount, -1, rooms);
     }
 
+    /**
+     * Sets the fallback room to be used when no other room fits, if it matches the collection's dimensions and is not a large-scale room.
+     *
+     * If the provided room does not match the required width and height, or is a large-scale room, the fallback is not set and an error is logged.
+     *
+     * @param fallbackGridRoom the room to set as the fallback
+     * @return this collection instance for chaining
+     */
     public GridRoomCollection setFallback(GridRoom fallbackGridRoom) {
         if (fallbackGridRoom.getGridWidth() != roomWidth || fallbackGridRoom.getGridHeight() != roomHeight) {
             TheDungeon.LOGGER.error("fallbackRoom ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", fallbackGridRoom, fallbackGridRoom.getGridWidth(), fallbackGridRoom.getGridHeight(), this, roomWidth, roomHeight);
@@ -121,6 +167,11 @@ public abstract class GridRoomCollection {
         return this;
     }
 
+    /**
+     * Adds a connection rule to the collection.
+     *
+     * @return this collection for method chaining
+     */
     public GridRoomCollection addTagRule(ConnectionRule rule) {
         connectionRules.add(rule);
         return this;
@@ -206,6 +257,13 @@ public abstract class GridRoomCollection {
         return null;
     }
 
+    /**
+     * Returns a map of all rooms that are eligible for placement based on individual and grouped placement constraints.
+     *
+     * Only rooms that have not exceeded their maximum allowed placements, either individually or as part of a required group, are included.
+     *
+     * @return a map of eligible GridRoom instances to their weights
+     */
     private Map<GridRoom, Integer> getAllPossibleRooms() {
         Map<GridRoom, Integer> toReturn = new HashMap<>();
         for (GridRoom room : allGridRooms.keySet()) {
@@ -235,9 +293,21 @@ public abstract class GridRoomCollection {
         return toReturn;
     }
 
-    public abstract GridRoomCollection getCopy();
+    /****
+ * Returns a deep copy of this GridRoomCollection, including all rooms, constraints, and rules.
+ *
+ * @return a new GridRoomCollection instance with the same configuration as this collection
+ */
+public abstract GridRoomCollection getCopy();
 
-    // check if the placed room was a requiredRoom
+    /****
+     * Updates the placement count for required rooms or required room groups when a room is placed.
+     *
+     * Increments the placed count for the individual room if it is tracked as a required placement,
+     * or for any group of rooms in which the placed room is included.
+     *
+     * @param placed the room that was placed
+     */
     public void updatePlacedRequirements(GridRoom placed) {
         if (requiredPlacements.containsKey(placed)) {
             requiredPlacements.put(placed, requiredPlacements.get(placed).offset(0, 0, 1));
@@ -255,6 +325,11 @@ public abstract class GridRoomCollection {
         return null;
     }
 
+    /**
+     * Checks whether all required room and room group placement constraints have been satisfied.
+     *
+     * @return true if all individual and grouped required rooms have met their minimum placement counts; false otherwise
+     */
     public boolean requiredRoomsDone() {
         for (GridRoom room : requiredPlacements.keySet()) {
             if (requiredPlacements.get(room).getX() > requiredPlacements.get(room).getZ())

@@ -48,7 +48,13 @@ public class GridRoom {
     // for when the room is the same, but it requires a different equals and hash
     protected final int differentiationID;
 
-    // constructor
+    /**
+     * Constructs a GridRoom with specified grid dimensions and a differentiation ID.
+     *
+     * @param gridWidth  the width of the room grid
+     * @param gridHeight the height of the room grid
+     * @param ID         unique identifier to differentiate rooms with otherwise identical properties
+     */
     public GridRoom(int gridWidth, int gridHeight, int ID) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
@@ -70,10 +76,21 @@ public class GridRoom {
         differentiationID=ID;
     }
 
+    /**
+     * Constructs a GridRoom with the specified grid width and height, using a default differentiation ID of 0.
+     *
+     * @param gridWidth the width of the room grid
+     * @param gridHeight the height of the room grid
+     */
     public GridRoom(int gridWidth, int gridHeight) {
         this (gridWidth, gridHeight, 0);
     }
 
+    /**
+     * Constructs a GridRoom using the grid dimensions from the specified GridRoomCollection.
+     *
+     * @param collection the GridRoomCollection providing the grid width and height
+     */
     public GridRoom(GridRoomCollection collection) {
         this(collection.getWidth(), collection.getHeight());
     }
@@ -429,6 +446,11 @@ public class GridRoom {
     }
 
 
+    /**
+     * Creates a deep copy of this GridRoom, including all configuration fields and the differentiation ID.
+     *
+     * @return a new GridRoom instance with identical properties to this one
+     */
     public GridRoom getCopy() {
         return new GridRoom(gridWidth, gridHeight, differentiationID).
                 setSizeHeight(northSizeScale, eastSizeScale, heightScale).
@@ -445,6 +467,14 @@ public class GridRoom {
 
     }
 
+    /**
+     * Determines whether this GridRoom is equal to another object.
+     *
+     * Two GridRoom instances are considered equal if all their significant properties, including resource location, grid dimensions, connections, rotation settings, size scales, offsets, tags, generation priority, override end chance, weight, spawn rules, structure processors, and differentiation ID, are identical.
+     *
+     * @param other the object to compare with this GridRoom
+     * @return true if the specified object is a GridRoom with identical properties; false otherwise
+     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof GridRoom otherRoom) {
@@ -471,6 +501,11 @@ public class GridRoom {
         return false;
     }
 
+    /**
+     * Computes a hash code for this GridRoom based on all significant fields, including differentiation ID.
+     *
+     * @return the hash code representing this GridRoom's state
+     */
     @Override
     public int hashCode() {
         int result = 17;
