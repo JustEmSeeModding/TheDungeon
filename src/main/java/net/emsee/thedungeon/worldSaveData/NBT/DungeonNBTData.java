@@ -6,16 +6,35 @@ import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public final class DungeonNBTData {
     private static final boolean addCleanupToStart = false;
 
     private final Queue<Dungeon> dungeonProgressQueue = new LinkedList<>();
     private final Queue<Dungeon> dungeonPassiveQueue = new LinkedList<>();
+    //TODO convert to this VV
+    /*private final Map<Dungeon.DungeonRank,Queue<Dungeon>> dungeonProgressQueue =
+            Map.of(
+                    Dungeon.DungeonRank.F, new LinkedList<>(),
+                    Dungeon.DungeonRank.E, new LinkedList<>(),
+                    Dungeon.DungeonRank.D, new LinkedList<>(),
+                    Dungeon.DungeonRank.C, new LinkedList<>(),
+                    Dungeon.DungeonRank.B, new LinkedList<>(),
+                    Dungeon.DungeonRank.A, new LinkedList<>(),
+                    Dungeon.DungeonRank.S, new LinkedList<>(),
+                    Dungeon.DungeonRank.SS, new LinkedList<>()
+            );
+    private final Map<Dungeon.DungeonRank,Queue<Dungeon>>  dungeonPassiveQueue = Map.of(
+            Dungeon.DungeonRank.F, new LinkedList<>(),
+            Dungeon.DungeonRank.E, new LinkedList<>(),
+            Dungeon.DungeonRank.D, new LinkedList<>(),
+            Dungeon.DungeonRank.C, new LinkedList<>(),
+            Dungeon.DungeonRank.B, new LinkedList<>(),
+            Dungeon.DungeonRank.A, new LinkedList<>(),
+            Dungeon.DungeonRank.S, new LinkedList<>(),
+            Dungeon.DungeonRank.SS, new LinkedList<>()
+    );*/
     private int tickInterval = 30/*-minutes -> to Ticks*/ *60*20;
     private long lastExecutionTime = -1;
     private long lastMinuteAnnouncement = -1;

@@ -73,20 +73,20 @@ public class GridDungeonGenerator {
         occupied,
     }
 
-    public GridDungeonGenerator(GridDungeon dungeon, BlockPos worldPos) {
-        this(dungeon, worldPos, new Random().nextLong());
+    public GridDungeonGenerator(GridDungeon dungeon) {
+        this(dungeon, new Random().nextLong());
     }
 
-    public GridDungeonGenerator(GridDungeon dungeon, BlockPos worldPos, long seed) {
-        this(dungeon, worldPos, new Random(seed));
+    public GridDungeonGenerator(GridDungeon dungeon, long seed) {
+        this(dungeon, new Random(seed));
         this.seed = seed;
     }
 
-    private GridDungeonGenerator(GridDungeon dungeon, BlockPos worldPos, Random random) {
+    private GridDungeonGenerator(GridDungeon dungeon, Random random) {
         this.random = random;
         this.dungeon = dungeon;
         collection = dungeon.getRoomCollection();
-        this.worldPos = worldPos;
+        this.worldPos = dungeon.getRank().getCenterPos();
         int listCentreOffset = dungeon.GetDungeonDepth();
         int arraySize = (dungeon.GetDungeonDepth() * 2) + 1;
         occupationArray = new Occupation[arraySize][arraySize][arraySize];
