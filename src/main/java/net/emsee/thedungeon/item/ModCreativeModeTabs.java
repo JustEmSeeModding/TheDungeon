@@ -75,6 +75,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModSpawnEggs.DEATH_KNIGHT_SPAWN_EGG);
                         output.accept(ModSpawnEggs.SKELETON_KNIGHT_SPAWN_EGG);
                         output.accept(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG);
+                        output.accept(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG);
                     }).build());
 
     public static void register(IEventBus eventBus) {
