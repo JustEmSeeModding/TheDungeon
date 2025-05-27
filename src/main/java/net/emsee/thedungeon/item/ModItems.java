@@ -33,7 +33,11 @@ public final class ModItems {
             () -> new DungeonClock(new Item.Properties()));
 
     public static final DeferredItem<DungeonSwordItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
-            () -> new DungeonSwordItem(Tiers.STONE, (new Item.Properties()).attributes(DungeonSwordItem.createAttributes(Tiers.IRON, 1 , 2, -2F))));
+            () -> new DungeonSwordItem(ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonSwordItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2F))));
+
+    public static final DeferredItem<DungeonPickaxeItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
+            () ->new DungeonPickaxeItem(ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonPickaxeItem.createAttributes(ModTiers.INFUSED_ALLOY, 0, -2f))));
+
 
     public static final DeferredItem<TestDummyItem> TEST_DUMMY = ITEMS.register("test_dummy",
             () -> new TestDummyItem((new Item.Properties())));
@@ -57,10 +61,11 @@ public final class ModItems {
     public static final DeferredItem<DungeonScholarArmorItem> SCHOLAR_BOOTS = ITEMS.register("scholar_boots",
             () -> new DungeonScholarArmorItem(ModArmorMaterials.DUNGEON_SCHOLAR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
 
-    //public static final DeferredItem<DungeonDiggerItem> TEST_TOOL = ITEMS.register("test_tool",
-    //        () ->new DungeonDiggerItem(Tiers.DIAMOND, BlockTags.MINEABLE_WITH_PICKAXE, new Item.Properties().durability(100)));
-
-
+    /****
+     * Registers all custom items and spawn eggs with the provided event bus.
+     *
+     * @param eventBus the event bus to register items and spawn eggs with
+     */
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
         ModSpawnEggs.register(eventBus);

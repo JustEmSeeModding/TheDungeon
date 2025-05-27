@@ -270,17 +270,17 @@ public class GridDungeonGenerator {
         return true;
     }
 
-    public void RoomConnectionFail(String tag, GeneratedRoom room, GridRoomUtils.Connection from) {
-        boolean placeFallback = true;
+    public void RoomConnectionFail(String tag, GeneratedRoom room, GridRoomUtils.Connection from, boolean placeFallback, boolean exitObstructed) {
+        boolean doPlaceFallback = placeFallback;
         for (FailRule failRule : collection.getFailRules()) {
             if (failRule.match(tag)) {
-                toPlaceInstances.add(new FailInstance(failRule,room, from));
+                toPlaceInstances.add(new FailInstance(failRule,room,from,placeFallback,exitObstructed));
                 if (failRule.stopFallbackPlacement())
-                    placeFallback=false;
+                    doPlaceFallback=false;
                 break;
             }
         }
-        if (placeFallback) {
+        if (doPlaceFallback) {
             Vec3i offset = room.getPlacedArrayOffset(from);
             if (offset!= null) {
                 Vec3i pos = room.getPlacedArrayPos().offset(offset);

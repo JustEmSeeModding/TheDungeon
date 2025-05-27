@@ -9,15 +9,19 @@ public class FailInstance {
     final FailRule failRule;
     final GeneratedRoom generatedRoom;
     final GridRoomUtils.Connection connection;
+    final boolean wouldPlaceFallback;
+    final boolean exitObstructed;
 
-    public FailInstance(FailRule failRule, GeneratedRoom generatedRoom, GridRoomUtils.Connection connection) {
+    public FailInstance(FailRule failRule, GeneratedRoom generatedRoom, GridRoomUtils.Connection connection, boolean wouldPlaceFallback, boolean exitObstructed) {
         this.failRule = failRule.getCopy();
         this.generatedRoom = generatedRoom;
         this.connection = connection;
+        this.wouldPlaceFallback = wouldPlaceFallback;
+        this. exitObstructed = exitObstructed;
     }
 
     public void finalize(ServerLevel level, StructureProcessorList processors) {
-        failRule.ApplyFail(generatedRoom, connection, level, processors);
+        failRule.ApplyFail(generatedRoom, connection, level, processors, wouldPlaceFallback, exitObstructed);
     }
 
     public boolean isFinished() {

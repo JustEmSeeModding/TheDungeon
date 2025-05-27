@@ -1,6 +1,5 @@
 package net.emsee.thedungeon.dungeon.connectionRules.fail;
 
-import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.room.GeneratedRoom;
 import net.emsee.thedungeon.dungeon.room.GridRoomUtils;
@@ -8,13 +7,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import net.neoforged.neoforge.common.world.ModifiableStructureInfo;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
+import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public class WallFailRule extends FailRule {
+    private final StructureProcessorList processorList = new StructureProcessorList(new ArrayList<>());
     private final int width;
     private final int height;
     private final int heightOffset;
@@ -46,6 +50,7 @@ public class WallFailRule extends FailRule {
         fillY = 0;
     }
 
+
     public WallFailRule(String tag, int width, int height, int heightOffset, boolean offsetOut, Supplier<Block> block, int blocksPerLoop) {
         super(tag);
         this.width = width;
@@ -63,19 +68,30 @@ public class WallFailRule extends FailRule {
         fillY = 0;
     }
 
-    @Override
-    public void ApplyFail(GeneratedRoom room, GridRoomUtils.Connection connection, ServerLevel level, StructureProcessorList processors) {
-        BlockPos wallCenter = findWallCenter(room, connection);
-        if (wallCenter==null) {
-            return;
-        }
-        FillUnoccupied(wallCenter, level, connection, processors);
+
+    public FailRule withStructureProcessor(StructureProcessor processor) {
+        processorList.list().add(processor);
+        return this;
     }
+
+
+    @Override
+    public void ApplyFail(GeneratedRoom room, GridRoomUtils.Connection connection, ServerLevel level, StructureProcessorList processors, boolean wouldPlaceFallback, boolean exitObstructed) {
+        if (offsetOut && exitObstructed) return;
+        StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
+        finalProcessors.list().addAll(processors.list());
+        finalProcessors.list().addAll(processorList.list());
+        BlockPos wallCenter = findWallCenter(room, connection);
+        if (wallCenter==null) return;
+        Fill(wallCenter, level, connection, finalProcessors);
+    }
+
 
     @Override
     public boolean isFinished() {
         return fillY>height-1;
     }
+
 
     private BlockPos findWallCenter(GeneratedRoom room, GridRoomUtils.Connection connection) {
         BlockPos roomCenter = room.getPlacedWorldPos();
@@ -99,7 +115,8 @@ public class WallFailRule extends FailRule {
 
     }
 
-    public void FillUnoccupied(BlockPos wallCenter, ServerLevel level, GridRoomUtils.Connection connection, StructureProcessorList processors) {
+
+    private void Fill(BlockPos wallCenter, ServerLevel level, GridRoomUtils.Connection connection, StructureProcessorList processors) {
         int i = blocksPerLoop;
         while (i > 0) {
             if (fillY > height - 1) return;
@@ -115,7 +132,8 @@ public class WallFailRule extends FailRule {
 
             }
 
-            level.setBlockAndUpdate(wallCenter.offset(fillX, fillY, fillZ), block.get().defaultBlockState());
+            BlockPos placePos = wallCenter.offset(fillX, fillY, fillZ);
+            level.setBlockAndUpdate(placePos, processBlockForPlacement(level,placePos, block.get().defaultBlockState(),processors));
             switch (connection) {
                 case north, south -> {
                     fillX++;
@@ -136,13 +154,41 @@ public class WallFailRule extends FailRule {
         }
     }
 
+    private BlockState processBlockForPlacement(ServerLevel level, BlockPos globalPos, BlockState initialState, StructureProcessorList processors) {
+        // Create a StructureBlockInfo for the block
+        StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(
+                globalPos,
+                initialState,
+                null
+        );
+
+        for (StructureProcessor processor : processors.list()) {
+            blockInfo = processor.processBlock(level, new BlockPos(0,0,0), globalPos, blockInfo, blockInfo, new StructurePlaceSettings());
+        }
+        // Return the processed block state (or fallback to initial state)
+        return blockInfo != null ? blockInfo.state() : initialState;
+    }
+
+    /**
+     * Indicates that fallback block placement should be halted after this rule is applied.
+     *
+     * @return true, signaling to stop any further fallback placement attempts
+     */
     @Override
     public boolean stopFallbackPlacement() {
         return true;
     }
 
+    /**
+     * Creates a copy of this WallFailRule, including all configuration parameters and structure processors.
+     *
+     * @return a new WallFailRule instance with identical settings and processors
+     */
     @Override
     public FailRule getCopy() {
-        return new WallFailRule(tag, width, height, heightOffset, offsetOut, block, blocksPerLoop);
+        WallFailRule toReturn = new WallFailRule(tag, width, height, heightOffset, offsetOut, block, blocksPerLoop);
+        for (StructureProcessor processor : processorList.list())
+            toReturn.withStructureProcessor(processor);
+        return toReturn;
     }
 }

@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -24,14 +25,30 @@ public class GildedCaveOreProcessor extends StructureProcessor {
 
     public static final MapCodec<GildedCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final Map<Block, Integer> defaultMap = Map.of(Blocks.BLACKSTONE,10, Blocks.GILDED_BLACKSTONE, 1);
+    private final Map<Block, Integer> defaultMap = Util.make(Maps.newHashMap(), (map) -> {
+        map.put(Blocks.BLACKSTONE, 10);
+        map.put(Blocks.GILDED_BLACKSTONE, 1);
+    });
 
     private final Map<Block, Map<Block, Integer>> replacements = Util.make(Maps.newHashMap(), (map) -> {
         map.put(Blocks.BLACKSTONE, defaultMap);
     });
 
-    private GildedCaveOreProcessor() {}
+    /**
+ * Constructs a singleton instance of GildedCaveOreProcessor.
+ *
+ * This private constructor enforces the singleton pattern, preventing external instantiation.
+ */
+private GildedCaveOreProcessor() {}
 
+    /**
+     * Replaces certain blocks during structure placement with weighted alternatives, preserving relevant block state properties.
+     *
+     * If the block at the given position has defined replacement options, randomly selects a replacement based on weights and applies it, copying over stair and slab properties if present. If no replacement is applicable, returns the original block info unchanged.
+     *
+     * @return a new StructureBlockInfo with the replaced block state if applicable; otherwise, the original StructureBlockInfo
+     */
+    @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());
         Map <Block, Integer> options = this.replacements.get(relativeBlockInfo.state().getBlock());

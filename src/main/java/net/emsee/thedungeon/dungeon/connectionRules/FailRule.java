@@ -20,7 +20,7 @@ public abstract class FailRule {
         return tag.equals(this.tag);
     }
 
-    public abstract void ApplyFail(GeneratedRoom room, GridRoomUtils.Connection connection, ServerLevel level, StructureProcessorList processors);
+    public abstract void ApplyFail(GeneratedRoom room, GridRoomUtils.Connection connection, ServerLevel level, StructureProcessorList processors, boolean wouldPlaceFallback, boolean exitObstructed);
     public abstract boolean isFinished();
     public boolean stopFallbackPlacement() {return false;}
 

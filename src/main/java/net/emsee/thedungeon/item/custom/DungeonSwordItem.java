@@ -2,6 +2,7 @@ package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
+import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class DungeonSwordItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips {
+public class DungeonSwordItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
     public DungeonSwordItem(Tier tier, Properties properties) {
         super(tier, properties.rarity(Rarity.RARE));
     }
@@ -32,19 +33,12 @@ public class DungeonSwordItem extends SwordItem implements IDungeonCarryItem, ID
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
+
     public static @NotNull ItemAttributeModifiers createAttributes(Tier tier, int attackDamage, float attackSpeed) {
-        return createAttributes(tier, attackDamage, attackDamage, attackSpeed);
+        return createAttributes(tier, (float)attackDamage, attackSpeed);
     }
 
     public static @NotNull ItemAttributeModifiers createAttributes(Tier tier, float attackDamage , float attackSpeed) {
-        return createAttributes(tier, attackDamage, attackDamage, attackSpeed);
-    }
-
-    public static @NotNull ItemAttributeModifiers createAttributes(Tier tier, int attackDamage, int dungeonAttackDamage, float attackSpeed) {
-        return createAttributes(tier, (float)attackDamage, dungeonAttackDamage, attackSpeed);
-    }
-
-    public static @NotNull ItemAttributeModifiers createAttributes(Tier tier, float attackDamage, float dungeonAttackDamage , float attackSpeed) {
         return ItemAttributeModifiers.builder()
                 .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, (attackDamage + tier.getAttackDamageBonus()), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                 .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, attackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND).build();

@@ -19,41 +19,27 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.Map;
 
-public class StoneCaveOreProcessor extends StructureProcessor {
-    public static final StoneCaveOreProcessor INSTANCE = new StoneCaveOreProcessor();
+public class StoneToDeepslateCaveProcessor extends StructureProcessor {
+    public static final StoneToDeepslateCaveProcessor INSTANCE = new StoneToDeepslateCaveProcessor();
 
-    public static final MapCodec<StoneCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<StoneToDeepslateCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+
 
     private final Map<Block, Integer> defaultMap = Util.make(Maps.newHashMap(), (map) -> {
-        map.put(Blocks.STONE, 250);
-        map.put(Blocks.ANDESITE, 250);
-        map.put(Blocks.COBBLESTONE, 250);
-        map.put(Blocks.TUFF, 250);
-        map.put(Blocks.GOLD_ORE, 10);
-        map.put(Blocks.COAL_ORE, 6);
-        map.put(Blocks.COPPER_ORE, 2);
-        map.put(Blocks.IRON_ORE, 3);
-        map.put(Blocks.DIAMOND_ORE,1);
+        map.put(Blocks.DEEPSLATE,500);
+        map.put(Blocks.COBBLED_DEEPSLATE,500);
+        map.put(Blocks.DEEPSLATE_GOLD_ORE, 10);
+        map.put(Blocks.DEEPSLATE_COAL_ORE, 6);
+        map.put(Blocks.DEEPSLATE_IRON_ORE, 4);
+        map.put(Blocks.DEEPSLATE_DIAMOND_ORE, 2);
     });
 
     private final Map<Block, Map<Block, Integer>> replacements = Util.make(Maps.newHashMap(), (map) -> {
         map.put(Blocks.STONE, defaultMap);
     });
 
-    /****
- * Constructs a singleton instance of the StoneCaveOreProcessor.
- *
- * This private constructor prevents external instantiation.
- */
-private StoneCaveOreProcessor() {}
+    private StoneToDeepslateCaveProcessor() {}
 
-    /**
-     * Replaces certain blocks during structure placement with randomly selected alternatives based on weighted probabilities.
-     *
-     * If the original block has defined replacement options, selects a replacement block according to configured weights and preserves relevant block state properties (such as stair orientation and slab type). Returns the original block info if no replacement is applicable.
-     *
-     * @return a new StructureBlockInfo with the replacement block state, or the original if no replacement occurs
-     */
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());

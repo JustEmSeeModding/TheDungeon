@@ -30,10 +30,19 @@
   "entity.thedungeon.death_knight" : "Death Knight",
   "entity.thedungeon.skeleton_knight" : "Skeleton Knight",
   "entity.thedungeon.cave_goblin" : "Cave Goblin",
+  "entity.thedungeon.shadow_goblin" : "Shadow Goblin",
 
-  "item.thedungeon.dungeon_item": "Dungeon Attuned Item",
+  "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
+  "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
+  "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
+  "item.thedungeon.shadow_goblin_spawn_egg" :"Shadow Goblin Spawn Egg",
+
+  "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
 
   "item.thedungeon.tooltip.full_set_bonus": "Full Set Bonus:",
+
+  "item.thedungeon.infused_dagger": "Infused Dagger",
+  "item.thedungeon.infused_chisel": "Infused Chisel",
 
   "item.thedungeon.infused_alloy_helmet": "Infused Alloy Helmet",
   "item.thedungeon.infused_alloy_chestplate": "Infused Alloy Chestplate",
@@ -58,10 +67,6 @@
   "item.thedungeon.dungeon_debug_tool": "Dungeon Debug Tool",
   "item.thedungeon.dungeon_debug_tool.use": "Dungeon Regenerated",
   "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
-
-  "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
-  "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
-  "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
 
   "block.thedungeon.dungeon_portal" : "Dungeon Portal",
   "block.thedungeon.dungeon_portal_unstable" : "Unstable Dungeon Portal",

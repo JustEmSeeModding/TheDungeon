@@ -18,6 +18,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -113,4 +114,9 @@ public class UnstableDungeonPortal extends DungeonBlock implements IDungeonCarry
     private Optional<RecipeHolder<DungeonInfusionRecipe>> getCurrentRecipe(Item item, Level level) {
         return level.getRecipeManager().getRecipeFor(ModRecipes.DUNGEON_INFUSION_TYPE.get(), new DungeonInfusionRecipeInput(new ItemStack(item)), level);
     }
+
+    /*@Override
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+        return 15;
+    }*/
 }

@@ -48,8 +48,9 @@ public class StoneToGildedCaveProcessor extends StructureProcessor {
         map.put(Blocks.CRACKED_STONE_BRICKS, Map.of(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS,1));
     });
 
-    private StoneToGildedCaveProcessor() {}
+private StoneToGildedCaveProcessor() {}
 
+    @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         RandomSource randomsource = settings.getRandom(relativeBlockInfo.pos());
         Map <Block, Integer> options = this.replacements.get(relativeBlockInfo.state().getBlock());

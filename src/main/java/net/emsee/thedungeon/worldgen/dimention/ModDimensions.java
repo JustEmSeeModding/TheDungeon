@@ -30,17 +30,16 @@ public final class ModDimensions {
             ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_type"));
 
     public static void bootstrapType(BootstrapContext<DimensionType> context) {
-
         context.register(DUNGEON_TYPE, new DimensionType(
                 OptionalLong.of(6000), // fixedTime
-                true, // hasSkylight
+                false, // hasSkylight //<<TODO what is better?
                 false, // hasCeiling
                 false, // ultraWarm
                 false, // natural
                 1.0, // coordinateScale
                 false, // bedWorks
                 false, // respawnAnchorWorks
-                0, // minY
+                -96, // minY
                 320, // height
                 320, // logicalHeight
                 BlockTags.INFINIBURN_OVERWORLD, // infiniburn
