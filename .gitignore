@@ -23,6 +23,7 @@ run/config
 run/defaultconfigs
 run/downloads
 run/logs
+run/crash-reports
 run/patchouli_books
 run/resourcepacks
 run/saves
@@ -32,6 +33,7 @@ run/options.txt
 run/patchouli_data.json
 run/usercache.json
 run/usernamecache.json
+run/imgui.ini
 runs
 run-data
 
