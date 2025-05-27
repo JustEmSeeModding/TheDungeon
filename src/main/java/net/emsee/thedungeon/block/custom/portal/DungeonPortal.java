@@ -1,7 +1,6 @@
-package net.emsee.thedungeon.block.custom;
+package net.emsee.thedungeon.block.custom.portal;
 
-import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.block.entity.DungeonPortalBlockEntity;
+import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.events.ModDungeonDimensionEvents;
@@ -23,24 +22,17 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem {
-    public static final MapCodec<DungeonPortal> CODEC = simpleCodec(DungeonPortal::new);
+public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem {
+
 
     public DungeonPortal(Properties properties) {
         super(properties.randomTicks());
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override
@@ -52,8 +44,8 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
     protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof DungeonPortalBlockEntity entity) {
             MinecraftServer server = level.getServer();
-            if (player.isCreative() || GlobalDungeonManager.isOpen(server, entity.getExitRank(server))) {
-                ModDungeonDimensionEvents.PlayerTeleportDungeon(player, entity.getExitID(server), entity.getExitRank(server));
+            if (player.isCreative() || GlobalDungeonManager.isOpen(server, getExitRank())) {
+                ModDungeonDimensionEvents.PlayerTeleportDungeon(player, entity.getExitID(server, this), getExitRank());
             } else {
                 player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), false);
             }
@@ -67,11 +59,6 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
     public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
         tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-    }
-
-    @Override
-    public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
-        return new DungeonPortalBlockEntity(blockPos, blockState);
     }
 
     @Override
@@ -94,7 +81,7 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
     @Override
     protected void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
         if (!level.isClientSide && state.getBlock() != newState.getBlock() && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
-            GlobalDungeonManager.removePortalLocation(level.getServer(), pos);
+            GlobalDungeonManager.removePortalLocation(level.getServer(), pos, Dungeon.DungeonRank.getClosestRank(pos));
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
@@ -103,4 +90,6 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
         return 15;
     }
+
+    public abstract Dungeon.DungeonRank getExitRank();
 }

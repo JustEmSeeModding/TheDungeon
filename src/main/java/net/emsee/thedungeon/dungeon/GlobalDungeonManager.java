@@ -26,6 +26,8 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.*;
 
+import static net.emsee.thedungeon.TheDungeon.LOGGER;
+
 public final class GlobalDungeonManager {
     private static final int forceLoadedChunkRadius = 30;
     private static final int killRadius = 500;
@@ -65,8 +67,11 @@ public final class GlobalDungeonManager {
         ServerLevel dungeonDimension = server.getLevel(dungeonResourceKey);
         //check if the current queued dungeon is idle but not done and start it
         if (!currentDungeon.IsDoneGenerating() && !currentDungeon.IsBusyGenerating()) {
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("removing all portals");
             cleanAllPortals(server, saveData, currentDungeon.getRank());
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("killing all");
             KillAllInDungeon(server, currentDungeon.getRank());
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("starting generation");
             currentDungeon.Generate(dungeonDimension, currentDungeon.getRank().getCenterPos());
         }
 
@@ -94,10 +99,11 @@ public final class GlobalDungeonManager {
         // if timeLeft is less than 0 select a new dungeon and generate it.
         if ((timeLeft <= 0 || worldTime < lastExecutionTime)) {
             CloseDungeon(saveData, saveData.getNextToCollapse());
-            saveData.clearPortalPositions();
+            saveData.clearPortalPositions(saveData.getNextToCollapse());
             SelectNewProgressDungeon(server, false, saveData.getNextToCollapse());
             saveData.SelectNextForCollapse();
-            saveData.setTickInterval(5/*minutes*/*60*20);
+            saveData.setTickInterval(10/*minutes*/*60*20);
+            saveData.SetLastExecutionTime(worldTime);
 
             saveData.SetLastMinuteAnnouncement(-1);
             saveData.SetLastSecondAnnouncement(-1);
@@ -155,16 +161,19 @@ public final class GlobalDungeonManager {
                     possibleDungeons.put(dungeon, dungeon.getWeight());
             if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC))
                 TheDungeon.LOGGER.info("Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
-            saveData.addToProgressQueue(Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(possibleDungeons, server.getLevel(Level.OVERWORLD).getRandom())).GetCopy());
+            if (possibleDungeons.isEmpty()) return;
+            Dungeon newDungeon = ListAndArrayUtils.getRandomFromWeightedMapI(possibleDungeons, Objects.requireNonNull(server.getLevel(Level.OVERWORLD)).getRandom());
+            if (newDungeon== null) return;
+            saveData.addToProgressQueue(newDungeon.GetCopy());
         }
     }
 
+    //TODO this is VERY slow
     public static void KillAllInDungeon(MinecraftServer server, Dungeon.DungeonRank rank) {
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_KILL_ON_REGEN)) {
             for (Dungeon.DungeonRank forceRank : Dungeon.DungeonRank.values())
                 updateForcedChunks(server, forceRank);
             ServerLevel dimension = server.getLevel(dungeonResourceKey);
-
 
             BlockPos blockPos = rank.getCenterPos();
 
@@ -173,10 +182,11 @@ public final class GlobalDungeonManager {
             double centerZ = blockPos.getZ() + 0.5;
 
             AABB area = new AABB(
-                    centerX - killRadius, centerY - killRadius, centerZ - killRadius, // Min corner
-                    centerX + killRadius, centerY + killRadius, centerZ + killRadius  // Max corner
+                    centerX - killRadius, centerY - 150, centerZ - killRadius, // Min corner
+                    centerX + killRadius, centerY + 200, centerZ + killRadius  // Max corner
             );
 
+            assert dimension != null;
             List<Entity> entities = dimension.getEntitiesOfClass(Entity.class, area, e -> true);
 
 
@@ -222,27 +232,28 @@ public final class GlobalDungeonManager {
     }
 
     public static void CloseDungeon (DungeonSaveData saveData, Dungeon.DungeonRank rank) {
+        if (rank==null) return;
         saveData.setDungeonOpen(rank,false);
     }
 
-    public static void OpenDungeon(MinecraftServer server, Dungeon dungeon, boolean isUtilDungeon, Dungeon.DungeonRank rank) {
+    public static void OpenDungeon(MinecraftServer server, Dungeon dungeon, boolean isUtilDungeon) {
         if (!isUtilDungeon) SendMessageToPlayers(server, Component.translatable("announcement.thedungeon.open_dungeon").withStyle(ChatFormatting.GOLD));
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         saveData.SetLastMinuteAnnouncement(-1);
         saveData.SetLastSecondAnnouncement(-1);
         long worldTime = server.overworld().getGameTime();
         saveData.SetLastExecutionTime(worldTime);
-        if (!isUtilDungeon) saveData.setDungeonOpen(rank,true);
+        if (!isUtilDungeon) saveData.setDungeonOpen(dungeon.getRank(),true);
     }
 
     private static void cleanAllPortals(MinecraftServer server, DungeonSaveData saveData, Dungeon.DungeonRank rank) {
         ServerLevel dungeonDimension = server.getLevel(dungeonResourceKey);
         List<BlockPos> posList = saveData.getAllPortalPositions(rank);
+        assert dungeonDimension != null;
         for (BlockPos pos : posList) {
-            assert dungeonDimension != null;
             dungeonDimension.destroyBlock(pos, false);
         }
-        saveData.clearPortalPositions();
+        saveData.clearPortalPositions(rank);
     }
 
     private static void SendMessageToPlayers(MinecraftServer server, Component component) {
@@ -353,7 +364,7 @@ public final class GlobalDungeonManager {
 
     public static int giveRandomPortalID(MinecraftServer server, Dungeon.DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (saveData.portalPositionsEmpty()) return -1;
+        if (saveData.portalPositionsEmpty(rank)) return -1;
         return new Random().nextInt(saveData.portalPositionAmount(rank));
     }
 
@@ -362,9 +373,9 @@ public final class GlobalDungeonManager {
         saveData.addPortalPosition(pos, rank);
     }
 
-    public static void removePortalLocation(MinecraftServer server, BlockPos pos) {
+    public static void removePortalLocation(MinecraftServer server, BlockPos pos, Dungeon.DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        saveData.removePortalPosition(pos);
+        saveData.removePortalPosition(pos, rank);
     }
 
     private static void updateForcedChunks(MinecraftServer server, Dungeon.DungeonRank rank) {

@@ -18,7 +18,7 @@ public final class ModVillagers {
             DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, TheDungeon.MOD_ID);
 
     public static final Holder<PoiType> PORTAL_POI = POI_TYPES.register("portal_poi",
-            ()-> new PoiType(ImmutableSet.copyOf(ModBlocks.DUNGEON_PORTAL.get().getStateDefinition().getPossibleStates()),1,1));
+            ()-> new PoiType(ImmutableSet.copyOf(ModBlocks.DUNGEON_PORTAL_F.get().getStateDefinition().getPossibleStates()),1,1));
 
     public static final Holder<VillagerProfession> DUNGEON_SCHOLAR = VILLAGER_PROFESSIONS.register("dungeon_scholar",
             () -> new VillagerProfession("dungeon_scholar", holder -> holder.value() == PORTAL_POI.value(), holder -> holder.value() == PORTAL_POI.value(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.END_PORTAL_FRAME_FILL));

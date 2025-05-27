@@ -23,6 +23,7 @@ public final class GeneratedRoom {
 
     private final GridRoom room;
 
+    private GridRoomUtils.Connection placedFrom;
     private BlockPos placedWorldPos;
     private Rotation placedRotation;
     private int placedArrayX;
@@ -189,6 +190,8 @@ public final class GeneratedRoom {
     }
 
     private void generateRoomFrom(GridDungeonGenerator generator, int arrayX, int arrayY, int arrayZ, BlockPos worldPos, Rotation roomRotation, GridRoomUtils.Connection fromConnection) {
+        placedFrom = fromConnection;
+
         int xOffset = 0;
         int yOffset = 0;
         int zOffset = 0;
@@ -274,32 +277,32 @@ public final class GeneratedRoom {
         //Priority Map
         Map<Runnable, Integer> tasks = new HashMap<>();
 
-        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.north, false))
+        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.north, false) && placedFrom!=GridRoomUtils.Connection.north)
             tasks.put(() -> {
                 newRoom[0] = (generateHorizontalRoom(generator, placedRoomConnections, GridRoomUtils.Connection.north, random));
                 finishedConnections.put(GridRoomUtils.Connection.north, true);
             }, placedRoomConnections.getOrDefault(GridRoomUtils.Connection.north, 0));
-        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.east, false))
+        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.east, false) && placedFrom!=GridRoomUtils.Connection.east)
             tasks.put(() -> {
                 newRoom[0] = (generateHorizontalRoom(generator, placedRoomConnections, GridRoomUtils.Connection.east, random));
                 finishedConnections.put(GridRoomUtils.Connection.east, true);
             }, placedRoomConnections.getOrDefault(GridRoomUtils.Connection.east, 0));
-        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.south, false))
+        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.south, false) && placedFrom!=GridRoomUtils.Connection.south)
             tasks.put(() -> {
                 newRoom[0] = (generateHorizontalRoom(generator, placedRoomConnections, GridRoomUtils.Connection.south, random));
                 finishedConnections.put(GridRoomUtils.Connection.south, true);
             }, placedRoomConnections.getOrDefault(GridRoomUtils.Connection.south, 0));
-        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.west, false))
+        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.west, false) && placedFrom!=GridRoomUtils.Connection.west)
             tasks.put(() -> {
                 newRoom[0] = (generateHorizontalRoom(generator, placedRoomConnections, GridRoomUtils.Connection.west, random));
                 finishedConnections.put(GridRoomUtils.Connection.west, true);
             }, placedRoomConnections.getOrDefault(GridRoomUtils.Connection.west, 0));
-        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.up, false))
+        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.up, false) && placedFrom!=GridRoomUtils.Connection.up)
             tasks.put(() -> {
                 newRoom[0] = (generateUpRoom(generator, placedRoomConnections, random));
                 finishedConnections.put(GridRoomUtils.Connection.up, true);
             }, placedRoomConnections.getOrDefault(GridRoomUtils.Connection.up, 0));
-        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.down, false))
+        if (!finishedConnections.getOrDefault(GridRoomUtils.Connection.down, false) && placedFrom!=GridRoomUtils.Connection.down)
             tasks.put(() -> {
                 newRoom[0] = (generateDownRoom(generator, placedRoomConnections, random));
                 finishedConnections.put(GridRoomUtils.Connection.down, true);

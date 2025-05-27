@@ -31,6 +31,7 @@ public final class ListAndArrayUtils {
         for (T t: map.keySet()) {
             totalWeight += map.get(t);
         }
+        if (totalWeight <= 0) return null;
         int chosenWeight = (int)Math.ceil(random.nextDouble()*(totalWeight));
 
         for (T t: map.keySet()) {
@@ -48,6 +49,7 @@ public final class ListAndArrayUtils {
         for (T t: map.keySet()) {
             totalWeight += map.get(t);
         }
+        if (totalWeight <= 0) return null;
         int chosenWeight = (int)Math.ceil(random.nextDouble()*(totalWeight));
 
         for (T t: map.keySet()) {
@@ -65,6 +67,7 @@ public final class ListAndArrayUtils {
         for (T t: map.keySet()) {
             totalWeight += map.get(t);
         }
+        if (totalWeight <= 0) return null;
         double chosenWeight = random.nextDouble()*(totalWeight);
 
         for (T t: map.keySet()) {
@@ -82,6 +85,7 @@ public final class ListAndArrayUtils {
         for (T t: map.keySet()) {
             totalWeight += map.get(t);
         }
+        if (totalWeight <= 0) return null;
         double chosenWeight = random.nextDouble()*(totalWeight);
 
         for (T t: map.keySet()) {

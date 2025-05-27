@@ -47,11 +47,19 @@ public final class ModCreativeModeTabs {
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_BLOCKS_TAB = CREATIVE_MODE_TAB.register("dungeon_blocks_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.DUNGEON_PORTAL.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.DUNGEON_PORTAL_F.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_ingredients_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModBlocks.DUNGEON_PORTAL);
+                        output.accept(ModBlocks.DUNGEON_PORTAL_F);
+                        output.accept(ModBlocks.DUNGEON_PORTAL_E);
+                        output.accept(ModBlocks.DUNGEON_PORTAL_D);
+                        //output.accept(ModBlocks.DUNGEON_PORTAL_C);
+                        //output.accept(ModBlocks.DUNGEON_PORTAL_B);
+                        //output.accept(ModBlocks.DUNGEON_PORTAL_A);
+                        //output.accept(ModBlocks.DUNGEON_PORTAL_S);
+                        //output.accept(ModBlocks.DUNGEON_PORTAL_SS);
+                        output.accept(ModBlocks.DUNGEON_PORTAL_EXIT);
                         output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);

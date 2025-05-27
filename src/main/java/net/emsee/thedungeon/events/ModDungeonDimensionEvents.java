@@ -29,8 +29,8 @@ public final class ModDungeonDimensionEvents {
             MinecraftServer server = level.getServer();
             assert server!=null;
 
-            BlockPos teleportPos;
-            ResourceKey<Level> resourceKey;
+            BlockPos teleportPos = new BlockPos(0,0,0);
+            ResourceKey<Level> resourceKey = null;
 
             boolean returnFromDungeon = player.level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY);
             if (returnFromDungeon) {
@@ -39,14 +39,14 @@ public final class ModDungeonDimensionEvents {
                     teleportPos = server.overworld().getSharedSpawnPos();
                 }
                 resourceKey = serverPlayer.getRespawnDimension();
-            } else {
+            } else if(rank != null) {
                 if (!player.isCreative() && !CheckInventory(player)) return;
                 //teleportPos = GlobalDungeonManager.centerPos.above(3);
                 teleportPos = GlobalDungeonManager.getPortalPosition(server, portalID, rank).above(2);
                 resourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
-
             }
 
+            if (resourceKey == null) return;
             ServerLevel portalDimension = server.getLevel(resourceKey);
 
             teleport(player, portalDimension, teleportPos);

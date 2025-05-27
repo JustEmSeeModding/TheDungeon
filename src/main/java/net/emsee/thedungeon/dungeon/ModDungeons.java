@@ -28,7 +28,7 @@ public final class ModDungeons {
 
     public static final Dungeon THE_LIBRARY = register(new GridDungeon(
             "dungeon.the_dungeon.library",
-            Dungeon.DungeonRank.C,
+            Dungeon.DungeonRank.A,
             1,
             13,
             9,
@@ -40,7 +40,7 @@ public final class ModDungeons {
 
     public static final Dungeon CASTLE = register(new GridDungeon(
             "dungeon.the_dungeon.castle",
-            Dungeon.DungeonRank.B,
+            Dungeon.DungeonRank.D,
             1,
             9,
             9,

@@ -218,6 +218,7 @@ public class GridDungeonGenerator {
                 return;
             }
             Object toPlace = toPlaceInstances.peek();
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("to Place:" + toPlace);
             if (toPlace instanceof GeneratedRoom room) {
                 room.finalizePlacement(serverLevel, collection.getStructureProcessors(), random);
                 toPlaceInstances.remove();
@@ -226,7 +227,8 @@ public class GridDungeonGenerator {
                 failInstance.finalize(serverLevel, collection.getStructureProcessors());
                 if (failInstance.isFinished())
                     toPlaceInstances.remove();
-            } else {
+            }
+            else {
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.IMPORTANT_ONLY))
                     LOGGER.warn("Disallowed object in ToPlace List: {} - removing", toPlace);
                 toPlaceInstances.remove();

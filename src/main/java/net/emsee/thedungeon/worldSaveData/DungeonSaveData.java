@@ -140,7 +140,6 @@ public final class DungeonSaveData extends SavedData {
 
     /****
      * Removes and returns the first dungeon from the passive queue.
-     *
      * @return the dungeon removed from the passive queue
      */
     public Dungeon removeFromPassiveQueue(Dungeon.DungeonRank rank) {
@@ -151,9 +150,6 @@ public final class DungeonSaveData extends SavedData {
 
     /**
      * Removes and returns the next dungeon from the progress queue, or returns null if the queue is empty.
-     *
-     * Marks the data as dirty to ensure changes are persisted.
-     *
      * @return the next Dungeon in the progress queue, or null if the queue is empty
      */
     public Dungeon pollFromProgressQueue() {
@@ -186,21 +182,21 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    public void clearPortalPositions() {
-        dungeonData.getPortalPositions().clear();
+    public void clearPortalPositions(Dungeon.DungeonRank rank) {
+        dungeonData.getPortalPositions().get(rank).clear();
         setDirty();
     }
 
     public int portalPositionAmount(Dungeon.DungeonRank rank) {
-        return dungeonData.getPortalPositions().size();
+        return dungeonData.getPortalPositions().get(rank).size();
     }
 
     public BlockPos getPortalPosition(int portalID, Dungeon.DungeonRank rank) {
         return dungeonData.getPortalPositions().get(rank).get(portalID);
     }
 
-    public boolean portalPositionsEmpty() {
-        return dungeonData.getPortalPositions().isEmpty();
+    public boolean portalPositionsEmpty(Dungeon.DungeonRank rank) {
+        return dungeonData.getPortalPositions().get(rank).isEmpty();
     }
 
     public void addPortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
@@ -209,8 +205,8 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    public void removePortalPosition(BlockPos pos) {
-        dungeonData.getPortalPositions().remove(pos);
+    public void removePortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+        dungeonData.getPortalPositions().get(rank).remove(pos);
         setDirty();
     }
 

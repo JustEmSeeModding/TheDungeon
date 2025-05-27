@@ -131,7 +131,7 @@ public class GridDungeon extends Dungeon {
                 generator = null;
                 TheDungeon.LOGGER.info("Finished Dungeon Generation");
                 generated = true;
-                GlobalDungeonManager.OpenDungeon(serverLevel.getServer(), this, utilDungeon, getRank());
+                GlobalDungeonManager.OpenDungeon(serverLevel.getServer(), this, utilDungeon);
             }
         }
     }
