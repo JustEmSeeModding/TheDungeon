@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ShadowGoblinRenderer extends MobRenderer<ShadowGoblinEntity, ShadowGoblinModel> {
     public ShadowGoblinRenderer(EntityRendererProvider.Context context) {
-        super(context, new ShadowGoblinModel(context.bakeLayer(ModModelLayers.CAVE_GOBLIN)), .5f);
+        super(context, new ShadowGoblinModel(context.bakeLayer(ModModelLayers.SHADOW_GOBLIN )), .5f);
         this.addLayer(new ShadowGoblinEyeLayer(this));
         this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
     }

@@ -4,6 +4,7 @@ package net.emsee.thedungeon.events.entityCreation;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.entity.client.Goblin.caveGoblin.CaveGoblinModel;
+import net.emsee.thedungeon.entity.client.Goblin.shadowGoblin.ShadowGoblinModel;
 import net.emsee.thedungeon.entity.client.ModModelLayers;
 import net.emsee.thedungeon.entity.client.TestDummyModel;
 import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightModel;
@@ -26,7 +27,7 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.DEATH_KNIGHT, DeathKnightModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SKELETON_KNIGHT, SkeletonKnightModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_GOBLIN, CaveGoblinModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.SHADOW_GOBLIN, CaveGoblinModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SHADOW_GOBLIN, ShadowGoblinModel::createBodyLayer);
     }
 
     @SubscribeEvent

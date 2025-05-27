@@ -547,7 +547,7 @@ public final class GeneratedRoom {
             roomEndChance = GetOverrideEndChance();
         }
 
-        if (random.nextFloat() > roomEndChance) {
+        if (random.nextFloat() <= roomEndChance) {
             if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
                 LOGGER.info("{}: room ended, placing fallback", this);
             generator.RoomConnectionFail(room.getConnectionTag(GridRoomUtils.Connection.down, placedRotation), this, GridRoomUtils.Connection.down, true, false);
