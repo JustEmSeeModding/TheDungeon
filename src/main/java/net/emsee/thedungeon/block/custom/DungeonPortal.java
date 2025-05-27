@@ -3,6 +3,7 @@ package net.emsee.thedungeon.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.entity.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.events.ModDungeonDimensionEvents;
 import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
@@ -51,8 +52,8 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
     protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof DungeonPortalBlockEntity entity) {
             MinecraftServer server = level.getServer();
-            if (player.isCreative() || GlobalDungeonManager.isOpen(server)) {
-                ModDungeonDimensionEvents.PlayerTeleportDungeon(player, entity.getExitID(server));
+            if (player.isCreative() || GlobalDungeonManager.isOpen(server, entity.getExitRank(server))) {
+                ModDungeonDimensionEvents.PlayerTeleportDungeon(player, entity.getExitID(server), entity.getExitRank(server));
             } else {
                 player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), false);
             }
@@ -76,7 +77,7 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
     @Override
     protected void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
-            GlobalDungeonManager.addPortalLocation(level.getServer(), pos);
+            GlobalDungeonManager.addPortalLocation(level.getServer(), pos, Dungeon.DungeonRank.getClosestRank(pos));
         }
         super.randomTick(state, level, pos, random);
     }
@@ -84,7 +85,7 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
     @Override
     protected void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
-            GlobalDungeonManager.addPortalLocation(level.getServer(), pos);
+            GlobalDungeonManager.addPortalLocation(level.getServer(), pos, Dungeon.DungeonRank.getClosestRank(pos));
         }
         super.onPlace(state, level, pos, oldState, movedByPiston);
     }

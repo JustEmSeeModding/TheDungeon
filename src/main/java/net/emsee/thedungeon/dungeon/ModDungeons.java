@@ -14,19 +14,6 @@ import java.util.Map;
 public final class ModDungeons {
     public static final Map<String, Dungeon> DUNGEONS = new HashMap<>();
 
-    //TODO remove this VV
-    public static final Dungeon CLEANUP_OLD = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup",
-            Dungeon.DungeonRank.F,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-
 
     public static final Dungeon TEST = register(new GridDungeon(
             "dungeon.the_dungeon.test",

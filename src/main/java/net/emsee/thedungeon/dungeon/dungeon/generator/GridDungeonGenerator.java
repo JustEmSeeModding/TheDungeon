@@ -116,7 +116,7 @@ public class GridDungeonGenerator {
 
         if (currentTask == GenerationTask.UNSTARTED) {
             currentTask = GenerationTask.CALCULATING;
-            GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer());
+            GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer(), dungeon.getRank());
         } else if (currentTask == GenerationTask.CALCULATING) calculationStep(serverLevel.getServer());
         else if (currentTask == GenerationTask.CHECK_REQUIREMENTS) checkRequirementStep(serverLevel.getServer());
         else if (currentTask == GenerationTask.FILLING_UNOCCUPIED) fillUnoccupiedStep(serverLevel.getServer());
@@ -184,7 +184,7 @@ public class GridDungeonGenerator {
             LOGGER.info("Not All Required Rooms where generated, regenerating with Seed+1");
             //generator = new GridDungeonGenerator(this, level, generatedPos, generator.GetSeed()+1);
             if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
-                PriorityCleanup(server);
+                PriorityCleanup(server, dungeon.getRank());
             dungeon.Generate(worldPos, GetSeed() + 1);
             return;
         }
@@ -212,7 +212,7 @@ public class GridDungeonGenerator {
     private void placeRoomStep(ServerLevel serverLevel) {
         for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.PLACER_STEPS_PER_TICK); i++) {
             if (toPlaceInstances.isEmpty()) {
-                GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer());
+                GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer(), dungeon.getRank());
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) LOGGER.info("All Rooms Placed, Starting Mob Spawning");
                 currentTask = GenerationTask.FILLING_WITH_MOBS;
                 return;

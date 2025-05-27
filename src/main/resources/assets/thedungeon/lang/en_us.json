@@ -1,7 +1,7 @@
 {
   "announcement.thedungeon.open_dungeon" : "A new dungeon has been opened",
-  "announcement.thedungeon.seconds_left" : "%s seconds left until dungeon collapse",
-  "announcement.thedungeon.minutes_left" : "%s minutes left until dungeon collapse",
+  "announcement.thedungeon.seconds_left" : "%s-rank has %s seconds left until collapse",
+  "announcement.thedungeon.minutes_left" : "%s-rank has %s minutes left until collapse",
 
   "message.thedungeon.view_time_closed" : "The dungeon is closed",
   "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the gamerules",

@@ -125,16 +125,16 @@ public final class DungeonSaveData extends SavedData {
         return toReturn;
     }
 
-    public boolean isPassiveQueueEmpty() {
-        return dungeonData.getDungeonPassiveQueue().isEmpty();
+    public boolean isPassiveQueueEmpty(Dungeon.DungeonRank rank) {
+        return dungeonData.getDungeonPassiveQueue(rank).isEmpty();
     }
 
-    public Dungeon peekPassiveQueue() {
-        return dungeonData.getDungeonPassiveQueue().peek();
+    public Dungeon peekPassiveQueue(Dungeon.DungeonRank rank) {
+        return dungeonData.getDungeonPassiveQueue(rank).peek();
     }
 
     public void addToPassiveQueue(Dungeon dungeon) {
-        dungeonData.getDungeonPassiveQueue().add(dungeon);
+        dungeonData.getDungeonPassiveQueue(dungeon.getRank()).add(dungeon);
         setDirty();
     }
 
@@ -143,8 +143,8 @@ public final class DungeonSaveData extends SavedData {
      *
      * @return the dungeon removed from the passive queue
      */
-    public Dungeon removeFromPassiveQueue() {
-        Dungeon toReturn = dungeonData.getDungeonPassiveQueue().remove();
+    public Dungeon removeFromPassiveQueue(Dungeon.DungeonRank rank) {
+        Dungeon toReturn = dungeonData.getDungeonPassiveQueue(rank).remove();
         setDirty();
         return toReturn;
     }
@@ -177,12 +177,12 @@ public final class DungeonSaveData extends SavedData {
      *
      * @return true if the dungeon is open; false otherwise
      */
-    public boolean isDungeonOpen() {
-        return dungeonData.getDungeonOpen();
+    public boolean isDungeonOpen(Dungeon.DungeonRank rank) {
+        return dungeonData.getDungeonOpen(rank);
     }
 
-    public void setDungeonOpen(boolean isOpen) {
-        dungeonData.setDungeonOpen(isOpen);
+    public void setDungeonOpen(Dungeon.DungeonRank rank, boolean isOpen) {
+        dungeonData.setDungeonOpen(rank, isOpen);
         setDirty();
     }
 
@@ -191,21 +191,21 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    public int portalPositionAmount() {
+    public int portalPositionAmount(Dungeon.DungeonRank rank) {
         return dungeonData.getPortalPositions().size();
     }
 
-    public BlockPos getPortalPosition(int portalID) {
-        return dungeonData.getPortalPositions().get(portalID);
+    public BlockPos getPortalPosition(int portalID, Dungeon.DungeonRank rank) {
+        return dungeonData.getPortalPositions().get(rank).get(portalID);
     }
 
     public boolean portalPositionsEmpty() {
         return dungeonData.getPortalPositions().isEmpty();
     }
 
-    public void addPortalPosition(BlockPos pos) {
-        if (!dungeonData.getPortalPositions().contains(pos))
-            dungeonData.getPortalPositions().add(pos);
+    public void addPortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+        if (!dungeonData.getPortalPositions().get(rank).contains(pos))
+            dungeonData.getPortalPositions().get(rank).add(pos);
         setDirty();
     }
 
@@ -214,8 +214,8 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    public List<BlockPos> getAllPortalPositions() {
-        return new ArrayList<>(dungeonData.getPortalPositions());
+    public List<BlockPos> getAllPortalPositions(Dungeon.DungeonRank rank) {
+        return new ArrayList<>(dungeonData.getPortalPositions().get(rank));
     }
 
     public int getTickInterval() {return dungeonData.getTickInterval();}
@@ -225,11 +225,12 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    public boolean isTiming() {
-        return dungeonData.isTiming();
+    public Dungeon.DungeonRank getNextToCollapse() {
+        return dungeonData.getNextToCollapse();
     }
-    public void setTiming(boolean timing) {
-        dungeonData.setTiming(timing);
+
+    public void SelectNextForCollapse() {
+        dungeonData.setNextToCollapse(Dungeon.DungeonRank.getNext(getNextToCollapse()));
         setDirty();
     }
 }
