@@ -19,7 +19,19 @@ build
 
 # other
 eclipse
-run
+run/config
+run/defaultconfigs
+run/downloads
+run/logs
+run/patchouli_books
+run/resourcepacks
+run/saves
+run/screenshots
+run/command_history.txt
+run/options.txt
+run/patchouli_data.json
+run/usercache.json
+run/usernamecache.json
 runs
 run-data
 
