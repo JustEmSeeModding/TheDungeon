@@ -119,6 +119,8 @@ public final class GlobalDungeonManager {
 
         Level dungeonDimension = server.getLevel(dungeonResourceKey);
 
+        if (saveData.getNextToCollapse() == null) return;
+
         if (minutesLeft <= 1) {
             if ((secondsLeft <= 10 || secondsLeft % 10 == 0) && (secondsLeft < saveData.GetLasSecondAnnouncement() || saveData.GetLasSecondAnnouncement() == -1)) {
                 if (secondsLeft<=10)
@@ -129,8 +131,9 @@ public final class GlobalDungeonManager {
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("{}-rank Ticks until next dungeon:{}", saveData.getNextToCollapse().getName(), timeLeft);
             }
         } else if ((minutesLeft <= saveData.GetLastMinuteAnnouncement() - 1) || saveData.GetLastMinuteAnnouncement() == -1) {
-            SendMessageToPlayersInLevel(server, Component.translatable("announcement.thedungeon.minutes_left", saveData.getNextToCollapse().getName(), minutesLeft).withStyle(ChatFormatting.GOLD), dungeonDimension);
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("{}-rank Ticks until next dungeon:{}", saveData.getNextToCollapse().getName(), timeLeft);
+                SendMessageToPlayersInLevel(server, Component.translatable("announcement.thedungeon.minutes_left", saveData.getNextToCollapse().getName(), minutesLeft).withStyle(ChatFormatting.GOLD), dungeonDimension);
+                if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC))
+                    TheDungeon.LOGGER.info("{}-rank Ticks until next dungeon:{}", saveData.getNextToCollapse().getName(), timeLeft);
             saveData.SetLastMinuteAnnouncement(minutesLeft);
         }
     }

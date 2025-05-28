@@ -8,16 +8,11 @@ import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.*;
 
 public final class DungeonNBTData {
     private final Queue<Dungeon> dungeonProgressQueue = new LinkedList<>();
-    //private final Queue<Dungeon> dungeonPassiveQueue = new LinkedList<>();
-    //TODO convert to this VV
-
     private final Map<Dungeon.DungeonRank, Queue<Dungeon>> dungeonPassiveQueue = Map.of(
             Dungeon.DungeonRank.F, new LinkedList<>(),
             Dungeon.DungeonRank.E, new LinkedList<>(),
@@ -28,7 +23,7 @@ public final class DungeonNBTData {
             Dungeon.DungeonRank.S, new LinkedList<>(),
             Dungeon.DungeonRank.SS, new LinkedList<>()
     );
-    private int tickInterval = 5/*-minutes -> to Ticks*/ * 60 * 20;
+    private int tickInterval = 10/*-minutes -> to Ticks*/ * 60 * 20;
     private long lastExecutionTime = -1;
     private long lastMinuteAnnouncement = -1;
     private long lastSecondAnnouncement = -1;
@@ -211,6 +206,7 @@ public final class DungeonNBTData {
     }
 
     public Queue<Dungeon> getDungeonPassiveQueue(Dungeon.DungeonRank rank) {
+        if (rank==null) return null;
         return dungeonPassiveQueue.get(rank);
     }
 

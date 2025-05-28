@@ -126,10 +126,12 @@ public final class DungeonSaveData extends SavedData {
     }
 
     public boolean isPassiveQueueEmpty(Dungeon.DungeonRank rank) {
+        if (rank==null) return true;
         return dungeonData.getDungeonPassiveQueue(rank).isEmpty();
     }
 
     public Dungeon peekPassiveQueue(Dungeon.DungeonRank rank) {
+        if (rank == null) return null;
         return dungeonData.getDungeonPassiveQueue(rank).peek();
     }
 
@@ -183,34 +185,41 @@ public final class DungeonSaveData extends SavedData {
     }
 
     public void clearPortalPositions(Dungeon.DungeonRank rank) {
+        if (rank==null) return;
         dungeonData.getPortalPositions().get(rank).clear();
         setDirty();
     }
 
     public int portalPositionAmount(Dungeon.DungeonRank rank) {
+        if (rank==null) return -1;
         return dungeonData.getPortalPositions().get(rank).size();
     }
 
     public BlockPos getPortalPosition(int portalID, Dungeon.DungeonRank rank) {
+        if (rank==null) return null;
         return dungeonData.getPortalPositions().get(rank).get(portalID);
     }
 
     public boolean portalPositionsEmpty(Dungeon.DungeonRank rank) {
+        if (rank==null) return true;
         return dungeonData.getPortalPositions().get(rank).isEmpty();
     }
 
     public void addPortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+        if (rank==null) return;
         if (!dungeonData.getPortalPositions().get(rank).contains(pos))
             dungeonData.getPortalPositions().get(rank).add(pos);
         setDirty();
     }
 
     public void removePortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+        if (rank==null) return;
         dungeonData.getPortalPositions().get(rank).remove(pos);
         setDirty();
     }
 
     public List<BlockPos> getAllPortalPositions(Dungeon.DungeonRank rank) {
+        if (rank==null) return null;
         return new ArrayList<>(dungeonData.getPortalPositions().get(rank));
     }
 
