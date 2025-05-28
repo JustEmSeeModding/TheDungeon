@@ -5,8 +5,13 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 
-public final class ParticleUtils {
 
+/**
+ * a class I originally made for a different mod
+ * has a lot of cool particle shapes
+ * maybe useful for some artifacts or Mob attacks
+ */
+public final class ParticleUtils {
     //client
     public static void circle(double centerX, double centerY, double centerZ, double radius, ClientLevel level, ParticleOptions particle, double xSpeed, double ySpeed, double zSpeed, double probability, int density) {
         double r = (radius * 2) / Math.PI;
@@ -42,6 +47,19 @@ public final class ParticleUtils {
             double rand = Math.random();
             if (rand < probability) {
                 level.addParticle(particle, true, x + centerX, centerY, z + centerZ, xSpeed - (x * expandSpeed), ySpeed, zSpeed - (z * expandSpeed));
+            }
+        }
+    }
+
+    //server
+    public static void circleExpand(double centerX, double centerY, double centerZ, double radius, double expandSpeed, ServerLevel level, ParticleOptions particle, double xSpeed, double ySpeed, double zSpeed, double probability, int density) {
+        double r = (radius * 2) / Math.PI;
+        for (double a = 0; a < Math.PI * 2; a += Math.PI / (density * r)) {
+            double x = Math.cos(a) * r;
+            double z = Math.sin(a) * r;
+            double rand = Math.random();
+            if (rand < probability) {
+                level.sendParticles(particle, x + centerX, centerY, z+centerZ, 1, xSpeed - (x * expandSpeed), ySpeed, zSpeed- (z * expandSpeed), 1);
             }
         }
     }

@@ -1,7 +1,7 @@
 {
   "announcement.thedungeon.open_dungeon" : "A new dungeon has been opened",
-  "announcement.thedungeon.seconds_left" : "%s seconds left until dungeon collapse",
-  "announcement.thedungeon.minutes_left" : "%s minutes left until dungeon collapse",
+  "announcement.thedungeon.seconds_left" : "%s-rank has %s seconds left until collapse",
+  "announcement.thedungeon.minutes_left" : "%s-rank has %s minutes left until collapse",
 
   "message.thedungeon.view_time_closed" : "The dungeon is closed",
   "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the gamerules",
@@ -68,7 +68,15 @@
   "item.thedungeon.dungeon_debug_tool.use": "Dungeon Regenerated",
   "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
 
-  "block.thedungeon.dungeon_portal" : "Dungeon Portal",
+  "block.thedungeon.dungeon_portal_f" : "F Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_e" : "E Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_d" : "D Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_c" : "C Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_b" : "B Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_a" : "A Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_s" : "S Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_ss" : "SS Rank Dungeon Portal",
+  "block.thedungeon.dungeon_portal_exit" : "Dungeon Exit Portal",
   "block.thedungeon.dungeon_portal_unstable" : "Unstable Dungeon Portal",
 
   "block.thedungeon.infused_dirt" : "Infused Dirt",

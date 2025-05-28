@@ -3,6 +3,7 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
@@ -17,7 +18,15 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.DUNGEON_PORTAL);
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_F, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_E, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_D, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_C, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_B, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_A, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_S, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_SS, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_EXIT, TheDungeon.resourceLocation("block/dungeon_portal"));
         blockWithItem(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
 
 
@@ -55,6 +64,10 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
     private void blockWithItem(DeferredBlock<?> deferredBlock) {
         simpleBlockWithItem(deferredBlock.get(), cubeAll(deferredBlock.get()));
+    }
+
+    private void blockWithItem(DeferredBlock<?> deferredBlock, ResourceLocation texture){
+        simpleBlockWithItem(deferredBlock.get(), this.models().cubeAll( BuiltInRegistries.BLOCK.getKey(deferredBlock.get()).getPath(), texture));
     }
 
     private void blockWithItemCopyFromOtherBlock(DeferredBlock<?> deferredBlock, DeferredBlock<?> copyDeferredBlock) {

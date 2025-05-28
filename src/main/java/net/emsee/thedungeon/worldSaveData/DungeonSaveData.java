@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.worldSaveData;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
@@ -40,7 +41,7 @@ public final class DungeonSaveData extends SavedData {
      */
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("DungeonData saving");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData saving");
         tag.put("DungeonData", dungeonData.SerializeNBT());
         return tag;
     }
@@ -53,7 +54,7 @@ public final class DungeonSaveData extends SavedData {
      * @return a new DungeonSaveData instance with its state restored from NBT
      */
     private static DungeonSaveData load(CompoundTag nbt, HolderLookup.Provider provider) {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("DungeonData Loading");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData Loading");
         DungeonSaveData data = new DungeonSaveData();
         data.dungeonData.DeserializeNBT(nbt.getCompound("DungeonData"));
         return data;
@@ -125,35 +126,33 @@ public final class DungeonSaveData extends SavedData {
         return toReturn;
     }
 
-    public boolean isPassiveQueueEmpty() {
-        return dungeonData.getDungeonPassiveQueue().isEmpty();
+    public boolean isPassiveQueueEmpty(Dungeon.DungeonRank rank) {
+        if (rank==null) return true;
+        return dungeonData.getDungeonPassiveQueue(rank).isEmpty();
     }
 
-    public Dungeon peekPassiveQueue() {
-        return dungeonData.getDungeonPassiveQueue().peek();
+    public Dungeon peekPassiveQueue(Dungeon.DungeonRank rank) {
+        if (rank == null) return null;
+        return dungeonData.getDungeonPassiveQueue(rank).peek();
     }
 
     public void addToPassiveQueue(Dungeon dungeon) {
-        dungeonData.getDungeonPassiveQueue().add(dungeon);
+        dungeonData.getDungeonPassiveQueue(dungeon.getRank()).add(dungeon);
         setDirty();
     }
 
     /****
      * Removes and returns the first dungeon from the passive queue.
-     *
      * @return the dungeon removed from the passive queue
      */
-    public Dungeon removeFromPassiveQueue() {
-        Dungeon toReturn = dungeonData.getDungeonPassiveQueue().remove();
+    public Dungeon removeFromPassiveQueue(Dungeon.DungeonRank rank) {
+        Dungeon toReturn = dungeonData.getDungeonPassiveQueue(rank).remove();
         setDirty();
         return toReturn;
     }
 
     /**
      * Removes and returns the next dungeon from the progress queue, or returns null if the queue is empty.
-     *
-     * Marks the data as dirty to ensure changes are persisted.
-     *
      * @return the next Dungeon in the progress queue, or null if the queue is empty
      */
     public Dungeon pollFromProgressQueue() {
@@ -177,45 +176,52 @@ public final class DungeonSaveData extends SavedData {
      *
      * @return true if the dungeon is open; false otherwise
      */
-    public boolean isDungeonOpen() {
-        return dungeonData.getDungeonOpen();
+    public boolean isDungeonOpen(Dungeon.DungeonRank rank) {
+        return dungeonData.getDungeonOpen(rank);
     }
 
-    public void setDungeonOpen(boolean isOpen) {
-        dungeonData.setDungeonOpen(isOpen);
+    public void setDungeonOpen(Dungeon.DungeonRank rank, boolean isOpen) {
+        dungeonData.setDungeonOpen(rank, isOpen);
         setDirty();
     }
 
-    public void clearPortalPositions() {
-        dungeonData.getPortalPositions().clear();
+    public void clearPortalPositions(Dungeon.DungeonRank rank) {
+        if (rank==null) return;
+        dungeonData.getPortalPositions().get(rank).clear();
         setDirty();
     }
 
-    public int portalPositionAmount() {
-        return dungeonData.getPortalPositions().size();
+    public int portalPositionAmount(Dungeon.DungeonRank rank) {
+        if (rank==null) return -1;
+        return dungeonData.getPortalPositions().get(rank).size();
     }
 
-    public BlockPos getPortalPosition(int portalID) {
-        return dungeonData.getPortalPositions().get(portalID);
+    public BlockPos getPortalPosition(int portalID, Dungeon.DungeonRank rank) {
+        if (rank==null) return null;
+        return dungeonData.getPortalPositions().get(rank).get(portalID);
     }
 
-    public boolean portalPositionsEmpty() {
-        return dungeonData.getPortalPositions().isEmpty();
+    public boolean portalPositionsEmpty(Dungeon.DungeonRank rank) {
+        if (rank==null) return true;
+        return dungeonData.getPortalPositions().get(rank).isEmpty();
     }
 
-    public void addPortalPosition(BlockPos pos) {
-        if (!dungeonData.getPortalPositions().contains(pos))
-            dungeonData.getPortalPositions().add(pos);
+    public void addPortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+        if (rank==null) return;
+        if (!dungeonData.getPortalPositions().get(rank).contains(pos))
+            dungeonData.getPortalPositions().get(rank).add(pos);
         setDirty();
     }
 
-    public void removePortalPosition(BlockPos pos) {
-        dungeonData.getPortalPositions().remove(pos);
+    public void removePortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+        if (rank==null) return;
+        dungeonData.getPortalPositions().get(rank).remove(pos);
         setDirty();
     }
 
-    public List<BlockPos> getAllPortalPositions() {
-        return new ArrayList<>(dungeonData.getPortalPositions());
+    public List<BlockPos> getAllPortalPositions(Dungeon.DungeonRank rank) {
+        if (rank==null) return null;
+        return new ArrayList<>(dungeonData.getPortalPositions().get(rank));
     }
 
     public int getTickInterval() {return dungeonData.getTickInterval();}
@@ -225,11 +231,12 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    public boolean isTiming() {
-        return dungeonData.isTiming();
+    public Dungeon.DungeonRank getNextToCollapse() {
+        return dungeonData.getNextToCollapse();
     }
-    public void setTiming(boolean timing) {
-        dungeonData.setTiming(timing);
+
+    public void SelectNextForCollapse() {
+        dungeonData.setNextToCollapse(Dungeon.DungeonRank.getNext(getNextToCollapse()));
         setDirty();
     }
 }

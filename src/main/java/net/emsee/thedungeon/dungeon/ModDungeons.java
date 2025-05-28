@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon;
 
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.dungeon.dungeon.type.GridDungeon;
@@ -9,23 +10,8 @@ import net.emsee.thedungeon.dungeon.roomCollections.collections.*;
 import java.util.HashMap;
 import java.util.Map;
 
-
-//TODO Rewrite dungeons and generate to generate based on rank. so there is always a dungeon of each rank open
 public final class ModDungeons {
     public static final Map<String, Dungeon> DUNGEONS = new HashMap<>();
-
-    //TODO remove this VV
-    public static final Dungeon CLEANUP_OLD = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup",
-            Dungeon.DungeonRank.F,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
 
 
     public static final Dungeon TEST = register(new GridDungeon(
@@ -41,7 +27,7 @@ public final class ModDungeons {
 
     public static final Dungeon THE_LIBRARY = register(new GridDungeon(
             "dungeon.the_dungeon.library",
-            Dungeon.DungeonRank.C,
+            Dungeon.DungeonRank.A,
             1,
             13,
             9,
@@ -53,7 +39,7 @@ public final class ModDungeons {
 
     public static final Dungeon CASTLE = register(new GridDungeon(
             "dungeon.the_dungeon.castle",
-            Dungeon.DungeonRank.B,
+            Dungeon.DungeonRank.D,
             1,
             9,
             9,
@@ -66,7 +52,7 @@ public final class ModDungeons {
     public static final Dungeon GOBLIN_CAVES = register(new GridDungeon(
             "dungeon.the_dungeon.goblin_caves",
             Dungeon.DungeonRank.F,
-            0,
+            1,
             11,
             11,
             new GoblinCavesGridRoomCollection())
@@ -167,7 +153,7 @@ public final class ModDungeons {
             .IsUtilDungeon(true));
 
     private static Dungeon register(Dungeon dungeon) {
-        if(TheDungeon.debugMode.is(TheDungeon.DebugMode.IMPORTANT_ONLY)) TheDungeon.LOGGER.info("Registering Dungeon :{}", dungeon);
+        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Registering Dungeon :{}", dungeon);
         DUNGEONS.put(dungeon.GetResourceName(), dungeon);
         GlobalDungeonManager.dungeons.put(dungeon, dungeon.getWeight());
         return dungeon;

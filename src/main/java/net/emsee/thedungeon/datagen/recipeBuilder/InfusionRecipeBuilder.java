@@ -1,13 +1,11 @@
 package net.emsee.thedungeon.datagen.recipeBuilder;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.recipe.DungeonInfusionRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
@@ -22,6 +20,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * custom DataGen for custom recipes
+ */
 public class InfusionRecipeBuilder implements RecipeBuilder {
     private final RecipeCategory category;
     private final Item result;

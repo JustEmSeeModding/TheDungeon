@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -26,12 +25,14 @@ public class WallFailRule extends FailRule {
     private final boolean offsetOut;
     private final Supplier<Block> block;
 
-    int fillX;
-    int fillY;
-    int fillZ;
+    private int fillX;
+    private int fillY;
+    private int fillZ;
 
-    int maxFillX;
-    int maxFillZ;
+    private int maxFillX;
+    private int maxFillZ;
+
+    private boolean exitMarkedObstructed;
 
     public WallFailRule(String tag, int width, int height, int heightOffset, boolean offsetOut, Supplier<Block> block) {
         super(tag);
@@ -77,6 +78,7 @@ public class WallFailRule extends FailRule {
 
     @Override
     public void ApplyFail(GeneratedRoom room, GridRoomUtils.Connection connection, ServerLevel level, StructureProcessorList processors, boolean wouldPlaceFallback, boolean exitObstructed) {
+        exitMarkedObstructed = exitObstructed;
         if (offsetOut && exitObstructed) return;
         StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
         finalProcessors.list().addAll(processors.list());
@@ -89,27 +91,27 @@ public class WallFailRule extends FailRule {
 
     @Override
     public boolean isFinished() {
-        return fillY>height-1;
+        return fillY>height-1 || offsetOut && exitMarkedObstructed;
     }
 
 
     private BlockPos findWallCenter(GeneratedRoom room, GridRoomUtils.Connection connection) {
         BlockPos roomCenter = room.getPlacedWorldPos();
         Vec3i connectionArrayOffset = room.getPlacedArrayOffset(connection);
-        if (connection == GridRoomUtils.Connection.up) {
+        if (connection == GridRoomUtils.Connection.UP) {
             return null;
         }
-        if (connection == GridRoomUtils.Connection.down) {
+        if (connection == GridRoomUtils.Connection.DOWN) {
             return null;
         }
         if (connectionArrayOffset==null) return null;
         int unitXOffset = 0;
         int unitZOffset = 0;
         switch (connection) {
-            case north -> unitZOffset = 1;
-            case east -> unitXOffset = -1;
-            case south -> unitZOffset = -1;
-            case west -> unitXOffset = 1;
+            case NORTH -> unitZOffset = 1;
+            case EAST -> unitXOffset = -1;
+            case SOUTH -> unitZOffset = -1;
+            case WEST -> unitXOffset = 1;
         }
         return roomCenter.offset((connectionArrayOffset.getX()*room.getGridWidth() + unitXOffset * (room.getGridWidth()/2+(offsetOut?0:1))), connectionArrayOffset.getY()*room.getGridHeight() + heightOffset, connectionArrayOffset.getZ()*room.getGridWidth() + unitZOffset * (room.getGridWidth()/2+(offsetOut?0:1)));
 
@@ -121,11 +123,11 @@ public class WallFailRule extends FailRule {
         while (i > 0) {
             if (fillY > height - 1) return;
             switch (connection) {
-                case north, south -> {
+                case NORTH, SOUTH -> {
                     fillZ = 0;
                     maxFillZ = 0;
                 }
-                case east, west -> {
+                case EAST, WEST -> {
                     fillX = 0;
                     maxFillX = 0;
                 }
@@ -135,14 +137,14 @@ public class WallFailRule extends FailRule {
             BlockPos placePos = wallCenter.offset(fillX, fillY, fillZ);
             level.setBlockAndUpdate(placePos, processBlockForPlacement(level,placePos, block.get().defaultBlockState(),processors));
             switch (connection) {
-                case north, south -> {
+                case NORTH, SOUTH -> {
                     fillX++;
                     if (fillX > maxFillX) {
                         fillX = -width / 2;
                         fillY++;
                     }
                 }
-                case east, west -> {
+                case EAST, WEST -> {
                     fillZ++;
                     if (fillZ > maxFillZ) {
                         fillZ = -width / 2;
@@ -155,6 +157,7 @@ public class WallFailRule extends FailRule {
     }
 
     private BlockState processBlockForPlacement(ServerLevel level, BlockPos globalPos, BlockState initialState, StructureProcessorList processors) {
+        if (processors.list().isEmpty()) return initialState;
         // Create a StructureBlockInfo for the block
         StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(
                 globalPos,
@@ -163,6 +166,7 @@ public class WallFailRule extends FailRule {
         );
 
         for (StructureProcessor processor : processors.list()) {
+            assert blockInfo != null;
             blockInfo = processor.processBlock(level, new BlockPos(0,0,0), globalPos, blockInfo, blockInfo, new StructurePlaceSettings());
         }
         // Return the processed block state (or fallback to initial state)

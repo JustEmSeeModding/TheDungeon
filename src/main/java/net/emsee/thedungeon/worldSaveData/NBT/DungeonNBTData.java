@@ -1,128 +1,159 @@
 package net.emsee.thedungeon.worldSaveData.NBT;
 
+import com.google.common.collect.Maps;
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.ModDungeons;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
+import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public final class DungeonNBTData {
-    private static final boolean addCleanupToStart = false;
-
     private final Queue<Dungeon> dungeonProgressQueue = new LinkedList<>();
-    private final Queue<Dungeon> dungeonPassiveQueue = new LinkedList<>();
-    private int tickInterval = 30/*-minutes -> to Ticks*/ *60*20;
+    private final Map<Dungeon.DungeonRank, Queue<Dungeon>> dungeonPassiveQueue = Util.make(Maps.newHashMap(), (map) -> {
+        map.put(Dungeon.DungeonRank.F, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.E, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.D, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.C, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.B, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.A, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.S, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.SS, new LinkedList<>());
+    });
+    private int tickInterval = 10/*-minutes -> to Ticks*/ * 60 * 20;
     private long lastExecutionTime = -1;
     private long lastMinuteAnnouncement = -1;
     private long lastSecondAnnouncement = -1;
-    private boolean isOpen;
-    private boolean isTiming = true;
-    private final List<BlockPos> portalPositions = new ArrayList<>();
+    private Dungeon.DungeonRank nextToCollapse = Dungeon.DungeonRank.F;
+
+    private final Map<Dungeon.DungeonRank, Boolean> isOpen = Util.make(Maps.newHashMap(), (map) -> {
+        map.put(Dungeon.DungeonRank.F, false);
+        map.put(Dungeon.DungeonRank.E, false);
+        map.put(Dungeon.DungeonRank.D, false);
+        map.put(Dungeon.DungeonRank.C, false);
+        map.put(Dungeon.DungeonRank.B, false);
+        map.put(Dungeon.DungeonRank.A, false);
+        map.put(Dungeon.DungeonRank.S, false);
+        map.put(Dungeon.DungeonRank.SS, false);
+    });
+    private final Map<Dungeon.DungeonRank, List<BlockPos>> portalPositions = Map.of(
+            Dungeon.DungeonRank.F, new ArrayList<>(),
+            Dungeon.DungeonRank.E, new ArrayList<>(),
+            Dungeon.DungeonRank.D, new ArrayList<>(),
+            Dungeon.DungeonRank.C, new ArrayList<>(),
+            Dungeon.DungeonRank.B, new ArrayList<>(),
+            Dungeon.DungeonRank.A, new ArrayList<>(),
+            Dungeon.DungeonRank.S, new ArrayList<>(),
+            Dungeon.DungeonRank.SS, new ArrayList<>()
+    );
 
     /**
      * Serializes the current dungeon state and related metadata into a CompoundTag.
-     *
+     * <p>
      * The serialized data includes timing fields, open and timing status, the contents of the dungeon progress and passive queues, and all portal positions.
      *
      * @return a CompoundTag containing all relevant dungeon state information
      */
     public CompoundTag SerializeNBT() {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("Serializing:");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"Serializing:");
         CompoundTag toReturn = new CompoundTag();
         toReturn.putLong("lastExecutionTime", lastExecutionTime);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("lastExecutionTime: {}", lastExecutionTime);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
         toReturn.putLong("lastMinuteAnnouncement", lastMinuteAnnouncement);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         toReturn.putLong("lastSecondAnnouncement", lastSecondAnnouncement);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("lastSecondAnnouncement: {}", lastSecondAnnouncement);
-        toReturn.putBoolean("isOpen", isOpen);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("isOpen: {}", isOpen);
-        toReturn.putBoolean("isTiming", isTiming);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("isTiming: {}", isTiming);
-        Queue<Dungeon> tempProgressQueue = new LinkedList<>(dungeonProgressQueue);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        for (Dungeon.DungeonRank rank : isOpen.keySet())
+            toReturn.putBoolean("isOpen_" + rank.getName(), isOpen.get(rank));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
+        toReturn.putString("nextToCollapse", nextToCollapse.getName());
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
+
         int i = 0;
-        while (!tempProgressQueue.isEmpty()) {
-            //TheDungeon.LOGGER.info("");
-            toReturn.putString("dungeonProgressQueue" + i, tempProgressQueue.remove().GetResourceName());
+        for (Dungeon dungeon : dungeonProgressQueue) {
+            toReturn.putString("dungeonProgressQueue" + i, dungeon.GetResourceName());
             i++;
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("dungeonProgressQueue: {}", dungeonProgressQueue);
-        Queue<Dungeon> tempPassiveQueue = new LinkedList<>(dungeonPassiveQueue);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
+
         i = 0;
-        while (!tempPassiveQueue.isEmpty()) {
-            //TheDungeon.LOGGER.info("");
-            toReturn.putString("dungeonPassiveQueue" + i, tempPassiveQueue.remove().GetResourceName());
-            i++;
+        for (Dungeon.DungeonRank rank : dungeonPassiveQueue.keySet()) {
+            for (Dungeon dungeon : dungeonPassiveQueue.get(rank)) {
+                toReturn.putString("dungeonPassiveQueue_" + rank.getName() + "_" + i, dungeon.GetResourceName());
+                i++;
+            }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("dungeonPassiveQueue: {}", dungeonPassiveQueue);
-        List<BlockPos> tempPosList = new ArrayList<>(portalPositions);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
+
         i = 0;
-        while (!tempPosList.isEmpty()) {
-            //TheDungeon.LOGGER.info("");
-            BlockPos pos = tempPosList.getFirst();
-            toReturn.putInt("PortalPosX" + i, pos.getX());
-            toReturn.putInt("PortalPosY" + i, pos.getY());
-            toReturn.putInt("PortalPosZ" + i, pos.getZ());
-            i++;
-            tempPosList.removeFirst();
+        for (Dungeon.DungeonRank rank : portalPositions.keySet()) {
+            for (BlockPos pos : portalPositions.get(rank)) {
+                toReturn.putInt("PortalPosX_" + rank.getName() + "_" + i, pos.getX());
+                toReturn.putInt("PortalPosY_" + rank.getName() + "_" + i, pos.getY());
+                toReturn.putInt("PortalPosZ_" + rank.getName() + "_" + i, pos.getZ());
+                i++;
+            }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("portalPositions: {}", portalPositions);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
         return toReturn;
     }
 
     /**
      * Restores the dungeon state from the provided CompoundTag.
-     *
+     * <p>
      * Reads and sets all internal fields, including timing values, open and timing flags, dungeon progress and passive queues, and portal positions, based on the serialized data in the tag. Existing queues and position lists are cleared before repopulation. If configured, a cleanup dungeon may be added at the start of the progress queue.
      *
      * @param tag the CompoundTag containing serialized dungeon data
      */
     public void DeserializeNBT(CompoundTag tag) {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("Deserializing:");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"Deserializing:");
         lastExecutionTime = tag.getLong("lastExecutionTime");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("lastExecutionTime: {}", lastExecutionTime);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
         lastMinuteAnnouncement = tag.getLong("lastMinuteAnnouncement");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         lastSecondAnnouncement = tag.getLong("lastSecondAnnouncement");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("lastSecondAnnouncement: {}", lastSecondAnnouncement);
-        isOpen = tag.getBoolean("isOpen");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("isOpen: {}", isOpen);
-        isTiming = tag.getBoolean("isTiming");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("isTiming: {}", isTiming);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        isOpen.replaceAll((rank, v) -> tag.getBoolean("isOpen_" + rank.getName()));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
+        nextToCollapse = Dungeon.DungeonRank.getByName(tag.getString("nextToCollapse"));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
         int i = 0;
         dungeonProgressQueue.clear();
         while (tag.contains("dungeonProgressQueue" + i)) {
             Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue" + i));
-            if (addCleanupToStart && i == 0 && toAdd != ModDungeons.CLEANUP_OLD) {
-                dungeonProgressQueue.add(ModDungeons.CLEANUP_OLD.GetCopy());
-            }
             dungeonProgressQueue.add(toAdd.GetCopy());
             i++;
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("dungeonProgressQueue: {}", dungeonProgressQueue);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
 
-        i = 0;
-        dungeonPassiveQueue.clear();
-        while (tag.contains("dungeonPassiveQueue" + i)) {
-            Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonPassiveQueue" + i));
-            dungeonPassiveQueue.add(toAdd.GetCopy());
-            i++;
+        for (Dungeon.DungeonRank rank : dungeonPassiveQueue.keySet()) {
+            i = 0;
+            Queue<Dungeon> passiveQueue = dungeonPassiveQueue.get(rank);
+            while (tag.contains("dungeonPassiveQueue_" + rank.getName() + "_" + i)) {
+                Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i));
+                passiveQueue.add(toAdd.GetCopy());
+                i++;
+            }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("dungeonPassiveQueue: {}", dungeonPassiveQueue);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
 
-        i = 0;
-        portalPositions.clear();
-        while (tag.contains("PortalPosX" + i)) {
-            portalPositions.add(new BlockPos(tag.getInt("PortalPosX" + i), tag.getInt("PortalPosY" + i), tag.getInt("PortalPosZ" + i)));
-            i++;
+        for (Dungeon.DungeonRank rank : portalPositions.keySet()) {
+            i = 0;
+            portalPositions.get(rank).clear();
+            while (tag.contains("PortalPosX" + i)) {
+                portalPositions.get(rank).add(new BlockPos(
+                        tag.getInt("PortalPosX_" + rank.getName() + "_" + i),
+                        tag.getInt("PortalPosY_" + rank.getName() + "_" + i),
+                        tag.getInt("PortalPosZ_" + rank.getName() + "_" + i)));
+                i++;
+            }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("portalPositions: {}", portalPositions);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
     }
 
     /**
@@ -158,23 +189,37 @@ public final class DungeonNBTData {
         return dungeonProgressQueue;
     }
 
-    public Queue<Dungeon> getDungeonPassiveQueue() {return dungeonPassiveQueue;}
-
-    public boolean getDungeonOpen() {
-        return isOpen;
+    public Queue<Dungeon> getDungeonPassiveQueue(Dungeon.DungeonRank rank) {
+        if (rank==null) return null;
+        return dungeonPassiveQueue.get(rank);
     }
 
-    public void setDungeonOpen(boolean isOpen) {
-        this.isOpen = isOpen;
+    public boolean getDungeonOpen(Dungeon.DungeonRank rank) {
+        return isOpen.get(rank);
     }
 
-    public boolean isTiming() {return isTiming;}
-    public void setTiming(boolean timing) {isTiming = timing;}
+    public void setDungeonOpen(Dungeon.DungeonRank rank, boolean is) {
+        if (rank == null) return;
+        isOpen.put(rank, is);
+    }
 
-    public List<BlockPos> getPortalPositions() {
+    public Map<Dungeon.DungeonRank, List<BlockPos>> getPortalPositions() {
         return portalPositions;
     }
 
-    public void setTickInterval(int tickInterval) {this.tickInterval = tickInterval;}
-    public int getTickInterval() {return this.tickInterval;}
+    public void setTickInterval(int tickInterval) {
+        this.tickInterval = tickInterval;
+    }
+
+    public int getTickInterval() {
+        return this.tickInterval;
+    }
+
+    public Dungeon.DungeonRank getNextToCollapse() {
+        return nextToCollapse;
+    }
+
+    public void setNextToCollapse(Dungeon.DungeonRank rank) {
+        nextToCollapse = rank;
+    }
 }

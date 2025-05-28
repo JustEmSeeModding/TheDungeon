@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.dungeon.dungeon.type;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
@@ -38,17 +39,16 @@ public class GridDungeon extends Dungeon {
 
     private RoomGenerationPickMethod pickMethod = RoomGenerationPickMethod.FIRST;
 
-    // constructor
-
+    //// constructor
     public GridDungeon(String resourceName, DungeonRank rank, int weight, int roomWidth, int roomHeight, GridRoomCollection collection) {
         super(resourceName, rank, weight);
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
         if (roomWidth % 2 != 1) {
-            TheDungeon.LOGGER.error("Dungeon ({}) has an even width ({})! This should be odd.", this, this.roomWidth);
+            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:"+roomWidth);
         }
         if (collection.getWidth() != roomWidth || collection.getHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("RoomCollection ({}:{},{}) is not the same size as the Dungeon ({}:{},{})", collection, collection.getWidth(), collection.getHeight(), this, roomWidth, roomHeight);
+            throw new IllegalStateException("RoomCollection "+collection+" is not the same size as the Dungeon "+this);
         }
         roomCollection = collection;
     }
@@ -58,15 +58,15 @@ public class GridDungeon extends Dungeon {
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
         if (roomWidth % 2 != 1) {
-            TheDungeon.LOGGER.error("Dungeon ({}) has an even width ({})! This should be odd.", this, this.roomWidth);
+            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:"+roomWidth);
         }
         if (collection.getWidth() != roomWidth || collection.getHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("RoomCollection ({}:{},{}) is not the same size as the Dungeon ({}:{},{})", collection, collection.getWidth(), collection.getHeight(), this, roomWidth, roomHeight);
+            throw new IllegalStateException("RoomCollection "+collection+" is not the same size as the Dungeon "+this);
         }
         roomCollection = collection;
     }
 
-    // construction methods
+    //// construction methods
 
 
     public GridDungeon setDepth(int depth) {
@@ -104,32 +104,38 @@ public class GridDungeon extends Dungeon {
         return this;
     }
 
-    // methods
+    //// methods
 
     @Override
     public void Generate(ServerLevel serverLevel, BlockPos worldPos) {
         long selectedSeed = GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.DUNGEON_SEED_OVERRIDE);
         if (selectedSeed == -1) {
-            Generate(worldPos, new Random().nextLong());
+            GenerateSeeded(new Random().nextLong());
         } else {
-            Generate(worldPos, selectedSeed);
+            GenerateSeeded(selectedSeed);
         }
     }
 
-    public void Generate(BlockPos worldPos, long seed) {
-        TheDungeon.LOGGER.info("Starting Dungeon Generation...");
-        TheDungeon.LOGGER.info("Dungeon: {}", this.GetResourceName());
-        generator = new GridDungeonGenerator(this, worldPos, seed);
-        TheDungeon.LOGGER.info("Seed: {}", seed);
+    /**
+     * generates the dungeon at the same position wit a diggerent seed
+     */
+    public void GenerateSeeded(long seed) {
+        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Starting Dungeon Generation...");
+        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Dungeon: {}", this.GetResourceName());
+        generator = new GridDungeonGenerator(this, seed);
+        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Seed: {}", seed);
     }
 
+    /**
+     * runs every tick while generating
+     */
     @Override
     public void GenerationTick(ServerLevel serverLevel) {
         if (generator != null) {
             generator.step(serverLevel);
             if (generator.isDone()) {
+                DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Finished Dungeon Generation");
                 generator = null;
-                TheDungeon.LOGGER.info("Finished Dungeon Generation");
                 generated = true;
                 GlobalDungeonManager.OpenDungeon(serverLevel.getServer(), this, utilDungeon);
             }

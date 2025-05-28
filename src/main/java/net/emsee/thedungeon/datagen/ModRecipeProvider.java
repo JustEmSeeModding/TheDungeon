@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.PatchouliAPI;
-import vazkii.patchouli.api.PatchouliConfigAccess;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -53,7 +52,6 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD)
                 .unlockedBy("has_dungeon_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
-
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.INFUSED_DAGGER.get(), 1)
                 .pattern("*")
                 .pattern("/")
@@ -78,7 +76,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('o', Items.ENDER_EYE)
                 .unlockedBy("has_shattered_portal_core", has(ModItems.SHATTERED_PORTAL_CORE)).save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.DUNGEON_PORTAL.get(), 1)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.DUNGEON_PORTAL_F.get(), 1)
                 .pattern("###")
                 .pattern("#*#")
                 .pattern("###")

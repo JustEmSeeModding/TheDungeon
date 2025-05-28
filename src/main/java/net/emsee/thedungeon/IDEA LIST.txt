@@ -1,24 +1,29 @@
 //TODO
 
-weapons waxing moon blade and waning moon blade (combine to full moon blade that combines abilities)
+weapons waxing moon blade and waning moon blade
+    combine to full moon blade that combines abilities
 
-achievement description for when player tries to take non dungeon item (Only the Attuned may pass. The realm devours all else.)
+achievement description for when player tries to take non dungeon item
+    Only the Attuned may pass. The realm devours all else.
 
 Corrupted Gear
-- High-tier dungeon gear slowly corrupts the player, granting power (e.g., +50% damage) but causing debuffs can be Cleansed to remove or reduce debuffs.
+    High-tier dungeon gear slowly corrupts the player, granting power (e.g., +50% damage) but causing debuffs can be Cleansed to remove or reduce debuffs.
 
-Dungeon Pets
+Dungeon Pets?
 
 A hidden mini-boss who was once the dungeon’s keeper. Defeating him unlocks a secret "Creator’s Forge" to craft OP gear.
 
-Temporary Portal: Starter portals that only grant single access, forcing players to scavenge quickly in the dungeon for better gear to build a permanent portal.
+Temporary Portal?
+    Starter portals that only grant single access, forcing players to scavenge quickly in the dungeon for better gear to build a permanent portal.
 
-Essencebound Armor
-    Full Set Bonus: Absorbs 1 shard from inventory to negate a lethal hit (60s cooldown).
+Essencebound Armor - name TBD
+    Full Set Bonus: Absorbs 1 (item) from inventory to negate a lethal hit (60s cooldown).
 
-Soulbound Totem
+Soul bound Totem
     Single-use item that prevents item loss on death (consumed)
 
-Castle Mobs:
-    SkeletalKnight
-    ShadeKnight
+New Dungeon Logic
+    one of each rank is active at the same time allowing players to travel to different ranked dungeons
+    every 5-10 minuted one rank is reset and regenerated order is TBD
+    attune your portal to specific ranks
+    rank F is only the goblin caves the rest have multiple dungeons

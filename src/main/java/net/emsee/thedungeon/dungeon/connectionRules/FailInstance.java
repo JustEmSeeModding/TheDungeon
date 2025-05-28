@@ -5,6 +5,9 @@ import net.emsee.thedungeon.dungeon.room.GridRoomUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
+/**
+ * a fail instance get placed when the tag fails placing the next room through any means
+ */
 public class FailInstance {
     final FailRule failRule;
     final GeneratedRoom generatedRoom;
@@ -12,6 +15,9 @@ public class FailInstance {
     final boolean wouldPlaceFallback;
     final boolean exitObstructed;
 
+    /**
+     * a fail instance get placed when the tag fails placing the next room through any means
+     */
     public FailInstance(FailRule failRule, GeneratedRoom generatedRoom, GridRoomUtils.Connection connection, boolean wouldPlaceFallback, boolean exitObstructed) {
         this.failRule = failRule.getCopy();
         this.generatedRoom = generatedRoom;
@@ -20,10 +26,16 @@ public class FailInstance {
         this. exitObstructed = exitObstructed;
     }
 
-    public void finalize(ServerLevel level, StructureProcessorList processors) {
+    /**
+     * finalizes placement
+     */
+    public void finalizeTick(ServerLevel level, StructureProcessorList processors) {
         failRule.ApplyFail(generatedRoom, connection, level, processors, wouldPlaceFallback, exitObstructed);
     }
 
+    /**
+     * checks if finalization is complete
+     */
     public boolean isFinished() {
         return failRule.isFinished();
     }
