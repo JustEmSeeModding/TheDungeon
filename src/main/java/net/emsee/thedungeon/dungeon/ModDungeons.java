@@ -10,8 +10,6 @@ import net.emsee.thedungeon.dungeon.roomCollections.collections.*;
 import java.util.HashMap;
 import java.util.Map;
 
-
-//TODO Rewrite dungeons and generate to generate based on rank. so there is always a dungeon of each rank open
 public final class ModDungeons {
     public static final Map<String, Dungeon> DUNGEONS = new HashMap<>();
 
@@ -54,7 +52,7 @@ public final class ModDungeons {
     public static final Dungeon GOBLIN_CAVES = register(new GridDungeon(
             "dungeon.the_dungeon.goblin_caves",
             Dungeon.DungeonRank.F,
-            0,
+            1,
             11,
             11,
             new GoblinCavesGridRoomCollection())

@@ -101,7 +101,7 @@ public final class GlobalDungeonManager {
             saveData.clearPortalPositions(saveData.getNextToCollapse());
             SelectNewProgressDungeon(server, false, saveData.getNextToCollapse());
             saveData.SelectNextForCollapse();
-            saveData.setTickInterval(10/*minutes*/*60*20);
+            saveData.setTickInterval(GameruleRegistry.getIntegerGamerule(server, ModGamerules.TICKS_BETWEEN_COLLAPSES));
             saveData.SetLastExecutionTime(worldTime);
 
             saveData.SetLastMinuteAnnouncement(-1);
@@ -154,12 +154,16 @@ public final class GlobalDungeonManager {
         else {
             Map<Dungeon,Integer> possibleDungeons = new HashMap<>();
             for (Dungeon dungeon : dungeons.keySet())
-                if (dungeon.getRank()==rank)
+                if (dungeon.getRank()==rank && dungeon.getWeight()>0)
                     possibleDungeons.put(dungeon, dungeon.getWeight());
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
-            if (possibleDungeons.isEmpty()) return;
+            if (possibleDungeons.isEmpty()) {
+                DebugLog.logWarn(DebugLog.DebugLevel.WARNINGS,"Rank: {} has no dungeons assigned", rank.toString());
+                return;
+            }
             Dungeon newDungeon = ListAndArrayUtils.getRandomFromWeightedMapI(possibleDungeons, Objects.requireNonNull(server.getLevel(Level.OVERWORLD)).getRandom());
-            if (newDungeon== null) return;
+            if (newDungeon== null)
+                throw new IllegalStateException("no new dungeon found");
             saveData.addToProgressQueue(newDungeon.GetCopy());
         }
     }

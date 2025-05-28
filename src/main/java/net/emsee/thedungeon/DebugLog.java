@@ -15,6 +15,7 @@ public class DebugLog {
         list.add(DebugLevel.SAVE_DATA);
         list.add(DebugLevel.GENERATING_STEPS);
         list.add(DebugLevel.GENERIC);
+        list.add(DebugLevel.WARNINGS);
         list.add(DebugLevel.IMPORTANT);
     });
 
