@@ -169,10 +169,10 @@ public final class GlobalDungeonManager {
     }
 
     //TODO this is VERY slow
+    //TODO also potentially remove forced chucks once done
     public static void KillAllInDungeon(MinecraftServer server, Dungeon.DungeonRank rank) {
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_KILL_ON_REGEN)) {
-            for (Dungeon.DungeonRank forceRank : Dungeon.DungeonRank.values())
-                updateForcedChunks(server, forceRank);
+            updateForcedChunks(server, rank);
             ServerLevel dimension = server.getLevel(dungeonResourceKey);
 
             BlockPos blockPos = rank.getCenterPos();

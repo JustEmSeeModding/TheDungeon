@@ -129,6 +129,9 @@ public abstract class Dungeon {
             case SS -> cleanup=ModDungeons.CLEANUP_SS;
         }
 
+        if (cleanup==null)
+            throw new IllegalStateException("cleanup was NULL");
+
         GlobalDungeonManager.AddToQueueFront(cleanup.GetCopy(), server);
         GlobalDungeonManager.KillAllInDungeon(server, rank);
     }
