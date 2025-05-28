@@ -34,24 +34,20 @@ public final class ModBlockEntities {
                     DungeonPortalCBlockEntity::new, ModBlocks.DUNGEON_PORTAL_C.get()).build(null)
             );
 
-
     public static final Supplier<BlockEntityType<DungeonPortalBBlockEntity>> DUDGEON_PORTAL_BLOCKENTITY_B =
             BLOCK_ENTITIES.register("dungeon_portal_blockentity_b", () -> BlockEntityType.Builder.of(
                     DungeonPortalBBlockEntity::new, ModBlocks.DUNGEON_PORTAL_B.get()).build(null)
             );
-
 
     public static final Supplier<BlockEntityType<DungeonPortalABlockEntity>> DUDGEON_PORTAL_BLOCKENTITY_A =
             BLOCK_ENTITIES.register("dungeon_portal_blockentity_a", () -> BlockEntityType.Builder.of(
                     DungeonPortalABlockEntity::new, ModBlocks.DUNGEON_PORTAL_A.get()).build(null)
             );
 
-
     public static final Supplier<BlockEntityType<DungeonPortalSBlockEntity>> DUDGEON_PORTAL_BLOCKENTITY_S =
             BLOCK_ENTITIES.register("dungeon_portal_blockentity_s", () -> BlockEntityType.Builder.of(
                     DungeonPortalSBlockEntity::new, ModBlocks.DUNGEON_PORTAL_S.get()).build(null)
             );
-
 
     public static final Supplier<BlockEntityType<DungeonPortalSSBlockEntity>> DUDGEON_PORTAL_BLOCKENTITY_SS =
             BLOCK_ENTITIES.register("dungeon_portal_blockentity_ss", () -> BlockEntityType.Builder.of(
@@ -62,7 +58,6 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register("dungeon_portal_blockentity_exit", () -> BlockEntityType.Builder.of(
                     DungeonPortalExitBlockEntity::new, ModBlocks.DUNGEON_PORTAL_EXIT.get()).build(null)
             );
-
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

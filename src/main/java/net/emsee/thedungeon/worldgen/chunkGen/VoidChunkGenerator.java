@@ -12,6 +12,9 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * honestly, don't touch this, this is pain
+ */
 public final class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
     public VoidChunkGenerator(BiomeSource p_256415_, Holder<NoiseGeneratorSettings> p_256182_) {

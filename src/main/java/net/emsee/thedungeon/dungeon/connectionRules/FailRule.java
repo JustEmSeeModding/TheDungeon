@@ -5,17 +5,22 @@ import net.emsee.thedungeon.dungeon.room.GridRoomUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
+/**
+ * a fail rule is what happens the tag fails placing the next room through any means
+ */
 public abstract class FailRule {
     protected final String tag;
 
-    public FailRule(FailRule rule) {
-        tag = rule.tag;
-    }
-
+    /**
+     * a fail rule is what happens the tag fails placing the next room through any means
+     */
     protected FailRule(String tag) {
         this.tag = tag;
     }
 
+    /**
+     * returns true if the tag matches this rule
+     */
     public final boolean match(String tag) {
         return tag.equals(this.tag);
     }

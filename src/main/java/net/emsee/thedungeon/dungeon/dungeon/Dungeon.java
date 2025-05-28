@@ -141,6 +141,21 @@ public abstract class Dungeon {
         return Component.translatable(resourceName);
     }
 
+    public DungeonRank getRank() {
+        return rank;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    /**
+     * gets a copy of base dungeon
+     */
     public final Dungeon GetCopy() {
         return GetCopy(ID);
     };
@@ -154,17 +169,5 @@ public abstract class Dungeon {
     @Override
     public String toString() {
         return (GetResourceName() + "-" + GetTranslatedName());
-    }
-
-    public DungeonRank getRank() {
-        return rank;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public int getID() {
-        return ID;
     }
 }

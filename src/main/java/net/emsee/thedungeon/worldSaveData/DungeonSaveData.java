@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.worldSaveData;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
@@ -40,7 +41,7 @@ public final class DungeonSaveData extends SavedData {
      */
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("DungeonData saving");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData saving");
         tag.put("DungeonData", dungeonData.SerializeNBT());
         return tag;
     }
@@ -53,7 +54,7 @@ public final class DungeonSaveData extends SavedData {
      * @return a new DungeonSaveData instance with its state restored from NBT
      */
     private static DungeonSaveData load(CompoundTag nbt, HolderLookup.Provider provider) {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("DungeonData Loading");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData Loading");
         DungeonSaveData data = new DungeonSaveData();
         data.dungeonData.DeserializeNBT(nbt.getCompound("DungeonData"));
         return data;

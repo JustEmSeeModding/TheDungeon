@@ -6,28 +6,30 @@ import net.minecraft.world.level.block.Rotation;
 import java.util.*;
 
 public final class GridRoomUtils {
-
     public enum Connection {
-        north, east, south, west, up, down
+        NORTH, EAST, SOUTH, WEST, UP, DOWN
     }
 
+    /**
+     * returns the connection rotated
+     */
     public static Connection getRotatedConnection(Connection connection, Rotation roomRotation) {
         if (roomRotation == null) return null;
-        if (connection == Connection.up || connection == Connection.down) return connection;
+        if (connection == Connection.UP || connection == Connection.DOWN) return connection;
 
         Connection[][] connectionRotations = {
-                {Connection.north, Connection.east, Connection.south, Connection.west},
-                {Connection.west, Connection.north, Connection.east, Connection.south},
-                {Connection.south, Connection.west, Connection.north, Connection.east},
-                {Connection.east, Connection.south, Connection.west, Connection.north}
+                {Connection.NORTH, Connection.EAST, Connection.SOUTH, Connection.WEST}, // none
+                {Connection.WEST, Connection.NORTH, Connection.EAST, Connection.SOUTH}, //+90
+                {Connection.SOUTH, Connection.WEST, Connection.NORTH, Connection.EAST}, //180
+                {Connection.EAST, Connection.SOUTH, Connection.WEST, Connection.NORTH}  //-90
         };
 
         int connectionIndex = -1;
         switch (connection) {
-            case north -> connectionIndex = 0;
-            case east -> connectionIndex = 1;
-            case south -> connectionIndex = 2;
-            case west -> connectionIndex = 3;
+            case NORTH -> connectionIndex = 0;
+            case EAST -> connectionIndex = 1;
+            case SOUTH -> connectionIndex = 2;
+            case WEST -> connectionIndex = 3;
         }
 
         int rotationIndex = -1;
@@ -42,6 +44,7 @@ public final class GridRoomUtils {
         return connectionRotations[rotationIndex][connectionIndex];
     }
 
+    // gets the opposite of the rotation
     public static Rotation getInvertedRotation(Rotation rotation) {
         return switch (rotation) {
             case NONE -> Rotation.NONE;
@@ -51,6 +54,9 @@ public final class GridRoomUtils {
         };
     }
 
+    /**
+     * returns the weighted connection map rotated
+     */
     public static Map<Connection, Integer> getRotatedConnections(Map<Connection, Integer> connections, Rotation roomRotation) {
         if (roomRotation == null) return null;
         if (roomRotation == Rotation.NONE) return connections;
@@ -61,6 +67,9 @@ public final class GridRoomUtils {
         return toReturn;
     }
 
+    /**
+     * returns the tag map rotated
+     */
     public static Map<Connection, String> getRotatedTags(Map<Connection, String> tags, Rotation roomRotation) {
         if (roomRotation == null) return null;
         if (roomRotation == Rotation.NONE) return tags;
@@ -71,33 +80,30 @@ public final class GridRoomUtils {
         return toReturn;
     }
 
-    public static String GetRotatedTag(Map<Connection, String> tags, Connection connection, Rotation roomRotation) {
-        return getRotatedTags(tags, roomRotation).get(connection);
-    }
-
     static Connection getOppositeConnection(Connection connection) {
         switch (connection) {
-            case north -> {
-                return Connection.south;
+            case NORTH -> {
+                return Connection.SOUTH;
             }
-            case east -> {
-                return Connection.west;
+            case EAST -> {
+                return Connection.WEST;
             }
-            case south -> {
-                return Connection.north;
+            case SOUTH -> {
+                return Connection.NORTH;
             }
-            case west -> {
-                return Connection.east;
+            case WEST -> {
+                return Connection.EAST;
             }
-            case up -> {
-                return Connection.down;
+            case UP -> {
+                return Connection.DOWN;
             }
-            case down -> {
-                return Connection.up;
+            case DOWN -> {
+                return Connection.UP;
             }
         }
-        return null;
+        throw new IllegalStateException("connection should not exist: " + connection);
     }
+
 
     public static Rotation getRandomRotation(Random random) {
         return ListAndArrayUtils.getRandomFromList(Arrays.stream(Rotation.values()).toList(), random);

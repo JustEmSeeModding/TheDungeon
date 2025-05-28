@@ -8,52 +8,25 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.*;
 
 public class GridRoomGroup extends GridRoom {
-    /** Weighted map */
+    /* Weighted map */
     protected Map<GridRoom, Integer> gridRooms = new HashMap<>();
 
-    /**
-     * Constructs a GridRoomGroup with the specified grid dimensions and differentiation ID.
-     *
-     * @param gridWidth the width of the grid
-     * @param gridHeight the height of the grid
-     * @param ID the differentiation ID for this group
-     */
     public GridRoomGroup(int gridWidth, int gridHeight, int ID) {
         super(gridWidth, gridHeight, ID);
     }
-    /**
-     * Constructs a GridRoomGroup with the specified grid width and height.
-     *
-     * @param gridWidth the width of the grid
-     * @param gridHeight the height of the grid
-     */
+
     public GridRoomGroup(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
     }
-    /**
-     * Constructs a GridRoomGroup using the properties of the given GridRoomCollection.
-     *
-     * The group's configuration is initialized based on the provided collection.
-     *
-     * @param collection the GridRoomCollection whose properties are used to initialize the group
-     */
-    public GridRoomGroup(GridRoomCollection collection) {
-        super(collection);
-    }
+
 
     /**
      * Adds a new simple room to the group with the specified resource location and weight.
-     *
-     * The new room inherits the group's size, offsets, connection tags, connections, rotation permissions,
-     * generation priority, end chance override, and spawn rules.
-     *
-     * @param recourseLocation the resource location identifier for the new room
-     * @param Weight the weight to assign to the new room in the group
-     * @return this group instance for method chaining
      */
-    public GridRoomGroup addSimpleRoom(String recourseLocation, int Weight) {
+    public GridRoomGroup addSimpleRoom(String recourseLocation, int weight) {
         addRoom(
-                new GridRoom(gridWidth, gridHeight).withResourceLocation(recourseLocation).withWeight(weight).
+                new GridRoom(gridWidth, gridHeight).withResourceLocation(recourseLocation)
+                        .withWeight(weight).
                         setSizeHeight(northSizeScale, eastSizeScale, heightScale).
                         setOffsets(connectionOffsets).
                         setConnectionTags(connectionTags).
@@ -72,25 +45,16 @@ public class GridRoomGroup extends GridRoom {
      */
     public GridRoomGroup addRoom(GridRoom gridRoom) {
 
-        //for (GridRoomUtils.Connection connection : connections.keySet()) {
-            //gridRoom.HasConnection(connection, connectionTags.get(connection));
+        if (!ListAndArrayUtils.mapEquals(connections, gridRoom.connections))
+            throw new IllegalStateException("added room does not have the same connections as the group");
 
-        if (!ListAndArrayUtils.mapEquals(connections, gridRoom.connections)) {
-            TheDungeon.LOGGER.error("LargeRoom ({}) does not have the same connections/Tags as RoomGroup ({})", gridRoom, this);
-            return this;
-        }
+        if (!ListAndArrayUtils.mapEquals(connectionTags, gridRoom.connectionTags))
+            throw new IllegalStateException("added room does not have the same connection tags as the group");
 
-
-
-
-        if (this.heightScale != gridRoom.heightScale || this.northSizeScale != gridRoom.northSizeScale || this.eastSizeScale != gridRoom.eastSizeScale) {
-            TheDungeon.LOGGER.error("LargeRoom ({}) does not have the same Scale as RoomGroup ({})", gridRoom, this);
-            return this;
-        }
+        if (this.heightScale != gridRoom.heightScale || this.northSizeScale != gridRoom.northSizeScale || this.eastSizeScale != gridRoom.eastSizeScale)
+            throw new IllegalStateException("added room does not have the same scale as the group");
 
         gridRooms.put(gridRoom, gridRoom.getWeight());
-
-
         return this;
     }
 
@@ -105,12 +69,10 @@ public class GridRoomGroup extends GridRoom {
     @Deprecated
     @Override
     public GridRoom withResourceLocation(ResourceLocation resourceLocation) {
-        TheDungeon.LOGGER.error("Gridroom group should not have resourceLocation");
-        return this;
+        throw new RuntimeException("GridRoomGroup should not have a resourceLocation");
     }
 
     //methods
-
     @Override
     public ResourceLocation getResourceLocation(Random random) {
         return null;
@@ -137,21 +99,12 @@ public class GridRoomGroup extends GridRoom {
                 .setStructureProcessors(structureProcessors);
     }
 
-    /****
-     * Determines whether this `GridRoomGroup` is equal to another object.
-     *
-     * Two `GridRoomGroup` instances are considered equal if all relevant fields match, including grid dimensions, resource location, connections, weights, rotation flags, size scales, contained rooms and their weights, offsets, tags, generation priority, override flags, spawn rules, structure processors, and differentiation ID.
-     *
-     * @param other the object to compare with this group
-     * @return true if the specified object is a `GridRoomGroup` with identical properties; false otherwise
-     */
     @Override
     public boolean equals(Object other) {
         if (other instanceof GridRoomGroup otherGroup) {
             return
                     gridWidth == otherGroup.gridWidth &&
                             gridHeight == otherGroup.gridHeight &&
-                            resourceLocation == otherGroup.resourceLocation &&
                             ListAndArrayUtils.mapEquals(connections, otherGroup.connections) &&
                             weight == otherGroup.weight &&
                             allowRotation == otherGroup.allowRotation &&
@@ -172,17 +125,11 @@ public class GridRoomGroup extends GridRoom {
         return false;
     }
 
-    /****
-     * Computes a hash code for this GridRoomGroup based on all significant fields, ensuring consistency with the equals method.
-     *
-     * @return the hash code representing this GridRoomGroup
-     */
     @Override
     public int hashCode() {
         int result = 17;
         result = 31 * result + gridWidth;
         result = 31 * result + gridHeight;
-        result = 31 * result + (resourceLocation != null ? resourceLocation.hashCode() : 0);
         result = 31 * result + (connections != null ? connections.hashCode() : 0);
         result = 31 * result + weight;
         result = 31 * result + (allowRotation ? 1 : 0);
@@ -204,10 +151,13 @@ public class GridRoomGroup extends GridRoom {
 
     @Override
     public String toString() {
-        return "roomGroup";
+        return "roomGroup, rooms:" + ListAndArrayUtils.mapToString(gridRooms);
     }
 
     public GridRoom getRandom(Random random) {
-        return ListAndArrayUtils.getRandomFromWeightedMapI(gridRooms, random).getCopy();
+        GridRoom toReturn = ListAndArrayUtils.getRandomFromWeightedMapI(gridRooms, random);
+        if (toReturn == null)
+            throw new IllegalStateException("error choosing room");
+        return toReturn.getCopy();
     }
 }

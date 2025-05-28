@@ -18,7 +18,6 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-
         blockWithItem(ModBlocks.DUNGEON_PORTAL_F, TheDungeon.resourceLocation("block/dungeon_portal"));
         blockWithItem(ModBlocks.DUNGEON_PORTAL_E, TheDungeon.resourceLocation("block/dungeon_portal"));
         blockWithItem(ModBlocks.DUNGEON_PORTAL_D, TheDungeon.resourceLocation("block/dungeon_portal"));

@@ -21,6 +21,9 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
 import java.util.OptionalLong;
 
+/**
+ * honestly, don't touch this, this is pain
+ */
 public final class ModDimensions {
     public static final ResourceKey<LevelStem> DUNGEON_KEY = ResourceKey.create(Registries.LEVEL_STEM,
             ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon"));

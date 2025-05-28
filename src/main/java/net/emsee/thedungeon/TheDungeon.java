@@ -1,6 +1,5 @@
 package net.emsee.thedungeon;
 
-import com.mojang.logging.LogUtils;
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.block.ModBlocks;
@@ -26,33 +25,15 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import org.slf4j.Logger;
 
 @Mod(TheDungeon.MOD_ID)
 public final class TheDungeon
 {
-    public enum DebugMode {
-        //TEMP(-1);
-        ALL(100),
-        GENERIC(2),
-        IMPORTANT_ONLY(1),
-        NONE(0);
-
-        private final int debugLevel;
-
-        DebugMode(int debugLevel) {this.debugLevel =debugLevel;}
-        public int getDebugLevel() { return debugLevel;}
-        public boolean is(DebugMode mode) {return debugLevel>=mode.debugLevel;}
-    }
     public static final String MOD_ID = "thedungeon";
-    public static final Logger LOGGER = LogUtils.getLogger();
-
-
-    public static final DebugMode debugMode = DebugMode.GENERIC;
 
     public TheDungeon(IEventBus modEventBus, ModContainer modContainer)
     {
-        LOGGER.info("Constructing mod instance...");
+        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Constructing mod instance...");
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
 
@@ -78,14 +59,14 @@ public final class TheDungeon
 
         ModGamerules.registerRules();
 
-        LOGGER.info("Mod instance constructed successfully.");
+        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Mod instance constructed successfully.");
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        LOGGER.info("Common setup...");
+        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Common setup...");
 
-        LOGGER.info("Common setup phase finished successfully.");
+        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Common setup phase finished successfully.");
     }
 
 
@@ -100,7 +81,7 @@ public final class TheDungeon
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            LOGGER.info("Client Setup...");
+            DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Client Setup...");
             ModEventBusClientEvents.ClientEntityRendererSetup(event);
 
         }

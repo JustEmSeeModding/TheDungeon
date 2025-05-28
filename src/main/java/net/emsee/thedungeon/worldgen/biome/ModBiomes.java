@@ -11,8 +11,10 @@ import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 
+/**
+ * honestly, don't touch this, this is pain
+ */
 public final class ModBiomes {
-
     public static final ResourceKey<Biome> DUNGEON_BIOME = ResourceKey.create(Registries.BIOME,
             ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_biome"));
 

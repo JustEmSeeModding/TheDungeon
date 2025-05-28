@@ -52,7 +52,6 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD)
                 .unlockedBy("has_dungeon_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
-
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.INFUSED_DAGGER.get(), 1)
                 .pattern("*")
                 .pattern("/")

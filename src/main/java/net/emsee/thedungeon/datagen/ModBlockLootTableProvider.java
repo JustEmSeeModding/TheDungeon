@@ -20,7 +20,6 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        TheDungeon.LOGGER.info("Generating loot tables for blocks...");
         dropSelf(ModBlocks.DUNGEON_PORTAL_F.get());
         dropSelf(ModBlocks.DUNGEON_PORTAL_E.get());
         dropSelf(ModBlocks.DUNGEON_PORTAL_D.get());

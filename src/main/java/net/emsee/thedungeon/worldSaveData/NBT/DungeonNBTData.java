@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.worldSaveData.NBT;
 
 import com.google.common.collect.Maps;
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.ModDungeons;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
@@ -13,16 +14,16 @@ import java.util.*;
 
 public final class DungeonNBTData {
     private final Queue<Dungeon> dungeonProgressQueue = new LinkedList<>();
-    private final Map<Dungeon.DungeonRank, Queue<Dungeon>> dungeonPassiveQueue = Map.of(
-            Dungeon.DungeonRank.F, new LinkedList<>(),
-            Dungeon.DungeonRank.E, new LinkedList<>(),
-            Dungeon.DungeonRank.D, new LinkedList<>(),
-            Dungeon.DungeonRank.C, new LinkedList<>(),
-            Dungeon.DungeonRank.B, new LinkedList<>(),
-            Dungeon.DungeonRank.A, new LinkedList<>(),
-            Dungeon.DungeonRank.S, new LinkedList<>(),
-            Dungeon.DungeonRank.SS, new LinkedList<>()
-    );
+    private final Map<Dungeon.DungeonRank, Queue<Dungeon>> dungeonPassiveQueue = Util.make(Maps.newHashMap(), (map) -> {
+        map.put(Dungeon.DungeonRank.F, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.E, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.D, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.C, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.B, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.A, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.S, new LinkedList<>());
+        map.put(Dungeon.DungeonRank.SS, new LinkedList<>());
+    });
     private int tickInterval = 10/*-minutes -> to Ticks*/ * 60 * 20;
     private long lastExecutionTime = -1;
     private long lastMinuteAnnouncement = -1;
@@ -58,32 +59,26 @@ public final class DungeonNBTData {
      * @return a CompoundTag containing all relevant dungeon state information
      */
     public CompoundTag SerializeNBT() {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("Serializing:");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"Serializing:");
         CompoundTag toReturn = new CompoundTag();
         toReturn.putLong("lastExecutionTime", lastExecutionTime);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("lastExecutionTime: {}", lastExecutionTime);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
         toReturn.putLong("lastMinuteAnnouncement", lastMinuteAnnouncement);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         toReturn.putLong("lastSecondAnnouncement", lastSecondAnnouncement);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
         for (Dungeon.DungeonRank rank : isOpen.keySet())
             toReturn.putBoolean("isOpen_" + rank.getName(), isOpen.get(rank));
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
         toReturn.putString("nextToCollapse", nextToCollapse.getName());
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("nextToCollapse: {}", nextToCollapse);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
         int i = 0;
         for (Dungeon dungeon : dungeonProgressQueue) {
             toReturn.putString("dungeonProgressQueue" + i, dungeon.GetResourceName());
             i++;
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("dungeonProgressQueue: {}", dungeonProgressQueue);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
 
         i = 0;
         for (Dungeon.DungeonRank rank : dungeonPassiveQueue.keySet()) {
@@ -92,8 +87,7 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
 
         i = 0;
         for (Dungeon.DungeonRank rank : portalPositions.keySet()) {
@@ -104,8 +98,7 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
         return toReturn;
     }
 
@@ -117,22 +110,17 @@ public final class DungeonNBTData {
      * @param tag the CompoundTag containing serialized dungeon data
      */
     public void DeserializeNBT(CompoundTag tag) {
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) TheDungeon.LOGGER.info("Deserializing:");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"Deserializing:");
         lastExecutionTime = tag.getLong("lastExecutionTime");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("lastExecutionTime: {}", lastExecutionTime);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
         lastMinuteAnnouncement = tag.getLong("lastMinuteAnnouncement");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         lastSecondAnnouncement = tag.getLong("lastSecondAnnouncement");
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
         isOpen.replaceAll((rank, v) -> tag.getBoolean("isOpen_" + rank.getName()));
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
         nextToCollapse = Dungeon.DungeonRank.getByName(tag.getString("nextToCollapse"));
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("nextToCollapse: {}", nextToCollapse);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
         int i = 0;
         dungeonProgressQueue.clear();
@@ -141,9 +129,7 @@ public final class DungeonNBTData {
             dungeonProgressQueue.add(toAdd.GetCopy());
             i++;
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("dungeonProgressQueue: {}", dungeonProgressQueue);
-
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
 
         for (Dungeon.DungeonRank rank : dungeonPassiveQueue.keySet()) {
             i = 0;
@@ -154,8 +140,7 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
 
         for (Dungeon.DungeonRank rank : portalPositions.keySet()) {
             i = 0;
@@ -168,8 +153,7 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL))
-            TheDungeon.LOGGER.info("portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
     }
 
     /**

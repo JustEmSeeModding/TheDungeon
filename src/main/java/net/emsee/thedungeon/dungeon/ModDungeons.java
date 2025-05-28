@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon;
 
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.dungeon.dungeon.type.GridDungeon;
@@ -154,7 +155,7 @@ public final class ModDungeons {
             .IsUtilDungeon(true));
 
     private static Dungeon register(Dungeon dungeon) {
-        if(TheDungeon.debugMode.is(TheDungeon.DebugMode.IMPORTANT_ONLY)) TheDungeon.LOGGER.info("Registering Dungeon :{}", dungeon);
+        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Registering Dungeon :{}", dungeon);
         DUNGEONS.put(dungeon.GetResourceName(), dungeon);
         GlobalDungeonManager.dungeons.put(dungeon, dungeon.getWeight());
         return dungeon;

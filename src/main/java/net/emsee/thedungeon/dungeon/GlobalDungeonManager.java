@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.dungeon;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
@@ -25,8 +26,6 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.*;
-
-import static net.emsee.thedungeon.TheDungeon.LOGGER;
 
 public final class GlobalDungeonManager {
     private static final int forceLoadedChunkRadius = 30;
@@ -67,11 +66,11 @@ public final class GlobalDungeonManager {
         ServerLevel dungeonDimension = server.getLevel(dungeonResourceKey);
         //check if the current queued dungeon is idle but not done and start it
         if (!currentDungeon.IsDoneGenerating() && !currentDungeon.IsBusyGenerating()) {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("removing all portals");
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"removing all portals");
             cleanAllPortals(server, saveData, currentDungeon.getRank());
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("killing all");
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"killing all entities");
             KillAllInDungeon(server, currentDungeon.getRank());
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("starting generation");
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"starting generation");
             currentDungeon.Generate(dungeonDimension, currentDungeon.getRank().getCenterPos());
         }
 
@@ -128,12 +127,11 @@ public final class GlobalDungeonManager {
                 else
                     SendMessageToPlayersInLevel(server, Component.translatable("announcement.thedungeon.seconds_left", saveData.getNextToCollapse().getName(), secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE), dungeonDimension);
                 saveData.SetLastSecondAnnouncement(secondsLeft);
-                if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) TheDungeon.LOGGER.info("{}-rank Ticks until next dungeon:{}", saveData.getNextToCollapse().getName(), timeLeft);
+                DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"{}-rank Ticks until next dungeon:{}", saveData.getNextToCollapse().getName(), timeLeft);
             }
         } else if ((minutesLeft <= saveData.GetLastMinuteAnnouncement() - 1) || saveData.GetLastMinuteAnnouncement() == -1) {
                 SendMessageToPlayersInLevel(server, Component.translatable("announcement.thedungeon.minutes_left", saveData.getNextToCollapse().getName(), minutesLeft).withStyle(ChatFormatting.GOLD), dungeonDimension);
-                if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC))
-                    TheDungeon.LOGGER.info("{}-rank Ticks until next dungeon:{}", saveData.getNextToCollapse().getName(), timeLeft);
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"{}-rank Ticks until next dungeon:{}", saveData.getNextToCollapse().getName(), timeLeft);
             saveData.SetLastMinuteAnnouncement(minutesLeft);
         }
     }
@@ -148,13 +146,9 @@ public final class GlobalDungeonManager {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
             Dungeon.Cleanup(server, rank);
-        if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) {
-            TheDungeon.LOGGER.info("Selecting new dungeon");
-        }
+        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Selecting new dungeon");
         if (!skipPassiveQueue && !saveData.isPassiveQueueEmpty(rank)) {
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) {
-                TheDungeon.LOGGER.info("Dungeon found in passive queue");
-            }
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Dungeon found in passive queue");
             saveData.addToProgressQueue(saveData.removeFromPassiveQueue(rank));
         }
         else {
@@ -162,8 +156,7 @@ public final class GlobalDungeonManager {
             for (Dungeon dungeon : dungeons.keySet())
                 if (dungeon.getRank()==rank)
                     possibleDungeons.put(dungeon, dungeon.getWeight());
-            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC))
-                TheDungeon.LOGGER.info("Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
             if (possibleDungeons.isEmpty()) return;
             Dungeon newDungeon = ListAndArrayUtils.getRandomFromWeightedMapI(possibleDungeons, Objects.requireNonNull(server.getLevel(Level.OVERWORLD)).getRandom());
             if (newDungeon== null) return;

@@ -23,7 +23,6 @@ public final class ModDatapackBuiltinEntriesProvider extends DatapackBuiltinEntr
             .add(Registries.LEVEL_STEM, ModDimensions::bootstrapStem)
             .add(Registries.DAMAGE_TYPE, ModDamageTypes::bootstrap);
 
-
     ModDatapackBuiltinEntriesProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BUILDER, Set.of(TheDungeon.MOD_ID));
     }

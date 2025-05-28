@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -99,20 +98,20 @@ public class WallFailRule extends FailRule {
     private BlockPos findWallCenter(GeneratedRoom room, GridRoomUtils.Connection connection) {
         BlockPos roomCenter = room.getPlacedWorldPos();
         Vec3i connectionArrayOffset = room.getPlacedArrayOffset(connection);
-        if (connection == GridRoomUtils.Connection.up) {
+        if (connection == GridRoomUtils.Connection.UP) {
             return null;
         }
-        if (connection == GridRoomUtils.Connection.down) {
+        if (connection == GridRoomUtils.Connection.DOWN) {
             return null;
         }
         if (connectionArrayOffset==null) return null;
         int unitXOffset = 0;
         int unitZOffset = 0;
         switch (connection) {
-            case north -> unitZOffset = 1;
-            case east -> unitXOffset = -1;
-            case south -> unitZOffset = -1;
-            case west -> unitXOffset = 1;
+            case NORTH -> unitZOffset = 1;
+            case EAST -> unitXOffset = -1;
+            case SOUTH -> unitZOffset = -1;
+            case WEST -> unitXOffset = 1;
         }
         return roomCenter.offset((connectionArrayOffset.getX()*room.getGridWidth() + unitXOffset * (room.getGridWidth()/2+(offsetOut?0:1))), connectionArrayOffset.getY()*room.getGridHeight() + heightOffset, connectionArrayOffset.getZ()*room.getGridWidth() + unitZOffset * (room.getGridWidth()/2+(offsetOut?0:1)));
 
@@ -124,11 +123,11 @@ public class WallFailRule extends FailRule {
         while (i > 0) {
             if (fillY > height - 1) return;
             switch (connection) {
-                case north, south -> {
+                case NORTH, SOUTH -> {
                     fillZ = 0;
                     maxFillZ = 0;
                 }
-                case east, west -> {
+                case EAST, WEST -> {
                     fillX = 0;
                     maxFillX = 0;
                 }
@@ -138,14 +137,14 @@ public class WallFailRule extends FailRule {
             BlockPos placePos = wallCenter.offset(fillX, fillY, fillZ);
             level.setBlockAndUpdate(placePos, processBlockForPlacement(level,placePos, block.get().defaultBlockState(),processors));
             switch (connection) {
-                case north, south -> {
+                case NORTH, SOUTH -> {
                     fillX++;
                     if (fillX > maxFillX) {
                         fillX = -width / 2;
                         fillY++;
                     }
                 }
-                case east, west -> {
+                case EAST, WEST -> {
                     fillZ++;
                     if (fillZ > maxFillZ) {
                         fillZ = -width / 2;

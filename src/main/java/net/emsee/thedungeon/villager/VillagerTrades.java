@@ -20,6 +20,10 @@ public final class VillagerTrades {
     static final float vanillaLowMultiplier = .05f;
     static final float vanillaHighMultiplier = .2f;
 
+    /**
+     * add all trades here,
+     * maybe if more villagers join in make a separate class and call that through here for each villager to keep it more organized
+     */
     @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event){
         if (event.getType() == ModVillagers.DUNGEON_SCHOLAR.value()) {
