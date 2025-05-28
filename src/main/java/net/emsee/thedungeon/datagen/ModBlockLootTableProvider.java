@@ -21,7 +21,15 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         TheDungeon.LOGGER.info("Generating loot tables for blocks...");
-        dropSelf(ModBlocks.DUNGEON_PORTAL.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_F.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_E.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_D.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_C.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_B.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_A.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_S.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_SS.get());
+        dropSelf(ModBlocks.DUNGEON_PORTAL_EXIT.get());
         dropOther(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get(), ModItems.SHATTERED_PORTAL_CORE);
 
         simpleItemDropWithSilk(ModBlocks.INFUSED_DIRT.get(), ModItems.DUNGEON_ESSENCE_SHARD);

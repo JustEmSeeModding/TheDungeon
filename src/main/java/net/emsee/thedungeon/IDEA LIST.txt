@@ -14,11 +14,13 @@ A hidden mini-boss who was once the dungeon’s keeper. Defeating him unlocks a 
 Temporary Portal: Starter portals that only grant single access, forcing players to scavenge quickly in the dungeon for better gear to build a permanent portal.
 
 Essencebound Armor
-    Full Set Bonus: Absorbs 1 shard from inventory to negate a lethal hit (60s cooldown).
+    Full Set Bonus: Absorbs 1 X from inventory to negate a lethal hit (60s cooldown).
 
-Soulbound Totem
+Soul bound Totem
     Single-use item that prevents item loss on death (consumed)
 
-Castle Mobs:
-    SkeletalKnight
-    ShadeKnight
+New Dungeon Logic
+    one of each rank is active at the same time allowing players to travel to different ranked dungeons
+    every 5-10 minuted one rank is reset and regenerated order is TBD
+    attune your portal to specific ranks
+    rank F is only the goblin caves the rest have multiple dungeons

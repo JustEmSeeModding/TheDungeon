@@ -73,20 +73,20 @@ public class GridDungeonGenerator {
         occupied,
     }
 
-    public GridDungeonGenerator(GridDungeon dungeon, BlockPos worldPos) {
-        this(dungeon, worldPos, new Random().nextLong());
+    public GridDungeonGenerator(GridDungeon dungeon) {
+        this(dungeon, new Random().nextLong());
     }
 
-    public GridDungeonGenerator(GridDungeon dungeon, BlockPos worldPos, long seed) {
-        this(dungeon, worldPos, new Random(seed));
+    public GridDungeonGenerator(GridDungeon dungeon, long seed) {
+        this(dungeon, new Random(seed));
         this.seed = seed;
     }
 
-    private GridDungeonGenerator(GridDungeon dungeon, BlockPos worldPos, Random random) {
+    private GridDungeonGenerator(GridDungeon dungeon, Random random) {
         this.random = random;
         this.dungeon = dungeon;
         collection = dungeon.getRoomCollection();
-        this.worldPos = worldPos;
+        this.worldPos = dungeon.getRank().getCenterPos();
         int listCentreOffset = dungeon.GetDungeonDepth();
         int arraySize = (dungeon.GetDungeonDepth() * 2) + 1;
         occupationArray = new Occupation[arraySize][arraySize][arraySize];
@@ -116,7 +116,7 @@ public class GridDungeonGenerator {
 
         if (currentTask == GenerationTask.UNSTARTED) {
             currentTask = GenerationTask.CALCULATING;
-            GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer());
+            GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer(), dungeon.getRank());
         } else if (currentTask == GenerationTask.CALCULATING) calculationStep(serverLevel.getServer());
         else if (currentTask == GenerationTask.CHECK_REQUIREMENTS) checkRequirementStep(serverLevel.getServer());
         else if (currentTask == GenerationTask.FILLING_UNOCCUPIED) fillUnoccupiedStep(serverLevel.getServer());
@@ -184,7 +184,7 @@ public class GridDungeonGenerator {
             LOGGER.info("Not All Required Rooms where generated, regenerating with Seed+1");
             //generator = new GridDungeonGenerator(this, level, generatedPos, generator.GetSeed()+1);
             if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
-                PriorityCleanup(server);
+                PriorityCleanup(server, dungeon.getRank());
             dungeon.Generate(worldPos, GetSeed() + 1);
             return;
         }
@@ -212,12 +212,13 @@ public class GridDungeonGenerator {
     private void placeRoomStep(ServerLevel serverLevel) {
         for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.PLACER_STEPS_PER_TICK); i++) {
             if (toPlaceInstances.isEmpty()) {
-                GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer());
+                GlobalDungeonManager.KillAllInDungeon(serverLevel.getServer(), dungeon.getRank());
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.GENERIC)) LOGGER.info("All Rooms Placed, Starting Mob Spawning");
                 currentTask = GenerationTask.FILLING_WITH_MOBS;
                 return;
             }
             Object toPlace = toPlaceInstances.peek();
+            if (TheDungeon.debugMode.is(TheDungeon.DebugMode.ALL)) LOGGER.info("to Place:" + toPlace);
             if (toPlace instanceof GeneratedRoom room) {
                 room.finalizePlacement(serverLevel, collection.getStructureProcessors(), random);
                 toPlaceInstances.remove();
@@ -226,7 +227,8 @@ public class GridDungeonGenerator {
                 failInstance.finalize(serverLevel, collection.getStructureProcessors());
                 if (failInstance.isFinished())
                     toPlaceInstances.remove();
-            } else {
+            }
+            else {
                 if (TheDungeon.debugMode.is(TheDungeon.DebugMode.IMPORTANT_ONLY))
                     LOGGER.warn("Disallowed object in ToPlace List: {} - removing", toPlace);
                 toPlaceInstances.remove();

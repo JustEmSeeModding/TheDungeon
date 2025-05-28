@@ -28,14 +28,38 @@ public abstract class Dungeon {
             this.name = name;
         }
 
-        public int getTickInterval() {
-            //TODO remove
-            return 15 * 60 * 20;
-        }
         public BlockPos getCenterPos() {return centerPos;}
 
         public String getName() {
             return name;
+        }
+
+        public static DungeonRank getByName(String name) {
+            for (DungeonRank rank : DungeonRank.values())
+                if (name.equals(rank.getName())) return rank;
+            return null;
+        }
+
+        public static DungeonRank getNext(DungeonRank rank) {
+            int i = 0;
+            for (DungeonRank r : DungeonRank.values()) {
+                if (r == rank) break;
+                i++;
+            }
+            return DungeonRank.values()[(i+1)%DungeonRank.values().length];
+        }
+
+        public static DungeonRank getClosestRank(BlockPos pos) {
+            double lowestDist = -1;
+            DungeonRank toReturn = null;
+            for (DungeonRank rank : DungeonRank.values()) {
+                double dist = rank.getCenterPos().distSqr(pos);
+                if (lowestDist == -1 || dist < lowestDist) {
+                    lowestDist = dist;
+                    toReturn = rank;
+                }
+            }
+            return toReturn;
         }
     }
 
@@ -74,16 +98,39 @@ public abstract class Dungeon {
 
     public abstract void GenerationTick(ServerLevel serverLevel);
 
-    public static void Cleanup(MinecraftServer server) {
+    public static void Cleanup(MinecraftServer server, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        saveData.addToProgressQueue(ModDungeons.CLEANUP_OLD.GetCopy());
-        GlobalDungeonManager.KillAllInDungeon(server);
+        Dungeon cleanup = null;
+        switch (rank) {
+            case F -> cleanup=ModDungeons.CLEANUP_F;
+            case E -> cleanup=ModDungeons.CLEANUP_E;
+            case D -> cleanup=ModDungeons.CLEANUP_D;
+            case C -> cleanup=ModDungeons.CLEANUP_C;
+            case B -> cleanup=ModDungeons.CLEANUP_B;
+            case A -> cleanup=ModDungeons.CLEANUP_A;
+            case S -> cleanup=ModDungeons.CLEANUP_S;
+            case SS -> cleanup=ModDungeons.CLEANUP_SS;
+        }
+        saveData.addToProgressQueue(cleanup.GetCopy());
+        GlobalDungeonManager.KillAllInDungeon(server, rank);
 
     }
 
-    public static void PriorityCleanup(MinecraftServer server) {
-        GlobalDungeonManager.AddToQueueFront(ModDungeons.CLEANUP_OLD.GetCopy(), server);
-        GlobalDungeonManager.KillAllInDungeon(server);
+    public static void PriorityCleanup(MinecraftServer server, DungeonRank rank) {
+        Dungeon cleanup = null;
+        switch (rank) {
+            case F -> cleanup=ModDungeons.CLEANUP_F;
+            case E -> cleanup=ModDungeons.CLEANUP_E;
+            case D -> cleanup=ModDungeons.CLEANUP_D;
+            case C -> cleanup=ModDungeons.CLEANUP_C;
+            case B -> cleanup=ModDungeons.CLEANUP_B;
+            case A -> cleanup=ModDungeons.CLEANUP_A;
+            case S -> cleanup=ModDungeons.CLEANUP_S;
+            case SS -> cleanup=ModDungeons.CLEANUP_SS;
+        }
+
+        GlobalDungeonManager.AddToQueueFront(cleanup.GetCopy(), server);
+        GlobalDungeonManager.KillAllInDungeon(server, rank);
     }
 
     public final String GetResourceName() {
@@ -111,10 +158,6 @@ public abstract class Dungeon {
 
     public DungeonRank getRank() {
         return rank;
-    }
-
-    public int getTickInterval() {
-        return rank.getTickInterval();
     }
 
     public Integer getWeight() {

@@ -20,12 +20,26 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(BlockTags.NEEDS_IRON_TOOL)
-                .add(ModBlocks.DUNGEON_PORTAL.get())
+                .add(ModBlocks.DUNGEON_PORTAL_F.get())
+                .add(ModBlocks.DUNGEON_PORTAL_E.get())
+                .add(ModBlocks.DUNGEON_PORTAL_D.get())
+                .add(ModBlocks.DUNGEON_PORTAL_C.get())
+                .add(ModBlocks.DUNGEON_PORTAL_B.get())
+                .add(ModBlocks.DUNGEON_PORTAL_A.get())
+                .add(ModBlocks.DUNGEON_PORTAL_S.get())
+                .add(ModBlocks.DUNGEON_PORTAL_SS.get())
                 .add(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get())
         ;
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(ModBlocks.DUNGEON_PORTAL.get())
+                .add(ModBlocks.DUNGEON_PORTAL_F.get())
+                .add(ModBlocks.DUNGEON_PORTAL_E.get())
+                .add(ModBlocks.DUNGEON_PORTAL_D.get())
+                .add(ModBlocks.DUNGEON_PORTAL_C.get())
+                .add(ModBlocks.DUNGEON_PORTAL_B.get())
+                .add(ModBlocks.DUNGEON_PORTAL_A.get())
+                .add(ModBlocks.DUNGEON_PORTAL_S.get())
+                .add(ModBlocks.DUNGEON_PORTAL_SS.get())
                 .add(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get())
                 .add(ModBlocks.INFUSED_STONE.get())
                 .add(ModBlocks.INFUSED_DEEPSLATE.get())
@@ -117,7 +131,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.WALL_POST_OVERRIDE).add(ModBlocks.INFUSED_THREAD.get());
 
         tag(BlockTags.DRAGON_IMMUNE)
-                .add(ModBlocks.DUNGEON_PORTAL.get())
+                .add(ModBlocks.DUNGEON_PORTAL_F.get())
                 .add(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get())
                 .add(ModBlocks.INFUSED_END_STONE.get())
                 ;

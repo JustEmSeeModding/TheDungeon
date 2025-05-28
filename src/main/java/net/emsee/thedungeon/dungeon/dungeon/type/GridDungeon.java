@@ -119,7 +119,7 @@ public class GridDungeon extends Dungeon {
     public void Generate(BlockPos worldPos, long seed) {
         TheDungeon.LOGGER.info("Starting Dungeon Generation...");
         TheDungeon.LOGGER.info("Dungeon: {}", this.GetResourceName());
-        generator = new GridDungeonGenerator(this, worldPos, seed);
+        generator = new GridDungeonGenerator(this, seed);
         TheDungeon.LOGGER.info("Seed: {}", seed);
     }
 

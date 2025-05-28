@@ -29,7 +29,7 @@ public final class ModAdvancementProvider extends AdvancementProvider {
     }
 
     private static void generateAdvancements(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-        AdvancementHolder dungeonRoot = createRootAdvancement("thedungeon", ModBlocks.DUNGEON_PORTAL, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"), Map.of("pickup_infused_alloy",  InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
+        AdvancementHolder dungeonRoot = createRootAdvancement("thedungeon", ModBlocks.DUNGEON_PORTAL_F, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"), Map.of("pickup_infused_alloy",  InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
         AdvancementHolder essenceShard = createItemAdvancement("thedungeon","dungeon_essence_shard", ModItems.DUNGEON_ESSENCE_SHARD, dungeonRoot, AdvancementType.TASK, false, saver,existingFileHelper);
         AdvancementHolder infusedAlloy = createItemAdvancement("thedungeon","infused_alloy", ModItems.INFUSED_ALLOY_INGOT, essenceShard, AdvancementType.TASK, false, saver,existingFileHelper);
     }

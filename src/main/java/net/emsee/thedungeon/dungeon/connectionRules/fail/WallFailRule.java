@@ -26,12 +26,14 @@ public class WallFailRule extends FailRule {
     private final boolean offsetOut;
     private final Supplier<Block> block;
 
-    int fillX;
-    int fillY;
-    int fillZ;
+    private int fillX;
+    private int fillY;
+    private int fillZ;
 
-    int maxFillX;
-    int maxFillZ;
+    private int maxFillX;
+    private int maxFillZ;
+
+    private boolean exitMarkedObstructed;
 
     public WallFailRule(String tag, int width, int height, int heightOffset, boolean offsetOut, Supplier<Block> block) {
         super(tag);
@@ -77,6 +79,7 @@ public class WallFailRule extends FailRule {
 
     @Override
     public void ApplyFail(GeneratedRoom room, GridRoomUtils.Connection connection, ServerLevel level, StructureProcessorList processors, boolean wouldPlaceFallback, boolean exitObstructed) {
+        exitMarkedObstructed = exitObstructed;
         if (offsetOut && exitObstructed) return;
         StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
         finalProcessors.list().addAll(processors.list());
@@ -89,7 +92,7 @@ public class WallFailRule extends FailRule {
 
     @Override
     public boolean isFinished() {
-        return fillY>height-1;
+        return fillY>height-1 || offsetOut && exitMarkedObstructed;
     }
 
 
@@ -155,6 +158,7 @@ public class WallFailRule extends FailRule {
     }
 
     private BlockState processBlockForPlacement(ServerLevel level, BlockPos globalPos, BlockState initialState, StructureProcessorList processors) {
+        if (processors.list().isEmpty()) return initialState;
         // Create a StructureBlockInfo for the block
         StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(
                 globalPos,
@@ -163,6 +167,7 @@ public class WallFailRule extends FailRule {
         );
 
         for (StructureProcessor processor : processors.list()) {
+            assert blockInfo != null;
             blockInfo = processor.processBlock(level, new BlockPos(0,0,0), globalPos, blockInfo, blockInfo, new StructurePlaceSettings());
         }
         // Return the processed block state (or fallback to initial state)

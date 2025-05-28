@@ -3,10 +3,11 @@ package net.emsee.thedungeon.block;
 
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.block.custom.DungeonPortal;
+import net.emsee.thedungeon.block.custom.portal.*;
 import net.emsee.thedungeon.block.custom.DungeonTripWireBlock;
 import net.emsee.thedungeon.block.custom.InfusedGlassBlock;
 import net.emsee.thedungeon.block.custom.UnstableDungeonPortal;
+import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.utils.BlockUtils;
 import net.minecraft.util.ColorRGBA;
@@ -24,9 +25,43 @@ public final class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(TheDungeon.MOD_ID);
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL = registerBlock("dungeon_portal",
-            () -> new DungeonPortal(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_F = registerBlock("dungeon_portal_f",
+            () -> new DungeonPortalF(BlockBehaviour.Properties.of()
                     .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_E = registerBlock("dungeon_portal_e",
+            () -> new DungeonPortalE(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_D = registerBlock("dungeon_portal_d",
+            () -> new DungeonPortalD(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_C = registerBlock("dungeon_portal_c",
+            () -> new DungeonPortalC(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_B = registerBlock("dungeon_portal_b",
+            () -> new DungeonPortalB(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_A = registerBlock("dungeon_portal_a",
+            () -> new DungeonPortalA(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_S = registerBlock("dungeon_portal_s",
+            () -> new DungeonPortalS(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_SS = registerBlock("dungeon_portal_ss",
+            () -> new DungeonPortalSS(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_EXIT = registerBlock("dungeon_portal_exit",
+            () -> new DungeonPortalExit(BlockBehaviour.Properties.of()
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light)-> 14)));
+
+
 
     public static final DeferredBlock<UnstableDungeonPortal> DUNGEON_PORTAL_UNSTABLE = registerBlock("dungeon_portal_unstable",
             () -> new UnstableDungeonPortal(BlockBehaviour.Properties.of()
