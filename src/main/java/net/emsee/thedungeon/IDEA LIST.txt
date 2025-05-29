@@ -3,9 +3,6 @@
 weapons waxing moon blade and waning moon blade
     combine to full moon blade that combines abilities
 
-achievement description for when player tries to take non dungeon item
-    Only the Attuned may pass. The realm devours all else.
-
 Corrupted Gear
     High-tier dungeon gear slowly corrupts the player, granting power (e.g., +50% damage) but causing debuffs can be Cleansed to remove or reduce debuffs.
 

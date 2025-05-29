@@ -20,5 +20,6 @@ public final class ModAttachmentTypes {
 
     public static void register(IEventBus eventBus){
         ATTACHMENT_TYPES.register(eventBus);
+
     }
 }

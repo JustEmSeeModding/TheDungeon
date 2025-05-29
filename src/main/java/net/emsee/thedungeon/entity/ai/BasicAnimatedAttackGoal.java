@@ -105,5 +105,4 @@ public class BasicAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         entity.setAttacking(false);
         super.stop();
     }
-
 }

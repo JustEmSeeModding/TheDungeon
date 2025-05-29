@@ -46,10 +46,8 @@ public abstract class GridRoomCollection {
 
 
     public GridRoomCollection addRoom(GridRoom gridRoom) {
-        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", gridRoom, gridRoom.getGridWidth(), gridRoom.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
+        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+gridRoom+" is not the same size as the RoomCollection "+this);
         int weight = gridRoom.getWeight();
         allGridRooms.put(gridRoom, weight);
 
@@ -77,10 +75,8 @@ public abstract class GridRoomCollection {
      */
     public GridRoomCollection setStartingRoom(GridRoom gridRoom) {
         if (gridRoom == null) return this;
-        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", gridRoom, gridRoom.getGridWidth(), gridRoom.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
+        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+gridRoom+" is not the same size as the RoomCollection "+this);
         startingRoom = (gridRoom);
         return this;
     }
@@ -96,10 +92,8 @@ public abstract class GridRoomCollection {
      * @return this collection instance for chaining
      */
     public GridRoomCollection addRequiredRoom(int requiredAmount, int maxAmount, GridRoom room) {
-        if (room.getGridWidth() != roomWidth || room.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", room, room.getGridWidth(), room.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
+        if (room.getGridWidth() != roomWidth || room.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+room+" is not the same size as the RoomCollection "+this);
 
         addRoom(room);
         requiredPlacements.put(room, new Vec3i(requiredAmount, maxAmount, 0));
@@ -155,14 +149,10 @@ public abstract class GridRoomCollection {
      * @return this collection instance for chaining
      */
     public GridRoomCollection setFallback(GridRoom fallbackGridRoom) {
-        if (fallbackGridRoom.getGridWidth() != roomWidth || fallbackGridRoom.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("fallbackRoom ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", fallbackGridRoom, fallbackGridRoom.getGridWidth(), fallbackGridRoom.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
-        if (fallbackGridRoom.getHeightScale() > 1 || fallbackGridRoom.getRotatedEastSizeScale(Rotation.NONE) > 1 || fallbackGridRoom.getRotatedNorthSizeScale(Rotation.NONE) > 1) {
-            TheDungeon.LOGGER.error("fallbackRoom ({}) is a large grid room in RoomCollection ({})", fallbackGridRoom, this);
-            return this;
-        }
+        if (fallbackGridRoom.getGridWidth() != roomWidth || fallbackGridRoom.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+fallbackGridRoom+" is not the same size as the RoomCollection "+this);
+        if (fallbackGridRoom.getHeightScale() > 1 || fallbackGridRoom.getRotatedEastSizeScale(Rotation.NONE) > 1 || fallbackGridRoom.getRotatedNorthSizeScale(Rotation.NONE) > 1)
+            throw new IllegalStateException("Fallback can not be larger than scale 1,1");
         this.fallbackGridRoom = fallbackGridRoom;
         return this;
     }

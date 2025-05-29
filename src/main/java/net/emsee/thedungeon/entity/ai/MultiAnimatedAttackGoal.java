@@ -207,5 +207,4 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             this.hand = hand;
         }
     }
-
 }

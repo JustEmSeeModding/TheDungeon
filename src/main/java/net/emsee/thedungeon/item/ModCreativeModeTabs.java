@@ -59,7 +59,7 @@ public final class ModCreativeModeTabs {
                         //output.accept(ModBlocks.DUNGEON_PORTAL_A);
                         //output.accept(ModBlocks.DUNGEON_PORTAL_S);
                         //output.accept(ModBlocks.DUNGEON_PORTAL_SS);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_EXIT);
+                        output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
                         output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);

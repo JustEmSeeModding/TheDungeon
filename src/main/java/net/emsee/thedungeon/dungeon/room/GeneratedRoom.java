@@ -83,7 +83,7 @@ public final class GeneratedRoom {
         GeneratedRoom toReturn = new GeneratedRoom(toGenerate, gridDungeonGenerator, listPosX, listPosY, listPosZ, worldPos, rotation, fromConnection, random);
 
         if (!toReturn.generated)
-            throw new IllegalStateException("error with placing generating room");
+            return null;
 
         return toReturn;
     }

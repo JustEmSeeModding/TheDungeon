@@ -70,7 +70,7 @@ public final class DungeonNBTData {
         for (Dungeon.DungeonRank rank : isOpen.keySet())
             toReturn.putBoolean("isOpen_" + rank.getName(), isOpen.get(rank));
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
-        toReturn.putString("nextToCollapse", nextToCollapse.getName());
+        if (nextToCollapse!= null) toReturn.putString("nextToCollapse", nextToCollapse.getName());
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
         int i = 0;
@@ -117,7 +117,8 @@ public final class DungeonNBTData {
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         lastSecondAnnouncement = tag.getLong("lastSecondAnnouncement");
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
-        isOpen.replaceAll((rank, v) -> tag.getBoolean("isOpen_" + rank.getName()));
+        for (Dungeon.DungeonRank rank : Dungeon.DungeonRank.values())
+            isOpen.put(rank,tag.getBoolean("isOpen_" + rank.getName()));
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
         nextToCollapse = Dungeon.DungeonRank.getByName(tag.getString("nextToCollapse"));
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
@@ -220,6 +221,7 @@ public final class DungeonNBTData {
     }
 
     public void setNextToCollapse(Dungeon.DungeonRank rank) {
+        if (rank==null) return;
         nextToCollapse = rank;
     }
 }

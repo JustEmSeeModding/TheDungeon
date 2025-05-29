@@ -106,5 +106,4 @@ public class SpawnInBox<T extends Entity> extends MobSpawnRules {
 
         return true;
     }
-
 }

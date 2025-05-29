@@ -25,18 +25,6 @@ public class DungeonScholarArmorItem extends DungeonArmorItem{
         super(material, type, properties);
     }
 
-    /*@Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-
-        tooltipComponents.add(Component.empty());
-        tooltipComponents.add(fullSetBonusHeader);
-        String[] bonusText = ((setMovementSpeedBonus*1000)+"").split("\\.");
-        if (Objects.equals(bonusText[1], "0"))
-            tooltipComponents.add(Component.translatable("item.thedungeon.scholar_armor.set_bonus",bonusText[0]+"%").withStyle(beneficialModifier));
-        else tooltipComponents.add(Component.translatable("item.thedungeon.scholar_armor.set_bonus",(setMovementSpeedBonus*1000)+"%").withStyle(beneficialModifier));
-    }*/
-
     @Override
     public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers() {
         ItemAttributeModifiers toReturn =
@@ -48,14 +36,4 @@ public class DungeonScholarArmorItem extends DungeonArmorItem{
         }
         return toReturn;
     }
-/*
-    @Override
-    protected void onFullSetEquipped(LivingEntity entity) {
-        Objects.requireNonNull(entity.getAttribute(Attributes.MOVEMENT_SPEED)).addOrUpdateTransientModifier(new AttributeModifier(TheDungeon.resourceLocation("scholar.speed.full_set"), setMovementSpeedBonus, AttributeModifier.Operation.ADD_VALUE));
-    }
-
-    @Override
-    protected void onFullSetUnEquipped(LivingEntity entity) {
-        Objects.requireNonNull(entity.getAttribute(Attributes.MOVEMENT_SPEED)).removeModifier(TheDungeon.resourceLocation("scholar.speed.full_set"));
-    }*/
 }

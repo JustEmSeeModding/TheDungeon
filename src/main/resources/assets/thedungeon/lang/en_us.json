@@ -21,6 +21,8 @@
   "advancements.thedungeon.dungeon_essence_shard.description" : "You can feel it resonating with something",
   "advancements.thedungeon.infused_alloy.title" : "Infused Alloying",
   "advancements.thedungeon.infused_alloy.description" : "A strong metal but quite heavy",
+  "advancements.thedungeon.failed_travel.title" : "YOU SHALL NOT PASS!",
+  "advancements.thedungeon.failed_travel.description" : "Only the Attuned may pass. The dungeon devours all else.",
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",

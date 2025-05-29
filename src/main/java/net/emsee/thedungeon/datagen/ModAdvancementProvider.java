@@ -2,6 +2,7 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.criterion.FailedDungeonTravelTrigger;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -32,22 +33,37 @@ public final class ModAdvancementProvider extends AdvancementProvider {
         AdvancementHolder dungeonRoot = createRootAdvancement("thedungeon", ModBlocks.DUNGEON_PORTAL_F, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"), Map.of("pickup_infused_alloy",  InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
         AdvancementHolder essenceShard = createItemAdvancement("thedungeon","dungeon_essence_shard", ModItems.DUNGEON_ESSENCE_SHARD, dungeonRoot, AdvancementType.TASK, false, saver,existingFileHelper);
         AdvancementHolder infusedAlloy = createItemAdvancement("thedungeon","infused_alloy", ModItems.INFUSED_ALLOY_INGOT, essenceShard, AdvancementType.TASK, false, saver,existingFileHelper);
-    }
+        AdvancementHolder FailedToTraveledToDungeon = createSimpleAdvancement("thedungeon", "failed_travel", new ItemStack(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get()), "has_tried", FailedDungeonTravelTrigger.criterion(), dungeonRoot, AdvancementType.TASK, true, saver, existingFileHelper);
+  }
 
     private static AdvancementHolder createItemAdvancement(String location, String name, ItemLike item, AdvancementHolder parent, AdvancementType advancementType, boolean hidden, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
         String criterionName = "pickup_"+ getItemName(item);
+        return createSimpleAdvancement(
+                location,
+                name,
+                new ItemStack(item),
+                criterionName,
+                InventoryChangeTrigger.TriggerInstance.hasItems(item),
+                parent,
+                advancementType,
+                hidden,
+                saver,
+                existingFileHelper);
+    }
+
+    private static AdvancementHolder createSimpleAdvancement(String location, String name, ItemStack icon, String criterionName, Criterion<?> criterion, AdvancementHolder parent, AdvancementType advancementType, boolean hidden, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
         Advancement.Builder builder = Advancement.Builder.advancement()
                 .display(
-                new ItemStack(item),
-                Component.translatable("advancements."+location+"."+name+".title"),
-                Component.translatable("advancements."+location+"."+name+".description"),
-                null,
-                advancementType,
-                true,
-                true,
-                hidden
-        )
-                .addCriterion(criterionName, InventoryChangeTrigger.TriggerInstance.hasItems(item))
+                        icon,
+                        Component.translatable("advancements."+location+"."+name+".title"),
+                        Component.translatable("advancements."+location+"."+name+".description"),
+                        null,
+                        advancementType,
+                        true,
+                        true,
+                        hidden
+                )
+                .addCriterion(criterionName, criterion)
                 .requirements(AdvancementRequirements.allOf(List.of(criterionName)));
         if (parent!=null) {
             builder.parent(parent);

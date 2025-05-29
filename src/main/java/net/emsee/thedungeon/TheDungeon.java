@@ -5,6 +5,7 @@ import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.ModBlockEntities;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
+import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
 import net.emsee.thedungeon.dungeon.ModDungeons;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.events.entityCreation.ModEventBusClientEvents;
@@ -42,6 +43,8 @@ public final class TheDungeon
         ModCreativeModeTabs.register(modEventBus);
 
         ModAttributes.register(modEventBus);
+
+        ModCriteriaTriggerTypes.register(modEventBus);
 
         ModItems.register(modEventBus);
         ModArmorMaterials.register(modEventBus);

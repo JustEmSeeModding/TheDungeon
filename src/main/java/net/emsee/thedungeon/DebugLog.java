@@ -32,7 +32,7 @@ public class DebugLog {
     }
 
     public static void logInfo(DebugLevel debugLevel, String msg) {
-        logInfo(debugLevel, msg, null);
+        if (isDebugMode(debugLevel)) LOGGER.info(msg);
     }
 
     public static void logInfo(DebugLevel debugLevel, String msg, Object... objects) {

@@ -3,10 +3,19 @@ package net.emsee.thedungeon.dungeon.dungeon;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.ModDungeons;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.BrewingStandMenu;
+import net.minecraft.world.item.BrushItem;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpyglassItem;
+import net.minecraft.world.level.block.BeaconBlock;
+import net.minecraft.world.level.block.BrewingStandBlock;
+import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 
 public abstract class Dungeon {
     private static int lastID = 0;
@@ -171,6 +180,6 @@ public abstract class Dungeon {
 
     @Override
     public String toString() {
-        return (GetResourceName() + "-" + GetTranslatedName());
+        return (GetResourceName() + "-weight:" + getWeight());
     }
 }

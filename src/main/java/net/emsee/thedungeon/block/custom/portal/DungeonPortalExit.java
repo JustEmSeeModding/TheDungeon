@@ -11,11 +11,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DungeonPortalExit extends DungeonPortalF{
+public class DungeonPortalExit extends DungeonPortal{
     public static final MapCodec<DungeonPortal> CODEC = simpleCodec(DungeonPortalExit::new);
 
     public DungeonPortalExit(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public Dungeon.DungeonRank getExitRank() {
+        return Dungeon.DungeonRank.F;
     }
 
     @Override

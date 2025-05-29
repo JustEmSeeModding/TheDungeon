@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.item.custom;
 
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
@@ -45,7 +46,7 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
                         selectedDungeonID = 0;
                     }
 
-                    TheDungeon.LOGGER.info("Selected Dungeon Using Tool : ({})={}", selectedDungeonID, GlobalDungeonManager.getDungeonByID(selectedDungeonID).GetResourceName());
+                    DebugLog.logInfo(DebugLog.DebugLevel.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, GlobalDungeonManager.getDungeonByID(selectedDungeonID).GetResourceName());
                     //GlobalDungeonManager.SelectDungeonFromTool(serverLevel);
                     player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", GlobalDungeonManager.getDungeonByID(selectedDungeonID).GetResourceName()));
 

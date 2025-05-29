@@ -100,14 +100,15 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
                     .addConnection(GridRoomUtils.Connection.WEST)
                     .doAllowRotation().setAllConnectionTags("corner"));
 
-    private static final GridRoom mainHallSegments = ((GridRoomGroup) new GridRoomGroup(9, 9).setSizeHeight(1, 3, 4).addConnection(GridRoomUtils.Connection.NORTH).addConnection(GridRoomUtils.Connection.SOUTH).doAllowRotation().setConnectionTag(GridRoomUtils.Connection.NORTH, "main_hall").setConnectionTag(GridRoomUtils.Connection.SOUTH, "main_hall").setGenerationPriority(10).setOverrideEndChance(0))
+    private static final GridRoom mainHallSegments = ((GridRoomGroup) new GridRoomGroup(9, 9).setSizeHeight(1, 3, 4).addConnection(GridRoomUtils.Connection.NORTH).addConnection(GridRoomUtils.Connection.SOUTH).doAllowRotation().setAllConnectionTags("main_hall").setGenerationPriority(10).setOverrideEndChance(0))
             .addRoom(new GridRoom(9, 9)
                     .setSizeHeight(1, 3, 4)
                     .withWeight(10)
                     .withResourceLocation("castle/mainhall/default")
                     .addConnection(GridRoomUtils.Connection.NORTH)
                     .addConnection(GridRoomUtils.Connection.SOUTH)
-                    .doAllowRotation().setAllConnectionTags("main_hall")
+                    .doAllowRotation()
+                    .setAllConnectionTags("main_hall")
                     .setOverrideEndChance(0)
                     .setGenerationPriority(10))
             .addRoom(new GridRoom(9, 9)
