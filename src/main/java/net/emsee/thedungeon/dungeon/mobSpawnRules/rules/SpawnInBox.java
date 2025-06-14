@@ -1,6 +1,6 @@
 package net.emsee.thedungeon.dungeon.mobSpawnRules.rules;
 
-import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRules;
+import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -12,13 +12,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.Random;
 import java.util.function.Supplier;
-import java.util.stream.StreamSupport;
 
-public class SpawnInBox<T extends Entity> extends MobSpawnRules {
+public class SpawnInBox<T extends Entity> extends MobSpawnRule {
     final Supplier<EntityType<T>> entity;
     final BlockPos cornerOne;
     final BlockPos cornerTwo;

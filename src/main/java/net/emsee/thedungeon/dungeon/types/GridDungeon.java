@@ -1,10 +1,9 @@
-package net.emsee.thedungeon.dungeon.dungeon.type;
+package net.emsee.thedungeon.dungeon.types;
 
 import net.emsee.thedungeon.DebugLog;
-import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
-import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
-import net.emsee.thedungeon.dungeon.dungeon.generator.GridDungeonGenerator;
+import net.emsee.thedungeon.dungeon.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
@@ -18,7 +17,6 @@ import java.util.Random;
  * custom generation in a grid based system
  */
 public class GridDungeon extends Dungeon {
-
     public enum RoomGenerationPickMethod {
         FIRST,
         LAST,
@@ -45,10 +43,10 @@ public class GridDungeon extends Dungeon {
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
         if (roomWidth % 2 != 1) {
-            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:"+roomWidth);
+            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:" + roomWidth);
         }
         if (collection.getWidth() != roomWidth || collection.getHeight() != roomHeight) {
-            throw new IllegalStateException("RoomCollection "+collection+" is not the same size as the Dungeon "+this);
+            throw new IllegalStateException("RoomCollection " + collection + " is not the same size as the Dungeon " + this);
         }
         roomCollection = collection;
     }
@@ -58,10 +56,10 @@ public class GridDungeon extends Dungeon {
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
         if (roomWidth % 2 != 1) {
-            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:"+roomWidth);
+            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:" + roomWidth);
         }
         if (collection.getWidth() != roomWidth || collection.getHeight() != roomHeight) {
-            throw new IllegalStateException("RoomCollection "+collection+" is not the same size as the Dungeon "+this);
+            throw new IllegalStateException("RoomCollection " + collection + " is not the same size as the Dungeon " + this);
         }
         roomCollection = collection;
     }
@@ -74,67 +72,85 @@ public class GridDungeon extends Dungeon {
         return this;
     }
 
+    /**
+     * the chance each room take to stop generating next rooms
+     */
     public GridDungeon setRoomEndChance(float roomEndChance) {
         this.roomEndChance = roomEndChance;
         return this;
     }
 
+    /**
+     * sets the max number of floors the dungeon is allowed to have (including the main floor)
+     * - in case allowDownGeneration is false use "setMaxFloorHeightOneWay()" instead
+     */
     public GridDungeon setMaxFloorHeight(int maxFloors) {
+        if (maxFloors % 2 != 1)
+            throw new IllegalStateException("Max floors must be odd");
         maxFloorHeight = maxFloors;
         return this;
     }
 
-    public GridDungeon disallowDownGeneration() {
-        canGenerateDown = false;
-        return this;
+    /**
+     * sets the max number of floors the dungeon is allowed to have in a single direction (including the main floor)
+     */
+    public GridDungeon setMaxFloorHeightOneWay(int maxFloors) {
+        return setMaxFloorHeight((maxFloors - 1) * 2 + 1);
     }
 
+    /**
+     * when set to false the dungeon will not generate below the main floor,
+     * when a scaled room goes below the main floor it can generate but any connections below the main floor will not be continued
+     */
     private GridDungeon allowDownGeneration(boolean value) {
         canGenerateDown = value;
         return this;
     }
 
+    /**
+     * the method this dungeon uses to select the room that can generate a connection
+     */
     public GridDungeon setRoomPickMethod(RoomGenerationPickMethod method) {
         pickMethod = method;
         return this;
     }
 
+    /**
+     * when true: once the entire dungeon has finished generating all empty spaces will be filled with fallback
+     */
     public GridDungeon setFillWithFallback(boolean state) {
         fillWithFallbackWhenDone = state;
         return this;
     }
 
     //// methods
-
     @Override
-    public void Generate(ServerLevel serverLevel, BlockPos worldPos) {
+    public void generate(ServerLevel serverLevel, BlockPos worldPos) {
         long selectedSeed = GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.DUNGEON_SEED_OVERRIDE);
         if (selectedSeed == -1) {
-            GenerateSeeded(new Random().nextLong());
+            generateSeeded(new Random().nextLong());
         } else {
-            GenerateSeeded(selectedSeed);
+            generateSeeded(selectedSeed);
         }
     }
 
     /**
-     * generates the dungeon at the same position wit a diggerent seed
+     * generates the dungeon at the same position with a seed
      */
-    public void GenerateSeeded(long seed) {
-        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Starting Dungeon Generation...");
-        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Dungeon: {}", this.GetResourceName());
+    public void generateSeeded(long seed) {
+        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS, "Starting Dungeon Generation...");
+        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS, "Dungeon: {}", this.getResourceName());
         generator = new GridDungeonGenerator(this, seed);
-        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Seed: {}", seed);
+        DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS, "Seed: {}", seed);
     }
 
-    /**
-     * runs every tick while generating
-     */
+
     @Override
-    public void GenerationTick(ServerLevel serverLevel) {
+    public void generationTick(ServerLevel serverLevel) {
         if (generator != null) {
             generator.step(serverLevel);
             if (generator.isDone()) {
-                DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Finished Dungeon Generation");
+                DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS, "Finished Dungeon Generation");
                 generator = null;
                 generated = true;
                 GlobalDungeonManager.OpenDungeon(serverLevel.getServer(), this, utilDungeon);
@@ -142,16 +158,8 @@ public class GridDungeon extends Dungeon {
         }
     }
 
-    public GridRoomCollection GetRoomCollection() {
-        return roomCollection;
-    }
-
-    public RoomGenerationPickMethod getRoomPickMethod() {
-        return pickMethod;
-    }
-
     @Override
-    public Dungeon GetCopy(int ID) {
+    public Dungeon getCopy(int ID) {
         return new GridDungeon(resourceName, rank, weight, roomWidth, roomHeight, roomCollection.getCopy(), ID).
                 setDepth(dungeonDepth).
                 setRoomEndChance(roomEndChance).
@@ -159,56 +167,57 @@ public class GridDungeon extends Dungeon {
                 allowDownGeneration(canGenerateDown).
                 setRoomPickMethod(pickMethod).
                 setFillWithFallback(fillWithFallbackWhenDone).
-                IsUtilDungeon(utilDungeon);
+                isUtilDungeon(utilDungeon).
+                setOverrideCenter(overrideCenter);
     }
 
-    public int GetDungeonDepth() {
+    public RoomGenerationPickMethod getRoomPickMethod() {
+        return pickMethod;
+    }
+
+    public int getDungeonDepth() {
         return dungeonDepth;
     }
 
-    public int GetMaxFloorHeight() {
+    public int getMaxFloorHeight() {
         return maxFloorHeight;
     }
 
-    public int GetMaxFloorHeightFromCenterOffset() {
-        return GetMaxFloorHeight() / 2;
+    public int getMaxFloorHeightFromCenterOffset() {
+        return (getMaxFloorHeight() - 1) / 2;
     }
 
     public GridRoomCollection getRoomCollection() {
         return roomCollection.getCopy();
     }
 
-    public GridRoom GetStaringRoom() {
+    public GridRoom getStaringRoom() {
         return roomCollection.getStartingRoom();
     }
 
-    public float GetRoomEndChance() {
+    public float getRoomEndChance() {
         return roomEndChance;
     }
 
-    public boolean IsGenerating() {
+    @Override
+    public boolean isDoneGenerating() {
+        return (!isBusyGenerating()) && generated;
+    }
+
+    @Override
+    public boolean isBusyGenerating() {
         return generator != null;
     }
 
-    @Override
-    public boolean IsDoneGenerating() {
-        return (!IsGenerating()) && generated;
-    }
-
-    @Override
-    public boolean IsBusyGenerating() {
-        return IsGenerating();
-    }
-
-    public int GetRoomWidth() {
+    public int getRoomWidth() {
         return roomWidth;
     }
 
-    public int GetRoomHeight() {
+    public int getRoomHeight() {
         return roomHeight;
     }
 
-    public boolean IsDownGenerationDisabled() {
+    public boolean isDownGenerationDisabled() {
         return !canGenerateDown;
     }
 

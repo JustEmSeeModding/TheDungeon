@@ -18,15 +18,15 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_F, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_E, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_D, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_C, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_B, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_A, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_S, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_SS, TheDungeon.resourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_EXIT, TheDungeon.resourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_F, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_E, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_D, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_C, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_B, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_A, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_S, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_SS, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
+        blockWithItem(ModBlocks.DUNGEON_PORTAL_EXIT, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
         blockWithItem(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
 
 

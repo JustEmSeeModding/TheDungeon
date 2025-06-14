@@ -1,9 +1,8 @@
 package net.emsee.thedungeon.block.custom.portal;
 
 import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.block.entity.portal.DungeonPortalEBlockEntity;
 import net.emsee.thedungeon.block.entity.portal.DungeonPortalExitBlockEntity;
-import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
+import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,8 +18,8 @@ public class DungeonPortalExit extends DungeonPortal{
     }
 
     @Override
-    public Dungeon.DungeonRank getExitRank() {
-        return Dungeon.DungeonRank.F;
+    public DungeonRank getExitRank() {
+        return DungeonRank.F;
     }
 
     @Override

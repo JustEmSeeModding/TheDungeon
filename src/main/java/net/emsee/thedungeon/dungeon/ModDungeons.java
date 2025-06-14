@@ -2,21 +2,21 @@ package net.emsee.thedungeon.dungeon;
 
 
 import net.emsee.thedungeon.DebugLog;
-import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
-import net.emsee.thedungeon.dungeon.dungeon.type.GridDungeon;
+import net.emsee.thedungeon.dungeon.types.Dungeon;
+import net.emsee.thedungeon.dungeon.types.GridDungeon;
 import net.emsee.thedungeon.dungeon.roomCollections.collections.*;
+import net.emsee.thedungeon.dungeon.util.DungeonRank;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ModDungeons {
+public class ModDungeons {
     public static final Map<String, Dungeon> DUNGEONS = new HashMap<>();
 
 
     public static final Dungeon TEST = register(new GridDungeon(
             "dungeon.the_dungeon.test",
-            Dungeon.DungeonRank.F,
+            DungeonRank.F,
             0,
             3,
             3,
@@ -27,8 +27,8 @@ public final class ModDungeons {
 
     public static final Dungeon THE_LIBRARY = register(new GridDungeon(
             "dungeon.the_dungeon.library",
-            Dungeon.DungeonRank.A,
-            1,
+            DungeonRank.A,
+            0, // disabled for now
             13,
             9,
             new LibraryGridRoomCollection())
@@ -39,7 +39,7 @@ public final class ModDungeons {
 
     public static final Dungeon CASTLE = register(new GridDungeon(
             "dungeon.the_dungeon.castle",
-            Dungeon.DungeonRank.D,
+            DungeonRank.D,
             1,
             9,
             9,
@@ -51,7 +51,7 @@ public final class ModDungeons {
 
     public static final Dungeon GOBLIN_CAVES = register(new GridDungeon(
             "dungeon.the_dungeon.goblin_caves",
-            Dungeon.DungeonRank.F,
+            DungeonRank.F,
             1,
             11,
             11,
@@ -61,100 +61,9 @@ public final class ModDungeons {
             .setMaxFloorHeight(12)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    public static final Dungeon CLEANUP_F = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_f",
-            Dungeon.DungeonRank.F,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-
-    public static final Dungeon CLEANUP_E = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_e",
-            Dungeon.DungeonRank.E,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-
-    public static final Dungeon CLEANUP_D = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_d",
-            Dungeon.DungeonRank.D,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-    public static final Dungeon CLEANUP_C = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_c",
-            Dungeon.DungeonRank.C,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-    public static final Dungeon CLEANUP_B = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_b",
-            Dungeon.DungeonRank.B,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-    public static final Dungeon CLEANUP_A = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_a",
-            Dungeon.DungeonRank.A,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-    public static final Dungeon CLEANUP_S = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_s",
-            Dungeon.DungeonRank.S,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-    public static final Dungeon CLEANUP_SS = register(new GridDungeon(
-            "dungeon.the_dungeon.cleanup_ss",
-            Dungeon.DungeonRank.SS,
-            0,
-            47,
-            47,
-            new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
-            .setRoomEndChance(0)
-            .IsUtilDungeon(true));
-
-    private static Dungeon register(Dungeon dungeon) {
+    protected static Dungeon register(Dungeon dungeon) {
         DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Registering Dungeon :{}", dungeon);
-        DUNGEONS.put(dungeon.GetResourceName(), dungeon);
+        DUNGEONS.put(dungeon.getResourceName(), dungeon);
         GlobalDungeonManager.dungeons.put(dungeon, dungeon.getWeight());
         return dungeon;
     }

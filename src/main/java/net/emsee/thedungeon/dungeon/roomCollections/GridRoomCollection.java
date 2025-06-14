@@ -1,9 +1,8 @@
 package net.emsee.thedungeon.dungeon.roomCollections;
 
-import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.connectionRules.FailRule;
-import net.emsee.thedungeon.dungeon.room.GridRoomUtils;
+import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.minecraft.core.Vec3i;
@@ -215,7 +214,7 @@ public abstract class GridRoomCollection {
         return toReturn.getCopy();
     }
 
-    public GridRoom getRandomRoomByConnection(GridRoomUtils.Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
+    public GridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
         Map<GridRoom, Integer> returnList = new HashMap<>();
         for (GridRoom gridRoom : getAllPossibleRooms().keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
@@ -229,7 +228,7 @@ public abstract class GridRoomCollection {
         return null;
     }
 
-    public GridRoom getRandomRoomByConnection(GridRoomUtils.Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random) {
+    public GridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random) {
         Map<GridRoom, Integer> returnList = new HashMap<>();
 
         //possibleRooms.addAll(requiredRooms);

@@ -2,8 +2,9 @@ package net.emsee.thedungeon.dungeon.room;
 
 import com.ibm.icu.impl.Pair;
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
-import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRules;
+import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRule;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.*;
 
 import static net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule.DEFAULT_CONNECTION_TAG;
-import static net.emsee.thedungeon.dungeon.room.GridRoomUtils.*;
+import static net.emsee.thedungeon.dungeon.util.DungeonUtils.*;
 
 public class GridRoom {
     protected ResourceLocation resourceLocation;
@@ -32,12 +33,12 @@ public class GridRoom {
     protected boolean allowUpDownConnectedRotation = false;
 
     /* Priority map */
-    protected final Map<GridRoomUtils.Connection, Integer> connections = new HashMap<>();
+    protected final Map<Connection, Integer> connections = new HashMap<>();
     /* Offset map */
-    protected final Map<GridRoomUtils.Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>();
+    protected final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>();
     /* Weighted map */
-    protected final Map<GridRoomUtils.Connection, String> connectionTags = new HashMap<>();
-    protected final List<MobSpawnRules> spawnRules = new ArrayList<>();
+    protected final Map<Connection, String> connectionTags = new HashMap<>();
+    protected final List<MobSpawnRule> spawnRules = new ArrayList<>();
     protected final StructureProcessorList structureProcessors = new StructureProcessorList(new ArrayList<>());
 
     // for when the room is the same, but it requires a different equals and hash
@@ -109,16 +110,16 @@ public class GridRoom {
         return this;
     }
 
-    public GridRoom addConnection(GridRoomUtils.Connection connection) {
+    public GridRoom addConnection(Connection connection) {
         return addConnection(connection,1);
     }
 
-    public GridRoom addConnection(GridRoomUtils.Connection connection, int priority) {
+    public GridRoom addConnection(Connection connection, int priority) {
         connections.put(connection, priority);
         return this;
     }
 
-    public GridRoom removeConnection(GridRoomUtils.Connection connection) {
+    public GridRoom removeConnection(Connection connection) {
         if (hasConnection(connection))
             connections.put(connection, 0);
         return this;
@@ -161,10 +162,10 @@ public class GridRoom {
      * offsets a specific connection along its horizontal face
      * the offset is as viewed from the outside (-=left +=right)
      */
-    public GridRoom setHorizontalConnectionOffset(GridRoomUtils.Connection connection, int widthOffset, int heightOffset) {
+    public GridRoom setHorizontalConnectionOffset(Connection connection, int widthOffset, int heightOffset) {
         if (Mth.abs(widthOffset)>(northSizeScale-1)/2 || heightOffset>(heightScale-1) || heightOffset<0)
             throw new IllegalStateException("offset is more than the room size");
-        if (connection == GridRoomUtils.Connection.UP || connection == GridRoomUtils.Connection.DOWN) return this;
+        if (connection == Connection.UP || connection == Connection.DOWN) return this;
         connectionOffsets.put(connection, Pair.of(widthOffset, heightOffset));
         return this;
     }
@@ -172,10 +173,10 @@ public class GridRoom {
     /**
      * offsets a specific connection along its vertical face
      */
-    public GridRoom setVerticalConnectionOffset(GridRoomUtils.Connection connection, int northOffset, int eastOffset) {
+    public GridRoom setVerticalConnectionOffset(Connection connection, int northOffset, int eastOffset) {
         if (Mth.abs(northOffset)>(northSizeScale-1)/2 || Mth.abs(eastOffset)>(eastSizeScale-1)/2)
             throw new IllegalStateException("offset is more than the room size");
-        if (connection == GridRoomUtils.Connection.NORTH || connection == GridRoomUtils.Connection.EAST || connection == GridRoomUtils.Connection.SOUTH || connection == GridRoomUtils.Connection.WEST)
+        if (connection == Connection.NORTH || connection == Connection.EAST || connection == Connection.SOUTH || connection == Connection.WEST)
             return this;
         connectionOffsets.put(connection, Pair.of(northOffset, eastOffset));
         return this;
@@ -186,13 +187,13 @@ public class GridRoom {
         return this;
     }
 
-    protected GridRoom setOffsets(Map<GridRoomUtils.Connection, Pair<Integer, Integer>> offsets) {
+    protected GridRoom setOffsets(Map<Connection, Pair<Integer, Integer>> offsets) {
         connectionOffsets.clear();
         connectionOffsets.putAll(offsets);
         return this;
     }
 
-    protected GridRoom setConnectionTags(Map<GridRoomUtils.Connection, String> tags) {
+    protected GridRoom setConnectionTags(Map<Connection, String> tags) {
         connectionTags.clear();
         connectionTags.putAll(tags);
         return this;
@@ -228,12 +229,12 @@ public class GridRoom {
     }
 
 
-    public GridRoom addMobSpawnRule(MobSpawnRules rule) {
+    public GridRoom addMobSpawnRule(MobSpawnRule rule) {
         spawnRules.add(rule);
         return this;
     }
 
-    protected GridRoom setSpawnRules(List<MobSpawnRules> list) {
+    protected GridRoom setSpawnRules(List<MobSpawnRule> list) {
         spawnRules.clear();
         spawnRules.addAll(list);
         return this;
@@ -254,15 +255,15 @@ public class GridRoom {
     /**
      * gets all rotations that give the room a connection at the given face
      */
-    public List<Rotation> getAllowedRotations(GridRoomUtils.Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
+    public List<Rotation> getAllowedRotations(Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
         List<Rotation> toReturn = new ArrayList<>();
         if (!allowRotation) {
             toReturn.add(Rotation.NONE);
             return toReturn;
         }
 
-        if ((connection == GridRoomUtils.Connection.UP && ConnectionRule.isValid(fromTag, connectionTags.get(GridRoomUtils.Connection.UP), connectionRules)) ||
-                (connection == GridRoomUtils.Connection.DOWN && ConnectionRule.isValid(fromTag, connectionTags.get(GridRoomUtils.Connection.UP), connectionRules))) {
+        if ((connection == Connection.UP && ConnectionRule.isValid(fromTag, connectionTags.get(Connection.UP), connectionRules)) ||
+                (connection == Connection.DOWN && ConnectionRule.isValid(fromTag, connectionTags.get(Connection.UP), connectionRules))) {
             toReturn.add(Rotation.NONE);
             toReturn.add(Rotation.COUNTERCLOCKWISE_90);
             toReturn.add(Rotation.CLOCKWISE_180);
@@ -274,13 +275,13 @@ public class GridRoom {
         if (connections.get(connection)>0 &&
                 isValidConnection(connection, Rotation.NONE, fromTag, connectionRules))
             toReturn.add(Rotation.NONE);
-        if (getRotatedConnections(connections, Rotation.COUNTERCLOCKWISE_90).get(connection)>0 &&
+        if (getRotatedConnectionMap(connections, Rotation.COUNTERCLOCKWISE_90).get(connection)>0 &&
                 isValidConnection(connection, Rotation.COUNTERCLOCKWISE_90, fromTag, connectionRules))
             toReturn.add(Rotation.COUNTERCLOCKWISE_90);
-        if (getRotatedConnections(connections, Rotation.CLOCKWISE_90).get(connection)>0 &&
+        if (getRotatedConnectionMap(connections, Rotation.CLOCKWISE_90).get(connection)>0 &&
                 isValidConnection(connection, Rotation.CLOCKWISE_90, fromTag, connectionRules))
             toReturn.add(Rotation.CLOCKWISE_90);
-        if (getRotatedConnections(connections, Rotation.CLOCKWISE_180).get(connection)>0 &&
+        if (getRotatedConnectionMap(connections, Rotation.CLOCKWISE_180).get(connection)>0 &&
                 isValidConnection(connection, Rotation.CLOCKWISE_180, fromTag, connectionRules))
             toReturn.add(Rotation.CLOCKWISE_180);
         return toReturn;
@@ -299,31 +300,31 @@ public class GridRoom {
         return gridHeight;
     }
 
-    public Map<GridRoomUtils.Connection, Integer> getConnections() {
+    public Map<Connection, Integer> getConnections() {
         return new HashMap<>(connections);
     }
 
-    protected boolean hasConnection(GridRoomUtils.Connection connection) {
+    protected boolean hasConnection(Connection connection) {
         return connections.get(connection)>0;
     }
 
-    public boolean hasConnection(GridRoomUtils.Connection connection, String withTag) {
+    public boolean hasConnection(Connection connection, String withTag) {
         return connections.get(connection)>0 && connectionTags.get(connection).equals(withTag);
     }
 
-    public boolean hasConnection(GridRoomUtils.Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
+    public boolean hasConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
         return connections.get(connection)>0 && ConnectionRule.isValid(fromTag, connectionTags.get(connection), connectionRules);
     }
 
     /**
      * checks if a room can be placed to accommodate a connection, also checks for all rotated instances
      */
-    public boolean isAllowedPlacementConnection(GridRoomUtils.Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
-        if (allowRotation && connection != GridRoomUtils.Connection.UP && connection != GridRoomUtils.Connection.DOWN) {
-            return hasConnection(GridRoomUtils.Connection.NORTH, fromTag, connectionRules) ||
-                    hasConnection(GridRoomUtils.Connection.EAST, fromTag, connectionRules) ||
-                    hasConnection(GridRoomUtils.Connection.SOUTH, fromTag, connectionRules) ||
-                    hasConnection(GridRoomUtils.Connection.WEST, fromTag, connectionRules);
+    public boolean isAllowedPlacementConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
+        if (allowRotation && connection != Connection.UP && connection != Connection.DOWN) {
+            return hasConnection(Connection.NORTH, fromTag, connectionRules) ||
+                    hasConnection(Connection.EAST, fromTag, connectionRules) ||
+                    hasConnection(Connection.SOUTH, fromTag, connectionRules) ||
+                    hasConnection(Connection.WEST, fromTag, connectionRules);
         }
         return hasConnection(connection, fromTag, connectionRules);
     }
@@ -356,11 +357,11 @@ public class GridRoom {
         return (getRotatedEastSizeScale(rotation) + 1) / 2;
     }
 
-    public Vec3i getConnectionPlaceOffsets(GridRoomUtils.Connection fromConnection, Rotation placementRotation) {
+    public Vec3i getConnectionPlaceOffsets(Connection fromConnection, Rotation placementRotation) {
         int xOffset = 0;
         int yOffset = 0;
         int zOffset = 0;
-        GridRoomUtils.Connection unrotatedConnection = GridRoomUtils.getRotatedConnection(fromConnection, getInvertedRotation(placementRotation));
+        Connection unrotatedConnection = fromConnection.getRotated(getInvertedRotation(placementRotation));
 
         if (connectionOffsets.containsKey(unrotatedConnection)) {
             Pair<Integer, Integer> offset = connectionOffsets.get(unrotatedConnection);
@@ -471,11 +472,11 @@ public class GridRoom {
     }
 
     private boolean isValidConnection(Connection connection, Rotation placementRotation, String fromTag, List<ConnectionRule> rules) {
-        return ConnectionRule.isValid(fromTag, connectionTags.get(getRotatedConnection(connection, getInvertedRotation(placementRotation))), rules);
+        return ConnectionRule.isValid(fromTag, connectionTags.get(connection.getRotated(getInvertedRotation(placementRotation))), rules);
     }
 
     public String getConnectionTag(Connection connection, Rotation placedRotation) {
-        return connectionTags.get(getRotatedConnection(connection, getInvertedRotation(placedRotation)));
+        return connectionTags.get(connection.getRotated(getInvertedRotation(placedRotation)));
     }
 
     public int getMaxSizeScale() {
@@ -511,7 +512,7 @@ public class GridRoom {
         return overrideEndChance;
     }
 
-    public List<MobSpawnRules> getSpawnRules() {
+    public List<MobSpawnRule> getSpawnRules() {
         return new ArrayList<>(spawnRules);
     }
 

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class CaveGoblinEyeLayer extends EyesLayer<CaveGoblinEntity, CaveGoblinModel> {
-    private static final RenderType EYES = RenderType.eyes(TheDungeon.resourceLocation("textures/entity/goblin/cave_goblin/cave_goblin_eyes.png"));
+    private static final RenderType EYES = RenderType.eyes(TheDungeon.defaultResourceLocation("textures/entity/goblin/cave_goblin/cave_goblin_eyes.png"));
 
     public CaveGoblinEyeLayer(RenderLayerParent<CaveGoblinEntity, CaveGoblinModel> p_116964_) {
         super(p_116964_);

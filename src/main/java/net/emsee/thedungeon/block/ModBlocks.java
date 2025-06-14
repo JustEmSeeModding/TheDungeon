@@ -7,7 +7,6 @@ import net.emsee.thedungeon.block.custom.portal.*;
 import net.emsee.thedungeon.block.custom.DungeonTripWireBlock;
 import net.emsee.thedungeon.block.custom.InfusedGlassBlock;
 import net.emsee.thedungeon.block.custom.UnstableDungeonPortal;
-import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.utils.BlockUtils;
 import net.minecraft.util.ColorRGBA;

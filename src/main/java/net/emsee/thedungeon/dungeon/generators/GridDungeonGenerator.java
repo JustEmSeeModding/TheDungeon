@@ -1,13 +1,13 @@
-package net.emsee.thedungeon.dungeon.dungeon.generator;
+package net.emsee.thedungeon.dungeon.generators;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
-import net.emsee.thedungeon.dungeon.connectionRules.FailInstance;
 import net.emsee.thedungeon.dungeon.connectionRules.FailRule;
-import net.emsee.thedungeon.dungeon.dungeon.type.GridDungeon;
+import net.emsee.thedungeon.dungeon.util.Connection;
+import net.emsee.thedungeon.dungeon.util.DungeonUtils;
+import net.emsee.thedungeon.dungeon.types.GridDungeon;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.room.GeneratedRoom;
-import net.emsee.thedungeon.dungeon.room.GridRoomUtils;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
@@ -20,8 +20,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Rotation;
 
 import java.util.*;
-
-import static net.emsee.thedungeon.dungeon.dungeon.Dungeon.PriorityCleanup;
 
 public class GridDungeonGenerator {
     private enum GenerationTask {
@@ -80,9 +78,9 @@ public class GridDungeonGenerator {
         this.random = random;
         this.dungeon = dungeon;
         this.collection = dungeon.getRoomCollection();
-        this.placedCenterPos = dungeon.getRank().getCenterPos();
-        int listCentreOffset = dungeon.GetDungeonDepth();
-        int arraySize = (dungeon.GetDungeonDepth() * 2) + 1;
+        this.placedCenterPos = dungeon.getCenterPos();
+        int listCentreOffset = dungeon.getDungeonDepth();
+        int arraySize = (dungeon.getDungeonDepth() * 2) + 1;
         this.occupationArray = new Occupation[arraySize][arraySize][arraySize];
 
         for (Occupation[][] occupationArrayRow : this.occupationArray) {
@@ -92,16 +90,14 @@ public class GridDungeonGenerator {
         }
 
         // sellect the starting room
-        GridRoom startingRoom = dungeon.GetStaringRoom();
+        GridRoom startingRoom = dungeon.getStaringRoom();
         if (startingRoom == null)
             startingRoom = dungeon.getRoomCollection().getRandomRoom(random);
         if (startingRoom == null)
             throw new IllegalStateException("error finding dungeon starting room");
 
         // create a GeneratedRoom from the room
-        GeneratedRoom generatedStartingRoom = GeneratedRoom.generateRoom(startingRoom, this, listCentreOffset, listCentreOffset, listCentreOffset, placedCenterPos, GridRoomUtils.getRandomRotation(random), random);
-        if (generatedStartingRoom == null)
-            throw new IllegalStateException("generate room was NULL");
+        GeneratedRoom generatedStartingRoom = GeneratedRoom.generateRoom(startingRoom, this, listCentreOffset, listCentreOffset, listCentreOffset, placedCenterPos, DungeonUtils.getRandomRotation(random), random);
 
         // add the room to all the lists
         todoRooms.add(generatedStartingRoom);
@@ -190,8 +186,8 @@ public class GridDungeonGenerator {
             // if not all rooms were generated discard this generator and start a new one with seed+1
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Not All Required Rooms where generated, regenerating with Seed+1");
             if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
-                PriorityCleanup(server, dungeon.getRank());
-            dungeon.GenerateSeeded(GetSeed() + 1);
+                GlobalDungeonManager.priorityCleanup(server, dungeon.getRank());
+            dungeon.generateSeeded(GetSeed() + 1);
             return;
         }
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"All Required Rooms where generated");
@@ -199,7 +195,7 @@ public class GridDungeonGenerator {
 
         // start next task
         currentTask = GenerationTask.FILLING_UNOCCUPIED;
-        lastFallbackFillY = Math.max(dungeon.GetDungeonDepth() - dungeon.GetMaxFloorHeightFromCenterOffset() - 1, 0);
+        lastFallbackFillY = Math.max(dungeon.getDungeonDepth() - dungeon.getMaxFloorHeightFromCenterOffset() - 1, 0);
     }
 
     private void fillUnoccupiedStep(MinecraftServer server) {
@@ -225,11 +221,11 @@ public class GridDungeonGenerator {
      */
     private boolean FillUnoccupied() {
         for (int x = lastFallbackFillX; x < occupationArray.length; x++) {
-            for (int y = lastFallbackFillY; y < Math.min(dungeon.GetDungeonDepth() + dungeon.GetMaxFloorHeightFromCenterOffset() + 2, occupationArray.length); y++) {
+            for (int y = lastFallbackFillY; y < Math.min(dungeon.getDungeonDepth() + dungeon.getMaxFloorHeightFromCenterOffset() + 2, occupationArray.length); y++) {
                 for (int z = lastFallbackFillZ; z < occupationArray.length; z++) {
                     Occupation instance = occupationArray[x][y][z];
                     if (instance == Occupation.AVAILABLE) {
-                        PlaceFallbackAt(x, y, z, placedCenterPos.offset(new Vec3i(dungeon.GetRoomWidth() * (x - dungeon.GetDungeonDepth()), dungeon.GetRoomHeight() * (y - dungeon.GetDungeonDepth()), dungeon.GetRoomWidth() * (z - dungeon.GetDungeonDepth()))), Occupation.OCCUPIED);
+                        PlaceFallbackAt(x, y, z, placedCenterPos.offset(new Vec3i(dungeon.getRoomWidth() * (x - dungeon.getDungeonDepth()), dungeon.getRoomHeight() * (y - dungeon.getDungeonDepth()), dungeon.getRoomWidth() * (z - dungeon.getDungeonDepth()))), Occupation.OCCUPIED);
                         lastFallbackFillX = x;
                         lastFallbackFillY = y;
                         lastFallbackFillZ = z;
@@ -239,7 +235,7 @@ public class GridDungeonGenerator {
                 }
                 lastFallbackFillZ = 0;
             }
-            lastFallbackFillY = Math.max(dungeon.GetDungeonDepth() - dungeon.GetMaxFloorHeightFromCenterOffset() - 1, 0);
+            lastFallbackFillY = Math.max(dungeon.getDungeonDepth() - dungeon.getMaxFloorHeightFromCenterOffset() - 1, 0);
         }
         lastFallbackFillX = 0;
         return true;
@@ -262,7 +258,7 @@ public class GridDungeonGenerator {
                 room.finalizePlacement(serverLevel, collection.getStructureProcessors(), random);
                 toPlaceInstances.remove();
             }
-            else if (toPlace instanceof FailInstance failInstance) {
+            else if (toPlace instanceof FailRule.Instance failInstance) {
                 // if it's a fail rule place it tick it end check if it's done
                 failInstance.finalizeTick(serverLevel, collection.getStructureProcessors());
                 if (failInstance.isFinished())
@@ -294,11 +290,11 @@ public class GridDungeonGenerator {
     }
 
 
-    public void RoomConnectionFail(String tag, GeneratedRoom room, GridRoomUtils.Connection from, boolean placeFallback, boolean exitObstructed) {
+    public void RoomConnectionFail(String tag, GeneratedRoom room, Connection from, boolean placeFallback, boolean exitObstructed) {
         boolean doPlaceFallback = placeFallback;
         for (FailRule failRule : collection.getFailRules()) {
             if (failRule.match(tag)) {
-                toPlaceInstances.add(new FailInstance(failRule,room,from,placeFallback,exitObstructed));
+                toPlaceInstances.add(new FailRule.Instance(failRule,room,from,placeFallback,exitObstructed));
                 if (failRule.stopFallbackPlacement())
                     doPlaceFallback=false;
                 break;
@@ -337,7 +333,7 @@ public class GridDungeonGenerator {
         return dungeon;
     }
 
-    public GridRoom GetRandomRoomByConnection(GridRoomUtils.Connection connection, String fromTag, Random random) {
+    public GridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random) {
         return collection.getRandomRoomByConnection(connection, fromTag, collection.getConnectionRules(), random);
     }
 

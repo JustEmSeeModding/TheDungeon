@@ -1,8 +1,8 @@
 package net.emsee.thedungeon.dungeon.connectionRules.fail;
 
 import net.emsee.thedungeon.dungeon.connectionRules.FailRule;
+import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.room.GeneratedRoom;
-import net.emsee.thedungeon.dungeon.room.GridRoomUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
@@ -77,7 +77,7 @@ public class WallFailRule extends FailRule {
 
 
     @Override
-    public void ApplyFail(GeneratedRoom room, GridRoomUtils.Connection connection, ServerLevel level, StructureProcessorList processors, boolean wouldPlaceFallback, boolean exitObstructed) {
+    public void applyFailTick(GeneratedRoom room, Connection connection, ServerLevel level, StructureProcessorList processors, boolean wouldPlaceFallback, boolean exitObstructed) {
         exitMarkedObstructed = exitObstructed;
         if (offsetOut && exitObstructed) return;
         StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
@@ -95,13 +95,13 @@ public class WallFailRule extends FailRule {
     }
 
 
-    private BlockPos findWallCenter(GeneratedRoom room, GridRoomUtils.Connection connection) {
+    private BlockPos findWallCenter(GeneratedRoom room, Connection connection) {
         BlockPos roomCenter = room.getPlacedWorldPos();
         Vec3i connectionArrayOffset = room.getPlacedArrayOffset(connection);
-        if (connection == GridRoomUtils.Connection.UP) {
+        if (connection == Connection.UP) {
             return null;
         }
-        if (connection == GridRoomUtils.Connection.DOWN) {
+        if (connection == Connection.DOWN) {
             return null;
         }
         if (connectionArrayOffset==null) return null;
@@ -118,7 +118,7 @@ public class WallFailRule extends FailRule {
     }
 
 
-    private void Fill(BlockPos wallCenter, ServerLevel level, GridRoomUtils.Connection connection, StructureProcessorList processors) {
+    private void Fill(BlockPos wallCenter, ServerLevel level, Connection connection, StructureProcessorList processors) {
         int i = blocksPerLoop;
         while (i > 0) {
             if (fillY > height - 1) return;

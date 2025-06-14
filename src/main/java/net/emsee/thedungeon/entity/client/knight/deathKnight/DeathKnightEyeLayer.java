@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class DeathKnightEyeLayer extends EyesLayer<DeathKnightEntity, DeathKnightModel> {
-    private static final RenderType EYES = RenderType.eyes(TheDungeon.resourceLocation("textures/entity/knight/death_knight/death_knight_eyes.png"));
+    private static final RenderType EYES = RenderType.eyes(TheDungeon.defaultResourceLocation("textures/entity/knight/death_knight/death_knight_eyes.png"));
 
     public DeathKnightEyeLayer(RenderLayerParent<DeathKnightEntity, DeathKnightModel> p_116964_) {
         super(p_116964_);

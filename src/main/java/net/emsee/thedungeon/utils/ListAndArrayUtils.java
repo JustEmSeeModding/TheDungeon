@@ -1,6 +1,5 @@
 package net.emsee.thedungeon.utils;
 
-import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRules;
 import net.minecraft.util.RandomSource;
 
 import java.util.*;
