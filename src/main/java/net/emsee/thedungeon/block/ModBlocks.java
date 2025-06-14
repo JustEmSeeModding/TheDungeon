@@ -4,7 +4,7 @@ package net.emsee.thedungeon.block;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.custom.portal.*;
-import net.emsee.thedungeon.block.custom.DungeonTripWireBlock;
+import net.emsee.thedungeon.block.custom.DungeonThreadBlock;
 import net.emsee.thedungeon.block.custom.InfusedGlassBlock;
 import net.emsee.thedungeon.block.custom.UnstableDungeonPortal;
 import net.emsee.thedungeon.item.ModItems;
@@ -104,8 +104,8 @@ public final class ModBlocks {
     public static final DeferredBlock<InfusedGlassBlock> INFUSED_GLASS = registerBlock("infused_glass",
             () -> new InfusedGlassBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CYAN_STAINED_GLASS)));
 
-    public static final DeferredBlock<DungeonTripWireBlock> INFUSED_THREAD = registerBlock("infused_thread",
-            () -> new DungeonTripWireBlock(Blocks.TRIPWIRE_HOOK, BlockBehaviour.Properties.ofFullCopy(Blocks.TRIPWIRE)));
+    public static final DeferredBlock<DungeonThreadBlock> INFUSED_THREAD = registerBlock("infused_thread",
+            () -> new DungeonThreadBlock(Blocks.TRIPWIRE_HOOK, BlockBehaviour.Properties.ofFullCopy(Blocks.TRIPWIRE)));
 
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {

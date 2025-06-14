@@ -36,7 +36,7 @@ public final class GeneratedRoom {
     /**
      * create a new GeneratedRoom
      */
-    public static GeneratedRoom generateRoom(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, Random random) {
+    public static GeneratedRoom createInstance(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, Random random) {
         if (toGenerate == null)
             throw new IllegalStateException("room to generate was NULL");
 
@@ -55,7 +55,7 @@ public final class GeneratedRoom {
     /**
      * create a new GeneratedRoom
      */
-    public static GeneratedRoom generateRoom(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, boolean skipBorderCheck, GridDungeonGenerator.Occupation occupation, boolean forcePlace, Random random) {
+    public static GeneratedRoom createInstance(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, boolean skipBorderCheck, GridDungeonGenerator.Occupation occupation, boolean forcePlace, Random random) {
         if (toGenerate == null)
             throw new IllegalStateException("room to generate was NULL");
 
@@ -72,9 +72,9 @@ public final class GeneratedRoom {
     }
 
     /**
-     * create a new GeneratedRoom from a connection
+     * create a new GeneratedRoom from a connection using its offsets
      */
-    public static GeneratedRoom generateRoomFromConnection(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, Connection fromConnection, Random random) {
+    private static GeneratedRoom generateRoomFromConnection(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, Connection fromConnection, Random random) {
         if (toGenerate == null)
             throw new IllegalStateException("room to generate was NULL");
 
@@ -91,9 +91,7 @@ public final class GeneratedRoom {
     }
 
 
-    /**
-     * only use for rooms you are 100% sure need to be in that place
-     */
+    
     private GeneratedRoom(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, Random random) {
         if (toGenerate == null)
             throw new IllegalStateException("room to generate was NULL");
@@ -102,9 +100,7 @@ public final class GeneratedRoom {
         generate(gridDungeonGenerator, listPosX, listPosY, listPosZ, worldPos, rotation, false, GridDungeonGenerator.Occupation.OCCUPIED, false);
     }
 
-    /**
-     * only use for rooms you are 100% sure need to be in that place
-     */
+    
     private GeneratedRoom(GridRoom toGenerate, GridDungeonGenerator gridDungeonGenerator, int listPosX, int listPosY, int listPosZ, BlockPos worldPos, Rotation rotation, boolean skipBorderCheck, GridDungeonGenerator.Occupation occupation, boolean forcePlace, Random random) {
         if (toGenerate == null)
             throw new IllegalStateException("room to generate was NULL");
@@ -119,14 +115,6 @@ public final class GeneratedRoom {
 
         room = toGenerate.getCopy();
         generateRoomFrom(gridDungeonGenerator, listPosX, listPosY, listPosZ, worldPos, rotation, fromConnection);
-    }
-
-    private int width() {
-        return room.getGridWidth();
-    }
-
-    private int height() {
-        return room.getGridHeight();
     }
 
     private void generate(GridDungeonGenerator generator, int arrayX, int arrayY, int arrayZ, BlockPos worldPos, Rotation roomRotation, boolean skipBorderCheck, GridDungeonGenerator.Occupation newOccupation, boolean forcePlace) {
@@ -407,7 +395,7 @@ public final class GeneratedRoom {
             List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), generator.getConnectionRules());
             Rotation randomRoomRotation = ListAndArrayUtils.getRandomFromList(allowedRoomRotations, random);
 
-            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + offsets.getX(), placedArrayY + offsets.getY(), placedArrayZ + offsets.getZ(), placedWorldPos.offset(offsets.getX() * width(), offsets.getY() * height(), offsets.getZ() * width()), randomRoomRotation, connection.getOpposite(), random);
+            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + offsets.getX(), placedArrayY + offsets.getY(), placedArrayZ + offsets.getZ(), placedWorldPos.offset(offsets.getX() * getGridHeight(), offsets.getY() *getGridHeight(), offsets.getZ() *getGridWidth()), randomRoomRotation, connection.getOpposite(), random);
 
             if (generatedRoom == null || !generatedRoom.generated) {
                 DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: new room placement returned failure", this);
@@ -484,7 +472,7 @@ public final class GeneratedRoom {
                 List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(Connection.DOWN, room.getConnectionTag(Connection.UP, placedRotation), generator.getConnectionRules());
                 randomRoomRotation = ListAndArrayUtils.getRandomFromList(allowedRoomRotations, random);
             } else randomRoomRotation = placedRotation;
-            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY + room.getHeightScale(), placedArrayZ + zOffset, placedWorldPos.offset(xOffset * width(), room.getHeightScale() * height(), zOffset * width()), randomRoomRotation, Connection.DOWN, random);
+            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY + room.getHeightScale(), placedArrayZ + zOffset, placedWorldPos.offset(xOffset *getGridWidth(), room.getHeightScale() *getGridHeight(), zOffset *getGridWidth()), randomRoomRotation, Connection.DOWN, random);
 
             if (generatedRoom == null || !generatedRoom.generated) {
                 DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: placement returned failure", this);
@@ -554,7 +542,7 @@ public final class GeneratedRoom {
                 List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(Connection.UP, room.getConnectionTag(Connection.DOWN, placedRotation), generator.getConnectionRules());
                 randomRoomRotation = ListAndArrayUtils.getRandomFromList(allowedRoomRotations, random);
             }
-            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY - 1, placedArrayZ + zOffset, placedWorldPos.offset(xOffset * width(), -height(), zOffset * width()), randomRoomRotation, Connection.UP, random);
+            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY - 1, placedArrayZ + zOffset, placedWorldPos.offset(xOffset *getGridWidth(), -getGridHeight(), zOffset *getGridWidth()), randomRoomRotation, Connection.UP, random);
             if (generatedRoom == null || !generatedRoom.generated) {
                 DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: placement returned failure", this);
                 triesLeft--;
@@ -640,11 +628,11 @@ public final class GeneratedRoom {
     }
 
     public int getGridWidth() {
-        return room.gridWidth;
+        return room.getGridWidth();
     }
 
     public int getGridHeight() {
-        return room.gridHeight;
+        return room.getGridHeight();
     }
 
     public GridRoom getRoom() {

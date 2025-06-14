@@ -23,17 +23,14 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee, Predicate<LivingEntity> targetPredicate) {
         super(mob, Player.class, mustSee, targetPredicate);
-
     }
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee, boolean mustReach) {
         super(mob, Player.class, mustSee, mustReach);
-
     }
 
     public DungeonTargetSelectorGoal(Mob mob, int randomInterval, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> targetPredicate) {
         super(mob, Player.class, randomInterval, mustSee, mustReach, targetPredicate);
-
     }
 
     @Override
@@ -43,6 +40,8 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         double maxPerception = mob.getAttributeValue(ModAttributes.MAX_PERCEPTION);
 
         List<Entity> nearEntities = mob.level().getEntities(mob, mob.getBoundingBox().inflate(maxRange));
+
+        // creates a weighted map of all players using aggro
         Map<Player, Double> nearPlayers = new HashMap<>();
         double totalAggro = 0;
         for (Entity entity : nearEntities) {
@@ -56,7 +55,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
     }
 
     protected double getPlayerAggro(Player player, double minPerception, double maxPerception) {
-        double playerAggro = player.getAttributeValue(ModAttributes.DUNGEON_ENEMY_AGGRO);
+        double playerAggro = player.getAttributeValue(ModAttributes.DUNGEON_AGGRO_TO_ENEMY);
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
         double multiplier = ((maxRange - mob.distanceTo(player))/maxRange);
         if (playerAggro >= maxPerception) multiplier *=2;

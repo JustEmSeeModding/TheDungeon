@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/** attack goal with multiple different animated attacks */
 public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnimatedEntity & IMultiAttackAnimatedEntity> extends MeleeAttackGoal {
     private byte lastId = 0;
     private final T entity;
@@ -35,7 +36,6 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
 
     public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer, int weight) {
         attackHolders.put(new AttackHolder(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer),weight);
-
         return this;
     }
 

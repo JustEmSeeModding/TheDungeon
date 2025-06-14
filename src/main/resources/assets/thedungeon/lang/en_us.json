@@ -114,5 +114,5 @@
 
   "attribute.thedungeon.name.generic.incoming_damage_reduction" : "Incoming Damage Reduction",
   "attribute.thedungeon.name.generic.mob_reach" : "Mob Reach",
-  "attribute.thedungeon.name.generic.enemy_aggro" : "Enemy Aggro"
+  "attribute.thedungeon.name.generic.enemy_aggro" : "Aggro To Enemy"
 }

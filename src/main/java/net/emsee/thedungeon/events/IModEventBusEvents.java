@@ -12,6 +12,6 @@ public class IModEventBusEvents {
     @SubscribeEvent
     public static void entityAttributeModificationEvent(EntityAttributeModificationEvent event) {
         event.add(EntityType.PLAYER, ModAttributes.INCOMING_DAMAGE_REDUCTION, 0);
-        event.add(EntityType.PLAYER, ModAttributes.DUNGEON_ENEMY_AGGRO, 500);
+        event.add(EntityType.PLAYER, ModAttributes.DUNGEON_AGGRO_TO_ENEMY, 500);
     }
 }

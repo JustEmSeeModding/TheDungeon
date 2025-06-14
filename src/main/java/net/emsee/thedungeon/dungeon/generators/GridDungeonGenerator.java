@@ -97,7 +97,7 @@ public class GridDungeonGenerator {
             throw new IllegalStateException("error finding dungeon starting room");
 
         // create a GeneratedRoom from the room
-        GeneratedRoom generatedStartingRoom = GeneratedRoom.generateRoom(startingRoom, this, listCentreOffset, listCentreOffset, listCentreOffset, placedCenterPos, DungeonUtils.getRandomRotation(random), random);
+        GeneratedRoom generatedStartingRoom = GeneratedRoom.createInstance(startingRoom, this, listCentreOffset, listCentreOffset, listCentreOffset, placedCenterPos, DungeonUtils.getRandomRotation(random), random);
 
         // add the room to all the lists
         todoRooms.add(generatedStartingRoom);
@@ -312,7 +312,7 @@ public class GridDungeonGenerator {
     private void PlaceFallbackAt(int arrayX, int arrayY, int arrayZ, BlockPos worldPos) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS,"placing fallback");
         if (collection.getFallback()==null) {return;}
-        GeneratedRoom fallback = GeneratedRoom.generateRoom(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, Occupation.AVAILABLE, true, random);
+        GeneratedRoom fallback = GeneratedRoom.createInstance(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, Occupation.AVAILABLE, true, random);
         toPlaceInstances.add(fallback);
         //return fallback;
     }
@@ -320,7 +320,7 @@ public class GridDungeonGenerator {
     public void PlaceFallbackAt(int arrayX, int arrayY, int arrayZ, BlockPos worldPos, Occupation occupation) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS,"placing fallback");
         if (collection.getFallback()==null) {return;}
-        GeneratedRoom fallback = GeneratedRoom.generateRoom(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, occupation, true, random);
+        GeneratedRoom fallback = GeneratedRoom.createInstance(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, occupation, true, random);
         toPlaceInstances.add(fallback);
         //return fallback;
     }

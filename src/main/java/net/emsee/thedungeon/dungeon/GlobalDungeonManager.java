@@ -60,18 +60,16 @@ public final class GlobalDungeonManager {
      * handles generation of current dungeon
      */
     private static void generationTick(MinecraftServer server, DungeonSaveData saveData) {
-        progressQueueNULLCheck(server);
-        //passiveQueueNULLCheck(server);
         if (saveData.isProgressQueueEmpty()) return;
         Dungeon currentDungeon = GetCurrentProgressDungeon(server);
 
+        if (currentDungeon==null) return;
+
         ServerLevel dungeonDimension = server.getLevel(dungeonResourceKey);
+
         //check if the current queued dungeon is idle but not done and start it
         if (!currentDungeon.isDoneGenerating() && !currentDungeon.isBusyGenerating()) {
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"updating forced chunks");
-            //TODO update this on world load instead
-            //updateForcedChunks(server);
-            //
             saveData.setDungeonOpen(currentDungeon.getRank(), false);
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"removing all portals");
             cleanAllPortals(server, saveData, currentDungeon.getRank());
@@ -148,6 +146,8 @@ public final class GlobalDungeonManager {
     }
 
     static private void SelectNewProgressDungeon(MinecraftServer server, boolean skipPassiveQueue, DungeonRank rank) {
+        progressQueueNULLCheck(server);
+        passiveQueueNULLCheck(server, rank);
         if (dungeons.isEmpty()) return;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
@@ -208,8 +208,10 @@ public final class GlobalDungeonManager {
             }
         }
     }
-
-    //todo rework
+    /*
+    todo rework
+     needs to be made rank dependent somehow
+    */
     public static void viewTime(Player player, MinecraftServer server) {
         /*if(!GameruleRegistry.getBooleanGamerule(server, ModGamerules.AUTO_DUNGEON_CYCLING)){
             player.sendSystemMessage(Component.translatable("message.thedungeon.cycling_disabled"));
@@ -229,6 +231,9 @@ public final class GlobalDungeonManager {
         } else {
             player.sendSystemMessage(Component.translatable("message.thedungeon.view_time_minutes", minutesLeft, secondsLeft - minutesLeft * 60));
         }*/
+
+        // temp code :
+        player.sendSystemMessage(Component.literal("this feature is WIP"));
     }
     public static void CloseDungeon (MinecraftServer server, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
@@ -287,21 +292,19 @@ public final class GlobalDungeonManager {
     /**
      * removes any NULL from the queue
      */
-    /*private static void passiveQueueNULLCheck(MinecraftServer server) {
+    private static void passiveQueueNULLCheck(MinecraftServer server, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        Dungeon posOne = saveData.peekPassiveQueue();
-        if (saveData.isPassiveQueueEmpty()) return;
+        Dungeon posOne = saveData.peekPassiveQueue(rank);
+        if (saveData.isPassiveQueueEmpty(rank)) return;
         while (posOne == null) {
-            saveData.removeFromPassiveQueue();
-            if (saveData.isPassiveQueueEmpty()) return;
-            posOne = saveData.peekPassiveQueue();
+            saveData.removeFromPassiveQueue(rank);
+            if (saveData.isPassiveQueueEmpty(rank)) return;
+            posOne = saveData.peekPassiveQueue(rank);
         }
-    }*/
+    }
 
     /****
      * Inserts a dungeon at the front of the progress queue, preserving the order of existing dungeons.
-     *
-     * @param dungeon the dungeon to add to the front of the queue
      */
     public static void AddToQueueFront(Dungeon dungeon, MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
@@ -315,11 +318,10 @@ public final class GlobalDungeonManager {
     }
 
     /**
-     * Adds a copy of the specified dungeon to the progress queue, optionally cleaning up existing dungeons first.
-     *
-     * @param selectedDungeonID the ID of the dungeon to generate
+     * called by the DungeonDebugTool
      */
     public static void GenerateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
+
         Dungeon newDungeon = getDungeonByID(selectedDungeonID).getCopy();
 
         DungeonSaveData saveData = DungeonSaveData.Get(server);
@@ -329,31 +331,22 @@ public final class GlobalDungeonManager {
     }
 
     /**
-     * Determines whether the dungeon is currently open and no dungeons are in progress.
-     *
-     * @param saveData the dungeon save data to check
-     * @return true if the dungeon is open and the progress queue is empty; false otherwise
+     * returns true if the portals are open
      */
     public static boolean isOpen(DungeonSaveData saveData, DungeonRank rank) {
-        return saveData.isProgressQueueEmpty() && saveData.isDungeonOpen(rank);
-    }
-
-    /**
-     * Determines whether the dungeon is currently open and no dungeons are in the progress queue.
-     *
-     * @param server the Minecraft server instance
-     * @return true if the dungeon is open and the progress queue is empty; false otherwise
-     */
-    public static boolean isOpen(MinecraftServer server, DungeonRank rank) {
-        DungeonSaveData saveData = DungeonSaveData.Get(server);
         return saveData.isDungeonOpen(rank);
     }
 
     /**
-     * Retrieves the portal position for the specified portal ID.
-     *
-     * @param portalID the ID of the portal to retrieve
-     * @return the portal position if the ID is valid; otherwise, returns the dungeon center position
+     * returns true if the portals are open
+     */
+    public static boolean isOpen(MinecraftServer server, DungeonRank rank) {
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        return isOpen(saveData,rank);
+    }
+
+    /**
+     * Retrieves the portal position linked to the ID, if no portals ar present defaults to the rank center pos
      */
     public static BlockPos getPortalPosition(MinecraftServer server, int portalID, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
