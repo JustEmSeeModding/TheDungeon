@@ -371,8 +371,8 @@ public final class GeneratedRoom {
         }
 
         float roomEndChance = generator.getDungeon().getRoomEndChance();
-        if (IsOverrideEndChance()) {
-            roomEndChance = GetOverrideEndChance();
+        if (hasOverrideEndChance()) {
+            roomEndChance = getOverrideEndChance();
         }
 
         if (random.nextFloat() <= roomEndChance) {
@@ -445,8 +445,8 @@ public final class GeneratedRoom {
         }
 
         float roomEndChance = generator.getDungeon().getRoomEndChance();
-        if (IsOverrideEndChance()) {
-            roomEndChance = GetOverrideEndChance();
+        if (hasOverrideEndChance()) {
+            roomEndChance = getOverrideEndChance();
         }
 
         if (random.nextFloat() <= roomEndChance) {
@@ -515,8 +515,8 @@ public final class GeneratedRoom {
         }
 
         float roomEndChance = generator.getDungeon().getRoomEndChance();
-        if (IsOverrideEndChance()) {
-            roomEndChance = GetOverrideEndChance();
+        if (hasOverrideEndChance()) {
+            roomEndChance = getOverrideEndChance();
         }
 
         if (random.nextFloat() <= roomEndChance) {
@@ -557,11 +557,7 @@ public final class GeneratedRoom {
         return null;
     }
 
-    /**
-     * Returns a string representation of this GeneratedRoom, including its underlying room.
-     *
-     * @return a string describing the GeneratedRoom and its associated GridRoom
-     */
+
     @Override
     public String toString() {
         return "GeneratedRoom:" + room;
@@ -571,11 +567,11 @@ public final class GeneratedRoom {
         return room.getGenerationPriority();
     }
 
-    public boolean IsOverrideEndChance() {
+    public boolean hasOverrideEndChance() {
         return room.hasOverrideEndChance();
     }
 
-    public float GetOverrideEndChance() {
+    public float getOverrideEndChance() {
         return room.getOverrideEndChance();
     }
 

@@ -24,13 +24,11 @@ public class BasicAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
 
     @Override
     public boolean canUse() {
-        //if (entity.isRunning()) return false;
         return super.canUse();
     }
 
     @Override
     public boolean canContinueToUse() {
-        //if (entity.isRunning()) return false;
         return super.canContinueToUse();
     }
 
