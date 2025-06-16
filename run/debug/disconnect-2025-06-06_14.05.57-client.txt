@@ -1,0 +1,165 @@
+---- Minecraft Network Protocol Error Report ----
+// Could be worse, I guess
+
+Time: 2025-06-06 14:05:57
+Description: Packet handling error
+
+java.lang.NullPointerException: Cannot invoke "net.minecraft.server.MinecraftServer.getLevel(net.minecraft.resources.ResourceKey)" because "server" is null
+	at TRANSFORMER/thedungeon@1.21.1-0.0.1/net.emsee.thedungeon.dungeon.GlobalDungeonManager.updateForcedChunks(GlobalDungeonManager.java:384) ~[%23199!/:?] {re:classloading}
+	at TRANSFORMER/thedungeon@1.21.1-0.0.1/net.emsee.thedungeon.events.ModEvents.onLevelLoad(ModEvents.java:87) ~[%23199!/:?] {re:classloading}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23150!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:315) ~[bus-8.0.2.jar%23150!/:?] {}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.multiplayer.ClientLevel.<init>(ClientLevel.java:203) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:runtimedistcleaner:A,re:classloading,pl:mixin:APP:mixins.litematica.json:world.MixinClientWorld from mod forgematica,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.multiplayer.ClientPacketListener.handleLogin(ClientPacketListener.java:431) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.game.ClientboundLoginPacket.handle(ClientboundLoginPacket.java:73) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.game.ClientboundLoginPacket.handle(ClientboundLoginPacket.java:17) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.PacketUtils.lambda$ensureRunningOnSameThread$0(PacketUtils.java:36) ~[neoforge-21.1.169.jar%23193!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.doRunTask(BlockableEventLoop.java:151) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(ReentrantBlockableEventLoop.java:24) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,re:computing_frames,re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.pollTask(BlockableEventLoop.java:122) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.runAllTasks(BlockableEventLoop.java:111) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient from mod forgematica,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient_easyPlace from mod forgematica,pl:mixin:APP:fabric-networking-api-v1.client.mixins.json:accessor.MinecraftClientAccessor from mod fabric_networking_api_v1,pl:mixin:APP:mixins.malilib.json:MixinMinecraftClient from mod mafglib,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:813) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient from mod forgematica,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient_easyPlace from mod forgematica,pl:mixin:APP:fabric-networking-api-v1.client.mixins.json:accessor.MinecraftClientAccessor from mod fabric_networking_api_v1,pl:mixin:APP:mixins.malilib.json:MixinMinecraftClient from mod mafglib,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230) ~[neoforge-21.1.169.jar%23193!/:?] {re:classloading,pl:runtimedistcleaner:A}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.NeoForgeClientDevLaunchHandler.runService(NeoForgeClientDevLaunchHandler.java:23) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?] {}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at net.neoforged.devlaunch.Main.main(Main.java:55) [DevLaunch-1.0.1.jar:?] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Render thread
+Stacktrace:
+	at TRANSFORMER/thedungeon@1.21.1-0.0.1/net.emsee.thedungeon.dungeon.GlobalDungeonManager.updateForcedChunks(GlobalDungeonManager.java:384) ~[%23199!/:?] {re:classloading}
+	at TRANSFORMER/thedungeon@1.21.1-0.0.1/net.emsee.thedungeon.events.ModEvents.onLevelLoad(ModEvents.java:87) ~[%23199!/:?] {re:classloading}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23150!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:315) ~[bus-8.0.2.jar%23150!/:?] {}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.multiplayer.ClientLevel.<init>(ClientLevel.java:203) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:runtimedistcleaner:A,re:classloading,pl:mixin:APP:mixins.litematica.json:world.MixinClientWorld from mod forgematica,pl:mixin:A,pl:runtimedistcleaner:A}
+-- Incoming Packet --
+Details:
+	Type: clientbound/minecraft:login
+	Is Terminal: false
+	Is Skippable: false
+Stacktrace:
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.PacketUtils.fillCrashReport(PacketUtils.java:65) ~[neoforge-21.1.169.jar%23193!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl.storeDisconnectionReport(ClientCommonPacketListenerImpl.java:130) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:runtimedistcleaner:A,re:computing_frames,pl:runtimedistcleaner:A,re:classloading,pl:mixin:APP:badpackets.mixins.json:client.AccessClientCommonPacketListenerImpl from mod badpackets,pl:mixin:APP:badpackets.mixins.json:client.MixinClientCommonPacketListenerImpl from mod badpackets,pl:mixin:APP:mixins.litematica.json:MixinClientCommonNetworkHandler from mod forgematica,pl:mixin:APP:fabric-networking-api-v1.client.mixins.json:ClientCommonNetworkHandlerMixin from mod fabric_networking_api_v1,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl.onPacketError(ClientCommonPacketListenerImpl.java:114) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:runtimedistcleaner:A,re:computing_frames,pl:runtimedistcleaner:A,re:classloading,pl:mixin:APP:badpackets.mixins.json:client.AccessClientCommonPacketListenerImpl from mod badpackets,pl:mixin:APP:badpackets.mixins.json:client.MixinClientCommonPacketListenerImpl from mod badpackets,pl:mixin:APP:mixins.litematica.json:MixinClientCommonNetworkHandler from mod forgematica,pl:mixin:APP:fabric-networking-api-v1.client.mixins.json:ClientCommonNetworkHandlerMixin from mod fabric_networking_api_v1,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.network.protocol.PacketUtils.lambda$ensureRunningOnSameThread$0(PacketUtils.java:42) ~[neoforge-21.1.169.jar%23193!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.doRunTask(BlockableEventLoop.java:151) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(ReentrantBlockableEventLoop.java:24) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,re:computing_frames,re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.pollTask(BlockableEventLoop.java:122) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.runAllTasks(BlockableEventLoop.java:111) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,re:computing_frames,pl:accesstransformer:B,re:classloading,pl:accesstransformer:B}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient from mod forgematica,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient_easyPlace from mod forgematica,pl:mixin:APP:fabric-networking-api-v1.client.mixins.json:accessor.MinecraftClientAccessor from mod fabric_networking_api_v1,pl:mixin:APP:mixins.malilib.json:MixinMinecraftClient from mod mafglib,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:813) ~[neoforge-21.1.169.jar%23193!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient from mod forgematica,pl:mixin:APP:mixins.litematica.json:MixinMinecraftClient_easyPlace from mod forgematica,pl:mixin:APP:fabric-networking-api-v1.client.mixins.json:accessor.MinecraftClientAccessor from mod fabric_networking_api_v1,pl:mixin:APP:mixins.malilib.json:MixinMinecraftClient from mod mafglib,pl:mixin:A,pl:runtimedistcleaner:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230) ~[neoforge-21.1.169.jar%23193!/:?] {re:classloading,pl:runtimedistcleaner:A}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.NeoForgeClientDevLaunchHandler.runService(NeoForgeClientDevLaunchHandler.java:23) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.39/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.39.jar%23146!/:4.0] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23128!/:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?] {}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at net.neoforged.devlaunch.Main.main(Main.java:55) [DevLaunch-1.0.1.jar:?] {}
+
+
+-- Connection --
+Details:
+	Protocol: play
+	Flow: CLIENTBOUND
+	Server type: <none>
+	Server brand: neoforge
+
+-- System Details --
+Details:
+	Minecraft Version: 1.21.1
+	Minecraft Version ID: 1.21.1
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 21.0.2, Eclipse Adoptium
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Eclipse Adoptium
+	Memory: 1562154096 bytes (1489 MiB) / 8577351680 bytes (8180 MiB) up to 8577351680 bytes (8180 MiB)
+	CPUs: 16
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen 7 3700X 8-Core Processor             
+	Identifier: AuthenticAMD Family 23 Model 113 Stepping 0
+	Microarchitecture: Zen 2
+	Frequency (GHz): 3.59
+	Number of physical packages: 1
+	Number of physical CPUs: 8
+	Number of logical CPUs: 16
+	Graphics card #0 name: AMD  Radeon RX 7800 XT
+	Graphics card #0 vendor: Advanced Micro Devices, Inc.
+	Graphics card #0 VRAM (MiB): 16368.00
+	Graphics card #0 deviceId: VideoController1
+	Graphics card #0 versionInfo: 32.0.21013.1000
+	Memory slot #0 capacity (MiB): 16384.00
+	Memory slot #0 clockSpeed (GHz): 2.67
+	Memory slot #0 type: DDR4
+	Memory slot #1 capacity (MiB): 16384.00
+	Memory slot #1 clockSpeed (GHz): 2.67
+	Memory slot #1 type: DDR4
+	Virtual memory max (MiB): 98249.34
+	Virtual memory used (MiB): 32015.87
+	Swap memory total (MiB): 65536.00
+	Swap memory used (MiB): 142.73
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 296444.50, total: 953223.00
+	Space in storage for workdir (MiB): available: 296444.50, total: 953223.00
+	JVM Flags: 0 total; 
+	ModLauncher: 11.0.4+main.d2e20e43
+	ModLauncher launch target: forgeclientdev
+	ModLauncher services: 
+		sponge-mixin-0.15.2+mixin.0.8.7.jar mixin PLUGINSERVICE 
+		loader-4.0.39.jar slf4jfixer PLUGINSERVICE 
+		loader-4.0.39.jar runtime_enum_extender PLUGINSERVICE 
+		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
+		loader-4.0.39.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-11.0.4.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-11.0.4.jar fml TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		javafml@4.0
+		lowcodefml@4.0
+		minecraft@4.0
+	Mod List: 
+		badpackets-neo-0.8.2.jar                          |Bad Packets                   |badpackets                    |0.8.2               |Manifest: NOSIGNATURE
+		Forgematica-0.3.1-mc1.21.1.jar                    |Forgematica                   |forgematica                   |0.3.1-mc1.21.1      |Manifest: NOSIGNATURE
+		fabric-api-base-0.4.42+d1308ded19.jar             |Forgified Fabric API Base     |fabric_api_base               |0.4.42+d1308ded19   |Manifest: NOSIGNATURE
+		fabric-networking-api-v1-4.3.0+cfe47bf219.jar     |Forgified Fabric Networking AP|fabric_networking_api_v1      |4.3.0+cfe47bf219    |Manifest: NOSIGNATURE
+		jei-1.21.1-neoforge-19.21.1.248.jar               |Just Enough Items             |jei                           |19.21.1.248         |Manifest: NOSIGNATURE
+		MaFgLib-0.3.3-mc1.21.1.jar                        |MaFgLib                       |mafglib                       |0.3.3-mc1.21.1      |Manifest: NOSIGNATURE
+		neoforge-21.1.169.jar                             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE
+		neoforge-21.1.169.jar                             |NeoForge                      |neoforge                      |21.1.169            |Manifest: NOSIGNATURE
+		Patchouli-1.21-88-NEOFORGE.jar                    |Patchouli                     |patchouli                     |1.21-88-NEOFORGE    |Manifest: NOSIGNATURE
+		main                                              |The Dungeon                   |thedungeon                    |1.21.1-0.0.1        |Manifest: NOSIGNATURE
+		worldedit-mod-7.3.8.jar                           |WorldEdit                     |worldedit                     |7.3.8+6939-7d32b45  |Manifest: NOSIGNATURE
+	Crash Report UUID: 8dee612b-3de8-4090-9ea8-1199500836ac
+	FML: 4.0.39
+	NeoForge: 21.1.169

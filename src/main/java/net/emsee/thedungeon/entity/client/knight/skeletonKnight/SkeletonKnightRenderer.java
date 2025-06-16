@@ -17,6 +17,6 @@ public class SkeletonKnightRenderer extends MobRenderer<SkeletonKnightEntity, Sk
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull SkeletonKnightEntity skeletonKnightEntity) {
-        return TheDungeon.resourceLocation("textures/entity/knight/skeleton_knight.png");
+        return TheDungeon.defaultResourceLocation("textures/entity/knight/skeleton_knight.png");
     }
 }

@@ -21,7 +21,7 @@ public class DeathKnightRenderer extends MobRenderer<DeathKnightEntity, DeathKni
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull DeathKnightEntity deathKnightEntity) {
-        return TheDungeon.resourceLocation("textures/entity/knight/death_knight/death_knight.png");
+        return TheDungeon.defaultResourceLocation("textures/entity/knight/death_knight/death_knight.png");
     }
 
     @Override

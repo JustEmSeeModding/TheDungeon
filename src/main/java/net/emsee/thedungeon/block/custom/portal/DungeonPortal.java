@@ -1,8 +1,9 @@
 package net.emsee.thedungeon.block.custom.portal;
 
+import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
+import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
-import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.events.ModDungeonDimensionEvents;
 import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
@@ -64,7 +65,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     @Override
     protected void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
-            GlobalDungeonManager.addPortalLocation(level.getServer(), pos, Dungeon.DungeonRank.getClosestRank(pos));
+            GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
         }
         super.randomTick(state, level, pos, random);
     }
@@ -72,7 +73,10 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     @Override
     protected void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
-            GlobalDungeonManager.addPortalLocation(level.getServer(), pos, Dungeon.DungeonRank.getClosestRank(pos));
+            if (this instanceof DungeonPortalExit)
+                GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
+            else
+                level.setBlockAndUpdate(pos, ModBlocks.DUNGEON_PORTAL_EXIT.get().defaultBlockState());
         }
         super.onPlace(state, level, pos, oldState, movedByPiston);
     }
@@ -81,7 +85,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     @Override
     protected void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
         if (!level.isClientSide && state.getBlock() != newState.getBlock() && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
-            GlobalDungeonManager.removePortalLocation(level.getServer(), pos, Dungeon.DungeonRank.getClosestRank(pos));
+            GlobalDungeonManager.removePortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
@@ -91,5 +95,5 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
         return 15;
     }
 
-    public abstract Dungeon.DungeonRank getExitRank();
+    public abstract DungeonRank getExitRank();
 }

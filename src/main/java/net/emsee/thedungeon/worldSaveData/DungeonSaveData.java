@@ -2,7 +2,8 @@ package net.emsee.thedungeon.worldSaveData;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
+import net.emsee.thedungeon.dungeon.types.Dungeon;
+import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -72,6 +73,7 @@ public final class DungeonSaveData extends SavedData {
         return dungeonData.GetLasSecondAnnouncement();
     }
 
+    //TODO remove this savedata and just use the gamerule
     public void SetLastExecutionTime(long lastExecutionTime) {
         dungeonData.SetLastExecutionTime(lastExecutionTime);
         setDirty();
@@ -126,12 +128,12 @@ public final class DungeonSaveData extends SavedData {
         return toReturn;
     }
 
-    public boolean isPassiveQueueEmpty(Dungeon.DungeonRank rank) {
+    public boolean isPassiveQueueEmpty(DungeonRank rank) {
         if (rank==null) return true;
         return dungeonData.getDungeonPassiveQueue(rank).isEmpty();
     }
 
-    public Dungeon peekPassiveQueue(Dungeon.DungeonRank rank) {
+    public Dungeon peekPassiveQueue(DungeonRank rank) {
         if (rank == null) return null;
         return dungeonData.getDungeonPassiveQueue(rank).peek();
     }
@@ -145,7 +147,7 @@ public final class DungeonSaveData extends SavedData {
      * Removes and returns the first dungeon from the passive queue.
      * @return the dungeon removed from the passive queue
      */
-    public Dungeon removeFromPassiveQueue(Dungeon.DungeonRank rank) {
+    public Dungeon removeFromPassiveQueue(DungeonRank rank) {
         Dungeon toReturn = dungeonData.getDungeonPassiveQueue(rank).remove();
         setDirty();
         return toReturn;
@@ -176,50 +178,50 @@ public final class DungeonSaveData extends SavedData {
      *
      * @return true if the dungeon is open; false otherwise
      */
-    public boolean isDungeonOpen(Dungeon.DungeonRank rank) {
+    public boolean isDungeonOpen(DungeonRank rank) {
         return dungeonData.getDungeonOpen(rank);
     }
 
-    public void setDungeonOpen(Dungeon.DungeonRank rank, boolean isOpen) {
+    public void setDungeonOpen(DungeonRank rank, boolean isOpen) {
         dungeonData.setDungeonOpen(rank, isOpen);
         setDirty();
     }
 
-    public void clearPortalPositions(Dungeon.DungeonRank rank) {
+    public void clearPortalPositions(DungeonRank rank) {
         if (rank==null) return;
         dungeonData.getPortalPositions().get(rank).clear();
         setDirty();
     }
 
-    public int portalPositionAmount(Dungeon.DungeonRank rank) {
+    public int portalPositionAmount(DungeonRank rank) {
         if (rank==null) return -1;
         return dungeonData.getPortalPositions().get(rank).size();
     }
 
-    public BlockPos getPortalPosition(int portalID, Dungeon.DungeonRank rank) {
+    public BlockPos getPortalPosition(int portalID, DungeonRank rank) {
         if (rank==null) return null;
         return dungeonData.getPortalPositions().get(rank).get(portalID);
     }
 
-    public boolean portalPositionsEmpty(Dungeon.DungeonRank rank) {
+    public boolean portalPositionsEmpty(DungeonRank rank) {
         if (rank==null) return true;
         return dungeonData.getPortalPositions().get(rank).isEmpty();
     }
 
-    public void addPortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+    public void addPortalPosition(BlockPos pos, DungeonRank rank) {
         if (rank==null) return;
         if (!dungeonData.getPortalPositions().get(rank).contains(pos))
             dungeonData.getPortalPositions().get(rank).add(pos);
         setDirty();
     }
 
-    public void removePortalPosition(BlockPos pos, Dungeon.DungeonRank rank) {
+    public void removePortalPosition(BlockPos pos, DungeonRank rank) {
         if (rank==null) return;
         dungeonData.getPortalPositions().get(rank).remove(pos);
         setDirty();
     }
 
-    public List<BlockPos> getAllPortalPositions(Dungeon.DungeonRank rank) {
+    public List<BlockPos> getAllPortalPositions(DungeonRank rank) {
         if (rank==null) return null;
         return new ArrayList<>(dungeonData.getPortalPositions().get(rank));
     }
@@ -231,12 +233,21 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    public Dungeon.DungeonRank getNextToCollapse() {
+    public DungeonRank getNextToCollapse() {
         return dungeonData.getNextToCollapse();
     }
 
     public void SelectNextForCollapse() {
-        dungeonData.setNextToCollapse(Dungeon.DungeonRank.getNext(getNextToCollapse()));
+        dungeonData.setNextToCollapse(DungeonRank.getNext(getNextToCollapse()));
+        setDirty();
+    }
+
+    public boolean isFinishedForcedChunks() {
+        return dungeonData.getFinishedForcedChunks();
+    }
+
+    public void setFinishedForcedChunks() {
+        dungeonData.setFinishedForcedChunks(true);
         setDirty();
     }
 }

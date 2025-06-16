@@ -13,7 +13,11 @@ public class DebugLog {
     private static final List<DebugLevel> debugLevels = Util.make(Lists.newArrayList(), (list) -> {
         list.add(DebugLevel.INSTANCE_SETUP);
         list.add(DebugLevel.SAVE_DATA);
+        //list.add(DebugLevel.SAVE_DATA_DETAILED);
         list.add(DebugLevel.GENERATING_STEPS);
+        //list.add(DebugLevel.GENERATING_TICKS);
+        //list.add(DebugLevel.GENERATING_TICKS_DETAILS);
+        list.add(DebugLevel.FORCED_CHUNK_UPDATES);
         list.add(DebugLevel.GENERIC);
         list.add(DebugLevel.WARNINGS);
         list.add(DebugLevel.IMPORTANT);
@@ -26,13 +30,14 @@ public class DebugLog {
         GENERATING_STEPS,
         GENERATING_TICKS,
         GENERATING_TICKS_DETAILS,
+        FORCED_CHUNK_UPDATES,
         GENERIC,
         WARNINGS,
         IMPORTANT
     }
 
     public static void logInfo(DebugLevel debugLevel, String msg) {
-        logInfo(debugLevel, msg, null);
+        if (isDebugMode(debugLevel)) LOGGER.info(msg);
     }
 
     public static void logInfo(DebugLevel debugLevel, String msg, Object... objects) {
@@ -40,7 +45,7 @@ public class DebugLog {
     }
 
     public static void logWarn(DebugLevel debugLevel, String msg) {
-        logWarn(debugLevel, msg, null);
+        if (isDebugMode(debugLevel)) LOGGER.warn(msg);
     }
 
     public static void logWarn(DebugLevel debugLevel, String msg, Object... objects) {
@@ -48,7 +53,7 @@ public class DebugLog {
     }
 
     public static void logError(DebugLevel debugLevel, String msg) {
-        logError(debugLevel, msg, null);
+        if (isDebugMode(debugLevel)) LOGGER.error(msg);
     }
 
     public static void logError(DebugLevel debugLevel, String msg, Object... objects) {

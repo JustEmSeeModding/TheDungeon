@@ -1,7 +1,9 @@
 package net.emsee.thedungeon.entity.ai;
 
 import net.emsee.thedungeon.attribute.ModAttributes;
+import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -23,17 +25,14 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee, Predicate<LivingEntity> targetPredicate) {
         super(mob, Player.class, mustSee, targetPredicate);
-
     }
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee, boolean mustReach) {
         super(mob, Player.class, mustSee, mustReach);
-
     }
 
     public DungeonTargetSelectorGoal(Mob mob, int randomInterval, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> targetPredicate) {
         super(mob, Player.class, randomInterval, mustSee, mustReach, targetPredicate);
-
     }
 
     @Override
@@ -43,7 +42,9 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         double maxPerception = mob.getAttributeValue(ModAttributes.MAX_PERCEPTION);
 
         List<Entity> nearEntities = mob.level().getEntities(mob, mob.getBoundingBox().inflate(maxRange));
-        Map<Player, Double> nearPlayers = new HashMap<>();
+
+        // creates a weighted map of all players using aggro
+        WeightedMap.Dbl<Player> nearPlayers = new WeightedMap.Dbl<>();
         double totalAggro = 0;
         for (Entity entity : nearEntities) {
             if (entity instanceof Player player && !player.isCreative()) {
@@ -52,11 +53,11 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
             }
         }
 
-        this.target = ListAndArrayUtils.getRandomFromWeightedMapD(nearPlayers, mob.level().getRandom());
+        this.target = nearPlayers.getRandom(mob.level().getRandom());
     }
 
     protected double getPlayerAggro(Player player, double minPerception, double maxPerception) {
-        double playerAggro = player.getAttributeValue(ModAttributes.DUNGEON_ENEMY_AGGRO);
+        double playerAggro = player.getAttributeValue(ModAttributes.DUNGEON_AGGRO_TO_ENEMY);
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
         double multiplier = ((maxRange - mob.distanceTo(player))/maxRange);
         if (playerAggro >= maxPerception) multiplier *=2;

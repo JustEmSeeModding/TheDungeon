@@ -89,7 +89,7 @@ public class InfusionRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(RecipeOutput recipeOutput) {
-        save(recipeOutput, TheDungeon.resourceLocation(getItemName(result) + "_from_infusing_" + getItemName(ingredient)));
+        save(recipeOutput, TheDungeon.defaultResourceLocation(getItemName(result) + "_from_infusing_" + getItemName(ingredient)));
     }
 
     private void ensureValid(ResourceLocation id) {

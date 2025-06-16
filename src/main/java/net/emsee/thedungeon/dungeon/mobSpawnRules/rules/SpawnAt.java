@@ -1,6 +1,6 @@
 package net.emsee.thedungeon.dungeon.mobSpawnRules.rules;
 
-import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRules;
+import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRule;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -9,10 +9,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Rotation;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
-public class SpawnAt<T extends Entity> extends MobSpawnRules {
+public class SpawnAt<T extends Entity> extends MobSpawnRule {
     final Supplier<EntityType<T>> entity;
     final BlockPos pos;
     final int count;

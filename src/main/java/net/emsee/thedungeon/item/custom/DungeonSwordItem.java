@@ -43,27 +43,6 @@ public class DungeonSwordItem extends SwordItem implements IDungeonCarryItem, ID
                 .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, (attackDamage + tier.getAttackDamageBonus()), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                 .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, attackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND).build();
     }
-
-    /*@Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (target instanceof DungeonMob dungeonMob) {
-             if (attacker.getAttributeValue(ModAttributes.DUNGEON_ATTACK_DAMAGE) > 0) {
-                 float multiplier = 1;
-                 if (attacker instanceof Player player) {
-                     multiplier *= .2f + player.getAttackStrengthScale(.5f) * player.getAttackStrengthScale(.5f) *.8f;
-                 }
-                 float damageAmount = ((float) attacker.getAttribute(ModAttributes.DUNGEON_ATTACK_DAMAGE).getValue()) * multiplier;
-                dungeonMob.hurt(attacker.damageSources().source(ModDamageTypes.DUNGEON_WEAPON, attacker), damageAmount);
-            }
-            return false;
-        }
-        return super.hurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        return super.onLeftClickEntity(stack, player, entity);
-    }*/
 }
 
 

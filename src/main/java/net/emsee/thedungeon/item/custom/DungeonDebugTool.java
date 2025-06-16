@@ -1,12 +1,10 @@
 package net.emsee.thedungeon.item.custom;
 
 
-import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -16,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -45,9 +42,9 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
                         selectedDungeonID = 0;
                     }
 
-                    TheDungeon.LOGGER.info("Selected Dungeon Using Tool : ({})={}", selectedDungeonID, GlobalDungeonManager.getDungeonByID(selectedDungeonID).GetResourceName());
+                    DebugLog.logInfo(DebugLog.DebugLevel.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, GlobalDungeonManager.getDungeonByID(selectedDungeonID).getResourceName());
                     //GlobalDungeonManager.SelectDungeonFromTool(serverLevel);
-                    player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", GlobalDungeonManager.getDungeonByID(selectedDungeonID).GetResourceName()));
+                    player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", GlobalDungeonManager.getDungeonByID(selectedDungeonID).getResourceName()));
 
                 } else {
                     GlobalDungeonManager.GenerateDungeonFromTool(level.getServer(), selectedDungeonID);

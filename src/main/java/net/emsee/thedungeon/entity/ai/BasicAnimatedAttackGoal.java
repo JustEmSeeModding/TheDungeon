@@ -1,16 +1,17 @@
 package net.emsee.thedungeon.entity.ai;
 
-import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
+/** attack goal with a single simple animation */
 public class BasicAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnimatedEntity> extends MeleeAttackGoal {
     private final T entity;
     private final int attackDelay; // time in anim before hit
-    private final int attackCooldown; // time in anim after hit
+    private final int attackCooldown; // time in anim after hit (can extend longer than anim plays)
+
     private int ticksUntilNextAttack;
     private boolean shouldCountTillNextAttack = false;
 
@@ -23,13 +24,11 @@ public class BasicAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
 
     @Override
     public boolean canUse() {
-        //if (entity.isRunning()) return false;
         return super.canUse();
     }
 
     @Override
     public boolean canContinueToUse() {
-        //if (entity.isRunning()) return false;
         return super.canContinueToUse();
     }
 
@@ -105,5 +104,4 @@ public class BasicAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         entity.setAttacking(false);
         super.stop();
     }
-
 }

@@ -47,7 +47,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         infusing(RecipeCategory.MISC, Items.IRON_INGOT, ModItems.INFUSED_ALLOY_INGOT, recipeOutput);
 
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, PatchouliAPI.get().getBookStack(TheDungeon.resourceLocation("dungeon_guide")))
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, PatchouliAPI.get().getBookStack(TheDungeon.defaultResourceLocation("dungeon_guide")))
                 .requires(Items.BOOK)
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD)
                 .unlockedBy("has_dungeon_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);

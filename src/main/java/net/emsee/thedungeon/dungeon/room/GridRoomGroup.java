@@ -1,15 +1,18 @@
 package net.emsee.thedungeon.dungeon.room;
 
-import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class GridRoomGroup extends GridRoom {
     /* Weighted map */
-    protected Map<GridRoom, Integer> gridRooms = new HashMap<>();
+    protected WeightedMap.Int<GridRoom> gridRooms = new WeightedMap.Int<>();
 
     public GridRoomGroup(int gridWidth, int gridHeight, int ID) {
         super(gridWidth, gridHeight, ID);
@@ -58,9 +61,51 @@ public class GridRoomGroup extends GridRoom {
         return this;
     }
 
-    protected GridRoomGroup setRoomMap(Map<GridRoom, Integer> rooms) {
-        gridRooms = rooms;
+    protected GridRoomGroup setRoomMap(WeightedMap.Int<GridRoom> rooms) {
+        gridRooms = new WeightedMap.Int<>(rooms);
         return this;
+    }
+
+    public GridRoomGroup applyToAll(Consumer<GridRoom> method) {
+        ListAndArrayUtils.mapForEachSafe(gridRooms, (k, v)-> method.accept(k));
+        //gridRooms.keySet().forEach(method);
+        return this;
+    }
+
+    @Override
+    public GridRoom withStructureProcessor(StructureProcessor processor) {
+        super.withStructureProcessor(processor);
+        return applyToAll(room -> room.withStructureProcessor(processor));
+    }
+
+    @Override
+    public GridRoom clearStructureProcessors() {
+        super.clearStructureProcessors();
+        return applyToAll(GridRoom::clearStructureProcessors);
+    }
+
+    @Override
+    protected GridRoom setStructureProcessors(StructureProcessorList processors) {
+        super.setStructureProcessors(processors);
+        return applyToAll(room -> room.setStructureProcessors(processors));
+    }
+
+    @Override
+    public GridRoom setConnectionTag(Connection connection, String tag) {
+        super.setConnectionTag(connection, tag);
+        return applyToAll(room->room.setConnectionTag(connection, tag));
+    }
+
+    @Override
+    public GridRoom setAllConnectionTags(String tag) {
+        super.setAllConnectionTags(tag);
+        return applyToAll(room->room.setAllConnectionTags(tag));
+    }
+
+    @Override
+    protected GridRoom setConnectionTags(Map<Connection, String> tags) {
+        super.setConnectionTags(tags);
+        return applyToAll(room->room.setConnectionTags(tags));
     }
 
     /**
@@ -95,8 +140,8 @@ public class GridRoomGroup extends GridRoom {
                 withWeight(weight).
                 setGenerationPriority(generationPriority).
                 setOverrideEndChance(overrideEndChance, doOverrideEndChance).
-                setSpawnRules(spawnRules)
-                .setStructureProcessors(structureProcessors);
+                setSpawnRules(spawnRules).
+                setStructureProcessors(structureProcessors);
     }
 
     @Override
@@ -155,7 +200,7 @@ public class GridRoomGroup extends GridRoom {
     }
 
     public GridRoom getRandom(Random random) {
-        GridRoom toReturn = ListAndArrayUtils.getRandomFromWeightedMapI(gridRooms, random);
+        GridRoom toReturn = gridRooms.getRandom(random);
         if (toReturn == null)
             throw new IllegalStateException("error choosing room");
         return toReturn.getCopy();

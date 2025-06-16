@@ -1,9 +1,11 @@
 package net.emsee.thedungeon.entity.ai;
 
+import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -13,13 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/** attack goal with multiple different animated attacks */
 public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnimatedEntity & IMultiAttackAnimatedEntity> extends MeleeAttackGoal {
     private byte lastId = 0;
     private final T entity;
     private int ticksUntilNextAttack;
     private boolean attacked = false;
     private boolean shouldCountTillNextAttack = false;
-    private final Map<AttackHolder, Integer> attackHolders = new HashMap<>();
+    private final WeightedMap.Int<AttackHolder> attackHolders = new WeightedMap.Int<>();
     private AttackHolder currentAttackHolder;
     private byte AnimationVersion;
 
@@ -35,7 +38,6 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
 
     public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer, int weight) {
         attackHolders.put(new AttackHolder(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer),weight);
-
         return this;
     }
 
@@ -66,7 +68,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
     @Override
     public void start() {
         super.start();
-        currentAttackHolder = ListAndArrayUtils.getRandomFromWeightedMapI(attackHolders, entity.level().getRandom());
+        currentAttackHolder = attackHolders.getRandom(entity.level().getRandom());
         resetAttackCooldown();
         AnimationVersion=0;
         entity.attackAnimation((byte) -1, AnimationVersion++);
@@ -89,14 +91,14 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             }
 
             if(animationFinished()){
-                currentAttackHolder = ListAndArrayUtils.getRandomFromWeightedMapI(attackHolders, entity.level().getRandom());
+                currentAttackHolder = attackHolders.getRandom(entity.level().getRandom());
                 this.resetAttackCooldown();
                 AnimationVersion++;
                 if (AnimationVersion == 0)
                     AnimationVersion++;
             }
         } else {
-            currentAttackHolder = ListAndArrayUtils.getRandomFromWeightedMapI(attackHolders, entity.level().getRandom());
+            currentAttackHolder = attackHolders.getRandom(entity.level().getRandom());
             this.resetAttackCooldown();
             shouldCountTillNextAttack = false;
             entity.setAttacking(false);
@@ -207,5 +209,4 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             this.hand = hand;
         }
     }
-
 }

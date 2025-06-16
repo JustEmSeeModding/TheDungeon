@@ -1,11 +1,10 @@
 package net.emsee.thedungeon.dungeon.roomCollections;
 
-import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.connectionRules.FailRule;
-import net.emsee.thedungeon.dungeon.room.GridRoomUtils;
+import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
-import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -17,7 +16,7 @@ public abstract class GridRoomCollection {
     public final GridRoomCollection instance;
 
     //private final List<GridRoom> allGridRooms = new ArrayList<>();
-    private final Map<GridRoom, Integer> allGridRooms = new HashMap<>();
+    private final WeightedMap.Int<GridRoom> allGridRooms = new WeightedMap.Int<>();
     private final List<ConnectionRule> connectionRules = new ArrayList<>();
     private final List<FailRule> failRules = new ArrayList<>();
     /** the vector stands for: (min, max, totalPlaced)*/
@@ -46,10 +45,8 @@ public abstract class GridRoomCollection {
 
 
     public GridRoomCollection addRoom(GridRoom gridRoom) {
-        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", gridRoom, gridRoom.getGridWidth(), gridRoom.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
+        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+gridRoom+" is not the same size as the RoomCollection "+this);
         int weight = gridRoom.getWeight();
         allGridRooms.put(gridRoom, weight);
 
@@ -77,10 +74,8 @@ public abstract class GridRoomCollection {
      */
     public GridRoomCollection setStartingRoom(GridRoom gridRoom) {
         if (gridRoom == null) return this;
-        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", gridRoom, gridRoom.getGridWidth(), gridRoom.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
+        if (gridRoom.getGridWidth() != roomWidth || gridRoom.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+gridRoom+" is not the same size as the RoomCollection "+this);
         startingRoom = (gridRoom);
         return this;
     }
@@ -96,10 +91,8 @@ public abstract class GridRoomCollection {
      * @return this collection instance for chaining
      */
     public GridRoomCollection addRequiredRoom(int requiredAmount, int maxAmount, GridRoom room) {
-        if (room.getGridWidth() != roomWidth || room.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("Room ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", room, room.getGridWidth(), room.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
+        if (room.getGridWidth() != roomWidth || room.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+room+" is not the same size as the RoomCollection "+this);
 
         addRoom(room);
         requiredPlacements.put(room, new Vec3i(requiredAmount, maxAmount, 0));
@@ -155,14 +148,10 @@ public abstract class GridRoomCollection {
      * @return this collection instance for chaining
      */
     public GridRoomCollection setFallback(GridRoom fallbackGridRoom) {
-        if (fallbackGridRoom.getGridWidth() != roomWidth || fallbackGridRoom.getGridHeight() != roomHeight) {
-            TheDungeon.LOGGER.error("fallbackRoom ({}:{},{}) is not the same size as the RoomCollection ({}:{},{})", fallbackGridRoom, fallbackGridRoom.getGridWidth(), fallbackGridRoom.getGridHeight(), this, roomWidth, roomHeight);
-            return this;
-        }
-        if (fallbackGridRoom.getHeightScale() > 1 || fallbackGridRoom.getRotatedEastSizeScale(Rotation.NONE) > 1 || fallbackGridRoom.getRotatedNorthSizeScale(Rotation.NONE) > 1) {
-            TheDungeon.LOGGER.error("fallbackRoom ({}) is a large grid room in RoomCollection ({})", fallbackGridRoom, this);
-            return this;
-        }
+        if (fallbackGridRoom.getGridWidth() != roomWidth || fallbackGridRoom.getGridHeight() != roomHeight)
+            throw new IllegalStateException("Room "+fallbackGridRoom+" is not the same size as the RoomCollection "+this);
+        if (fallbackGridRoom.getHeightScale() > 1 || fallbackGridRoom.getRotatedEastSizeScale(Rotation.NONE) > 1 || fallbackGridRoom.getRotatedNorthSizeScale(Rotation.NONE) > 1)
+            throw new IllegalStateException("Fallback can not be larger than scale 1,1");
         this.fallbackGridRoom = fallbackGridRoom;
         return this;
     }
@@ -210,37 +199,37 @@ public abstract class GridRoomCollection {
     }
 
     public GridRoom getRandomRoom(Random random) {
-        GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(getAllPossibleRooms(), random));
+        GridRoom toReturn = Objects.requireNonNull(getAllPossibleRooms().getRandom(random));
         return toReturn.getCopy();
     }
 
     public GridRoom getRandomRoom(int maxRoomScale, Random random) {
-        Map<GridRoom, Integer> returnMap = new HashMap<>();
+        WeightedMap.Int<GridRoom> returnMap = new WeightedMap.Int<>();
         for (GridRoom gridRoom : getAllPossibleRooms().keySet()) {
             if (gridRoom.getMaxSizeScale() <= maxRoomScale) {
                 returnMap.put(gridRoom, gridRoom.getWeight());
             }
         }
-        GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(returnMap, random));
+        GridRoom toReturn = Objects.requireNonNull(returnMap.getRandom(random));
         return toReturn.getCopy();
     }
 
-    public GridRoom getRandomRoomByConnection(GridRoomUtils.Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
-        Map<GridRoom, Integer> returnList = new HashMap<>();
+    public GridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
+        WeightedMap.Int<GridRoom> returnList = new WeightedMap.Int<>();
         for (GridRoom gridRoom : getAllPossibleRooms().keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
                 returnList.put(gridRoom, gridRoom.getWeight());
             }
         }
         if (!returnList.isEmpty()) {
-            GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(returnList, random));
+            GridRoom toReturn = Objects.requireNonNull(returnList.getRandom(random));
             return toReturn.getCopy();
         }
         return null;
     }
 
-    public GridRoom getRandomRoomByConnection(GridRoomUtils.Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random) {
-        Map<GridRoom, Integer> returnList = new HashMap<>();
+    public GridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random) {
+        WeightedMap.Int<GridRoom> returnList = new WeightedMap.Int<>();
 
         //possibleRooms.addAll(requiredRooms);
         for (GridRoom gridRoom : getAllPossibleRooms().keySet()) {
@@ -251,7 +240,7 @@ public abstract class GridRoomCollection {
             }
         }
         if (!returnList.isEmpty()) {
-            GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(returnList, random));
+            GridRoom toReturn = Objects.requireNonNull(returnList.getRandom(random));
             return toReturn.getCopy();
         }
         return null;
@@ -264,8 +253,8 @@ public abstract class GridRoomCollection {
      *
      * @return a map of eligible GridRoom instances to their weights
      */
-    private Map<GridRoom, Integer> getAllPossibleRooms() {
-        Map<GridRoom, Integer> toReturn = new HashMap<>();
+    private WeightedMap.Int<GridRoom> getAllPossibleRooms() {
+        WeightedMap.Int<GridRoom> toReturn = new WeightedMap.Int<>();
         for (GridRoom room : allGridRooms.keySet()) {
             boolean allowed = true;
             if (requiredPlacements.containsKey(room)) {

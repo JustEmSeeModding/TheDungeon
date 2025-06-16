@@ -1,8 +1,9 @@
 package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
+import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
+import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
-import net.emsee.thedungeon.dungeon.dungeon.Dungeon;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.core.BlockPos;
@@ -22,7 +23,7 @@ import net.minecraft.world.level.Level;
 
 
 public final class ModDungeonDimensionEvents {
-    public static void PlayerTeleportDungeon(Player player, int portalID, Dungeon.DungeonRank rank) {
+    public static void PlayerTeleportDungeon(Player player, int portalID, DungeonRank rank) {
         Level level = player.level();
         if (!level.isClientSide) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
@@ -41,7 +42,6 @@ public final class ModDungeonDimensionEvents {
                 resourceKey = serverPlayer.getRespawnDimension();
             } else if(rank != null) {
                 if (!player.isCreative() && !CheckInventory(player)) return;
-                //teleportPos = GlobalDungeonManager.centerPos.above(3);
                 teleportPos = GlobalDungeonManager.getPortalPosition(server, portalID, rank).above(2);
                 resourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
             }
@@ -60,6 +60,8 @@ public final class ModDungeonDimensionEvents {
             if (!(stack.getItem() instanceof IDungeonCarryItem ||
                     (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof  IDungeonCarryItem))) {
                 player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items"), false);
+                if (player instanceof ServerPlayer serverPlayer)
+                    ModCriteriaTriggerTypes.FAILED_DUNGEON_TRAVEL.get().trigger(serverPlayer);
                 return false;
             }
         }

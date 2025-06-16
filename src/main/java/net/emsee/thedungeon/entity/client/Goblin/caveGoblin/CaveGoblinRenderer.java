@@ -18,6 +18,6 @@ public class CaveGoblinRenderer extends MobRenderer<CaveGoblinEntity, CaveGoblin
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull CaveGoblinEntity caveGoblinEntity) {
-        return TheDungeon.resourceLocation("textures/entity/goblin/cave_goblin/cave_goblin.png");
+        return TheDungeon.defaultResourceLocation("textures/entity/goblin/cave_goblin/cave_goblin.png");
     }
 }

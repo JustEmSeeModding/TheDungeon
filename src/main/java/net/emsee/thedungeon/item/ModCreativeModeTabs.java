@@ -20,6 +20,7 @@ public final class ModCreativeModeTabs {
             () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.INFUSED_DAGGER.get()))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_tools"))
                     .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModItems.DUNGEON_DEBUG_TOOL);//TODO comment out at release
                         output.accept(ModItems.DUNGEON_CLOCK);
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
@@ -59,7 +60,7 @@ public final class ModCreativeModeTabs {
                         //output.accept(ModBlocks.DUNGEON_PORTAL_A);
                         //output.accept(ModBlocks.DUNGEON_PORTAL_S);
                         //output.accept(ModBlocks.DUNGEON_PORTAL_SS);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_EXIT);
+                        output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
                         output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);

@@ -17,8 +17,8 @@ public final class ModAttachmentTypes {
             "saved_gamemode", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
     );
 
-
     public static void register(IEventBus eventBus){
         ATTACHMENT_TYPES.register(eventBus);
+
     }
 }

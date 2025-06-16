@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class DungeonTripWireBlock extends TripWireBlock implements IDungeonCarryItem {
-
-    public DungeonTripWireBlock(Block hook, Properties properties) {
+public class DungeonThreadBlock extends TripWireBlock implements IDungeonCarryItem {
+    public DungeonThreadBlock(Block hook, Properties properties) {
         super(hook, properties);
     }
 

@@ -5,6 +5,8 @@ import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.ModBlockEntities;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
+import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
+import net.emsee.thedungeon.dungeon.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.ModDungeons;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.events.entityCreation.ModEventBusClientEvents;
@@ -38,10 +40,13 @@ public final class TheDungeon
         NeoForge.EVENT_BUS.register(this);
 
         loadClass(ModDungeons.class);
+        loadClass(ModCleanupDungeons.class);
 
         ModCreativeModeTabs.register(modEventBus);
 
         ModAttributes.register(modEventBus);
+
+        ModCriteriaTriggerTypes.register(modEventBus);
 
         ModItems.register(modEventBus);
         ModArmorMaterials.register(modEventBus);
@@ -55,7 +60,6 @@ public final class TheDungeon
         ModAttachmentTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
         ModVillagers.register(modEventBus);
-        //modEventBus.addListener(this::addCreative);
 
         ModGamerules.registerRules();
 
@@ -99,7 +103,7 @@ public final class TheDungeon
         }
     }
 
-    public static ResourceLocation resourceLocation(String path) {
+    public static ResourceLocation defaultResourceLocation(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }

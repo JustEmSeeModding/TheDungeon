@@ -11,6 +11,7 @@ import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
+/** when mob is far enough away it wil run at its target*/
 public class RunToTargetGoal extends Goal {
         protected final PathfinderMob mob;
         private final double speedModifier;
@@ -24,7 +25,7 @@ public class RunToTargetGoal extends Goal {
         private int ticksUntilNextPathRecalculation;
         private long lastCanUseCheck;
         private int failedPathFindingPenalty = 0;
-        private boolean canPenalize = false;
+        private final boolean canPenalize = false;
 
         public RunToTargetGoal(PathfinderMob mob, double speedModifier, float startDistance, float stopDistance, boolean followingTargetEvenIfNotSeen) {
             this.mob = mob;
@@ -59,7 +60,7 @@ public class RunToTargetGoal extends Goal {
                     }
                 } else {
                     this.path = this.mob.getNavigation().createPath(livingentity, 0);
-                    return this.path != null ? true : this.mob.isWithinMeleeAttackRange(livingentity);
+                    return this.path != null || this.mob.isWithinMeleeAttackRange(livingentity);
                 }
             }
         }
@@ -76,7 +77,7 @@ public class RunToTargetGoal extends Goal {
             } else if (!this.followingTargetEvenIfNotSeen) {
                 return !this.mob.getNavigation().isDone();
             } else {
-                return !this.mob.isWithinRestriction(livingentity.blockPosition()) ? false : !(livingentity instanceof Player) || !livingentity.isSpectator() && !((Player)livingentity).isCreative();
+                return this.mob.isWithinRestriction(livingentity.blockPosition()) && (!(livingentity instanceof Player) || !livingentity.isSpectator() && !((Player) livingentity).isCreative());
             }
         }
 

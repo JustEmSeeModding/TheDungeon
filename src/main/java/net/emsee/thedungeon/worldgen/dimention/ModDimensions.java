@@ -35,7 +35,7 @@ public final class ModDimensions {
     public static void bootstrapType(BootstrapContext<DimensionType> context) {
         context.register(DUNGEON_TYPE, new DimensionType(
                 OptionalLong.of(6000), // fixedTime
-                false, // hasSkylight //<<TODO what is better?
+                true, // hasSkylight //<<TODO what is better?
                 false, // hasCeiling
                 false, // ultraWarm
                 false, // natural
@@ -43,8 +43,8 @@ public final class ModDimensions {
                 false, // bedWorks
                 false, // respawnAnchorWorks
                 -96, // minY
-                320, // height
-                320, // logicalHeight
+                320+96, // height
+                320+96, // logicalHeight
                 BlockTags.INFINIBURN_OVERWORLD, // infiniburn
                 BuiltinDimensionTypes.OVERWORLD_EFFECTS, // effectsLocation
                 0f, // ambientLight
