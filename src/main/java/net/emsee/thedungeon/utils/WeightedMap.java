@@ -65,7 +65,7 @@ public class WeightedMap {
                 totalWeight += get(t);
             }
             if (totalWeight <= 0) return null;
-            int chosenWeight = (int) Math.ceil(random.nextDouble() * (totalWeight));
+            double chosenWeight = Math.ceil(random.nextDouble() * (totalWeight));
 
             for (T t : keySet()) {
                 chosenWeight -= get(t);
@@ -81,7 +81,7 @@ public class WeightedMap {
                 totalWeight += get(t);
             }
             if (totalWeight <= 0) return null;
-            int chosenWeight = (int) Math.ceil(random.nextDouble() * (totalWeight));
+            double chosenWeight = Math.ceil(random.nextDouble() * (totalWeight));
 
             for (T t : keySet()) {
                 chosenWeight -= get(t);
