@@ -1,7 +1,9 @@
 package net.emsee.thedungeon.entity.ai;
 
 import net.emsee.thedungeon.attribute.ModAttributes;
+import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -42,7 +44,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         List<Entity> nearEntities = mob.level().getEntities(mob, mob.getBoundingBox().inflate(maxRange));
 
         // creates a weighted map of all players using aggro
-        Map<Player, Double> nearPlayers = new HashMap<>();
+        WeightedMap.Dbl<Player> nearPlayers = new WeightedMap.Dbl<>();
         double totalAggro = 0;
         for (Entity entity : nearEntities) {
             if (entity instanceof Player player && !player.isCreative()) {
@@ -51,7 +53,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
             }
         }
 
-        this.target = ListAndArrayUtils.getRandomFromWeightedMapD(nearPlayers, mob.level().getRandom());
+        this.target = nearPlayers.getRandom(mob.level().getRandom());
     }
 
     protected double getPlayerAggro(Player player, double minPerception, double maxPerception) {

@@ -241,4 +241,13 @@ public final class DungeonSaveData extends SavedData {
         dungeonData.setNextToCollapse(DungeonRank.getNext(getNextToCollapse()));
         setDirty();
     }
+
+    public boolean isFinishedForcedChunks() {
+        return dungeonData.getFinishedForcedChunks();
+    }
+
+    public void setFinishedForcedChunks() {
+        dungeonData.setFinishedForcedChunks(true);
+        setDirty();
+    }
 }

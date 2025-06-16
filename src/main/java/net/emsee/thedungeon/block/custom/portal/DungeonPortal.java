@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.block.custom.portal;
 
+import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
@@ -72,7 +73,10 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     @Override
     protected void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
-            GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
+            if (this instanceof DungeonPortalExit)
+                GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
+            else
+                level.setBlockAndUpdate(pos, ModBlocks.DUNGEON_PORTAL_EXIT.get().defaultBlockState());
         }
         super.onPlace(state, level, pos, oldState, movedByPiston);
     }

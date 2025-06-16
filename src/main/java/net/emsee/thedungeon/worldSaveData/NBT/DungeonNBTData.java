@@ -29,6 +29,7 @@ public final class DungeonNBTData {
     private long lastMinuteAnnouncement = -1;
     private long lastSecondAnnouncement = -1;
     private DungeonRank nextToCollapse = DungeonRank.F;
+    private boolean finishedForcedChunks = false;
 
     private final Map<DungeonRank, Boolean> isOpen = Util.make(Maps.newHashMap(), (map) -> {
         map.put(DungeonRank.F, false);
@@ -67,6 +68,8 @@ public final class DungeonNBTData {
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         toReturn.putLong("lastSecondAnnouncement", lastSecondAnnouncement);
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        toReturn.putBoolean("finishedForcedChunks", finishedForcedChunks);
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"finishedForcedChunks: {}", finishedForcedChunks);
         for (DungeonRank rank : isOpen.keySet())
             toReturn.putBoolean("isOpen_" + rank.getName(), isOpen.get(rank));
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
@@ -117,6 +120,8 @@ public final class DungeonNBTData {
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         lastSecondAnnouncement = tag.getLong("lastSecondAnnouncement");
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        finishedForcedChunks = tag.getBoolean("finishedForcedChunks");
+        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"finishedForcedChunks: {}", finishedForcedChunks);
         for (DungeonRank rank : DungeonRank.values())
             isOpen.put(rank,tag.getBoolean("isOpen_" + rank.getName()));
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
@@ -223,5 +228,13 @@ public final class DungeonNBTData {
     public void setNextToCollapse(DungeonRank rank) {
         if (rank==null) return;
         nextToCollapse = rank;
+    }
+
+    public void setFinishedForcedChunks(Boolean finishedForcedChunks) {
+        this.finishedForcedChunks = finishedForcedChunks;
+    }
+
+    public Boolean getFinishedForcedChunks() {
+        return finishedForcedChunks;
     }
 }

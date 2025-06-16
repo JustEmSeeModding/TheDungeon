@@ -5,7 +5,9 @@ import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRule;
+import net.emsee.thedungeon.dungeon.util.DungeonUtils;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.PriorityMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -32,11 +34,8 @@ public class GridRoom {
     protected boolean allowRotation = false;
     protected boolean allowUpDownConnectedRotation = false;
 
-    /* Priority map */
-    protected final Map<Connection, Integer> connections = new HashMap<>();
-    /* Offset map */
-    protected final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>();
-    /* Weighted map */
+    protected final PriorityMap<Connection> connections = new PriorityMap<>();
+    protected final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>(); /* Offset map */
     protected final Map<Connection, String> connectionTags = new HashMap<>();
     protected final List<MobSpawnRule> spawnRules = new ArrayList<>();
     protected final StructureProcessorList structureProcessors = new StructureProcessorList(new ArrayList<>());
@@ -89,7 +88,7 @@ public class GridRoom {
     }
 
 
-    protected GridRoom setConnections(Map<Connection, Integer> connectionMap) {
+    protected GridRoom setConnections(PriorityMap<Connection> connectionMap) {
         this.connections.putAll(connectionMap);
         return this;
     }
@@ -245,6 +244,11 @@ public class GridRoom {
         return this;
     }
 
+    public GridRoom clearStructureProcessors() {
+        this.structureProcessors.list().clear();
+        return this;
+    }
+
     protected GridRoom setStructureProcessors(StructureProcessorList processors) {
         this.structureProcessors.list().clear();
         this.structureProcessors.list().addAll(processors.list());
@@ -300,8 +304,8 @@ public class GridRoom {
         return gridHeight;
     }
 
-    public Map<Connection, Integer> getConnections() {
-        return new HashMap<>(connections);
+    public PriorityMap<Connection> getConnections() {
+        return new PriorityMap<>(connections);
     }
 
     protected boolean hasConnection(Connection connection) {
@@ -472,7 +476,7 @@ public class GridRoom {
     }
 
     private boolean isValidConnection(Connection connection, Rotation placementRotation, String fromTag, List<ConnectionRule> rules) {
-        return ConnectionRule.isValid(fromTag, connectionTags.get(connection.getRotated(getInvertedRotation(placementRotation))), rules);
+        return ConnectionRule.isValid(fromTag, DungeonUtils.getRotatedTags(connectionTags,placementRotation).get(connection), rules);
     }
 
     public String getConnectionTag(Connection connection, Rotation placedRotation) {

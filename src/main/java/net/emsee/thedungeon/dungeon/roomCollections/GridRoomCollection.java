@@ -4,7 +4,7 @@ import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
-import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -16,7 +16,7 @@ public abstract class GridRoomCollection {
     public final GridRoomCollection instance;
 
     //private final List<GridRoom> allGridRooms = new ArrayList<>();
-    private final Map<GridRoom, Integer> allGridRooms = new HashMap<>();
+    private final WeightedMap.Int<GridRoom> allGridRooms = new WeightedMap.Int<>();
     private final List<ConnectionRule> connectionRules = new ArrayList<>();
     private final List<FailRule> failRules = new ArrayList<>();
     /** the vector stands for: (min, max, totalPlaced)*/
@@ -199,37 +199,37 @@ public abstract class GridRoomCollection {
     }
 
     public GridRoom getRandomRoom(Random random) {
-        GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(getAllPossibleRooms(), random));
+        GridRoom toReturn = Objects.requireNonNull(getAllPossibleRooms().getRandom(random));
         return toReturn.getCopy();
     }
 
     public GridRoom getRandomRoom(int maxRoomScale, Random random) {
-        Map<GridRoom, Integer> returnMap = new HashMap<>();
+        WeightedMap.Int<GridRoom> returnMap = new WeightedMap.Int<>();
         for (GridRoom gridRoom : getAllPossibleRooms().keySet()) {
             if (gridRoom.getMaxSizeScale() <= maxRoomScale) {
                 returnMap.put(gridRoom, gridRoom.getWeight());
             }
         }
-        GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(returnMap, random));
+        GridRoom toReturn = Objects.requireNonNull(returnMap.getRandom(random));
         return toReturn.getCopy();
     }
 
     public GridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
-        Map<GridRoom, Integer> returnList = new HashMap<>();
+        WeightedMap.Int<GridRoom> returnList = new WeightedMap.Int<>();
         for (GridRoom gridRoom : getAllPossibleRooms().keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
                 returnList.put(gridRoom, gridRoom.getWeight());
             }
         }
         if (!returnList.isEmpty()) {
-            GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(returnList, random));
+            GridRoom toReturn = Objects.requireNonNull(returnList.getRandom(random));
             return toReturn.getCopy();
         }
         return null;
     }
 
     public GridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random) {
-        Map<GridRoom, Integer> returnList = new HashMap<>();
+        WeightedMap.Int<GridRoom> returnList = new WeightedMap.Int<>();
 
         //possibleRooms.addAll(requiredRooms);
         for (GridRoom gridRoom : getAllPossibleRooms().keySet()) {
@@ -240,7 +240,7 @@ public abstract class GridRoomCollection {
             }
         }
         if (!returnList.isEmpty()) {
-            GridRoom toReturn = Objects.requireNonNull(ListAndArrayUtils.getRandomFromWeightedMapI(returnList, random));
+            GridRoom toReturn = Objects.requireNonNull(returnList.getRandom(random));
             return toReturn.getCopy();
         }
         return null;
@@ -253,8 +253,8 @@ public abstract class GridRoomCollection {
      *
      * @return a map of eligible GridRoom instances to their weights
      */
-    private Map<GridRoom, Integer> getAllPossibleRooms() {
-        Map<GridRoom, Integer> toReturn = new HashMap<>();
+    private WeightedMap.Int<GridRoom> getAllPossibleRooms() {
+        WeightedMap.Int<GridRoom> toReturn = new WeightedMap.Int<>();
         for (GridRoom room : allGridRooms.keySet()) {
             boolean allowed = true;
             if (requiredPlacements.containsKey(room)) {

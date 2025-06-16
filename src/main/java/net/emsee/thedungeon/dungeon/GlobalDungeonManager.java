@@ -7,6 +7,7 @@ import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.events.ModDungeonDimensionEvents;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
+import net.emsee.thedungeon.utils.WeightedMap;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
@@ -158,7 +159,7 @@ public final class GlobalDungeonManager {
             saveData.addToProgressQueue(saveData.removeFromPassiveQueue(rank));
         }
         else {
-            Map<Dungeon,Integer> possibleDungeons = new HashMap<>();
+            WeightedMap.Int<Dungeon> possibleDungeons = new WeightedMap.Int<>();
             //DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"All Dungeons: {}", ListAndArrayUtils.mapToString(dungeons));
             for (Dungeon dungeon : dungeons.keySet())
                 if (dungeon.getRank()==rank && dungeons.get(dungeon)>0)
@@ -168,10 +169,12 @@ public final class GlobalDungeonManager {
                 DebugLog.logWarn(DebugLog.DebugLevel.WARNINGS,"Rank: {} has no dungeons assigned", rank.toString());
                 return;
             }
-            Dungeon newDungeon = ListAndArrayUtils.getRandomFromWeightedMapI(possibleDungeons, Objects.requireNonNull(server.getLevel(Level.OVERWORLD)).getRandom());
-            if (newDungeon== null)
-                throw new IllegalStateException("no new dungeon found");
+            ServerLevel overworld = server.getLevel(Level.OVERWORLD);
+            if (overworld == null) throw new IllegalStateException("overworld not found");
+            Dungeon newDungeon = possibleDungeons.getRandom(overworld.getRandom());
+            if (newDungeon== null) throw new IllegalStateException("no new dungeon found");
             saveData.addToProgressQueue(newDungeon.getCopy());
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS, "added {} to queue", newDungeon);
         }
     }
 
@@ -373,15 +376,14 @@ public final class GlobalDungeonManager {
     }
 
     public static void updateForcedChunks(MinecraftServer server) {
-        if (server == null) {
-            DebugLog.logError(DebugLog.DebugLevel.WARNINGS, "UpdateForcedChunks: server is null");
-            return;
-        }
+
         ServerLevel level = server.getLevel(dungeonResourceKey);
         if (level == null) {
             DebugLog.logError(DebugLog.DebugLevel.WARNINGS, "UpdateForcedChunks: level is null");
             return;
         }
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        if (saveData.isFinishedForcedChunks()) return;
         for (DungeonRank rank : DungeonRank.values()) {
             BlockPos center = rank.getDefaultCenterPos();
             ChunkPos chunkPos = level.getChunkAt(center).getPos();
@@ -395,6 +397,7 @@ public final class GlobalDungeonManager {
                 }
             }
         }
+        saveData.setFinishedForcedChunks();
     }
 
     public static Dungeon getDungeonByID(int ID) {

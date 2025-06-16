@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon.util;
 
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.PriorityMap;
 import net.minecraft.world.level.block.Rotation;
 
 import java.util.*;
@@ -17,12 +18,12 @@ public final class DungeonUtils {
     }
 
     /**
-     * returns the weighted connection map rotated
+     * returns the priority connection map rotated
      */
-    public static Map<Connection, Integer> getRotatedConnectionMap(Map<Connection, Integer> connections, Rotation roomRotation) {
+    public static PriorityMap<Connection> getRotatedConnectionMap(PriorityMap<Connection> connections, Rotation roomRotation) {
         if (roomRotation == null) return null;
         if (roomRotation == Rotation.NONE) return connections;
-        Map<Connection, Integer> toReturn = new HashMap<>();
+        PriorityMap<Connection> toReturn = new PriorityMap<>();
         for (Connection connection : connections.keySet()) {
             toReturn.put(connection.getRotated(roomRotation), connections.get(connection));
         }

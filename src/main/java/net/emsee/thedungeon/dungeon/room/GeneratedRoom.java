@@ -6,6 +6,7 @@ import net.emsee.thedungeon.dungeon.util.DungeonUtils;
 import net.emsee.thedungeon.dungeon.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRule;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.PriorityMap;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -263,13 +264,13 @@ public final class GeneratedRoom {
     public GeneratedRoom generateConnection(GridDungeonGenerator generator, Random random) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: generating connected room", this);
 
-        Map<Connection, Integer> placedRoomConnections = DungeonUtils.getRotatedConnectionMap(room.getConnections(), placedRotation);
+        PriorityMap<Connection> placedRoomConnections = DungeonUtils.getRotatedConnectionMap(room.getConnections(), placedRotation);
 
         // use an array to store a single data value as Lambda's can only use final values
         final GeneratedRoom[] newRoom = {null};
 
         //Priority Task Map
-        Map<Runnable, Integer> tasks = new HashMap<>();
+        PriorityMap<Runnable> tasks = new PriorityMap<>();
 
         if (!finishedConnections.getOrDefault(Connection.NORTH, false) && placedFrom != Connection.NORTH)
             tasks.put(() -> {
@@ -302,7 +303,7 @@ public final class GeneratedRoom {
                 finishedConnections.put(Connection.DOWN, true);
             }, placedRoomConnections.getOrDefault(Connection.DOWN, 0));
 
-        Runnable task = ListAndArrayUtils.getRandomFromPriorityMap(tasks, random, 1);
+        Runnable task = tasks.getRandom(random, 1);
 
         // in case there are no tasks left to preform mark as done
         if (task == null) {
@@ -340,8 +341,7 @@ public final class GeneratedRoom {
     /**
      * places a new room on a HORIZONTAL connection, returns NULL on fail
      */
-    private GeneratedRoom generateHorizontalRoom(GridDungeonGenerator generator, Map<Connection, Integer> connections, Connection
-            connection, Random random) {
+    private GeneratedRoom generateHorizontalRoom(GridDungeonGenerator generator, PriorityMap<Connection> connections, Connection connection, Random random) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: generating room at {}", this, connection);
         if (connections.get(connection) <= 0) {
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: room does not have this connection, skipping", this);
@@ -415,7 +415,7 @@ public final class GeneratedRoom {
     /**
      * places a new room on an UPWARDS connection, returns NULL on fail
      */
-    private GeneratedRoom generateUpRoom(GridDungeonGenerator generator, Map<Connection, Integer> connections, Random random) {
+    private GeneratedRoom generateUpRoom(GridDungeonGenerator generator, PriorityMap<Connection> connections, Random random) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: generating room at {}", this, Connection.UP);
         if (connections.get(Connection.UP) <= 0) {
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: room does not have connection", this);
@@ -491,7 +491,7 @@ public final class GeneratedRoom {
     }
 
 
-    private GeneratedRoom generateDownRoom(GridDungeonGenerator generator, Map<Connection, Integer> connections, Random random) {
+    private GeneratedRoom generateDownRoom(GridDungeonGenerator generator, PriorityMap<Connection> connections, Random random) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: generating room at {}", this, Connection.DOWN);
         if (connections.get(Connection.DOWN) <= 0) {
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: room does not have connection", this);
@@ -589,7 +589,7 @@ public final class GeneratedRoom {
     }
 
     public Vec3i getPlacedArrayOffset(Connection placedConnection) {
-        Map<Connection, Integer> connections = DungeonUtils.getRotatedConnectionMap(room.getConnections(), placedRotation);
+        PriorityMap<Connection> connections = DungeonUtils.getRotatedConnectionMap(room.getConnections(), placedRotation);
         if (connections.get(placedConnection) <= 0) return null;
 
         int unitXOffset = 0;
