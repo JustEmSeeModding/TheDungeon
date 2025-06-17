@@ -100,7 +100,7 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
                     .addConnection(Connection.WEST)
                     .doAllowRotation().setAllConnectionTags("corner"));
 
-    private static final GridRoom mainHallSegments = ((GridRoomGroup) new GridRoomGroup(9, 9).setSizeHeight(1, 3, 4).addConnection(Connection.NORTH).addConnection(Connection.SOUTH).doAllowRotation().setAllConnectionTags("main_hall").setGenerationPriority(10).setOverrideEndChance(0))
+    private static final GridRoom mainHallSegments = ((GridRoomGroup) new GridRoomGroup(9, 9).setSizeHeight(1, 3, 4).addConnection(Connection.NORTH).addConnection(Connection.SOUTH).doAllowRotation().setAllConnectionTags("main_hall"))
             .addRoom(new GridRoom(9, 9)
                     .setSizeHeight(1, 3, 4)
                     .withWeight(10)

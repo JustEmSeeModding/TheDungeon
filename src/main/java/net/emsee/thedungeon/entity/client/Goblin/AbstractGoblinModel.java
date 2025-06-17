@@ -85,8 +85,8 @@ public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends Hierarc
         this.applyStatic(GoblinAnimations.ANIM_GOBLIN_POSE);
         this.animateWalk(entity.isRunning()? GoblinAnimations.ANIM_GOBLIN_RUN:GoblinAnimations.ANIM_GOBLIN_WALK, limbSwing, limbSwingAmount, 4f, 2.5f);
         this.animate(entity.idleAnimationState, GoblinAnimations.ANIM_GOBLIN_IDLE, ageInTicks, 1);
-        this.animate(entity.basicAttackAnimationStateLeft, GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
         this.animate(entity.basicAttackAnimationStateRight, GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_RIGHT, ageInTicks, 1);
+        this.animate(entity.basicAttackAnimationStateLeft, GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
     }
 
     private void applyHeadRotation(float headYaw, float headPitch) {

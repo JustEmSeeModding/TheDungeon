@@ -30,6 +30,8 @@ public final class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
 
 
+        blockWithItem(ModBlocks.PYRITE_ORE);
+
         blockWithItem(ModBlocks.INFUSED_DIRT);
         blockWithItem(ModBlocks.INFUSED_CLAY);
         blockWithItem(ModBlocks.INFUSED_SAND);

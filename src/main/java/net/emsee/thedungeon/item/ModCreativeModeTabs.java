@@ -45,6 +45,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
+                        output.accept(ModItems.PYRITE);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_BLOCKS_TAB = CREATIVE_MODE_TAB.register("dungeon_blocks_tab",
@@ -62,6 +63,7 @@ public final class ModCreativeModeTabs {
                         //output.accept(ModBlocks.DUNGEON_PORTAL_SS);
                         output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
                         output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
+                        output.accept(ModBlocks.PYRITE_ORE);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);
                         output.accept(ModBlocks.INFUSED_SAND);
@@ -86,6 +88,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModSpawnEggs.SKELETON_KNIGHT_SPAWN_EGG);
                         output.accept(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG);
                         output.accept(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG);
+                        output.accept(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG);
                     }).build());
 
     public static void register(IEventBus eventBus) {

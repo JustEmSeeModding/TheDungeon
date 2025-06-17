@@ -12,24 +12,26 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 
 import java.util.Map;
 
-public class GildedCaveOreProcessor extends BasicReplacementProcessor {
-    public static final GildedCaveOreProcessor INSTANCE = new GildedCaveOreProcessor();
+public class BlackstoneToStoneCaveProcessor extends BasicReplacementProcessor {
+    public static final BlackstoneToStoneCaveProcessor INSTANCE = new BlackstoneToStoneCaveProcessor();
 
-    public static final MapCodec<GildedCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<BlackstoneToStoneCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+
+    private BlackstoneToStoneCaveProcessor() {}
 
     private WeightedMap.Int<BlockState> defaultMap() {
         return Util.make(new WeightedMap.Int<>(), (map) -> {
-            map.put(Blocks.BLACKSTONE.defaultBlockState(), 5);
-            map.put(Blocks.GILDED_BLACKSTONE.defaultBlockState(), 1);
+            map.put(Blocks.STONE.defaultBlockState(), 1);
         });
     }
 
-    @Override
+
     protected Map<Block, WeightedMap.Int<BlockState>> replacements() {
         return Util.make(Maps.newHashMap(), (map) -> {
             map.put(Blocks.BLACKSTONE, defaultMap());
         });
     }
+
 
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;

@@ -3,7 +3,6 @@ package net.emsee.thedungeon.item;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.item.custom.*;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -27,6 +26,9 @@ public final class ModItems {
             () -> new DungeonItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonItem> INFUSED_ALLOY_INGOT = ITEMS.register("infused_alloy_ingot",
+            () -> new DungeonItem(new Item.Properties()));
+
+    public static final DeferredItem<DungeonItem> PYRITE = ITEMS.register("pyrite",
             () -> new DungeonItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonClock> DUNGEON_CLOCK = ITEMS.register("dungeon_clock",

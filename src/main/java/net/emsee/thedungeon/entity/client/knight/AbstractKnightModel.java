@@ -1,7 +1,6 @@
 package net.emsee.thedungeon.entity.client.knight;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.emsee.thedungeon.entity.custom.knight.AbstractKnightEntity;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.HierarchicalModel;

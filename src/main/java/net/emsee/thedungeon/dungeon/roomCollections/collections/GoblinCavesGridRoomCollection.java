@@ -8,10 +8,7 @@ import net.emsee.thedungeon.dungeon.room.GridRoomGroup;
 import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.util.GridRoomList;
 import net.emsee.thedungeon.entity.ModEntities;
-import net.emsee.thedungeon.structureProcessor.goblinCaves.GildedCaveOreProcessor;
-import net.emsee.thedungeon.structureProcessor.goblinCaves.StoneToDeepslateCaveProcessor;
-import net.emsee.thedungeon.structureProcessor.goblinCaves.StoneToGildedCaveProcessor;
-import net.emsee.thedungeon.structureProcessor.goblinCaves.StoneCaveOreProcessor;
+import net.emsee.thedungeon.structureProcessor.goblinCaves.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
 
@@ -23,6 +20,16 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
         super(11, 11);
         //SetFallback(new GridRoom(11, 11).ResourceLocation(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "castle/fallback")))
         this
+                .setStartingRoom(new GridRoom(11, 11)
+                        .withResourceLocation("goblin_caves/stone/den")
+                        .setSizeHeight(5, 5, 3)
+                        .horizontalConnections(1, 1, 1, 0)
+                        .setHorizontalConnectionOffset(Connection.EAST, 0, 1)
+                        .setHorizontalConnectionOffset(Connection.SOUTH, 2, 1)
+                        .setAllConnectionTags("stone_caves")
+                        .doAllowRotation()
+                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
+                        .addMobSpawnRule(new SpawnInBox<>(ModEntities.CAVE_GOBLIN, new BlockPos(-22, 3, -22), new BlockPos(22, 27, 22), 2, 5, 1)))
                 .addRequiredRoomsOf(4, 6, spawnRooms())
                 .addRequiredRoomsOf(5, dens)
 
@@ -42,22 +49,55 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, "deepslate_caves")
+                        .setConnectionTag(Connection.SOUTH, "stone_caves")
+                        .doAllowRotation()
+                        .withStructureProcessor(StoneToDeepslateCaveProcessor.INSTANCE)
+                        .withStructureProcessor(BlackstoneToStoneCaveProcessor.INSTANCE)
+                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
+                        .setOverrideEndChance(0)
+                        .setGenerationPriority(1))
+                .addRequiredRoom(0, 1, new GridRoom(11, 11)
+                        .withResourceLocation("goblin_caves/convert/stone_gilded")
+                        .withWeight(3)
+                        .horizontalConnections(1, 0, 1, 0)
+                        .setConnectionTag(Connection.NORTH, "deepslate_caves")
                         .setConnectionTag(Connection.SOUTH, "gilded_caves")
                         .doAllowRotation()
                         .withStructureProcessor(StoneToDeepslateCaveProcessor.INSTANCE)
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1))
+                .addRequiredRoom(0, 1, new GridRoom(11, 11)
+                        .withResourceLocation("goblin_caves/convert/stone_gilded")
+                        .withWeight(3)
+                        .horizontalConnections(1, 0, 1, 0)
+                        .setConnectionTag(Connection.NORTH, "deepslate_caves")
+                        .setConnectionTag(Connection.SOUTH, "ice_caves")
+                        .doAllowRotation()
+                        .withStructureProcessor(StoneToDeepslateCaveProcessor.INSTANCE)
+                        .withStructureProcessor(BlackstoneToStoneCaveProcessor.INSTANCE)
+                        .withStructureProcessor(StoneToIceCaveProcessor.INSTANCE)
+                        .setOverrideEndChance(0)
+                        .setGenerationPriority(1))
 
                 .addRooms(unassigned_caves.getCopy()
                         .applyToAll(room -> room.withStructureProcessor(new StoneCaveOreProcessor()))
-                        .applyToAll(room -> room.setAllConnectionTags("stone_caves")))
+                        .applyToAll(room -> room.setAllConnectionTags("stone_caves"))
+                )
                 .addRooms(unassigned_caves.getCopy()
                         .applyToAll(room -> room.withStructureProcessor(new StoneToGildedCaveProcessor()))
-                        .applyToAll(room -> room.setAllConnectionTags("gilded_caves")))
+                        .applyToAll(room -> room.setAllConnectionTags("gilded_caves"))
+                        .applyToAll(room -> room.setOverrideEndChance(.02f))
+                )
                 .addRooms(unassigned_caves.getCopy()
                         .applyToAll(room -> room.withStructureProcessor(new StoneToDeepslateCaveProcessor()))
-                        .applyToAll(room -> room.setAllConnectionTags("deepslate_caves")))
+                        .applyToAll(room -> room.setAllConnectionTags("deepslate_caves"))
+                )
+                .addRooms(unassigned_caves.getCopy()
+                        .applyToAll(room -> room.withStructureProcessor(StoneToIceCaveProcessor.INSTANCE))
+                        .applyToAll(room -> room.setAllConnectionTags("ice_caves"))
+                        .applyToAll(room -> room.setOverrideEndChance(.04f))
+                )
 
                 .addTagRule(new WallFailRule("stone_caves", 11, 11, 0, false, () -> Blocks.STONE, 11 * 11)
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
@@ -65,6 +105,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE))
                 .addTagRule(new WallFailRule("deepslate_caves", 11, 11, 0, false, () -> Blocks.STONE, 11 * 11)
                         .withStructureProcessor(StoneToDeepslateCaveProcessor.INSTANCE))
+                .addTagRule(new WallFailRule("ice_caves", 11, 11, 0, false, () -> Blocks.STONE, 11 * 11)
+                        .withStructureProcessor(StoneToIceCaveProcessor.INSTANCE))
         ;
     }
 
