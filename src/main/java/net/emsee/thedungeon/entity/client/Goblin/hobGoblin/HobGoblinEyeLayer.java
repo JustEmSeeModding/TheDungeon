@@ -2,7 +2,6 @@ package net.emsee.thedungeon.entity.client.Goblin.hobGoblin;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.custom.goblin.HobGoblinEntity;
-import net.emsee.thedungeon.entity.custom.goblin.ShadowGoblinEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;

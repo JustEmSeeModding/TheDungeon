@@ -175,8 +175,6 @@ public class WallFailRule extends FailRule {
 
     /**
      * Indicates that fallback block placement should be halted after this rule is applied.
-     *
-     * @return true, signaling to stop any further fallback placement attempts
      */
     @Override
     public boolean stopFallbackPlacement() {

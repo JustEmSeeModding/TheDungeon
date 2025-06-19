@@ -77,7 +77,7 @@ public final class GlobalDungeonManager {
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"killing all entities");
             KillAllInDungeon(server, currentDungeon.getRank());
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"starting generation");
-            currentDungeon.generate(dungeonDimension, currentDungeon.getCenterPos());
+            currentDungeon.generate(dungeonDimension);
         }
 
         currentDungeon.generationTick(dungeonDimension);

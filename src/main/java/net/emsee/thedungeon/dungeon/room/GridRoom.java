@@ -296,11 +296,11 @@ public class GridRoom {
         return weight;
     }
 
-    public int getGridWidth() {
+    public int getGridCellWidth() {
         return gridWidth;
     }
 
-    public int getGridHeight() {
+    public int getGridCellHeight() {
         return gridHeight;
     }
 

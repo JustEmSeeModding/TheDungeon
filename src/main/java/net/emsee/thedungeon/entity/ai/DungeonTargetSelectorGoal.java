@@ -1,8 +1,6 @@
 package net.emsee.thedungeon.entity.ai;
 
 import net.emsee.thedungeon.attribute.ModAttributes;
-import net.emsee.thedungeon.dungeon.room.GridRoom;
-import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

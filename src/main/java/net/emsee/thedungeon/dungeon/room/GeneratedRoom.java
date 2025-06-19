@@ -162,9 +162,9 @@ public final class GeneratedRoom {
             throw new IllegalStateException(this + ": Placement rotation was null");
         }
 
-        BlockPos origin = centre.subtract(new Vec3i(Math.round((room.getGridWidth()) * room.getRotatedEastSizeScale(Rotation.NONE) / 2f) - 1, 0, Math.round((room.getGridWidth()) * room.getRotatedNorthSizeScale(Rotation.NONE) / 2f) - 1));
-        BlockPos minCorner = centre.subtract(new Vec3i(room.getGridWidth() * room.getMaxSizeScale(), 0, room.getGridWidth() * room.getMaxSizeScale()));
-        BlockPos maxCorner = centre.offset(new Vec3i(room.getGridWidth() * room.getMaxSizeScale(), room.getGridHeight() * room.getHeightScale(), room.getGridWidth() * room.getMaxSizeScale()));
+        BlockPos origin = centre.subtract(new Vec3i(Math.round((room.getGridCellWidth()) * room.getRotatedEastSizeScale(Rotation.NONE) / 2f) - 1, 0, Math.round((room.getGridCellWidth()) * room.getRotatedNorthSizeScale(Rotation.NONE) / 2f) - 1));
+        BlockPos minCorner = centre.subtract(new Vec3i(room.getGridCellWidth() * room.getMaxSizeScale(), 0, room.getGridCellWidth() * room.getMaxSizeScale()));
+        BlockPos maxCorner = centre.offset(new Vec3i(room.getGridCellWidth() * room.getMaxSizeScale(), room.getGridCellHeight() * room.getHeightScale(), room.getGridCellWidth() * room.getMaxSizeScale()));
         RandomSource rand = RandomSource.create(serverLevel.dimension().location().hashCode() + Math.round(Math.random() * 1000));
         BoundingBox mbb = BoundingBox.fromCorners(minCorner, maxCorner);
 
@@ -172,7 +172,7 @@ public final class GeneratedRoom {
                 .setRandom(rand)
                 .addProcessor(JigsawReplacementProcessor.INSTANCE)
                 //.addProcessor()
-                .setRotationPivot(new BlockPos(room.getGridWidth() * room.getRotatedEastSizeScale(Rotation.NONE) / 2, 0, room.getGridWidth() * room.getRotatedNorthSizeScale(Rotation.NONE) / 2))
+                .setRotationPivot(new BlockPos(room.getGridCellWidth() * room.getRotatedEastSizeScale(Rotation.NONE) / 2, 0, room.getGridCellWidth() * room.getRotatedNorthSizeScale(Rotation.NONE) / 2))
                 .setRotation(roomRotation)
                 .setBoundingBox(mbb)
                 .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
@@ -206,7 +206,7 @@ public final class GeneratedRoom {
         yOffset += offsets.getY();
         zOffset += offsets.getZ();
 
-        BlockPos newWorldPos = worldPos.offset(new Vec3i(xOffset * room.getGridWidth(), yOffset * room.getGridWidth(), zOffset * room.getGridWidth()));
+        BlockPos newWorldPos = worldPos.offset(new Vec3i(xOffset * room.getGridCellWidth(), yOffset * room.getGridCellWidth(), zOffset * room.getGridCellWidth()));
         int newArrayX = arrayX + xOffset;
         int newArrayY = arrayY + yOffset;
         int newArrayZ = arrayZ + zOffset;
@@ -624,11 +624,11 @@ public final class GeneratedRoom {
     }
 
     public int getGridWidth() {
-        return room.getGridWidth();
+        return room.getGridCellWidth();
     }
 
     public int getGridHeight() {
-        return room.getGridHeight();
+        return room.getGridCellHeight();
     }
 
     public GridRoom getRoom() {

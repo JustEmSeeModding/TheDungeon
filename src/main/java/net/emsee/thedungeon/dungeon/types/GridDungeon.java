@@ -6,26 +6,19 @@ import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
-import net.emsee.thedungeon.gameRule.GameruleRegistry;
-import net.emsee.thedungeon.gameRule.ModGamerules;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-
-import java.util.Random;
 
 /**
  * custom generation in a grid based system
  */
 public class GridDungeon extends Dungeon {
     public enum RoomGenerationPickMethod {
-        FIRST,
-        LAST,
-        RANDOM
+        FIRST, LAST, RANDOM
     }
 
     private final GridRoomCollection roomCollection;
-    private final int roomWidth;
-    private final int roomHeight;
+    private final int gridCellWidth; // these could be a Vec2 maybe, IDK
+    private final int gridCellHeight; //^
     private int dungeonDepth = 20;
     private float roomEndChance = .1f;
     private int maxFloorHeight = 999999;
@@ -38,27 +31,28 @@ public class GridDungeon extends Dungeon {
     private RoomGenerationPickMethod pickMethod = RoomGenerationPickMethod.FIRST;
 
     //// constructor
-    public GridDungeon(String resourceName, DungeonRank rank, int weight, int roomWidth, int roomHeight, GridRoomCollection collection) {
+    public GridDungeon(String resourceName, DungeonRank rank, int weight, int gridCellWidth, int gridCellHeight, GridRoomCollection collection) {
         super(resourceName, rank, weight);
-        this.roomWidth = roomWidth;
-        this.roomHeight = roomHeight;
-        if (roomWidth % 2 != 1) {
-            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:" + roomWidth);
-        }
-        if (collection.getWidth() != roomWidth || collection.getHeight() != roomHeight) {
-            throw new IllegalStateException("RoomCollection " + collection + " is not the same size as the Dungeon " + this);
-        }
+        this.gridCellWidth = gridCellWidth;
+        this.gridCellHeight = gridCellHeight;
+        if (gridCellWidth % 2 != 1)
+            throw new IllegalStateException(this+":Dungeon has an even width! This should be odd, width:" + gridCellWidth);
+        if (collection == null)
+            throw new IllegalStateException(this+":Dungeon collection is set to NULL");
+        if (collection.getGridCellWidth() != gridCellWidth || collection.getGridCellHeight() != gridCellHeight)
+            throw new IllegalStateException(this+":RoomCollection (" + collection + ") is not the same size as the Dungeon");
+
         roomCollection = collection;
     }
 
-    public GridDungeon(String resourceName, DungeonRank rank, int weight, int roomWidth, int roomHeight, GridRoomCollection collection, int ID) {
+    public GridDungeon(String resourceName, DungeonRank rank, int weight, int gridCellWidth, int gridCellHeight, GridRoomCollection collection, int ID) {
         super(resourceName, rank, weight, ID);
-        this.roomWidth = roomWidth;
-        this.roomHeight = roomHeight;
-        if (roomWidth % 2 != 1) {
-            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:" + roomWidth);
+        this.gridCellWidth = gridCellWidth;
+        this.gridCellHeight = gridCellHeight;
+        if (gridCellWidth % 2 != 1) {
+            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:" + gridCellWidth);
         }
-        if (collection.getWidth() != roomWidth || collection.getHeight() != roomHeight) {
+        if (collection.getGridCellWidth() != gridCellWidth || collection.getGridCellHeight() != gridCellHeight) {
             throw new IllegalStateException("RoomCollection " + collection + " is not the same size as the Dungeon " + this);
         }
         roomCollection = collection;
@@ -120,25 +114,13 @@ public class GridDungeon extends Dungeon {
     /**
      * when true: once the entire dungeon has finished generating all empty spaces will be filled with fallback
      */
-    public GridDungeon setFillWithFallback(boolean state) {
-        fillWithFallbackWhenDone = state;
+    public GridDungeon setFillWithFallback(boolean doFill) {
+        fillWithFallbackWhenDone = doFill;
         return this;
     }
 
     //// methods
     @Override
-    public void generate(ServerLevel serverLevel, BlockPos worldPos) {
-        long selectedSeed = GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.DUNGEON_SEED_OVERRIDE);
-        if (selectedSeed == -1) {
-            generateSeeded(new Random().nextLong());
-        } else {
-            generateSeeded(selectedSeed);
-        }
-    }
-
-    /**
-     * generates the dungeon at the same position with a seed
-     */
     public void generateSeeded(long seed) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS, "Starting Dungeon Generation...");
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS, "Dungeon: {}", this.getResourceName());
@@ -162,7 +144,7 @@ public class GridDungeon extends Dungeon {
 
     @Override
     public Dungeon getCopy(int ID) {
-        return new GridDungeon(resourceName, rank, weight, roomWidth, roomHeight, roomCollection.getCopy(), ID).
+        return new GridDungeon(resourceName, rank, weight, gridCellWidth, gridCellHeight, roomCollection.getCopy(), ID).
                 setDepth(dungeonDepth).
                 setRoomEndChance(roomEndChance).
                 setMaxFloorHeight(maxFloorHeight).
@@ -194,7 +176,7 @@ public class GridDungeon extends Dungeon {
     }
 
     public GridRoom getStaringRoom() {
-        return roomCollection.getStartingRoom();
+        return roomCollection.getStartingRoom().getCopy();
     }
 
     public float getRoomEndChance() {
@@ -211,12 +193,12 @@ public class GridDungeon extends Dungeon {
         return generator != null;
     }
 
-    public int getRoomWidth() {
-        return roomWidth;
+    public int getGridCellWidth() {
+        return gridCellWidth;
     }
 
-    public int getRoomHeight() {
-        return roomHeight;
+    public int getGridCellHeight() {
+        return gridCellHeight;
     }
 
     public boolean isDownGenerationDisabled() {
