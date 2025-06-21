@@ -52,15 +52,20 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.addBehaviourGoals();
+        this.addTargetGoals();
         this.setupAttackGoal();
     }
 
     protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.8,10, 3.5f, true));
+        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.2f,10, 3.5f, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(2, new DungeonTargetSelectorGoal(this, true));
-        this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
     }
+
+    protected void addTargetGoals() {
+        this.targetSelector.addGoal(1, new DungeonTargetSelectorGoal(this, true));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+    }
+
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
                 .withAttack(15,5,1,1, 1)

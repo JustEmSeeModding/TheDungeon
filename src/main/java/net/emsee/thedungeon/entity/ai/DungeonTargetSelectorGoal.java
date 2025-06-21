@@ -14,7 +14,8 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Player> {
-    //protected final int maxRange;
+    // must all return true for the player to be considered "valid"
+    Predicate<Player> selectionPredicate = p -> true;
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee) {
         super(mob, Player.class, mustSee);
@@ -33,6 +34,11 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         super(mob, Player.class, randomInterval, mustSee, mustReach, targetPredicate);
     }
 
+    public DungeonTargetSelectorGoal addPredicate(Predicate<Player> predicate) {
+        selectionPredicate = selectionPredicate.and(predicate);
+        return this;
+    }
+
     @Override
     protected void findTarget() {
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
@@ -47,7 +53,8 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         for (Entity entity : nearEntities) {
             if (entity instanceof Player player && !player.isCreative()) {
                 double playerAggro = getPlayerAggro(player, minPerception, maxPerception);
-                nearPlayers.put(player, playerAggro);
+                if (checkPredicates(player))
+                    nearPlayers.put(player, playerAggro);
             }
         }
 
@@ -61,5 +68,9 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         if (playerAggro >= maxPerception) multiplier *=2;
         else if (playerAggro < minPerception) multiplier /=2;
         return playerAggro * multiplier;
+    }
+
+    private boolean checkPredicates(Player player) {
+        return selectionPredicate.test(player);
     }
 }

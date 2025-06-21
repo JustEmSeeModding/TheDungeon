@@ -30,7 +30,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                         .addMobSpawnRule(new SpawnInBox<>(ModEntities.CAVE_GOBLIN, new BlockPos(-22, 3, -22), new BlockPos(22, 27, 22), 2, 5, 1)))
-                .addRequiredRoomsOf(4, 6, spawnRooms())
+                .addRequiredRoomsOf(12, 20, spawnRooms())
                 .addRequiredRoomsOf(5, dens)
 
                 .addRequiredRoom(0, 1, new GridRoom(11, 11)
@@ -132,7 +132,14 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .addConnection(Connection.NORTH)
                         .setAllConnectionTags("deepslate_caves")
                         .doAllowRotation()
-                        .withStructureProcessor(StoneToDeepslateCaveProcessor.INSTANCE)
+                        .withStructureProcessor(StoneToDeepslateCaveProcessor.INSTANCE),
+                new GridRoom(11, 11)
+                        .withResourceLocation("goblin_caves/stone/spawn")
+                        .withWeight(1)
+                        .addConnection(Connection.NORTH)
+                        .setAllConnectionTags("ice_caves")
+                        .doAllowRotation()
+                        .withStructureProcessor(StoneToIceCaveProcessor.INSTANCE)
         );
     }
 

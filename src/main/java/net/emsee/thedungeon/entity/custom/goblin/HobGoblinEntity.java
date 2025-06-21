@@ -1,31 +1,24 @@
 package net.emsee.thedungeon.entity.custom.goblin;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.ibm.icu.impl.Pair;
 import com.mojang.serialization.DataResult;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.attribute.ModAttributes;
+import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.villager.ModVillagerTrades;
 import net.minecraft.Util;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -33,11 +26,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.Merchant;
@@ -45,11 +36,8 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.DimensionTransition;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +53,20 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     }
 
     @Override
+    protected void addTargetGoals() {
+        this.targetSelector.addGoal(1,
+                new DungeonTargetSelectorGoal(this, true)
+                        .addPredicate(player -> !isFriendlyToPlayer(player))
+        );
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+    }
+
+    @Override
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
                 .withAttack(12,8,.5f,.75f, 1, 3)
-                .withAttack(12,8,.5f,.75f, 1, null,Pair.of(List.of(),List.of(Items.STONE_SWORD, Items.STONE_AXE)),2)
-                .withAttack(12,18, 1f,1, 1, null, Pair.of(List.of(Items.STONE_SWORD),List.of(Items.STONE_SWORD)), 1 )
+                .withAttack(12,8,.5f,.75f, 1, null,Pair.of(List.of(),List.of(ModItems.INFUSED_DAGGER.get(), Items.STONE_AXE)),2)
+                .withAttack(12,18, 1f,1, 1, null, Pair.of(List.of(ModItems.INFUSED_DAGGER.get()),List.of(ModItems.INFUSED_DAGGER.get())), 1 )
         );
     }
 
@@ -92,8 +89,8 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         double rDouble = random.nextDouble();
         if (rDouble>.67) {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-            this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.STONE_SWORD));
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.INFUSED_DAGGER.get()));
+            this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.INFUSED_DAGGER.get()));
         }
         else if (rDouble>.33){
             this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_AXE));
@@ -106,17 +103,17 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
 
     @Override
     protected @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (this.isAlive() && !this.isTrading()) {
-            if (hand == InteractionHand.MAIN_HAND) {
-                //player.awardStat(Stats.TALKED_TO_VILLAGER);
-            }
+        if (this.isAlive() && !this.isTrading() && isFriendlyToPlayer(player)) {
+            //if (hand == InteractionHand.MAIN_HAND) {
+            //  player.awardStat(Stats.TALKED_TO_VILLAGER);
+            //}
 
             if (!this.level().isClientSide) {
                 if (this.getOffers().isEmpty()) {
                     return InteractionResult.CONSUME;
                 }
                 this.setTradingPlayer(player);
-                this.openTradingScreen(player, this.getDisplayName(), 1);
+                this.openTradingScreen(player, Objects.requireNonNull(this.getDisplayName()), 1);
             }
 
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -233,9 +230,9 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Offers")) {
-            DataResult dataResult = MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(NbtOps.INSTANCE), compound.get("Offers"));
+            DataResult<MerchantOffers> dataResult = MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(NbtOps.INSTANCE), compound.get("Offers"));
             dataResult.resultOrPartial(Util.prefix("Failed to load offers: ", string -> DebugLog.logWarn(DebugLog.DebugLevel.WARNINGS, string))).ifPresent((p_323775_) -> {
-                this.offers = (MerchantOffers) p_323775_;
+                this.offers = p_323775_;
             });
         }
     }
@@ -258,5 +255,9 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
 
     public boolean isTrading() {
         return this.tradingPlayer != null;
+    }
+
+    protected boolean isFriendlyToPlayer(Player player) {
+        return player.isCreative();
     }
 }

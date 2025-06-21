@@ -48,14 +48,18 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.addBehaviourGoals();
+        this.addTargetGoals();
         this.setupAttackGoal();
     }
 
     protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(0, new RunToTargetGoal(this,2,15, 4f, true));
+        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.3f,15, 4f, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(2, new DungeonTargetSelectorGoal(this, true));
-        this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
+    }
+
+    protected void addTargetGoals() {
+        this.targetSelector.addGoal(1, new DungeonTargetSelectorGoal(this, true));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
     }
 
     protected void setupAttackGoal() {
