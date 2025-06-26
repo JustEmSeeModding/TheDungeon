@@ -15,6 +15,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -47,14 +48,20 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.addBehaviourGoals();
+        this.addTargetGoals();
         this.setupAttackGoal();
     }
 
     protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(0, new RunToTargetGoal(this,2,15, 4f, true));
+        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.3f,15, 4f, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.targetSelector.addGoal(2, new DungeonTargetSelectorGoal(this, true));
     }
+
+    protected void addTargetGoals() {
+        this.targetSelector.addGoal(1, new DungeonTargetSelectorGoal(this, true));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+    }
+
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
                 .withAttack(12,8,.5f,.75f, 1, 3)
@@ -65,7 +72,6 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
 
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
-        super.populateDefaultEquipmentSlots(random, difficulty);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.STONE_SWORD));
     }

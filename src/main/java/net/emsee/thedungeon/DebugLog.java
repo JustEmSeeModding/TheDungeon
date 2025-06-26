@@ -17,7 +17,8 @@ public class DebugLog {
         list.add(DebugLevel.GENERATING_STEPS);
         //list.add(DebugLevel.GENERATING_TICKS);
         //list.add(DebugLevel.GENERATING_TICKS_DETAILS);
-        list.add(DebugLevel.FORCED_CHUNK_UPDATES);
+        //list.add(DebugLevel.GENERATING_REQUIRED_PLACEMENTS);
+        //list.add(DebugLevel.FORCED_CHUNK_UPDATES);
         list.add(DebugLevel.GENERIC);
         list.add(DebugLevel.WARNINGS);
         list.add(DebugLevel.IMPORTANT);
@@ -29,6 +30,7 @@ public class DebugLog {
         SAVE_DATA_DETAILED,
         GENERATING_STEPS,
         GENERATING_TICKS,
+        GENERATING_REQUIRED_PLACEMENTS,
         GENERATING_TICKS_DETAILS,
         FORCED_CHUNK_UPDATES,
         GENERIC,

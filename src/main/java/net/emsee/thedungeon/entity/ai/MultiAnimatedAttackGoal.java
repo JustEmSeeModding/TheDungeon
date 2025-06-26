@@ -1,17 +1,17 @@
 package net.emsee.thedungeon.entity.ai;
 
-import net.emsee.thedungeon.dungeon.room.GridRoom;
+import com.ibm.icu.impl.Pair;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
-import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -32,22 +32,27 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
     }
 
     public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer) {
-        withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer, 1);
-        return this;
+        return withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer, 1);
     }
 
     public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer, int weight) {
-        attackHolders.put(new AttackHolder(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer),weight);
-        return this;
+        return withAttack(new AttackHolder(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer),weight);
     }
 
     public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier) {
-        withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, 1);
-        return this;
+        return withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, 1);
     }
 
     public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, int weight) {
-        this.withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, weight);
+        return withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, weight);
+    }
+
+    public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer, Pair<List<Item>,List<Item>> requiredItems, int weight) {
+        return withAttack(new AttackHolder(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer, requiredItems),weight);
+    }
+
+    private MultiAnimatedAttackGoal<T> withAttack(AttackHolder holder, int weight) {
+        attackHolders.put(holder,weight);
         return this;
     }
 
@@ -68,7 +73,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
     @Override
     public void start() {
         super.start();
-        currentAttackHolder = attackHolders.getRandom(entity.level().getRandom());
+        currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
         resetAttackCooldown();
         AnimationVersion=0;
         entity.attackAnimation((byte) -1, AnimationVersion++);
@@ -91,20 +96,32 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             }
 
             if(animationFinished()){
-                currentAttackHolder = attackHolders.getRandom(entity.level().getRandom());
+                currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
                 this.resetAttackCooldown();
                 AnimationVersion++;
                 if (AnimationVersion == 0)
                     AnimationVersion++;
             }
         } else {
-            currentAttackHolder = attackHolders.getRandom(entity.level().getRandom());
+            currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
             this.resetAttackCooldown();
             shouldCountTillNextAttack = false;
             entity.setAttacking(false);
             AnimationVersion=0;
             entity.attackAnimation((byte) -1, AnimationVersion);
         }
+    }
+
+    WeightedMap.Int<AttackHolder> getPossibleAttacks(LivingEntity entity) {
+        WeightedMap.Int<AttackHolder> toReturn = new WeightedMap.Int<>();
+        for (Map.Entry<AttackHolder,Integer> entry : attackHolders.entrySet()) {
+            AttackHolder holder = entry.getKey();
+            if ((holder.requiredItems.first.isEmpty() || holder.requiredItems.first.contains(entity.getMainHandItem().getItem())) &&
+                    (holder.requiredItems.second.isEmpty() || holder.requiredItems.second.contains(entity.getOffhandItem().getItem())))
+                toReturn.put(entry.getKey(), entry.getValue());
+        }
+
+        return toReturn;
     }
 
     private boolean animationFinished() {
@@ -177,7 +194,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         NONE
     }
 
-    private class AttackHolder {
+    public class AttackHolder {
         protected final byte id;
         protected final int attackDelay;
         protected final int attackCooldown;
@@ -186,8 +203,9 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         protected final float reachMultiplier;
         protected final Consumer<T> consumer;
         protected final AttackHand hand;
+        protected final Pair<List<Item>, List<Item>> requiredItems;
 
-        AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer) {
+        public AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer) {
             id=lastId++;
             this.attackDelay = attackDelay;
             this.attackCooldown = attackCooldown;
@@ -195,6 +213,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             this.knockbackMultiplier = knockbackMultiplier;
             this.reachMultiplier = reachMultiplier;
             this.consumer = consumer;
+            this.requiredItems = Pair.of(List.of(), List.of());
             this.hand = AttackHand.RIGHT;
         }
 
@@ -206,6 +225,31 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             this.knockbackMultiplier = knockbackMultiplier;
             this.reachMultiplier = reachMultiplier;
             this.consumer = consumer;
+            this.requiredItems = Pair.of(List.of(), List.of());
+            this.hand = hand;
+        }
+
+        AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer, Pair<List<Item>,List<Item>> requiredItems) {
+            id=lastId++;
+            this.attackDelay = attackDelay;
+            this.attackCooldown = attackCooldown;
+            this.damageMultiplier = damageMultiplier;
+            this.knockbackMultiplier = knockbackMultiplier;
+            this.reachMultiplier = reachMultiplier;
+            this.consumer = consumer;
+            this.requiredItems = requiredItems;
+            this.hand = AttackHand.RIGHT;
+        }
+
+        AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, Consumer<T> consumer, Pair<List<Item>,List<Item>> requiredItems, AttackHand hand) {
+            id=lastId++;
+            this.attackDelay = attackDelay;
+            this.attackCooldown = attackCooldown;
+            this.damageMultiplier = damageMultiplier;
+            this.knockbackMultiplier = knockbackMultiplier;
+            this.reachMultiplier = reachMultiplier;
+            this.consumer = consumer;
+            this.requiredItems = requiredItems;
             this.hand = hand;
         }
     }

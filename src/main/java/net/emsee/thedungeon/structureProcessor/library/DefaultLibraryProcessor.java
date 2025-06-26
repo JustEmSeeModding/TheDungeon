@@ -1,4 +1,5 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves;
+package net.emsee.thedungeon.structureProcessor.library;
+
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
@@ -13,28 +14,32 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GildedCaveOreProcessor extends BasicReplacementProcessor {
-    public static final GildedCaveOreProcessor INSTANCE = new GildedCaveOreProcessor();
+public class DefaultLibraryProcessor extends BasicReplacementProcessor {
 
-    public static final MapCodec<GildedCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+
+    public static final DefaultLibraryProcessor INSTANCE = new DefaultLibraryProcessor();
+
+    public static final MapCodec<DefaultLibraryProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+
+    private DefaultLibraryProcessor() {
+    }
 
     private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.BLACKSTONE::defaultBlockState, 5);
-                map.put(Blocks.GILDED_BLACKSTONE::defaultBlockState, 1);
+                map.put(Blocks.BOOKSHELF::defaultBlockState, 10);
+                //map.put(Blocks.CHISELED_BOOKSHELF::defaultBlockState, 4);
             });
 
-
-    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BLACKSTONE, defaultMap);
+                map.put(Blocks.BOOKSHELF, defaultMap);
             });
 
 
-    @Override
     protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
         return replacements;
     }
+
 
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;

@@ -22,6 +22,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SHATTERED_PORTAL_CORE.asItem());
         basicItem(ModItems.DUNGEON_ESSENCE_SHARD.asItem());
         basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
+        basicItem(ModItems.PYRITE.asItem());
         basicItem(ModItems.DUNGEON_CLOCK.asItem());
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");
         basicItemOtherTexturePath(ModItems.DUNGEON_DEBUG_TOOL, "minecraft", "item/stick");
@@ -43,6 +44,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(ModSpawnEggs.SKELETON_KNIGHT_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
     }
 

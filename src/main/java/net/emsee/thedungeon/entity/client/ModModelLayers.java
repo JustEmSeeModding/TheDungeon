@@ -21,4 +21,7 @@ public final class ModModelLayers {
 
     public static final ModelLayerLocation SHADOW_GOBLIN = new ModelLayerLocation(
             TheDungeon.defaultResourceLocation("shadow_goblin"), "main");
+
+    public static final ModelLayerLocation HOB_GOBLIN = new ModelLayerLocation(
+            TheDungeon.defaultResourceLocation("hob_goblin"), "main");
 }

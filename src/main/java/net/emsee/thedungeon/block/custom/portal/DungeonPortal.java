@@ -91,7 +91,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+    public int getLightEmission(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
         return 15;
     }
 

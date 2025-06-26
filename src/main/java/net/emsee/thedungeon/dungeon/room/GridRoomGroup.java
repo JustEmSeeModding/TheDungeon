@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.dungeon.room;
 
+import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRule;
 import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
@@ -11,8 +12,8 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class GridRoomGroup extends GridRoom {
-    /* Weighted map */
-    protected WeightedMap.Int<GridRoom> gridRooms = new WeightedMap.Int<>();
+
+    protected final WeightedMap.Int<GridRoom> gridRooms = new WeightedMap.Int<>();
 
     public GridRoomGroup(int gridWidth, int gridHeight, int ID) {
         super(gridWidth, gridHeight, ID);
@@ -49,20 +50,22 @@ public class GridRoomGroup extends GridRoom {
     public GridRoomGroup addRoom(GridRoom gridRoom) {
 
         if (!ListAndArrayUtils.mapEquals(connections, gridRoom.connections))
-            throw new IllegalStateException("added room does not have the same connections as the group");
+            throw new IllegalStateException(this+":added room does not have the same connections as the group");
 
         if (!ListAndArrayUtils.mapEquals(connectionTags, gridRoom.connectionTags))
-            throw new IllegalStateException("added room does not have the same connection tags as the group");
+            throw new IllegalStateException(this+":added room does not have the same connection tags as the group");
 
         if (this.heightScale != gridRoom.heightScale || this.northSizeScale != gridRoom.northSizeScale || this.eastSizeScale != gridRoom.eastSizeScale)
-            throw new IllegalStateException("added room does not have the same scale as the group");
+            throw new IllegalStateException(this+":added room does not have the same scale as the group");
 
         gridRooms.put(gridRoom, gridRoom.getWeight());
         return this;
     }
 
     protected GridRoomGroup setRoomMap(WeightedMap.Int<GridRoom> rooms) {
-        gridRooms = new WeightedMap.Int<>(rooms);
+        gridRooms.clear();
+        for (GridRoom room : rooms.keySet())
+            gridRooms.put(room.getCopy(), rooms.get(room));
         return this;
     }
 
@@ -74,20 +77,17 @@ public class GridRoomGroup extends GridRoom {
 
     @Override
     public GridRoom withStructureProcessor(StructureProcessor processor) {
-        super.withStructureProcessor(processor);
         return applyToAll(room -> room.withStructureProcessor(processor));
     }
 
     @Override
     public GridRoom clearStructureProcessors() {
-        super.clearStructureProcessors();
         return applyToAll(GridRoom::clearStructureProcessors);
     }
 
     @Override
-    protected GridRoom setStructureProcessors(StructureProcessorList processors) {
-        super.setStructureProcessors(processors);
-        return applyToAll(room -> room.setStructureProcessors(processors));
+    public GridRoom addMobSpawnRule(MobSpawnRule rule) {
+        return applyToAll(room -> room.addMobSpawnRule(rule));
     }
 
     @Override
@@ -108,19 +108,68 @@ public class GridRoomGroup extends GridRoom {
         return applyToAll(room->room.setConnectionTags(tags));
     }
 
-    /**
-     * Gridroom group should not have resourceLocation
-     */
-    @Deprecated
     @Override
+    public GridRoom setGenerationPriority(int generationPriority) {
+        return applyToAll(room -> room.setGenerationPriority(generationPriority));
+    }
+
+    @Override
+    public GridRoom setOverrideEndChance(float value) {
+        return applyToAll(room -> room.setOverrideEndChance(value));
+    }
+
+    @Override
+    @Deprecated
+    public GridRoom withResourceLocation(String path) {
+        throw new IllegalStateException(this+ ":withResourceLocation(p) should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
+    public GridRoom withResourceLocation(String nameSpace, String path) {
+        throw new IllegalStateException(this+ ":withResourceLocation(n,p) should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
     public GridRoom withResourceLocation(ResourceLocation resourceLocation) {
-        throw new RuntimeException("GridRoomGroup should not have a resourceLocation");
+        throw new IllegalStateException(this+ ":withResourceLocation(r) should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
+    protected GridRoom setOverrideEndChance(float value, boolean doOverride) {
+        throw new IllegalStateException(this+ ":setOverrideEndChance(v,d) should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
+    public float getOverrideEndChance() {
+        throw new IllegalStateException(this+ ":getOverrideEndChance() should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
+    protected GridRoom setStructureProcessors(StructureProcessorList processors) {
+        throw new IllegalStateException(this+ ":setStructureProcessors(p) should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
+    public StructureProcessorList getStructureProcessors() {
+        throw new IllegalStateException(this+ ":getStructureProcessors() should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
+    protected GridRoom setSpawnRules(List<MobSpawnRule> list) {
+        throw new IllegalStateException(this+ ":setSpawnRules(l) should not be used for groups");
     }
 
     //methods
     @Override
     public ResourceLocation getResourceLocation(Random random) {
-        return null;
+        throw new IllegalStateException(this+ ":getResourceLocation(r) should not be used for groups");
     }
 
     /**
@@ -130,18 +179,18 @@ public class GridRoomGroup extends GridRoom {
      */
     @Override
     public GridRoom getCopy() {
-        return new GridRoomGroup(gridWidth, gridHeight, differentiationID).
-                setRoomMap(gridRooms).
-                setSizeHeight(northSizeScale, eastSizeScale, heightScale).
-                setOffsets(connectionOffsets).
-                setConnectionTags(connectionTags).
-                setConnections(connections).
-                doAllowRotation(allowRotation, allowUpDownConnectedRotation).
-                withWeight(weight).
-                setGenerationPriority(generationPriority).
-                setOverrideEndChance(overrideEndChance, doOverrideEndChance).
-                setSpawnRules(spawnRules).
-                setStructureProcessors(structureProcessors);
+        return new GridRoomGroup(gridWidth, gridHeight, differentiationID)
+                .setRoomMap(gridRooms)
+                .setSizeHeight(northSizeScale, eastSizeScale, heightScale)
+                .setOffsets(connectionOffsets)
+                .setConnectionTags(connectionTags)
+                .setConnections(connections)
+                .doAllowRotation(allowRotation, allowUpDownConnectedRotation)
+                .withWeight(weight);
+                //.setGenerationPriority(generationPriority).
+                //.setOverrideEndChance(overrideEndChance, doOverrideEndChance).
+                //.setSpawnRules(spawnRules).
+                //.setStructureProcessors(structureProcessors);
     }
 
     @Override

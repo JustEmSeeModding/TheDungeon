@@ -28,7 +28,7 @@ public class DungeonPortalS extends DungeonPortal{
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 }

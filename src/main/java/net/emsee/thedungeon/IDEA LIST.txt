@@ -19,8 +19,19 @@ Essencebound Armor - name TBD
 Soul bound Totem
     Single-use item that prevents item loss on death (consumed)
 
-New Dungeon Logic
-    one of each rank is active at the same time allowing players to travel to different ranked dungeons
-    every 5-10 minuted one rank is reset and regenerated order is TBD
-    attune your portal to specific ranks
-    rank F is only the goblin caves the rest have multiple dungeons
+Goblin Tinkerer
+    throws makeshift grenades
+
+Goblin Dungeon Biomes and connections
+    Stone-Deepslate
+    Stone-Gilded
+    Deepslate-Gilded
+    Deepslate-Ice
+    Stone-Overgrown
+    Overgrown-Fungal
+    Stone-Crystal
+    Ice-Crystal
+
+    magma?
+
+

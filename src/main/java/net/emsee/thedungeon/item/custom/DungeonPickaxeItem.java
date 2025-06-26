@@ -59,6 +59,8 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
                     map.put(Blocks.NETHER_GOLD_ORE, Blocks.NETHERRACK);
                     map.put(Blocks.NETHER_QUARTZ_ORE, Blocks.NETHERRACK);
 
+                    map.put(ModBlocks.PYRITE_ORE.get(), Blocks.STONE);
+
                     map.put(ModBlocks.INFUSED_STONE.get(), Blocks.STONE);
                     map.put(ModBlocks.INFUSED_DEEPSLATE.get(), Blocks.DEEPSLATE);
                 });

@@ -1,6 +1,4 @@
-package net.emsee.thedungeon.dungeon.util;
-
-import net.emsee.thedungeon.dungeon.room.GridRoom;
+package net.emsee.thedungeon.dungeon.room;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

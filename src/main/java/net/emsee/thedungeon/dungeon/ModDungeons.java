@@ -27,8 +27,8 @@ public class ModDungeons {
 
     public static final Dungeon THE_LIBRARY = register(new GridDungeon(
             "dungeon.the_dungeon.library",
-            DungeonRank.A,
-            0, // disabled for now
+            DungeonRank.SS,
+            0 /* disabled for now as this will not be in first release*/,
             13,
             9,
             new LibraryGridRoomCollection())
@@ -56,7 +56,7 @@ public class ModDungeons {
             11,
             11,
             new GoblinCavesGridRoomCollection())
-            .setDepth(25)
+            .setDepth(30)
             .setRoomEndChance(.01f)
             .setMaxFloorHeight(11)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));

@@ -95,7 +95,7 @@ public class RunToTargetGoal extends Goal {
         public void stop() {
             LivingEntity livingentity = this.mob.getTarget();
             if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingentity)) {
-                this.mob.setTarget((LivingEntity)null);
+                this.mob.setTarget(null);
             }
 
             this.mob.setAggressive(false);
@@ -126,7 +126,7 @@ public class RunToTargetGoal extends Goal {
                         this.ticksUntilNextPathRecalculation += this.failedPathFindingPenalty;
                         if (this.mob.getNavigation().getPath() != null) {
                             Node finalPathPoint = this.mob.getNavigation().getPath().getEndNode();
-                            if (finalPathPoint != null && livingentity.distanceToSqr((double)finalPathPoint.x, (double)finalPathPoint.y, (double)finalPathPoint.z) < 1.0) {
+                            if (finalPathPoint != null && livingentity.distanceToSqr(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1.0) {
                                 this.failedPathFindingPenalty = 0;
                             } else {
                                 this.failedPathFindingPenalty += 10;

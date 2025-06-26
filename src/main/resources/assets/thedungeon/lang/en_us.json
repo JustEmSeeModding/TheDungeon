@@ -33,11 +33,13 @@
   "entity.thedungeon.skeleton_knight" : "Skeleton Knight",
   "entity.thedungeon.cave_goblin" : "Cave Goblin",
   "entity.thedungeon.shadow_goblin" : "Shadow Goblin",
+  "entity.thedungeon.hob_goblin" : "Hob Goblin",
 
   "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
   "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
   "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
   "item.thedungeon.shadow_goblin_spawn_egg" :"Shadow Goblin Spawn Egg",
+  "item.thedungeon.hob_goblin_spawn_egg" :"Hob Goblin Spawn Egg",
 
   "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
 
@@ -62,6 +64,7 @@
   "item.thedungeon.portal_core": "Portal Core",
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
+  "item.thedungeon.pyrite": "Pyrite",
 
   "item.thedungeon.dungeon_clock": "Dungeon Clock",
   "item.thedungeon.test_dummy": "Infused Test Dummy",
@@ -80,6 +83,8 @@
   "block.thedungeon.dungeon_portal_ss" : "SS Rank Dungeon Portal",
   "block.thedungeon.dungeon_portal_exit" : "Dungeon Exit Portal",
   "block.thedungeon.dungeon_portal_unstable" : "Unstable Dungeon Portal",
+
+  "block.thedungeon.pyrite_ore" : "Pyrite Ore",
 
   "block.thedungeon.infused_dirt" : "Infused Dirt",
   "block.thedungeon.infused_clay" : "Infused Clay",

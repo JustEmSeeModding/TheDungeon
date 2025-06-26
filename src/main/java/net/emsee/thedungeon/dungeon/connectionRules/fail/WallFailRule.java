@@ -113,7 +113,7 @@ public class WallFailRule extends FailRule {
             case SOUTH -> unitZOffset = -1;
             case WEST -> unitXOffset = 1;
         }
-        return roomCenter.offset((connectionArrayOffset.getX()*room.getGridWidth() + unitXOffset * (room.getGridWidth()/2+(offsetOut?0:1))), connectionArrayOffset.getY()*room.getGridHeight() + heightOffset, connectionArrayOffset.getZ()*room.getGridWidth() + unitZOffset * (room.getGridWidth()/2+(offsetOut?0:1)));
+        return roomCenter.offset((connectionArrayOffset.getX()*room.getGridCellWidth() + unitXOffset * (room.getGridCellWidth()/2+(offsetOut?0:1))), connectionArrayOffset.getY()*room.getGridCellHeight() + heightOffset, connectionArrayOffset.getZ()*room.getGridCellWidth() + unitZOffset * (room.getGridCellWidth()/2+(offsetOut?0:1)));
 
     }
 
@@ -175,8 +175,6 @@ public class WallFailRule extends FailRule {
 
     /**
      * Indicates that fallback block placement should be halted after this rule is applied.
-     *
-     * @return true, signaling to stop any further fallback placement attempts
      */
     @Override
     public boolean stopFallbackPlacement() {

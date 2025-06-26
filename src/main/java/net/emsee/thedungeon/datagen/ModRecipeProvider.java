@@ -97,6 +97,10 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 List.of(ModBlocks.INFUSED_SAND),
                 RecipeCategory.BUILDING_BLOCKS, ModBlocks.INFUSED_GLASS, 0.25f, 200, 100, "infused_glass");
 
+        oreSmeltingAndBlasting(recipeOutput,
+                List.of(ModBlocks.PYRITE_ORE),
+                RecipeCategory.BUILDING_BLOCKS, ModItems.PYRITE, 0.25f, 200, 100, "fools_pyrite");
+
         /*oreBlasting(recipeOutput,
                 List.of(ModItems.DUNGEON_DEBUG_TOOL, Items.DIAMOND_AXE),
                 RecipeCategory.MISC, ModBlocks.DUNGEON_PORTAL.get(), 0.25f, 100, "portal");*/
@@ -144,11 +148,11 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         oreCooking(recipeOutput, RecipeSerializer.BLASTING_RECIPE, BlastingRecipe::new, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_blasting");
     }
 
-    protected static void oreSmoking(RecipeOutput recipeOutput, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
+    private static void oreSmoking(RecipeOutput recipeOutput, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
         oreCooking(recipeOutput, RecipeSerializer.SMOKING_RECIPE, SmokingRecipe::new, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_smoking");
     }
 
-    protected static void oreCampfire(RecipeOutput recipeOutput, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
+    private static void oreCampfire(RecipeOutput recipeOutput, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
         oreCooking(recipeOutput, RecipeSerializer.CAMPFIRE_COOKING_RECIPE, CampfireCookingRecipe::new, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_campfire");
     }
 

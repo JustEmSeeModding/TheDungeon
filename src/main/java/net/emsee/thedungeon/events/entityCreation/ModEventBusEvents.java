@@ -4,6 +4,7 @@ package net.emsee.thedungeon.events.entityCreation;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.entity.client.Goblin.caveGoblin.CaveGoblinModel;
+import net.emsee.thedungeon.entity.client.Goblin.hobGoblin.HobGoblinModel;
 import net.emsee.thedungeon.entity.client.Goblin.shadowGoblin.ShadowGoblinModel;
 import net.emsee.thedungeon.entity.client.ModModelLayers;
 import net.emsee.thedungeon.entity.client.TestDummyModel;
@@ -11,6 +12,7 @@ import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightModel;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightModel;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
+import net.emsee.thedungeon.entity.custom.goblin.HobGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.ShadowGoblinEntity;
 import net.emsee.thedungeon.entity.custom.knight.DeathKnightEntity;
 import net.emsee.thedungeon.entity.custom.knight.SkeletonKnightEntity;
@@ -28,6 +30,7 @@ public class ModEventBusEvents {
         event.registerLayerDefinition(ModModelLayers.SKELETON_KNIGHT, SkeletonKnightModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_GOBLIN, CaveGoblinModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SHADOW_GOBLIN, ShadowGoblinModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.HOB_GOBLIN, HobGoblinModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -37,5 +40,6 @@ public class ModEventBusEvents {
         event.put(ModEntities.SKELETON_KNIGHT.get(), SkeletonKnightEntity.createAttributes().build());
         event.put(ModEntities.CAVE_GOBLIN.get(), CaveGoblinEntity.createAttributes().build());
         event.put(ModEntities.SHADOW_GOBLIN.get(), ShadowGoblinEntity.createAttributes().build());
+        event.put(ModEntities.HOB_GOBLIN.get(), HobGoblinEntity.createAttributes().build());
     }
 }

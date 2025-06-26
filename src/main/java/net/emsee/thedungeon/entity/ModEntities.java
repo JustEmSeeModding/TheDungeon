@@ -3,6 +3,7 @@ package net.emsee.thedungeon.entity;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
+import net.emsee.thedungeon.entity.custom.goblin.HobGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.ShadowGoblinEntity;
 import net.emsee.thedungeon.entity.custom.knight.AbstractKnightEntity;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
@@ -39,6 +40,10 @@ public final class ModEntities {
     public static final Supplier<EntityType<ShadowGoblinEntity>> SHADOW_GOBLIN =
             ENTITY_TYPES.register("shadow_goblin", () -> EntityType.Builder.of(ShadowGoblinEntity::new, MobCategory.MONSTER)
                     .sized(.6f, 1.5f).build("shadow_goblin"));
+
+    public static final Supplier<EntityType<HobGoblinEntity>> HOB_GOBLIN =
+            ENTITY_TYPES.register("hob_goblin", () -> EntityType.Builder.of(HobGoblinEntity::new, MobCategory.MONSTER)
+                    .sized(.7f, 1.8f).build("hob_goblin"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

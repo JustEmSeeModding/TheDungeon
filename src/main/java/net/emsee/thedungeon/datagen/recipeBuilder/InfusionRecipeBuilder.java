@@ -36,7 +36,7 @@ public class InfusionRecipeBuilder implements RecipeBuilder {
 
     public InfusionRecipeBuilder(RecipeCategory p_249996_, ItemLike ingredient, ItemStack result) {
         this.ingredient = ingredient;
-        this.criteria = new LinkedHashMap();
+        this.criteria = new LinkedHashMap<>();
         this.category = p_249996_;
         this.result = result.getItem();
         this.resultStack = result;
