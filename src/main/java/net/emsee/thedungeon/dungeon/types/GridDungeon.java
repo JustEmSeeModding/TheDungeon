@@ -177,7 +177,8 @@ public class GridDungeon extends Dungeon {
 
     public GridRoom getStaringRoom() {
         GridRoom toReturn = roomCollection.getStartingRoom();
-        return toReturn == null ? null : toReturn.getCopy();
+        if (toReturn == null) return null;
+        return toReturn.getCopy();
     }
 
     public float getRoomEndChance() {

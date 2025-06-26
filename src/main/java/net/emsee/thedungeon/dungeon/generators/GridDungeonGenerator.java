@@ -38,7 +38,7 @@ public class GridDungeonGenerator {
     private final Random random;
     private final Occupation[][][] occupationArray;
     private final GridDungeon dungeon;
-    private GridRoomCollection collection;
+    private final GridRoomCollection collection;
     private final BlockPos placedCenterPos;
     private final Queue<GeneratedRoom> todoRooms = new LinkedList<>();
     private final Queue<Object> toPlaceInstances = new LinkedList<>();
@@ -48,17 +48,6 @@ public class GridDungeonGenerator {
     private int lastFallbackFillY = 0;
     private int lastFallbackFillZ = 0;
 
-    public GridRoomCollection GetCollectionCopy() {
-        return collection.getCopy();
-    }
-
-    public void SetCollection(GridRoomCollection gridRoomCollection) {
-        collection = gridRoomCollection;
-    }
-
-    public GridRoomCollection GetCollectionSource() {
-        return collection;
-    }
 
     public List<ConnectionRule> getConnectionRules() {
         return new ArrayList<>(collection.getConnectionRules());
@@ -101,7 +90,7 @@ public class GridDungeonGenerator {
 
         // add the room to all the lists
         todoRooms.add(generatedStartingRoom);
-        collection.updatePlacedRequirements(startingRoom);
+        collection.updatePlacedRequirements(startingRoom); //TODO decide if the starting room should be doing this
         toPlaceInstances.add(generatedStartingRoom);
         if (generatedStartingRoom.hasMobSpawns()) {
             toSpawnMobsRooms.add(generatedStartingRoom);

@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.dungeon.roomCollections;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.util.Connection;
@@ -14,7 +15,6 @@ import java.util.*;
 public abstract class GridRoomCollection {
     public final GridRoomCollection instance;
 
-    //private final List<GridRoom> allGridRooms = new ArrayList<>();
     private final WeightedMap.Int<GridRoom> allGridRooms = new WeightedMap.Int<>();
     private final List<ConnectionRule> connectionRules = new ArrayList<>();
     private final List<FailRule> failRules = new ArrayList<>();
@@ -259,11 +259,22 @@ public abstract class GridRoomCollection {
     public void updatePlacedRequirements(GridRoom placed) {
         if (requiredPlacements.containsKey(placed)) {
             requiredPlacements.get(placed).addPlacement();
+            DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_REQUIRED_PLACEMENTS, "requirement found:{}",placed);
+            if (requiredPlacements.get(placed).max>=0)
+                DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}-{}",requiredPlacements.get(placed).placed, requiredPlacements.get(placed).min, requiredPlacements.get(placed).max);
+            else
+                DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}",requiredPlacements.get(placed).placed, requiredPlacements.get(placed).min);
             return;
         }
         for (List<GridRoom> rooms : requiredListPlacements.keySet()) {
-            if (rooms.contains(placed))
+            if (rooms.contains(placed)) {
                 requiredListPlacements.get(rooms).addPlacement();
+                DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_REQUIRED_PLACEMENTS, "requirement found in list:{}",placed);
+                if (requiredListPlacements.get(rooms).max>=0)
+                    DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}-{}",requiredListPlacements.get(rooms).placed,requiredListPlacements.get(rooms).min,requiredListPlacements.get(rooms).max);
+                else
+                    DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}",requiredListPlacements.get(rooms).placed,requiredListPlacements.get(rooms).min);
+            }
         }
     }
 
@@ -284,7 +295,7 @@ public abstract class GridRoomCollection {
                 return false;
         }
         for (List<GridRoom> rooms : requiredListPlacements.keySet()) {
-            if (requiredListPlacements.get(rooms).placementAboveMin())
+            if (!requiredListPlacements.get(rooms).placementAboveMin())
                 return false;
         }
         return true;

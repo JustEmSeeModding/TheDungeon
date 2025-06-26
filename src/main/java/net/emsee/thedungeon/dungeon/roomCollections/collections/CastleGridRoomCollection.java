@@ -6,6 +6,7 @@ import net.emsee.thedungeon.dungeon.connectionRules.connection.CanConnectOneWay;
 import net.emsee.thedungeon.dungeon.connectionRules.connection.CantConnectToSelf;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.connectionRules.fail.WallFailRule;
+import net.emsee.thedungeon.dungeon.room.MultiResourceGridRoom;
 import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.dungeon.room.GridRoomGroup;
@@ -86,68 +87,32 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
 
     }
 
-    private static final GridRoom hallsStraight = ((GridRoomGroup) new GridRoomGroup(9, 9).addConnection(Connection.NORTH).addConnection(Connection.SOUTH).doAllowRotation())
-            .addRoom(new GridRoom(9, 9)
-                    .withWeight(10).withResourceLocation("castle/halls/straight/default")
-                    .doAllowRotation()
-                    .addConnection(Connection.NORTH)
-                    .addConnection(Connection.SOUTH));
+    private static final GridRoom hallsStraight = new MultiResourceGridRoom(9, 9)
+            .withResourceLocation("castle/halls/straight/default",10)
+            .addConnection(Connection.NORTH)
+            .addConnection(Connection.SOUTH)
+            .doAllowRotation();
 
-    private static final GridRoom hallsCorners = ((GridRoomGroup) new GridRoomGroup(9, 9).addConnection(Connection.NORTH).addConnection(Connection.WEST).doAllowRotation().setAllConnectionTags("corner"))
-            .addRoom(new GridRoom(9, 9)
-                    .withWeight(10).withResourceLocation("castle/halls/corner/default")
-                    .addConnection(Connection.NORTH)
-                    .addConnection(Connection.WEST)
-                    .doAllowRotation().setAllConnectionTags("corner"));
+    private static final GridRoom hallsCorners = new MultiResourceGridRoom(9, 9)
+            .withResourceLocation("castle/halls/corner/default",10)
+            .addConnection(Connection.NORTH)
+            .addConnection(Connection.WEST)
+            .doAllowRotation()
+            .setAllConnectionTags("corner");
 
-    private static final GridRoom mainHallSegments = ((GridRoomGroup) new GridRoomGroup(9, 9).setSizeHeight(1, 3, 4).addConnection(Connection.NORTH).addConnection(Connection.SOUTH).doAllowRotation().setAllConnectionTags("main_hall"))
-            .addRoom(new GridRoom(9, 9)
-                    .setSizeHeight(1, 3, 4)
-                    .withWeight(10)
-                    .withResourceLocation("castle/mainhall/default")
-                    .addConnection(Connection.NORTH)
-                    .addConnection(Connection.SOUTH)
-                    .doAllowRotation()
-                    .setAllConnectionTags("main_hall")
-                    .setOverrideEndChance(0)
-                    .setGenerationPriority(10))
-            .addRoom(new GridRoom(9, 9)
-                    .setSizeHeight(1, 3, 4)
-                    .withWeight(2)
-                    .withResourceLocation("castle/mainhall/loose_flag")
-                    .addConnection(Connection.NORTH)
-                    .addConnection(Connection.SOUTH)
-                    .doAllowRotation()
-                    .setAllConnectionTags("main_hall")
-                    .setOverrideEndChance(0)
-                    .setGenerationPriority(10))
-            .addRoom(new GridRoom(9, 9)
-                    .setSizeHeight(1, 3, 4)
-                    .withWeight(2)
-                    .withResourceLocation("castle/mainhall/ripped_flag")
-                    .addConnection(Connection.NORTH)
-                    .addConnection(Connection.SOUTH)
-                    .doAllowRotation().setAllConnectionTags("main_hall")
-                    .setOverrideEndChance(0)
-                    .setGenerationPriority(10))
-            .addRoom(new GridRoom(9, 9)
-                    .setSizeHeight(1, 3, 4)
-                    .withWeight(2)
-                    .withResourceLocation("castle/mainhall/fallen_flag")
-                    .addConnection(Connection.NORTH)
-                    .addConnection(Connection.SOUTH)
-                    .doAllowRotation().setAllConnectionTags("main_hall")
-                    .setOverrideEndChance(0)
-                    .setGenerationPriority(10))
-            .addRoom(new GridRoom(9, 9)
-                    .setSizeHeight(1, 3, 4)
-                    .withWeight(2)
-                    .withResourceLocation("castle/mainhall/cracked_wall")
-                    .addConnection(Connection.NORTH)
-                    .addConnection(Connection.SOUTH)
-                    .doAllowRotation().setAllConnectionTags("main_hall")
-                    .setOverrideEndChance(0)
-                    .setGenerationPriority(10));
+    private static final GridRoom mainHallSegments = new MultiResourceGridRoom(9, 9)
+            .withResourceLocation("castle/mainhall/default",10)
+            .withResourceLocation("castle/mainhall/loose_flag",2)
+            .withResourceLocation("castle/mainhall/ripped_flag",2)
+            .withResourceLocation("castle/mainhall/fallen_flag",1)
+            .withResourceLocation("castle/mainhall/cracked_wall",4)
+            .setSizeHeight(1, 3, 4)
+            .addConnection(Connection.NORTH)
+            .addConnection(Connection.SOUTH)
+            .doAllowRotation()
+            .setAllConnectionTags("main_hall")
+            .setOverrideEndChance(0)
+            .setGenerationPriority(10);
 
 
     @Override
