@@ -11,24 +11,29 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class GildedCaveOreProcessor extends BasicReplacementProcessor {
     public static final GildedCaveOreProcessor INSTANCE = new GildedCaveOreProcessor();
 
     public static final MapCodec<GildedCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private WeightedMap.Int<BlockState> defaultMap() {
-        return Util.make(new WeightedMap.Int<>(), (map) -> {
-            map.put(Blocks.BLACKSTONE.defaultBlockState(), 5);
-            map.put(Blocks.GILDED_BLACKSTONE.defaultBlockState(), 1);
-        });
-    }
+    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(Blocks.BLACKSTONE::defaultBlockState, 5);
+                map.put(Blocks.GILDED_BLACKSTONE::defaultBlockState, 1);
+            });
+
+
+    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+            Util.make(Maps.newHashMap(), (map) -> {
+                map.put(Blocks.BLACKSTONE, defaultMap);
+            });
+
 
     @Override
-    protected Map<Block, WeightedMap.Int<BlockState>> replacements() {
-        return Util.make(Maps.newHashMap(), (map) -> {
-            map.put(Blocks.BLACKSTONE, defaultMap());
-        });
+    protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
+        return replacements;
     }
 
     protected StructureProcessorType<?> getType() {

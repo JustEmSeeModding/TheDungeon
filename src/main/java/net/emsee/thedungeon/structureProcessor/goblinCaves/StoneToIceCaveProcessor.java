@@ -11,26 +11,30 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class StoneToIceCaveProcessor extends BasicReplacementProcessor {
     public static final StoneToIceCaveProcessor INSTANCE = new StoneToIceCaveProcessor();
 
     public static final MapCodec<StoneToIceCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private StoneToIceCaveProcessor() {}
-
-    private WeightedMap.Int<BlockState> defaultMap() {
-        return Util.make(new WeightedMap.Int<>(), (map) -> {
-            map.put(Blocks.PACKED_ICE.defaultBlockState(), 10);
-            map.put(Blocks.BLUE_ICE.defaultBlockState(), 7);
-        });
+    private StoneToIceCaveProcessor() {
     }
 
+    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(Blocks.PACKED_ICE::defaultBlockState, 10);
+                map.put(Blocks.BLUE_ICE::defaultBlockState, 7);
+            });
 
-    protected Map<Block, WeightedMap.Int<BlockState>> replacements() {
-        return Util.make(Maps.newHashMap(), (map) -> {
-            map.put(Blocks.STONE, defaultMap());
-        });
+    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+            Util.make(Maps.newHashMap(), (map) -> {
+                map.put(Blocks.STONE, defaultMap);
+            });
+
+
+    protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
+        return replacements;
     }
 
 
