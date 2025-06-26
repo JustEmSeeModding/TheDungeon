@@ -65,7 +65,6 @@ public class MultiResourceGridRoom extends GridRoom {
     public boolean equals(Object other) {
         if (other instanceof MultiResourceGridRoom otherRoom) {
             return
-                    resourceLocation == otherRoom.resourceLocation &&
                             gridWidth == otherRoom.gridWidth &&
                             gridHeight == otherRoom.gridHeight &&
                             ListAndArrayUtils.mapEquals(connections, otherRoom.connections) &&
@@ -91,7 +90,6 @@ public class MultiResourceGridRoom extends GridRoom {
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + (resourceLocation != null ? resourceLocation.hashCode() : 0);
         result = 31 * result + gridWidth;
         result = 31 * result + gridHeight;
         result = 31 * result + connections.hashCode();

@@ -1,6 +1,6 @@
 package net.emsee.thedungeon.entity.ai;
 
-import com.ibm.icu.impl.Pair;
+import com.mojang.datafixers.util.Pair;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
@@ -116,8 +116,8 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         WeightedMap.Int<AttackHolder> toReturn = new WeightedMap.Int<>();
         for (Map.Entry<AttackHolder,Integer> entry : attackHolders.entrySet()) {
             AttackHolder holder = entry.getKey();
-            if ((holder.requiredItems.first.isEmpty() || holder.requiredItems.first.contains(entity.getMainHandItem().getItem())) &&
-                    (holder.requiredItems.second.isEmpty() || holder.requiredItems.second.contains(entity.getOffhandItem().getItem())))
+            if ((holder.requiredItems.getFirst().isEmpty() || holder.requiredItems.getFirst().contains(entity.getMainHandItem().getItem())) &&
+                    (holder.requiredItems.getSecond().isEmpty() || holder.requiredItems.getSecond().contains(entity.getOffhandItem().getItem())))
                 toReturn.put(entry.getKey(), entry.getValue());
         }
 

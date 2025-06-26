@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.entity.custom.goblin;
 
 import com.google.common.collect.Lists;
-import com.ibm.icu.impl.Pair;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.attribute.ModAttributes;

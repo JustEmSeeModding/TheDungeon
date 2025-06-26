@@ -154,7 +154,7 @@ public final class ModVillagerTrades {
 
 
     private static Int2ObjectMap<net.minecraft.world.entity.npc.VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, net.minecraft.world.entity.npc.VillagerTrades.ItemListing[]> map) {
-        return new Int2ObjectOpenHashMap(map);
+        return new Int2ObjectOpenHashMap<>(map);
     }
 
     static class ItemsForPyrite implements net.minecraft.world.entity.npc.VillagerTrades.ItemListing {
@@ -170,7 +170,7 @@ public final class ModVillagerTrades {
         }
 
         public ItemsForPyrite(Item item, int pyriteCost, int numberOfItems, int villagerXp) {
-            this((ItemStack)(new ItemStack(item)), pyriteCost, numberOfItems, 12, villagerXp);
+            this(new ItemStack(item), pyriteCost, numberOfItems, 12, villagerXp);
         }
 
         public ItemsForPyrite(Item item, int pyriteCost, int numberOfItems, int maxUses, int villagerXp) {
@@ -206,9 +206,7 @@ public final class ModVillagerTrades {
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             ItemStack itemstack = this.itemStack.copy();
             Level level = trader.level();
-            this.enchantmentProvider.ifPresent((p_348340_) -> {
-                EnchantmentHelper.enchantItemFromProvider(itemstack, level.registryAccess(), p_348340_, level.getCurrentDifficultyAt(trader.blockPosition()), random);
-            });
+            this.enchantmentProvider.ifPresent((p_348340_) -> EnchantmentHelper.enchantItemFromProvider(itemstack, level.registryAccess(), p_348340_, level.getCurrentDifficultyAt(trader.blockPosition()), random));
             return new MerchantOffer(new ItemCost(ModItems.PYRITE, this.pyriteCost), itemstack, this.maxUses, this.villagerXp, this.priceMultiplier);
         }
     }
