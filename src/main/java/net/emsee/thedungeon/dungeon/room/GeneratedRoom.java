@@ -146,7 +146,7 @@ public final class GeneratedRoom {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: finalizing placement", this);
         StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
         finalProcessors.list().addAll(room.getStructureProcessors().list());
-        finalProcessors.list().addAll(processors.list());
+        finalProcessors.list().addAll(processors.list()); //todo add a boolean to the room to be able to ignore the collection processors
         placeTemplate(serverLevel, placedWorldPos, placedRotation, finalProcessors, random);
     }
 
@@ -395,7 +395,7 @@ public final class GeneratedRoom {
             List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), generator.getConnectionRules());
             Rotation randomRoomRotation = ListAndArrayUtils.getRandomFromList(allowedRoomRotations, random);
 
-            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + offsets.getX(), placedArrayY + offsets.getY(), placedArrayZ + offsets.getZ(), placedWorldPos.offset(offsets.getX() * getGridHeight(), offsets.getY() *getGridHeight(), offsets.getZ() *getGridWidth()), randomRoomRotation, connection.getOpposite(), random);
+            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + offsets.getX(), placedArrayY + offsets.getY(), placedArrayZ + offsets.getZ(), placedWorldPos.offset(offsets.getX() * getGridCellWidth(), offsets.getY() * getGridCellHeight(), offsets.getZ() * getGridCellWidth()), randomRoomRotation, connection.getOpposite(), random);
 
             if (generatedRoom == null || !generatedRoom.generated) {
                 DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: new room placement returned failure", this);
@@ -472,7 +472,7 @@ public final class GeneratedRoom {
                 List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(Connection.DOWN, room.getConnectionTag(Connection.UP, placedRotation), generator.getConnectionRules());
                 randomRoomRotation = ListAndArrayUtils.getRandomFromList(allowedRoomRotations, random);
             } else randomRoomRotation = placedRotation;
-            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY + room.getHeightScale(), placedArrayZ + zOffset, placedWorldPos.offset(xOffset *getGridWidth(), room.getHeightScale() *getGridHeight(), zOffset *getGridWidth()), randomRoomRotation, Connection.DOWN, random);
+            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY + room.getHeightScale(), placedArrayZ + zOffset, placedWorldPos.offset(xOffset * getGridCellWidth(), room.getHeightScale() * getGridCellHeight(), zOffset * getGridCellWidth()), randomRoomRotation, Connection.DOWN, random);
 
             if (generatedRoom == null || !generatedRoom.generated) {
                 DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: placement returned failure", this);
@@ -542,7 +542,7 @@ public final class GeneratedRoom {
                 List<Rotation> allowedRoomRotations = targetGridRoom.getAllowedRotations(Connection.UP, room.getConnectionTag(Connection.DOWN, placedRotation), generator.getConnectionRules());
                 randomRoomRotation = ListAndArrayUtils.getRandomFromList(allowedRoomRotations, random);
             }
-            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY - 1, placedArrayZ + zOffset, placedWorldPos.offset(xOffset *getGridWidth(), -getGridHeight(), zOffset *getGridWidth()), randomRoomRotation, Connection.UP, random);
+            GeneratedRoom generatedRoom = generateRoomFromConnection(targetGridRoom, generator, placedArrayX + xOffset, placedArrayY - 1, placedArrayZ + zOffset, placedWorldPos.offset(xOffset * getGridCellWidth(), -getGridCellHeight(), zOffset * getGridCellWidth()), randomRoomRotation, Connection.UP, random);
             if (generatedRoom == null || !generatedRoom.generated) {
                 DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: placement returned failure", this);
                 triesLeft--;
@@ -623,11 +623,11 @@ public final class GeneratedRoom {
         return placedWorldPos;
     }
 
-    public int getGridWidth() {
+    public int getGridCellWidth() {
         return room.getGridCellWidth();
     }
 
-    public int getGridHeight() {
+    public int getGridCellHeight() {
         return room.getGridCellHeight();
     }
 

@@ -6,6 +6,7 @@ import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.dungeon.room.GridRoomGroup;
 import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
+import net.emsee.thedungeon.structureProcessor.library.DefaultLibraryProcessor;
 import net.minecraft.resources.ResourceLocation;
 
 public final class LibraryGridRoomCollection extends GridRoomCollection {
@@ -25,7 +26,8 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
                 .addRoom(smallRooms.withWeight(3))
 
                 .addRequiredRoom(1, 1, new GridRoom(13, 9).withWeight(4).setGenerationPriority(1).withResourceLocation("library/big/portal").horizontalConnections().setSizeHeight(3, 3, 1))
-                .addRequiredRoom(3, 5, new GridRoom(13, 9).withWeight(4).setGenerationPriority(1).withResourceLocation("library/crosses/portal").horizontalConnections());
+                .addRequiredRoom(3, 5, new GridRoom(13, 9).withWeight(4).setGenerationPriority(1).withResourceLocation("library/crosses/portal").horizontalConnections())
+                .withStructureProcessor(DefaultLibraryProcessor.INSTANCE);
     }
 
     static GridRoom straights = new MultiResourceGridRoom(13, 9)

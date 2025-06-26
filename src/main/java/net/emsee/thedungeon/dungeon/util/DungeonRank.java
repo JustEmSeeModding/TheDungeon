@@ -4,13 +4,13 @@ import net.minecraft.core.BlockPos;
 
 public enum DungeonRank {
     F(new BlockPos(0, 150, 0), "F"),
-    E(new BlockPos(15000, 150, 15000), "E"),
-    D(new BlockPos(-15000, 150, 15000), "D"),
-    C(new BlockPos(15000, 150, -15000), "C"),
-    B(new BlockPos(-15000, 150, -15000), "B"),
-    A(new BlockPos(30000, 150, 30000), "A"),
-    S(new BlockPos(-30000, 150, 30000), "S"),
-    SS(new BlockPos(30000, 150, -30000), "SS");
+    E(new BlockPos(3000, 150, 3000), "E"),
+    D(new BlockPos(-3000, 150, 3000), "D"),
+    C(new BlockPos(3000, 150, -3000), "C"),
+    B(new BlockPos(-3000, 150, -3000), "B"),
+    A(new BlockPos(6000, 150, 6000), "A"),
+    S(new BlockPos(-30000, 150, 6000), "S"),
+    SS(new BlockPos(6000, 150, -6000), "SS");
 
     private final BlockPos centerPos;
     private final String name;
