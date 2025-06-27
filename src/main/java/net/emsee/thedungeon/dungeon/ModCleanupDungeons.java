@@ -6,15 +6,21 @@ import net.emsee.thedungeon.dungeon.roomCollections.collections.CleanupGridRoomC
 import net.emsee.thedungeon.dungeon.util.DungeonRank;
 
 public class ModCleanupDungeons extends ModDungeons {
+    static final int cleanupDepth = 7;
+    static final int cleanupHeight = 15;
+
+    static final int cleanupCellWidth = 47;
+    static final int cleanupCellHeight = 47;
+
     public static final Dungeon CLEANUP_F = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_f",
             DungeonRank.F,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
 
@@ -22,11 +28,11 @@ public class ModCleanupDungeons extends ModDungeons {
             "dungeon.the_dungeon.cleanup_e",
             DungeonRank.E,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
 
@@ -34,66 +40,66 @@ public class ModCleanupDungeons extends ModDungeons {
             "dungeon.the_dungeon.cleanup_d",
             DungeonRank.D,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
     public static final Dungeon CLEANUP_C = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_c",
             DungeonRank.C,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
     public static final Dungeon CLEANUP_B = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_b",
             DungeonRank.B,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
     public static final Dungeon CLEANUP_A = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_a",
             DungeonRank.A,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
     public static final Dungeon CLEANUP_S = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_s",
             DungeonRank.S,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
     public static final Dungeon CLEANUP_SS = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_ss",
             DungeonRank.SS,
             0,
-            47,
-            47,
+            cleanupCellWidth,
+            cleanupCellHeight,
             new CleanupGridRoomCollection())
-            .setDepth(7)
-            .setMaxFloorHeight(15)
+            .setDepth(cleanupDepth)
+            .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
             .isUtilDungeon(true));
 }

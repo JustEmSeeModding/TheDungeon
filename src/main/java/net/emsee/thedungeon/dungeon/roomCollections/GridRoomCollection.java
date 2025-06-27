@@ -228,7 +228,7 @@ public abstract class GridRoomCollection {
             boolean allowed = true;
             if (requiredPlacements.containsKey(room)) {
                 RequiredRoomPlacements constraints = requiredPlacements.get(room);
-                // Skip if no maximum (max <= 0)
+                // Skip if no maximum
                 if (constraints.hasMax() && !constraints.placementBelowMax()) {
                     allowed = false;
                 }
@@ -237,7 +237,7 @@ public abstract class GridRoomCollection {
                 for (List<GridRoom> rooms : requiredListPlacements.keySet()) {
                     if (rooms.contains(room)) {
                         RequiredRoomPlacements constraints = requiredListPlacements.get(rooms);
-                        // Skip if no maximum (y == -1)
+                        // Skip if no maximum
                         if (constraints.hasMax() && !constraints.placementBelowMax()) {
                             allowed = false;
                             break;

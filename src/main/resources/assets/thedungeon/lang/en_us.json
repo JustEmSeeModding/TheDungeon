@@ -2,11 +2,11 @@
   "announcement.thedungeon.open_dungeon" : "A new dungeon has been opened",
   "announcement.thedungeon.seconds_left" : "%s-rank has %s seconds left until collapse",
   "announcement.thedungeon.minutes_left" : "%s-rank has %s minutes left until collapse",
+  "announcement.thedungeon.low_time_teleport": "This dungeon only has %s seconds left until collapse, Crouch-Click to confirm teleport",
 
-  "message.thedungeon.view_time_closed" : "The dungeon is closed",
   "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the gamerules",
-  "message.thedungeon.view_time_seconds" : "%s seconds left until dungeon collapse",
-  "message.thedungeon.view_time_minutes" : "%s minutes and %s seconds left until dungeon collapse",
+  "message.thedungeon.view_time_seconds" : "%s is next: %s seconds left until dungeon collapse",
+  "message.thedungeon.view_time_minutes" : "%s is next: %s minutes and %s seconds left until dungeon collapse",
 
   "message.thedungeon.equipped_wrong_armor" : "You feel the armor hurt your skin as you rush to take it off",
 

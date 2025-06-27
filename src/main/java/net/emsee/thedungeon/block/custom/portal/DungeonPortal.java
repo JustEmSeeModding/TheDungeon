@@ -5,9 +5,13 @@ import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.events.ModDungeonDimensionEvents;
+import net.emsee.thedungeon.gameRule.GameruleRegistry;
+import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -30,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem {
-
+    private final long timeLeftWarning = 2400;
 
     public DungeonPortal(Properties properties) {
         super(properties.randomTicks());
@@ -46,9 +50,10 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof DungeonPortalBlockEntity entity) {
             MinecraftServer server = level.getServer();
             if (player.isCreative() || GlobalDungeonManager.isOpen(server, getExitRank())) {
-                ModDungeonDimensionEvents.PlayerTeleportDungeon(player, entity.getExitID(server, this), getExitRank());
+                if (timeCheck(player, server) || player.isCrouching() || player.isCreative())
+                    ModDungeonDimensionEvents.PlayerTeleportDungeon(player, entity.getExitID(server, this), getExitRank());
             } else {
-                player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), false);
+                player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), true);
             }
         } else {
             level.playLocalSound(pos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1,1,false);
@@ -93,6 +98,18 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     @Override
     public int getLightEmission(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
         return 15;
+    }
+
+    private boolean timeCheck(Player player, MinecraftServer server) {
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        long worldTime = server.overworld().getGameTime();
+        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - saveData.getTickInterval());
+        if (getExitRank() == saveData.getNextToCollapse() && timeLeft <= timeLeftWarning) {
+            long secondsLeft = (long) Math.ceil(timeLeft / (20f));
+            player.displayClientMessage(Component.translatable("announcement.thedungeon.low_time_teleport", secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE),true);
+            return false;
+        }
+        return true;
     }
 
     public abstract DungeonRank getExitRank();

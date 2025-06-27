@@ -59,7 +59,7 @@ public final class ModDungeonDimensionEvents {
             if (stack.getCount() == 0) continue;
             if (!(stack.getItem() instanceof IDungeonCarryItem ||
                     (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof  IDungeonCarryItem))) {
-                player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items"), false);
+                player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items"), true);
                 if (player instanceof ServerPlayer serverPlayer)
                     ModCriteriaTriggerTypes.FAILED_DUNGEON_TRAVEL.get().trigger(serverPlayer);
                 return false;
@@ -71,10 +71,12 @@ public final class ModDungeonDimensionEvents {
     private static void teleport(Player player, ServerLevel portalDimension, BlockPos teleportPos) {
         if (portalDimension != null/* && !eventPlayer.isPassenger()*/) {
             player.teleportTo(portalDimension, teleportPos.getX() + .5, teleportPos.getY(), teleportPos.getZ() + .5, RelativeMovement.ALL, player.getYRot(), player.getXRot());
-            player.removeAllEffects();
-            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0), player);
-            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, 5), player);
-            player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 5), player);
+            if (!player.isCreative()) {
+                player.removeAllEffects();
+                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0), player);
+                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, 5), player);
+                player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 5), player);
+            }
         }
     }
 

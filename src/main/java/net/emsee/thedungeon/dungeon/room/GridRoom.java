@@ -33,6 +33,7 @@ public class GridRoom {
     protected boolean doOverrideEndChance = false;
     protected boolean allowRotation = false;
     protected boolean allowUpDownConnectedRotation = false;
+    protected boolean skipCollectionProcessors = false;
 
     protected final PriorityMap<Connection> connections = new PriorityMap<>();
     protected final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>(); /* Offset map */
@@ -254,6 +255,16 @@ public class GridRoom {
         this.structureProcessors.list().addAll(processors.list());
         return this;
     }
+
+    public GridRoom skipCollectionProcessors() {
+        skipCollectionProcessors = true;
+        return this;
+    }
+
+    protected GridRoom setSkipCollectionProcessors(boolean skip) {
+        skipCollectionProcessors = skip;
+        return this;
+    }
     // methods
 
     /**
@@ -410,45 +421,44 @@ public class GridRoom {
      * Creates a copy of this GridRoom.
      */
     public GridRoom getCopy() {
-        return new GridRoom(gridWidth, gridHeight, differentiationID).
-                setSizeHeight(northSizeScale, eastSizeScale, heightScale).
-                setOffsets(connectionOffsets).
-                setConnectionTags(connectionTags).
-                withResourceLocation(resourceLocation).
-                setConnections(connections).
-                doAllowRotation(allowRotation, allowUpDownConnectedRotation).
-                withWeight(weight).
-                setGenerationPriority(generationPriority).
-                setOverrideEndChance(overrideEndChance, doOverrideEndChance).
-                setSpawnRules(spawnRules).
-                setStructureProcessors(structureProcessors);
+        return new GridRoom(gridWidth, gridHeight, differentiationID)
+                .setSizeHeight(northSizeScale, eastSizeScale, heightScale)
+                .setOffsets(connectionOffsets)
+                .setConnectionTags(connectionTags)
+                .withResourceLocation(resourceLocation)
+                .setConnections(connections)
+                .doAllowRotation(allowRotation, allowUpDownConnectedRotation)
+                .withWeight(weight)
+                .setGenerationPriority(generationPriority)
+                .setOverrideEndChance(overrideEndChance, doOverrideEndChance)
+                .setSpawnRules(spawnRules)
+                .setStructureProcessors(structureProcessors)
+                .setSkipCollectionProcessors(skipCollectionProcessors);
 
     }
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof GridRoom otherRoom) {
-            return
-                    resourceLocation == otherRoom.resourceLocation &&
-                            gridWidth == otherRoom.gridWidth &&
-                            gridHeight == otherRoom.gridHeight &&
-                            ListAndArrayUtils.mapEquals(connections, otherRoom.connections) &&
-                            weight == otherRoom.weight &&
-                            allowRotation == otherRoom.allowRotation &&
-                            allowUpDownConnectedRotation == otherRoom.allowUpDownConnectedRotation &&
-                            northSizeScale == otherRoom.northSizeScale &&
-                            eastSizeScale == otherRoom.eastSizeScale &&
-                            heightScale == otherRoom.heightScale &&
-                            connectionOffsets.equals(otherRoom.connectionOffsets) &&
-                            connectionTags.equals(otherRoom.connectionTags) &&
-                            generationPriority == otherRoom.generationPriority &&
-                            overrideEndChance == otherRoom.overrideEndChance &&
-                            doOverrideEndChance == otherRoom.doOverrideEndChance &&
-                            ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
-                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
-                            differentiationID == otherRoom.differentiationID;
-        }
-        return false;
+        return other instanceof GridRoom otherRoom &&
+                resourceLocation == otherRoom.resourceLocation &&
+                gridWidth == otherRoom.gridWidth &&
+                gridHeight == otherRoom.gridHeight &&
+                ListAndArrayUtils.mapEquals(connections, otherRoom.connections) &&
+                weight == otherRoom.weight &&
+                allowRotation == otherRoom.allowRotation &&
+                allowUpDownConnectedRotation == otherRoom.allowUpDownConnectedRotation &&
+                northSizeScale == otherRoom.northSizeScale &&
+                eastSizeScale == otherRoom.eastSizeScale &&
+                heightScale == otherRoom.heightScale &&
+                connectionOffsets.equals(otherRoom.connectionOffsets) &&
+                connectionTags.equals(otherRoom.connectionTags) &&
+                generationPriority == otherRoom.generationPriority &&
+                overrideEndChance == otherRoom.overrideEndChance &&
+                doOverrideEndChance == otherRoom.doOverrideEndChance &&
+                ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
+                ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
+                differentiationID == otherRoom.differentiationID &&
+                skipCollectionProcessors == otherRoom.skipCollectionProcessors;
     }
 
     @Override
@@ -472,6 +482,7 @@ public class GridRoom {
         result = 31 * result + spawnRules.hashCode();
         result = 31 * result + structureProcessors.list().hashCode();
         result = 31 * result + differentiationID;
+        result = 31 * result + (skipCollectionProcessors ? 1 : 0);
         return result;
     }
 
@@ -522,6 +533,10 @@ public class GridRoom {
 
     public boolean hasMobSpawns() {
         return !getSpawnRules().isEmpty();
+    }
+
+    public boolean doSkipCollectionProcessors() {
+        return skipCollectionProcessors;
     }
 
     public StructureProcessorList getStructureProcessors() {return structureProcessors;}
