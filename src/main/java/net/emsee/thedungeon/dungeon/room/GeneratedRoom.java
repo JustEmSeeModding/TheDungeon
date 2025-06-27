@@ -142,11 +142,12 @@ public final class GeneratedRoom {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: returning success", this);
     }
 
-    public void finalizePlacement(ServerLevel serverLevel, StructureProcessorList processors, Random random) {
+    public void finalizePlacement(ServerLevel serverLevel, StructureProcessorList collectionProcessors, Random random) {
         DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_TICKS_DETAILS, "{}: finalizing placement", this);
         StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
         finalProcessors.list().addAll(room.getStructureProcessors().list());
-        finalProcessors.list().addAll(processors.list()); //todo add a boolean to the room to be able to ignore the collection processors
+        if (!room.doSkipCollectionProcessors())
+            finalProcessors.list().addAll(collectionProcessors.list());
         placeTemplate(serverLevel, placedWorldPos, placedRotation, finalProcessors, random);
     }
 

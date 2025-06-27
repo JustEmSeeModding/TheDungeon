@@ -119,6 +119,11 @@ public class GridRoomGroup extends GridRoom {
     }
 
     @Override
+    public GridRoom skipCollectionProcessors() {
+        return applyToAll(GridRoom::skipCollectionProcessors);
+    }
+
+    @Override
     @Deprecated
     public GridRoom withResourceLocation(String path) {
         throw new IllegalStateException(this+ ":withResourceLocation(p) should not be used for groups");
@@ -187,36 +192,30 @@ public class GridRoomGroup extends GridRoom {
                 .setConnections(connections)
                 .doAllowRotation(allowRotation, allowUpDownConnectedRotation)
                 .withWeight(weight);
-                //.setGenerationPriority(generationPriority).
-                //.setOverrideEndChance(overrideEndChance, doOverrideEndChance).
-                //.setSpawnRules(spawnRules).
-                //.setStructureProcessors(structureProcessors);
     }
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof GridRoomGroup otherGroup) {
-            return
-                    gridWidth == otherGroup.gridWidth &&
-                            gridHeight == otherGroup.gridHeight &&
-                            ListAndArrayUtils.mapEquals(connections, otherGroup.connections) &&
-                            weight == otherGroup.weight &&
-                            allowRotation == otherGroup.allowRotation &&
-                            allowUpDownConnectedRotation == otherGroup.allowUpDownConnectedRotation &&
-                            northSizeScale == otherGroup.northSizeScale &&
-                            eastSizeScale == otherGroup.eastSizeScale &&
-                            heightScale == otherGroup.heightScale &&
-                            ListAndArrayUtils.mapEquals(gridRooms, otherGroup.gridRooms) &&
-                            connectionOffsets.equals(otherGroup.connectionOffsets) &&
-                            connectionTags.equals(otherGroup.connectionTags) &&
-                            generationPriority == otherGroup.generationPriority &&
-                            overrideEndChance == otherGroup.overrideEndChance &&
-                            doOverrideEndChance == otherGroup.doOverrideEndChance &&
-                            ListAndArrayUtils.listEquals(spawnRules, otherGroup.spawnRules) &&
-                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherGroup.structureProcessors.list()) &&
-                            differentiationID == otherGroup.differentiationID;
-        }
-        return false;
+        return other instanceof GridRoomGroup otherGroup &&
+                gridWidth == otherGroup.gridWidth &&
+                gridHeight == otherGroup.gridHeight &&
+                ListAndArrayUtils.mapEquals(connections, otherGroup.connections) &&
+                weight == otherGroup.weight &&
+                allowRotation == otherGroup.allowRotation &&
+                allowUpDownConnectedRotation == otherGroup.allowUpDownConnectedRotation &&
+                northSizeScale == otherGroup.northSizeScale &&
+                eastSizeScale == otherGroup.eastSizeScale &&
+                heightScale == otherGroup.heightScale &&
+                ListAndArrayUtils.mapEquals(gridRooms, otherGroup.gridRooms) &&
+                connectionOffsets.equals(otherGroup.connectionOffsets) &&
+                connectionTags.equals(otherGroup.connectionTags) &&
+                generationPriority == otherGroup.generationPriority &&
+                overrideEndChance == otherGroup.overrideEndChance &&
+                doOverrideEndChance == otherGroup.doOverrideEndChance &&
+                ListAndArrayUtils.listEquals(spawnRules, otherGroup.spawnRules) &&
+                ListAndArrayUtils.listEquals(structureProcessors.list(), otherGroup.structureProcessors.list()) &&
+                differentiationID == otherGroup.differentiationID &&
+                skipCollectionProcessors == otherGroup.skipCollectionProcessors;
     }
 
     @Override
@@ -240,6 +239,7 @@ public class GridRoomGroup extends GridRoom {
         result = 31 * result + (spawnRules != null ? spawnRules.hashCode() : 0);
         result = 31 * result + (structureProcessors != null ? structureProcessors.list().hashCode() : 0);
         result = 31 * result + differentiationID;
+        result = 31 * result + (skipCollectionProcessors ? 1 : 0);
         return result;
     }
 

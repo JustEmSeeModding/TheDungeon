@@ -63,28 +63,26 @@ public class MultiResourceGridRoom extends GridRoom {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof MultiResourceGridRoom otherRoom) {
-            return
-                            gridWidth == otherRoom.gridWidth &&
-                            gridHeight == otherRoom.gridHeight &&
-                            ListAndArrayUtils.mapEquals(connections, otherRoom.connections) &&
-                            weight == otherRoom.weight &&
-                            allowRotation == otherRoom.allowRotation &&
-                            allowUpDownConnectedRotation == otherRoom.allowUpDownConnectedRotation &&
-                            northSizeScale == otherRoom.northSizeScale &&
-                            eastSizeScale == otherRoom.eastSizeScale &&
-                            heightScale == otherRoom.heightScale &&
-                            connectionOffsets.equals(otherRoom.connectionOffsets) &&
-                            connectionTags.equals(otherRoom.connectionTags) &&
-                            generationPriority == otherRoom.generationPriority &&
-                            overrideEndChance == otherRoom.overrideEndChance &&
-                            doOverrideEndChance == otherRoom.doOverrideEndChance &&
-                            ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
-                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
-                            differentiationID == otherRoom.differentiationID &&
-                            ListAndArrayUtils.mapEquals(resourceLocations, otherRoom.resourceLocations);
-        }
-        return false;
+        return other instanceof MultiResourceGridRoom otherRoom &&
+                gridWidth == otherRoom.gridWidth &&
+                gridHeight == otherRoom.gridHeight &&
+                ListAndArrayUtils.mapEquals(connections, otherRoom.connections) &&
+                weight == otherRoom.weight &&
+                allowRotation == otherRoom.allowRotation &&
+                allowUpDownConnectedRotation == otherRoom.allowUpDownConnectedRotation &&
+                northSizeScale == otherRoom.northSizeScale &&
+                eastSizeScale == otherRoom.eastSizeScale &&
+                heightScale == otherRoom.heightScale &&
+                connectionOffsets.equals(otherRoom.connectionOffsets) &&
+                connectionTags.equals(otherRoom.connectionTags) &&
+                generationPriority == otherRoom.generationPriority &&
+                overrideEndChance == otherRoom.overrideEndChance &&
+                doOverrideEndChance == otherRoom.doOverrideEndChance &&
+                ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
+                ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
+                differentiationID == otherRoom.differentiationID &&
+                ListAndArrayUtils.mapEquals(resourceLocations, otherRoom.resourceLocations) &&
+                skipCollectionProcessors == otherRoom.skipCollectionProcessors;
     }
 
     @Override
@@ -108,6 +106,7 @@ public class MultiResourceGridRoom extends GridRoom {
         result = 31 * result + structureProcessors.list().hashCode();
         result = 31 * result + differentiationID;
         result = 31 * result + resourceLocations.hashCode();
+        result = 31 * result + (skipCollectionProcessors ? 1:0);
         return result;
     }
 
@@ -115,18 +114,19 @@ public class MultiResourceGridRoom extends GridRoom {
      * Creates a copy of this.
      */
     public GridRoom getCopy() {
-        return new MultiResourceGridRoom(gridWidth, gridHeight, differentiationID).
-                setResourceLocations(resourceLocations).
-                setSizeHeight(northSizeScale, eastSizeScale, heightScale).
-                setOffsets(connectionOffsets).
-                setConnectionTags(connectionTags).
-                setConnections(connections).
-                doAllowRotation(allowRotation, allowUpDownConnectedRotation).
-                withWeight(weight).
-                setGenerationPriority(generationPriority).
-                setOverrideEndChance(overrideEndChance, doOverrideEndChance).
-                setSpawnRules(spawnRules).
-                setStructureProcessors(structureProcessors);
+        return new MultiResourceGridRoom(gridWidth, gridHeight, differentiationID)
+                .setResourceLocations(resourceLocations)
+                .setSizeHeight(northSizeScale, eastSizeScale, heightScale)
+                .setOffsets(connectionOffsets)
+                .setConnectionTags(connectionTags)
+                .setConnections(connections)
+                .doAllowRotation(allowRotation, allowUpDownConnectedRotation)
+                .withWeight(weight)
+                .setGenerationPriority(generationPriority)
+                .setOverrideEndChance(overrideEndChance, doOverrideEndChance)
+                .setSpawnRules(spawnRules)
+                .setStructureProcessors(structureProcessors)
+                .setSkipCollectionProcessors(skipCollectionProcessors);
 
     }
 

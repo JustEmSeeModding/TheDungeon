@@ -30,7 +30,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import java.util.*;
 
 public final class GlobalDungeonManager {
-    private static final int forceLoadedChunkRadius = 30;
+    private static final int forceLoadedChunkRadius = 35;
     private static final int killRadius = 500;
 
     final static Map<Dungeon, Integer> dungeons = new HashMap<>();
@@ -77,6 +77,7 @@ public final class GlobalDungeonManager {
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"killing all entities");
             KillAllInDungeon(server, currentDungeon.getRank());
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"starting generation");
+            assert dungeonDimension != null;
             currentDungeon.generate(dungeonDimension);
         }
 
@@ -211,33 +212,7 @@ public final class GlobalDungeonManager {
             }
         }
     }
-    /*
-    todo rework
-     needs to be made rank dependent somehow
-    */
-    public static void viewTime(Player player, MinecraftServer server) {
-        /*if(!GameruleRegistry.getBooleanGamerule(server, ModGamerules.AUTO_DUNGEON_CYCLING)){
-            player.sendSystemMessage(Component.translatable("message.thedungeon.cycling_disabled"));
-        }
-        long worldTime = server.overworld().getGameTime();
-        DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (!saveData.isDungeonOpen()) {
-            player.sendSystemMessage(Component.translatable("message.thedungeon.view_time_closed"));
-            return;
-        }
-        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - saveData.getTickInterval());
-        long secondsLeft = (long) Math.ceil(timeLeft / (20f));
-        long minutesLeft = (long) Math.floor(secondsLeft / (60f));
 
-        if (secondsLeft <= 60) {
-            player.sendSystemMessage(Component.translatable("message.thedungeon.view_time_seconds", secondsLeft));
-        } else {
-            player.sendSystemMessage(Component.translatable("message.thedungeon.view_time_minutes", minutesLeft, secondsLeft - minutesLeft * 60));
-        }*/
-
-        // temp code :
-        player.sendSystemMessage(Component.literal("this feature is WIP"));
-    }
     public static void CloseDungeon (MinecraftServer server, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         CloseDungeon(saveData, rank);
@@ -325,7 +300,7 @@ public final class GlobalDungeonManager {
      */
     public static void GenerateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
 
-        Dungeon newDungeon = getDungeonByID(selectedDungeonID).getCopy();
+        Dungeon newDungeon = Objects.requireNonNull(getDungeonByID(selectedDungeonID)).getCopy();
 
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))

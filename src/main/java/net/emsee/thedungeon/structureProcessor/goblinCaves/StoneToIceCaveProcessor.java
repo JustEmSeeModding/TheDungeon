@@ -25,6 +25,7 @@ public class StoneToIceCaveProcessor extends BasicReplacementProcessor {
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.PACKED_ICE::defaultBlockState, 10);
                 map.put(Blocks.BLUE_ICE::defaultBlockState, 7);
+                map.put(Blocks.SNOW_BLOCK::defaultBlockState, 2);
             });
 
     private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
