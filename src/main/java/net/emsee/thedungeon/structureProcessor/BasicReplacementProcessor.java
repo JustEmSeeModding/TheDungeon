@@ -27,28 +27,36 @@ public abstract class BasicReplacementProcessor extends StructureProcessor {
             return relativeBlockInfo;
         } else {
             BlockState oldBlockstate = relativeBlockInfo.state();
-            if (oldBlockstate.hasProperty(StairBlock.FACING) &&
-                    newBlockstate.hasProperty(StairBlock.FACING)) {
-                newBlockstate = newBlockstate.setValue(StairBlock.FACING, oldBlockstate.getValue(StairBlock.FACING));
-            }
-
-            if (oldBlockstate.hasProperty(StairBlock.HALF) &&
-                    newBlockstate.hasProperty(StairBlock.HALF)) {
-                newBlockstate = newBlockstate.setValue(StairBlock.HALF, oldBlockstate.getValue(StairBlock.HALF));
-            }
-
-            if (oldBlockstate.hasProperty(SlabBlock.TYPE) &&
-                    newBlockstate.hasProperty(SlabBlock.TYPE)) {
-                newBlockstate = newBlockstate.setValue(SlabBlock.TYPE, oldBlockstate.getValue(SlabBlock.TYPE));
-            }
-
-
-            if (oldBlockstate.hasProperty(RotatedPillarBlock.AXIS) &&
-                    newBlockstate.hasProperty(RotatedPillarBlock.AXIS)) {
-                newBlockstate = newBlockstate.setValue(RotatedPillarBlock.AXIS, oldBlockstate.getValue(RotatedPillarBlock.AXIS));
-            }
+            newBlockstate = copyProperties(oldBlockstate, newBlockstate);
 
             return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos(), newBlockstate, relativeBlockInfo.nbt());
         }
+    }
+
+    protected BlockState copyProperties(BlockState from, BlockState to) {
+        if (from.hasProperty(StairBlock.FACING) &&
+                to.hasProperty(StairBlock.FACING)) {
+            to = to.setValue(StairBlock.FACING, from.getValue(StairBlock.FACING));
+        }
+        if (from.hasProperty(StairBlock.HALF) &&
+                to.hasProperty(StairBlock.HALF)) {
+            to = to.setValue(StairBlock.HALF, from.getValue(StairBlock.HALF));
+        }
+
+        if (from.hasProperty(SlabBlock.TYPE) &&
+                to.hasProperty(SlabBlock.TYPE)) {
+            to = to.setValue(SlabBlock.TYPE, from.getValue(SlabBlock.TYPE));
+        }
+
+        if (from.hasProperty(RotatedPillarBlock.AXIS) &&
+                to.hasProperty(RotatedPillarBlock.AXIS)) {
+            to = to.setValue(RotatedPillarBlock.AXIS, from.getValue(RotatedPillarBlock.AXIS));
+        }
+        if (from.hasProperty(HorizontalDirectionalBlock.FACING) &&
+                to.hasProperty(HorizontalDirectionalBlock.FACING)) {
+            to = to.setValue(HorizontalDirectionalBlock.FACING, from.getValue(HorizontalDirectionalBlock.FACING));
+        }
+
+        return to;
     }
 }

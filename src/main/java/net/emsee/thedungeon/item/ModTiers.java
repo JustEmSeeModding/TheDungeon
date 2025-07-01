@@ -1,15 +1,10 @@
 package net.emsee.thedungeon.item;
 
-import com.google.common.base.Suppliers;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -25,7 +20,7 @@ public enum ModTiers implements Tier {
     private final int enchantmentValue;
     private final Supplier<Ingredient> repairIngredient;
 
-    private ModTiers(TagKey incorrectBlockForDrops, int uses, float speed, float damage, int enchantmentValue, Supplier<Ingredient> repairIngredient) {
+    ModTiers(TagKey<Block> incorrectBlockForDrops, int uses, float speed, float damage, int enchantmentValue, Supplier<Ingredient> repairIngredient) {
         this.incorrectBlocksForDrops = incorrectBlockForDrops;
         this.uses = uses;
         this.speed = speed;
@@ -56,7 +51,7 @@ public enum ModTiers implements Tier {
     }
 
     public Ingredient getRepairIngredient() {
-        return (Ingredient) this.repairIngredient.get();
+        return this.repairIngredient.get();
     }
 
     public @Nullable TagKey<Block> getTag() {
@@ -64,10 +59,11 @@ public enum ModTiers implements Tier {
     }
 
     public static TagKey<Block> getTag(ModTiers tier) {
-        TagKey key;
+        TagKey<Block> key;
         switch (tier) {
             case INFUSED_ALLOY -> key = BlockTags.NEEDS_IRON_TOOL;
-            default -> throw new MatchException((String)null, (Throwable)null);
+            //add more here
+            default -> throw new MatchException(null, null);
         }
 
         return key;

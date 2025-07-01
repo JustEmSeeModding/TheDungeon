@@ -35,16 +35,12 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
         if (player.isCreative()) {
             if (!level.isClientSide) {
                 if (player.isCrouching()) {
-
-
-
                     if (++selectedDungeonID >= GlobalDungeonManager.getDungeonCount()) {
                         selectedDungeonID = 0;
                     }
 
-                    DebugLog.logInfo(DebugLog.DebugLevel.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, GlobalDungeonManager.getDungeonByID(selectedDungeonID).getResourceName());
-                    //GlobalDungeonManager.SelectDungeonFromTool(serverLevel);
-                    player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", GlobalDungeonManager.getDungeonByID(selectedDungeonID).getResourceName()));
+                    DebugLog.logInfo(DebugLog.DebugLevel.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, Objects.requireNonNull(GlobalDungeonManager.getDungeonByID(selectedDungeonID)).getResourceName());
+                    player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", Objects.requireNonNull(GlobalDungeonManager.getDungeonByID(selectedDungeonID)).getResourceName()));
 
                 } else {
                     GlobalDungeonManager.GenerateDungeonFromTool(level.getServer(), selectedDungeonID);

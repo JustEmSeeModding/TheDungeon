@@ -9,12 +9,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorStandItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -42,9 +39,8 @@ public class TestDummyItem extends Item {
             ItemStack itemstack = context.getItemInHand();
             Vec3 vec3 = Vec3.atBottomCenterOf(blockpos);
             AABB aabb = ModEntities.TEST_DUMMY.get().getDimensions().makeBoundingBox(vec3.x(), vec3.y(), vec3.z());
-            if (level.noCollision((Entity)null, aabb) && level.getEntities((Entity)null, aabb).isEmpty()) {
-                if (level instanceof ServerLevel) {
-                    ServerLevel serverlevel = (ServerLevel)level;
+            if (level.noCollision(null, aabb) && level.getEntities(null, aabb).isEmpty()) {
+                if (level instanceof ServerLevel serverlevel) {
                     Consumer<TestDummyEntity> consumer = EntityType.createDefaultStackConfig(serverlevel, itemstack, context.getPlayer());
                     TestDummyEntity dummy = ModEntities.TEST_DUMMY.get().create(serverlevel, consumer, blockpos, MobSpawnType.SPAWN_EGG, true, true);
                     if (dummy == null) {

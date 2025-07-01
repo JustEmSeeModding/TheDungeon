@@ -4,7 +4,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.types.Dungeon;
 import net.emsee.thedungeon.dungeon.util.DungeonRank;
-import net.emsee.thedungeon.events.ModDungeonDimensionEvents;
+import net.emsee.thedungeon.events.ModDungeonCalledEvents;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.utils.WeightedMap;
@@ -19,7 +19,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -203,7 +202,7 @@ public final class GlobalDungeonManager {
                     if (entity instanceof ServerPlayer player) {
                         if ((!player.isCreative()) && (player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR)) {
                             player.hurt(dimension.damageSources().source(ModDamageTypes.DUNGEON_RESET), player.getHealth());
-                            ModDungeonDimensionEvents.setPlayerGameMode(player, true);
+                            ModDungeonCalledEvents.setPlayerGameMode(player, true);
                             if (!player.isDeadOrDying()) player.kill();
                         }
                     } else

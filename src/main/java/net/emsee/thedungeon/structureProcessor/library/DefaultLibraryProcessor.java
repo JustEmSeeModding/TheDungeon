@@ -27,12 +27,12 @@ public class DefaultLibraryProcessor extends BasicReplacementProcessor {
     private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.BOOKSHELF::defaultBlockState, 10);
-                //map.put(Blocks.CHISELED_BOOKSHELF::defaultBlockState, 4);
+                map.put(Blocks.CHISELED_BOOKSHELF::defaultBlockState, 2);
             });
 
     private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BOOKSHELF, defaultMap);
+                map.put(Blocks.CHISELED_BOOKSHELF, defaultMap);
             });
 
 
