@@ -27,7 +27,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                         .addMobSpawnRule(new SpawnInBox<>(ModEntities.CAVE_GOBLIN, new BlockPos(-22, 3, -22), new BlockPos(22, 27, 22), 2, 5, 1)))
-                .addRequiredRoomsOf(12, 20, spawnRooms)
+                .addRequiredRoomsOf(35, 50, spawnRooms)
                 .addRequiredRoomsOf(5, dens)
 
                 .addRequiredRoom(0, 1, new GridRoom(11, 11)
@@ -223,7 +223,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                     .horizontalConnections().setHorizontalConnectionOffset(Connection.EAST, 0, 1)
                     .setHorizontalConnectionOffset(Connection.SOUTH, 0, 1)
                     .doAllowRotation())
-            .addRoom(
+            .addRoom(// TODO has an issue with some misplaced blocks
                     new GridRoom(11, 11)
                     .withResourceLocation("goblin_caves/stone/x_large/elevated_two")
                     .withWeight(3).setSizeHeight(3, 3, 2)
@@ -264,49 +264,6 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
             .addRoom(i_overgrown().withWeight(60))
             .addRoom(l_overgrown().withWeight(50))
             .addRoom(t_overgrown().withWeight(30));
-            /*.addRoom(
-                    new MultiResourceGridRoom(11, 11)
-                            .withResourceLocation("goblin_caves/stone/t_large/one", 5)
-                            .withResourceLocation("goblin_caves/stone/t_large/crevice", 2)
-                            .withWeight(8)
-                            .setSizeHeight(3, 3, 1)
-                            .horizontalConnections(1, 1, 0, 1)
-                            .doAllowRotation())
-            .addRoom(
-                    new MultiResourceGridRoom(11, 11)
-                            .withResourceLocation("goblin_caves/stone/t_large/elevated_one", 2)
-                            .withResourceLocation("goblin_caves/stone/t_large/elevated_cliff", 1)
-                            .withWeight(8)
-                            .setSizeHeight(3, 3, 2)
-                            .horizontalConnections(1, 1, 0, 1)
-                            .setHorizontalConnectionOffset(Connection.EAST, 0, 1)
-                            .setHorizontalConnectionOffset(Connection.WEST, 0, 1)
-                            .doAllowRotation())
-            .addRoom(
-                    new GridRoom(11, 11)
-                            .withResourceLocation("goblin_caves/stone/x_large/elevated_one")
-                            .withWeight(3)
-                            .setSizeHeight(3, 3, 2)
-                            .horizontalConnections().setHorizontalConnectionOffset(Connection.EAST, 0, 1)
-                            .setHorizontalConnectionOffset(Connection.SOUTH, 0, 1)
-                            .doAllowRotation())
-            .addRoom(
-                    new GridRoom(11, 11)
-                            .withResourceLocation("goblin_caves/stone/x_large/elevated_two")
-                            .withWeight(3).setSizeHeight(3, 3, 2)
-                            .horizontalConnections().setHorizontalConnectionOffset(Connection.EAST, 0, 1)
-                            .setHorizontalConnectionOffset(Connection.SOUTH, 0, 1)
-                            .setHorizontalConnectionOffset(Connection.WEST, 0, 1)
-                            .doAllowRotation())
-            .addRoom(
-                    new GridRoom(11, 11)
-                            .withResourceLocation("goblin_caves/stone/x_large/bridge")
-                            .withWeight(2)
-                            .setSizeHeight(3, 3, 2)
-                            .horizontalConnections().setHorizontalConnectionOffset(Connection.EAST, 0, 1)
-                            .setHorizontalConnectionOffset(Connection.WEST, 0, 1)
-                            .doAllowRotation()
-            );*/
 
     private static GridRoom i_overgrown() {
         return new MultiResourceGridRoom(11, 11)
