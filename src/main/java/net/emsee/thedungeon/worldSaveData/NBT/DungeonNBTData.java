@@ -60,7 +60,7 @@ public final class DungeonNBTData {
 
         int i = 0;
         for (Dungeon dungeon : dungeonProgressQueue) {
-            toReturn.putString("dungeonProgressQueue" + i, dungeon.getResourceName());
+            toReturn.putString("dungeonProgressQueue_" + i, dungeon.getResourceName());
             i++;
         }
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
@@ -112,8 +112,8 @@ public final class DungeonNBTData {
 
         int i = 0;
         dungeonProgressQueue.clear();
-        while (tag.contains("dungeonProgressQueue" + i)) {
-            Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue" + i));
+        while (tag.contains("dungeonProgressQueue_" + i)) {
+            Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue_" + i));
             dungeonProgressQueue.add(toAdd.getCopy());
             i++;
         }
@@ -133,7 +133,7 @@ public final class DungeonNBTData {
         for (DungeonRank rank : portalPositions.keySet()) {
             i = 0;
             portalPositions.get(rank).clear();
-            while (tag.contains("PortalPosX" + i)) {
+            while (tag.contains("PortalPosX_" + rank.getName() + "_" + i)) {
                 portalPositions.get(rank).add(new BlockPos(
                         tag.getInt("PortalPosX_" + rank.getName() + "_" + i),
                         tag.getInt("PortalPosY_" + rank.getName() + "_" + i),
