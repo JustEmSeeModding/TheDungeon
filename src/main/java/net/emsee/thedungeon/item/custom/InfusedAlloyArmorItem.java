@@ -25,7 +25,7 @@ public class InfusedAlloyArmorItem extends DungeonArmorItem{
     public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers() {
         return super.getDefaultAttributeModifiers()
                 .withModifierAdded(Attributes.MOVEMENT_SPEED, new AttributeModifier(TheDungeon.defaultResourceLocation("infused_alloy.speed."+type.getName()), speedPenalty, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()))
-                .withModifierAdded(ModAttributes.DUNGEON_AGGRO_TO_ENEMY, new AttributeModifier(TheDungeon.defaultResourceLocation("infused_alloy.aggro."+type.getName()), aggroBoost, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()))
+                .withModifierAdded(ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY, new AttributeModifier(TheDungeon.defaultResourceLocation("infused_alloy.aggro."+type.getName()), aggroBoost, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()))
                 .withModifierAdded(Attributes.MAX_HEALTH, new AttributeModifier(TheDungeon.defaultResourceLocation("infused_alloy.max_health_boost"), setHealthBonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(EquipmentSlot.BODY));
     }
 }

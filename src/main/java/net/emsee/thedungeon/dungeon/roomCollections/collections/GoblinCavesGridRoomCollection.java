@@ -17,17 +17,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
     public GoblinCavesGridRoomCollection() {
         super(11, 11);
         this
-                .setStartingRoom(new GridRoom(11, 11)
-                        .withResourceLocation("goblin_caves/stone/den")
-                        .setSizeHeight(5, 5, 3)
-                        .horizontalConnections(1, 1, 1, 0)
-                        .setHorizontalConnectionOffset(Connection.EAST, 0, 1)
-                        .setHorizontalConnectionOffset(Connection.SOUTH, 2, 1)
-                        .setAllConnectionTags("stone_caves")
-                        .doAllowRotation()
-                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
-                        .addMobSpawnRule(new SpawnInBox<>(ModEntities.CAVE_GOBLIN, new BlockPos(-22, 3, -22), new BlockPos(22, 27, 22), 2, 5, 1)))
-                .addRequiredRoomsOf(35, 50, spawnRooms)
+                .addRequiredRoomsOf(15, 50, spawnRooms)
                 .addRequiredRoomsOf(5, dens)
 
                 .addRequiredRoom(0, 1, new GridRoom(11, 11)

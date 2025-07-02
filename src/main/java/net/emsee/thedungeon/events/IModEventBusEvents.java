@@ -11,7 +11,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 public class IModEventBusEvents {
     @SubscribeEvent
     public static void entityAttributeModificationEvent(EntityAttributeModificationEvent event) {
-        event.add(EntityType.PLAYER, ModAttributes.INCOMING_DAMAGE_REDUCTION, 0);
-        event.add(EntityType.PLAYER, ModAttributes.DUNGEON_AGGRO_TO_ENEMY, 500);
+        event.add(EntityType.PLAYER, ModAttributes.PLAYER_INCOMING_DAMAGE_REDUCTION, 0);
+        event.add(EntityType.PLAYER, ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY, 500);
     }
 }

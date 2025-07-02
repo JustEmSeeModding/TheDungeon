@@ -42,8 +42,8 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
     @Override
     protected void findTarget() {
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
-        double minPerception = mob.getAttributeValue(ModAttributes.MIN_PERCEPTION);
-        double maxPerception = mob.getAttributeValue(ModAttributes.MAX_PERCEPTION);
+        double minPerception = mob.getAttributeValue(ModAttributes.DUNGEON_MOB_MIN_PERCEPTION);
+        double maxPerception = mob.getAttributeValue(ModAttributes.DUNGEON_MOB_MAX_PERCEPTION);
 
         List<Entity> nearEntities = mob.level().getEntities(mob, mob.getBoundingBox().inflate(maxRange));
 
@@ -62,7 +62,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
     }
 
     protected double getPlayerAggro(Player player, double minPerception, double maxPerception) {
-        double playerAggro = player.getAttributeValue(ModAttributes.DUNGEON_AGGRO_TO_ENEMY);
+        double playerAggro = player.getAttributeValue(ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY);
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
         double multiplier = ((maxRange - mob.distanceTo(player))/maxRange);
         if (playerAggro >= maxPerception) multiplier *=2;

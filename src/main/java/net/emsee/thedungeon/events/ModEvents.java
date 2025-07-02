@@ -19,8 +19,6 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-import java.util.Objects;
-
 @EventBusSubscriber(modid = TheDungeon.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class ModEvents {
     @SubscribeEvent
@@ -57,7 +55,7 @@ public final class ModEvents {
                     dungeonArmorItem.EntityPreDamaged(event);
             });
 
-            float reduction = (float) player.getAttribute(ModAttributes.INCOMING_DAMAGE_REDUCTION).getValue();
+            float reduction = (float) player.getAttribute(ModAttributes.PLAYER_INCOMING_DAMAGE_REDUCTION).getValue();
             if (reduction > 0) {
                 event.setNewDamage(event.getNewDamage() - reduction);
             }
@@ -84,9 +82,10 @@ public final class ModEvents {
         }
     }
 
-    @SubscribeEvent
+    //TODO there is a lot of issues with this that need to be fixed
+    /*@SubscribeEvent
     public static void onLevelLoad(LevelEvent.Load event) {
         if(!event.getLevel().isClientSide())
             GlobalDungeonManager.updateForcedChunks(Objects.requireNonNull(event.getLevel().getServer()));
-    }
+    }*/
 }

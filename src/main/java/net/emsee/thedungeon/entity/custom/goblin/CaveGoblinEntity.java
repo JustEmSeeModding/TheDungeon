@@ -24,7 +24,7 @@ public class CaveGoblinEntity extends AbstractGoblinEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, .1)
                 .add(Attributes.STEP_HEIGHT, 1)
                 .add(ModAttributes.DUNGEON_MOB_REACH, 2.5)
-                .add(ModAttributes.MIN_PERCEPTION, 300)
-                .add(ModAttributes.MAX_PERCEPTION, 900);
+                .add(ModAttributes.DUNGEON_MOB_MIN_PERCEPTION, 300)
+                .add(ModAttributes.DUNGEON_MOB_MAX_PERCEPTION, 900);
     }
 }

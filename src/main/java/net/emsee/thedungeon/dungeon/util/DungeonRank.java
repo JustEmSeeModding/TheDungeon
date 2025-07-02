@@ -9,7 +9,7 @@ public enum DungeonRank {
     C(new BlockPos(3000, 150, -3000), "C"),
     B(new BlockPos(-3000, 150, -3000), "B"),
     A(new BlockPos(6000, 150, 6000), "A"),
-    S(new BlockPos(-30000, 150, 6000), "S"),
+    S(new BlockPos(-3000, 150, 6000), "S"),
     SS(new BlockPos(6000, 150, -6000), "SS");
 
     private final BlockPos centerPos;

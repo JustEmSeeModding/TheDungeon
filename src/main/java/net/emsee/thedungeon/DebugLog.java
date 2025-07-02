@@ -6,6 +6,7 @@ import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class DebugLog {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -18,7 +19,8 @@ public class DebugLog {
         //list.add(DebugLevel.GENERATING_TICKS);
         //list.add(DebugLevel.GENERATING_TICKS_DETAILS);
         //list.add(DebugLevel.GENERATING_REQUIRED_PLACEMENTS);
-        //list.add(DebugLevel.FORCED_CHUNK_UPDATES);
+        list.add(DebugLevel.FORCED_CHUNK_UPDATES);
+        list.add(DebugLevel.FORCED_CHUNK_UPDATES_DETAILS);
         list.add(DebugLevel.GENERIC);
         list.add(DebugLevel.WARNINGS);
         list.add(DebugLevel.IMPORTANT);
@@ -33,6 +35,7 @@ public class DebugLog {
         GENERATING_REQUIRED_PLACEMENTS,
         GENERATING_TICKS_DETAILS,
         FORCED_CHUNK_UPDATES,
+        FORCED_CHUNK_UPDATES_DETAILS,
         GENERIC,
         WARNINGS,
         IMPORTANT
@@ -46,8 +49,17 @@ public class DebugLog {
         if (isDebugMode(debugLevel)) LOGGER.info(msg, objects);
     }
 
+    public static void logInfo(DebugLevel debugLevel, Supplier<String> msg) {
+        if (isDebugMode(debugLevel)) LOGGER.info(msg.get());
+    }
+
+
     public static void logWarn(DebugLevel debugLevel, String msg) {
         if (isDebugMode(debugLevel)) LOGGER.warn(msg);
+    }
+
+    public static void logWarn(DebugLevel debugLevel, Supplier<String> msg) {
+        if (isDebugMode(debugLevel)) LOGGER.warn(msg.get());
     }
 
     public static void logWarn(DebugLevel debugLevel, String msg, Object... objects) {
@@ -56,6 +68,10 @@ public class DebugLog {
 
     public static void logError(DebugLevel debugLevel, String msg) {
         if (isDebugMode(debugLevel)) LOGGER.error(msg);
+    }
+
+    public static void logError(DebugLevel debugLevel, Supplier<String> msg) {
+        if (isDebugMode(debugLevel)) LOGGER.error(msg.get());
     }
 
     public static void logError(DebugLevel debugLevel, String msg, Object... objects) {

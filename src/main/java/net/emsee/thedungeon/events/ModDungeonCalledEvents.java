@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 
 
 public final class ModDungeonCalledEvents {
-    public static void PlayerTeleportDungeon(Player player, int portalID, DungeonRank rank) {
+    public static void playerTeleportDungeon(Player player, int portalID, DungeonRank rank) {
         Level level = player.level();
         if (!level.isClientSide) {
             ServerPlayer serverPlayer = (ServerPlayer) player;

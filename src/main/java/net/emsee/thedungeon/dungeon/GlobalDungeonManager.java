@@ -13,6 +13,7 @@ import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -350,7 +351,6 @@ public final class GlobalDungeonManager {
     }
 
     public static void updateForcedChunks(MinecraftServer server) {
-
         ServerLevel level = server.getLevel(dungeonResourceKey);
         if (level == null) {
             DebugLog.logError(DebugLog.DebugLevel.WARNINGS, "UpdateForcedChunks: level is null");
@@ -359,15 +359,19 @@ public final class GlobalDungeonManager {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (saveData.isFinishedForcedChunks()) return;
         for (DungeonRank rank : DungeonRank.values()) {
+            DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES, "UpdateForcedChunks: Starting rank: {}", rank.getName());
             BlockPos center = rank.getDefaultCenterPos();
-            ChunkPos chunkPos = level.getChunkAt(center).getPos();
+            //ChunkPos chunkPos = level.getChunkAt(center).getPos();
+            ChunkPos chunkPos = new ChunkPos(SectionPos.blockToSectionCoord(center.getX()), SectionPos.blockToSectionCoord(center.getZ()));
 
             for (int x = -forceLoadedChunkRadius; x < forceLoadedChunkRadius; x++) {
                 for (int z = -forceLoadedChunkRadius; z < forceLoadedChunkRadius; z++) {
                     ChunkPos forcedChunkPos = new ChunkPos(chunkPos.x + x, chunkPos.z + z);
+                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Loading at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
                     level.getChunk(forcedChunkPos.x, forcedChunkPos.z, ChunkStatus.FULL, true);
+                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Adding at: {},{} to list", forcedChunkPos.x, forcedChunkPos.z);
                     level.setChunkForced(forcedChunkPos.x, forcedChunkPos.z, true);
-                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES, "UpdateForcedChunks: Updated chunk force status at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
+                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Updated chunk force status at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
                 }
             }
         }
