@@ -30,7 +30,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
     @Override
     protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
         infusing(RecipeCategory.MISC, Blocks.DIRT, ModBlocks.INFUSED_DIRT, recipeOutput);
-        infusing(RecipeCategory.MISC, Blocks.GRASS_BLOCK, ModBlocks.INFUSED_DIRT, recipeOutput);
+        infusing(RecipeCategory.MISC, Blocks.GRASS_BLOCK, ModBlocks.INFUSED_GRASS_BLOCK, recipeOutput);
         infusing(RecipeCategory.MISC, Blocks.CLAY, ModBlocks.INFUSED_CLAY, recipeOutput);
         infusing(RecipeCategory.MISC, Blocks.SAND, ModBlocks.INFUSED_SAND, recipeOutput);
         infusing(RecipeCategory.MISC, Blocks.GRAVEL, ModBlocks.INFUSED_GRAVEL, recipeOutput);

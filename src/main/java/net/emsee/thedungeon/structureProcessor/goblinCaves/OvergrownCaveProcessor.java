@@ -41,8 +41,9 @@ public class OvergrownCaveProcessor extends BasicReplacementProcessor {
 
     private final WeightedMap.Int<Supplier<BlockState>> defaultGrassMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.GRASS_BLOCK::defaultBlockState, 100);
-                map.put(Blocks.MOSS_BLOCK::defaultBlockState, 100);
+                map.put(Blocks.GRASS_BLOCK::defaultBlockState, 500);
+                map.put(Blocks.MOSS_BLOCK::defaultBlockState, 500);
+                map.put(() -> ModBlocks.INFUSED_GRASS_BLOCK.get().defaultBlockState(), 1);
             });
 
     private final WeightedMap.Int<Supplier<BlockState>> defaultDirtMap =

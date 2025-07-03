@@ -13,12 +13,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class BlackstoneToStoneCaveProcessor extends BasicReplacementProcessor {
-    public static final BlackstoneToStoneCaveProcessor INSTANCE = new BlackstoneToStoneCaveProcessor();
+public class BlackstoneToPlainStoneCaveProcessor extends BasicReplacementProcessor {
+    public static final BlackstoneToPlainStoneCaveProcessor INSTANCE = new BlackstoneToPlainStoneCaveProcessor();
 
-    public static final MapCodec<BlackstoneToStoneCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<BlackstoneToPlainStoneCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private BlackstoneToStoneCaveProcessor() {
+    private BlackstoneToPlainStoneCaveProcessor() {
     }
 
     private final WeightedMap.Int<Supplier<BlockState>> defaultMap =

@@ -64,6 +64,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
                         output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
                         output.accept(ModBlocks.PYRITE_ORE);
+                        output.accept(ModBlocks.INFUSED_GRASS_BLOCK);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);
                         output.accept(ModBlocks.INFUSED_SAND);

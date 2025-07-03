@@ -86,6 +86,7 @@
 
   "block.thedungeon.pyrite_ore" : "Pyrite Ore",
 
+  "block.thedungeon.infused_grass_block" : "Infused Grass Block",
   "block.thedungeon.infused_dirt" : "Infused Dirt",
   "block.thedungeon.infused_clay" : "Infused Clay",
   "block.thedungeon.infused_sand" : "Infused Sand",

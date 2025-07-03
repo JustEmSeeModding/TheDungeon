@@ -21,8 +21,9 @@ public class StoneToDeepslateCaveProcessor extends BasicReplacementProcessor {
 
     private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.DEEPSLATE::defaultBlockState, 750);
-                map.put(Blocks.COBBLED_DEEPSLATE::defaultBlockState, 750);
+                map.put(Blocks.DEEPSLATE::defaultBlockState, 650);
+                map.put(Blocks.COBBLED_DEEPSLATE::defaultBlockState, 650);
+                map.put(Blocks.BEDROCK::defaultBlockState, 200);
                 map.put(Blocks.DEEPSLATE_GOLD_ORE::defaultBlockState, 11);
                 map.put(Blocks.DEEPSLATE_COAL_ORE::defaultBlockState, 4);
                 map.put(Blocks.DEEPSLATE_COPPER_ORE::defaultBlockState, 1);

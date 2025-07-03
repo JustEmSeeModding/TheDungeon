@@ -23,15 +23,16 @@ Goblin Tinkerer
     throws makeshift grenades
 
 Goblin Dungeon Biomes and connections
-    Stone-Deepslate
-    Stone-Gilded
-    Deepslate-Gilded
-    Deepslate-Ice
-    Stone-Overgrown
+    Stone-Deepslate (done)
+    Stone-Gilded (done)
+    Deepslate-Gilded (done)
+    Deepslate-Ice (done)
+    Stone-Overgrown (done)
     Overgrown-Fungal
     Stone-Crystal
     Ice-Crystal
 
     magma?
+    Sculk Biome?
 
 
