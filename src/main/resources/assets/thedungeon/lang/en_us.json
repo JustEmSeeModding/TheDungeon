@@ -13,7 +13,8 @@
   "message.thedungeon.dungeon_portal.non_dungeon_items": "You are carrying items that don't belong in the dungeon",
   "message.thedungeon.dungeon_portal.dungeon_closed": "The dungeon is closed",
 
-  "jei.thedungeon.infusion_recipe_title" : "In World Infusion",
+  "jei.thedungeon.infusion_in_world_recipe_title" : "In World Infusion",
+  "jei.thedungeon.infusion_recipe_title" : "Infusion",
 
   "advancements.thedungeon.root.title" : "The Dungeon",
   "advancements.thedungeon.root.description" : "All things dungeneering",

@@ -18,7 +18,7 @@ public final class ModRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DungeonInfusionRecipe>> DUNGEON_INFUSION_SERIALIZER =
             SERIALIZERS.register("dungeon_infusion", DungeonInfusionRecipe.Serializer::new);
     public static final DeferredHolder<RecipeType<?>, RecipeType<DungeonInfusionRecipe>> DUNGEON_INFUSION_TYPE =
-            TYPES.register("dungeon_infusion", () -> new RecipeType</*DungeonInfusionRecipe*/>() {
+            TYPES.register("dungeon_infusion", () -> new RecipeType<>() {
                 @Override
                 public String toString() {
                     return "dungeon_infusion";

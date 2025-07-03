@@ -32,6 +32,7 @@ public class StoneCaveOreProcessor extends BasicReplacementProcessor {
                 map.put(Blocks.DIAMOND_ORE::defaultBlockState, 1);
                 map.put(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState(), 4);
                 map.put(() -> ModBlocks.INFUSED_STONE.get().defaultBlockState(), 2);
+                // TODO research if cyan Terracotta looks good? also concrete?
             });
 
     private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =

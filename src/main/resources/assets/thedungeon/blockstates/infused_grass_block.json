@@ -18,7 +18,7 @@
       }
     ],
     "snowy=true": {
-      "model": "minecraft:block/grass_block_snow"
+      "model": "thedungeon:block/snowy_infused_grass_block"
     }
   }
 }

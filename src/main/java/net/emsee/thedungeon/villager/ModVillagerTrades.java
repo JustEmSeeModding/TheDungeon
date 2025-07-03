@@ -33,7 +33,7 @@ public final class ModVillagerTrades {
 
     /**
      * add all trades here,
-     * maybe if more villagers join in make a separate class and call that through here for each villager to keep it more organized
+     * maybe if more villagers join, make a separate class and call that through here for each villager to keep it more organized
      */
     @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event){
@@ -130,7 +130,7 @@ public final class ModVillagerTrades {
                 new ItemStack(ModItems.PORTAL_CORE.get(), 1),
                 1,
                 30,
-                0.05f
+                vanillaLowMultiplier
         ));
     }
 

@@ -16,29 +16,29 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
-public final class DungeonInfusionRecipeCategory implements IRecipeCategory<DungeonInfusionRecipe> {
-    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_infusion");
+public final class DungeonInWorldInfusionRecipeCategory implements IRecipeCategory<DungeonInfusionRecipe> {
+    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "in_world_dungeon_infusion");
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/gui/jei/dungeon_infusion.png");
 
     private final IDrawable background;
     private final IDrawable icon;
 
-    public static final RecipeType<DungeonInfusionRecipe> DUNGEON_INFUSION_RECIPE_RECIPE_TYPE =
+    public static final RecipeType<DungeonInfusionRecipe> IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE =
             new RecipeType<>(UID, DungeonInfusionRecipe.class);
 
-    public DungeonInfusionRecipeCategory(IGuiHelper helper) {
+    public DungeonInWorldInfusionRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 0, 0, 179, 34);
-        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Blocks.DIRT));
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.DUNGEON_PORTAL_UNSTABLE));
     }
 
     @Override
     public RecipeType<DungeonInfusionRecipe> getRecipeType() {
-        return DUNGEON_INFUSION_RECIPE_RECIPE_TYPE;
+        return IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE;
     }
 
     @Override
     public Component getTitle() {
-        return Component.translatable("jei.thedungeon.infusion_recipe_title");
+        return Component.translatable("jei.thedungeon.infusion_in_world_recipe_title");
     }
 
     @Override

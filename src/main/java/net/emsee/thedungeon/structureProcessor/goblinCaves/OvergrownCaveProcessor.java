@@ -51,6 +51,10 @@ public class OvergrownCaveProcessor extends BasicReplacementProcessor {
                 map.put(Blocks.DIRT::defaultBlockState, 100);
                 map.put(Blocks.COARSE_DIRT::defaultBlockState, 100);
                 map.put(Blocks.ROOTED_DIRT::defaultBlockState, 100);
+                map.put(Blocks.PACKED_MUD::defaultBlockState, 100);
+                map.put(Blocks.LIGHT_GRAY_TERRACOTTA::defaultBlockState, 30);
+                map.put(Blocks.TERRACOTTA::defaultBlockState, 10);
+                map.put(Blocks.GRANITE::defaultBlockState, 10);
                 map.put(() -> ModBlocks.INFUSED_DIRT.get().defaultBlockState(), 1);
             });
 
