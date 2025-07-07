@@ -98,8 +98,8 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 RecipeCategory.BUILDING_BLOCKS, ModBlocks.INFUSED_GLASS, 0.25f, 200, 100, "infused_glass");
 
         oreSmeltingAndBlasting(recipeOutput,
-                List.of(ModBlocks.PYRITE_ORE),
-                RecipeCategory.BUILDING_BLOCKS, ModItems.PYRITE, 0.25f, 200, 100, "fools_pyrite");
+                List.of(ModBlocks.PYRITE_ORE, ModBlocks.DEEPSLATE_PYRITE_ORE),
+                RecipeCategory.BUILDING_BLOCKS, ModItems.PYRITE, 0.25f, 200, 100, "pyrite");
 
         /*oreBlasting(recipeOutput,
                 List.of(ModItems.DUNGEON_DEBUG_TOOL, Items.DIAMOND_AXE),

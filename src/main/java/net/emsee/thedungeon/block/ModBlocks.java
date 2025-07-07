@@ -68,6 +68,9 @@ public final class ModBlocks {
     public static final DeferredBlock<Block> PYRITE_ORE = registerBlock("pyrite_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE)));
 
+    public static final DeferredBlock<Block> DEEPSLATE_PYRITE_ORE = registerBlock("deepslate_pyrite_ore",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE)));
+
     public static final DeferredBlock<Block> INFUSED_DIRT = registerBlock("infused_dirt",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)));
 

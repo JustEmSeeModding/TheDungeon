@@ -21,6 +21,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.PYRITE_ORE.get())
+                .add(ModBlocks.DEEPSLATE_PYRITE_ORE.get())
         ;
 
         tag(BlockTags.NEEDS_IRON_TOOL)
@@ -46,6 +47,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.DUNGEON_PORTAL_SS.get())
                 .add(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get())
                 .add(ModBlocks.PYRITE_ORE.get())
+                .add(ModBlocks.DEEPSLATE_PYRITE_ORE.get())
                 .add(ModBlocks.INFUSED_STONE.get())
                 .add(ModBlocks.INFUSED_DEEPSLATE.get())
                 .add(ModBlocks.INFUSED_STONE_BRICKS.get())
