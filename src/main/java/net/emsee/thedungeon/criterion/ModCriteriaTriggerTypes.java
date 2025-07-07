@@ -13,7 +13,7 @@ public class ModCriteriaTriggerTypes {
             DeferredRegister.create(Registries.TRIGGER_TYPE, TheDungeon.MOD_ID);
 
     public static final Supplier<FailedDungeonTravelTrigger> FAILED_DUNGEON_TRAVEL =
-            TRIGGER_TYPES.register("dungeon_travel", FailedDungeonTravelTrigger::new);
+            TRIGGER_TYPES.register("failed_dungeon_travel", FailedDungeonTravelTrigger::new);
 
     public static void register(IEventBus eventBus) {
         TRIGGER_TYPES.register(eventBus);
