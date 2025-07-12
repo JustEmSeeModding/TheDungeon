@@ -40,6 +40,8 @@ public final class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(ModItems.INFUSED_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger"));
         withExistingParent(ModItems.INFUSED_CHISEL.getId().getPath(), TheDungeon.defaultResourceLocation("item/chisel"));
 
+        withExistingParent(ModBlocks.INFUSED_GRASS_BLOCK.getId().getPath(), TheDungeon.defaultResourceLocation("block/infused_grass_block"));
+
         withExistingParent(ModSpawnEggs.DEATH_KNIGHT_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.SKELETON_KNIGHT_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));

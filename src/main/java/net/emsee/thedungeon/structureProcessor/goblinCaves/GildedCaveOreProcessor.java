@@ -18,16 +18,23 @@ public class GildedCaveOreProcessor extends BasicReplacementProcessor {
 
     public static final MapCodec<GildedCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> blackstoneMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.BLACKSTONE::defaultBlockState, 5);
                 map.put(Blocks.GILDED_BLACKSTONE::defaultBlockState, 1);
             });
 
+    protected final WeightedMap.Int<Supplier<BlockState>> veinMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(Blocks.RAW_GOLD_BLOCK::defaultBlockState, 2);
+                map.put(Blocks.GILDED_BLACKSTONE::defaultBlockState, 3);
+            });
+
 
     protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BLACKSTONE, defaultMap);
+                map.put(Blocks.BLACKSTONE, blackstoneMap);
+                map.put(Blocks.RAW_GOLD_BLOCK, veinMap);
             });
 
 

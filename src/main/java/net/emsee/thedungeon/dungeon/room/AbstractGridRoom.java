@@ -1,27 +1,26 @@
 package net.emsee.thedungeon.dungeon.room;
 
 import com.ibm.icu.impl.Pair;
-import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.util.Connection;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.mobSpawnRules.MobSpawnRule;
 import net.emsee.thedungeon.dungeon.util.DungeonUtils;
-import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.PriorityMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.*;
 
 import static net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule.DEFAULT_CONNECTION_TAG;
 import static net.emsee.thedungeon.dungeon.util.DungeonUtils.*;
 
-public class GridRoom {
-    protected ResourceLocation resourceLocation;
+public abstract class AbstractGridRoom {
     protected final int gridWidth;
     protected final int gridHeight;
     protected int weight = 1;
@@ -33,6 +32,7 @@ public class GridRoom {
     protected boolean doOverrideEndChance = false;
     protected boolean allowRotation = false;
     protected boolean allowUpDownConnectedRotation = false;
+    protected boolean skipCollectionProcessors = false;
 
     protected final PriorityMap<Connection> connections = new PriorityMap<>();
     protected final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>(); /* Offset map */
@@ -45,11 +45,11 @@ public class GridRoom {
 
     //// constructor
 
-    public GridRoom(int gridWidth, int gridHeight) {
+    public AbstractGridRoom(int gridWidth, int gridHeight) {
         this (gridWidth, gridHeight, 0);
     }
 
-    public GridRoom(int gridWidth, int gridHeight, int ID) {
+    public AbstractGridRoom(int gridWidth, int gridHeight, int ID) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
 
@@ -63,24 +63,11 @@ public class GridRoom {
 
     //// construction methods
 
-    public GridRoom withResourceLocation(ResourceLocation resourceLocation) {
-        this.resourceLocation = resourceLocation;
-        return this;
-    }
-
-    public GridRoom withResourceLocation(String path) {
-        return this.withResourceLocation(TheDungeon.MOD_ID, path);
-    }
-
-    public GridRoom withResourceLocation(String nameSpace, String path) {
-        return this.withResourceLocation(ResourceLocation.fromNamespaceAndPath(nameSpace, path));
-    }
-
-    public GridRoom setConnections(boolean north, boolean east, boolean south, boolean west, boolean up, boolean down) {
+    public AbstractGridRoom setConnections(boolean north, boolean east, boolean south, boolean west, boolean up, boolean down) {
         return setConnections(north?1:0,east?1:0,south?1:0,west?1:0,up?1:0,down?1:0);
     }
 
-    public GridRoom setConnections(int northPriority, int eastPriority, int southPriority, int westPriority, int upPriority, int downPriority) {
+    public AbstractGridRoom setConnections(int northPriority, int eastPriority, int southPriority, int westPriority, int upPriority, int downPriority) {
         horizontalConnections(northPriority, eastPriority, southPriority, westPriority);
         addConnection(Connection.UP, upPriority);
         addConnection(Connection.DOWN, downPriority);
@@ -88,20 +75,20 @@ public class GridRoom {
     }
 
 
-    protected GridRoom setConnections(PriorityMap<Connection> connectionMap) {
+    protected AbstractGridRoom setConnections(PriorityMap<Connection> connectionMap) {
         this.connections.putAll(connectionMap);
         return this;
     }
 
-    public GridRoom allConnections() {
+    public AbstractGridRoom allConnections() {
         return setConnections(1, 1, 1, 1, 1, 1);
     }
 
-    public GridRoom horizontalConnections() {
+    public AbstractGridRoom horizontalConnections() {
         return horizontalConnections(1,1,1,1);
     }
 
-    public GridRoom horizontalConnections(int northPriority, int eastPriority, int southPriority, int westPriority) {
+    public AbstractGridRoom horizontalConnections(int northPriority, int eastPriority, int southPriority, int westPriority) {
         addConnection(Connection.NORTH, northPriority);
         addConnection(Connection.EAST, eastPriority);
         addConnection(Connection.SOUTH, southPriority);
@@ -109,37 +96,37 @@ public class GridRoom {
         return this;
     }
 
-    public GridRoom addConnection(Connection connection) {
+    public AbstractGridRoom addConnection(Connection connection) {
         return addConnection(connection,1);
     }
 
-    public GridRoom addConnection(Connection connection, int priority) {
+    public AbstractGridRoom addConnection(Connection connection, int priority) {
         connections.put(connection, priority);
         return this;
     }
 
-    public GridRoom removeConnection(Connection connection) {
+    public AbstractGridRoom removeConnection(Connection connection) {
         if (hasConnection(connection))
             connections.put(connection, 0);
         return this;
     }
 
-    public GridRoom withWeight(int weight) {
+    public AbstractGridRoom withWeight(int weight) {
         this.weight = weight;
         return this;
     }
 
-    public GridRoom doAllowRotation() {
+    public AbstractGridRoom doAllowRotation() {
         return doAllowRotation(true, true);
     }
 
-    public GridRoom doAllowRotation(boolean allow, boolean upDown) {
+    public AbstractGridRoom doAllowRotation(boolean allow, boolean upDown) {
         allowRotation = allow;
         allowUpDownConnectedRotation = allow && upDown;
         return this;
     }
 
-    public GridRoom setSize(int north, int east) {
+    public AbstractGridRoom setSize(int north, int east) {
         if (north % 2 == 1 && east % 2 == 1) {
             this.northSizeScale = north;
             this.eastSizeScale = east;
@@ -148,12 +135,12 @@ public class GridRoom {
             throw new IllegalStateException("east or north size scale must be odd");
     }
 
-    public GridRoom setHeight(int height) {
+    public AbstractGridRoom setHeight(int height) {
         this.heightScale = height;
         return this;
     }
 
-    public GridRoom setSizeHeight(int northSize, int eastSize, int height) {
+    public AbstractGridRoom setSizeHeight(int northSize, int eastSize, int height) {
         return this.setSize(northSize, eastSize).setHeight(height);
     }
 
@@ -161,7 +148,7 @@ public class GridRoom {
      * offsets a specific connection along its horizontal face
      * the offset is as viewed from the outside (-=left +=right)
      */
-    public GridRoom setHorizontalConnectionOffset(Connection connection, int widthOffset, int heightOffset) {
+    public AbstractGridRoom setHorizontalConnectionOffset(Connection connection, int widthOffset, int heightOffset) {
         if (Mth.abs(widthOffset)>(northSizeScale-1)/2 || heightOffset>(heightScale-1) || heightOffset<0)
             throw new IllegalStateException("offset is more than the room size");
         if (connection == Connection.UP || connection == Connection.DOWN) return this;
@@ -172,7 +159,7 @@ public class GridRoom {
     /**
      * offsets a specific connection along its vertical face
      */
-    public GridRoom setVerticalConnectionOffset(Connection connection, int northOffset, int eastOffset) {
+    public AbstractGridRoom setVerticalConnectionOffset(Connection connection, int northOffset, int eastOffset) {
         if (Mth.abs(northOffset)>(northSizeScale-1)/2 || Mth.abs(eastOffset)>(eastSizeScale-1)/2)
             throw new IllegalStateException("offset is more than the room size");
         if (connection == Connection.NORTH || connection == Connection.EAST || connection == Connection.SOUTH || connection == Connection.WEST)
@@ -181,24 +168,24 @@ public class GridRoom {
         return this;
     }
 
-    public GridRoom setConnectionTag(Connection connection, String tag) {
+    public AbstractGridRoom setConnectionTag(Connection connection, String tag) {
         connectionTags.put(connection, tag);
         return this;
     }
 
-    protected GridRoom setOffsets(Map<Connection, Pair<Integer, Integer>> offsets) {
+    protected AbstractGridRoom setOffsets(Map<Connection, Pair<Integer, Integer>> offsets) {
         connectionOffsets.clear();
         connectionOffsets.putAll(offsets);
         return this;
     }
 
-    protected GridRoom setConnectionTags(Map<Connection, String> tags) {
+    protected AbstractGridRoom setConnectionTags(Map<Connection, String> tags) {
         connectionTags.clear();
         connectionTags.putAll(tags);
         return this;
     }
 
-    public GridRoom setAllConnectionTags(String tag) {
+    public AbstractGridRoom setAllConnectionTags(String tag) {
         connectionTags.replaceAll((c, v) -> tag);
         return this;
     }
@@ -207,7 +194,7 @@ public class GridRoom {
     /**
      * the priority for this room to generate the next connecting rooms over another
      */
-    public GridRoom setGenerationPriority(int generationPriority) {
+    public AbstractGridRoom setGenerationPriority(int generationPriority) {
         this.generationPriority = generationPriority;
         return this;
     }
@@ -215,43 +202,53 @@ public class GridRoom {
     /**
      * overrides the dungeons room end chance for this room
      */
-    public GridRoom setOverrideEndChance(float value) {
+    public AbstractGridRoom setOverrideEndChance(float value) {
         overrideEndChance = value;
         doOverrideEndChance = true;
         return this;
     }
 
-    protected GridRoom setOverrideEndChance(float value, boolean doOverride) {
+    protected AbstractGridRoom setOverrideEndChance(float value, boolean doOverride) {
         overrideEndChance = value;
         doOverrideEndChance = doOverride;
         return this;
     }
 
 
-    public GridRoom addMobSpawnRule(MobSpawnRule rule) {
+    public AbstractGridRoom addMobSpawnRule(MobSpawnRule rule) {
         spawnRules.add(rule);
         return this;
     }
 
-    protected GridRoom setSpawnRules(List<MobSpawnRule> list) {
+    protected AbstractGridRoom setSpawnRules(List<MobSpawnRule> list) {
         spawnRules.clear();
         spawnRules.addAll(list);
         return this;
     }
 
-    public GridRoom withStructureProcessor(StructureProcessor processor) {
+    public AbstractGridRoom withStructureProcessor(StructureProcessor processor) {
         this.structureProcessors.list().add(processor);
         return this;
     }
 
-    public GridRoom clearStructureProcessors() {
+    public AbstractGridRoom clearStructureProcessors() {
         this.structureProcessors.list().clear();
         return this;
     }
 
-    protected GridRoom setStructureProcessors(StructureProcessorList processors) {
+    protected AbstractGridRoom setStructureProcessors(StructureProcessorList processors) {
         this.structureProcessors.list().clear();
         this.structureProcessors.list().addAll(processors.list());
+        return this;
+    }
+
+    public AbstractGridRoom skipCollectionProcessors() {
+        skipCollectionProcessors = true;
+        return this;
+    }
+
+    protected AbstractGridRoom setSkipCollectionProcessors(boolean skip) {
+        skipCollectionProcessors = skip;
         return this;
     }
     // methods
@@ -409,71 +406,11 @@ public class GridRoom {
     /**
      * Creates a copy of this GridRoom.
      */
-    public GridRoom getCopy() {
-        return new GridRoom(gridWidth, gridHeight, differentiationID).
-                setSizeHeight(northSizeScale, eastSizeScale, heightScale).
-                setOffsets(connectionOffsets).
-                setConnectionTags(connectionTags).
-                withResourceLocation(resourceLocation).
-                setConnections(connections).
-                doAllowRotation(allowRotation, allowUpDownConnectedRotation).
-                withWeight(weight).
-                setGenerationPriority(generationPriority).
-                setOverrideEndChance(overrideEndChance, doOverrideEndChance).
-                setSpawnRules(spawnRules).
-                setStructureProcessors(structureProcessors);
-
-    }
-
+    public abstract AbstractGridRoom getCopy();
     @Override
-    public boolean equals(Object other) {
-        if (other instanceof GridRoom otherRoom) {
-            return
-                    resourceLocation == otherRoom.resourceLocation &&
-                            gridWidth == otherRoom.gridWidth &&
-                            gridHeight == otherRoom.gridHeight &&
-                            ListAndArrayUtils.mapEquals(connections, otherRoom.connections) &&
-                            weight == otherRoom.weight &&
-                            allowRotation == otherRoom.allowRotation &&
-                            allowUpDownConnectedRotation == otherRoom.allowUpDownConnectedRotation &&
-                            northSizeScale == otherRoom.northSizeScale &&
-                            eastSizeScale == otherRoom.eastSizeScale &&
-                            heightScale == otherRoom.heightScale &&
-                            connectionOffsets.equals(otherRoom.connectionOffsets) &&
-                            connectionTags.equals(otherRoom.connectionTags) &&
-                            generationPriority == otherRoom.generationPriority &&
-                            overrideEndChance == otherRoom.overrideEndChance &&
-                            doOverrideEndChance == otherRoom.doOverrideEndChance &&
-                            ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
-                            ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
-                            differentiationID == otherRoom.differentiationID;
-        }
-        return false;
-    }
-
+    public abstract boolean equals(Object other);
     @Override
-    public int hashCode() {
-        int result = 17;
-        result = 31 * result + (resourceLocation != null ? resourceLocation.hashCode() : 0);
-        result = 31 * result + gridWidth;
-        result = 31 * result + gridHeight;
-        result = 31 * result + connections.hashCode();
-        result = 31 * result + weight;
-        result = 31 * result + (allowRotation ? 1 : 0);
-        result = 31 * result + (allowUpDownConnectedRotation ? 1 : 0);
-        result = 31 * result + Double.hashCode(northSizeScale);
-        result = 31 * result + Double.hashCode(eastSizeScale);
-        result = 31 * result + Double.hashCode(heightScale);
-        result = 31 * result + connectionOffsets.hashCode();
-        result = 31 * result + connectionTags.hashCode();
-        result = 31 * result + generationPriority;
-        result = 31 * result + Double.hashCode(overrideEndChance);
-        result = 31 * result + (doOverrideEndChance ? 1 : 0);
-        result = 31 * result + spawnRules.hashCode();
-        result = 31 * result + structureProcessors.list().hashCode();
-        result = 31 * result + differentiationID;
-        return result;
-    }
+    public abstract int hashCode();
 
     private boolean isValidConnection(Connection connection, Rotation placementRotation, String fromTag, List<ConnectionRule> rules) {
         return ConnectionRule.isValid(fromTag, DungeonUtils.getRotatedTags(connectionTags,placementRotation).get(connection), rules);
@@ -492,13 +429,7 @@ public class GridRoom {
     }
 
     @Override
-    public String toString() {
-        return resourceLocation.toString();
-    }
-
-    public ResourceLocation getResourceLocation(Random random) {
-        return resourceLocation;
-    }
+    public abstract String toString();
 
     public boolean canUpDownRotate() {
         return allowUpDownConnectedRotation;
@@ -524,6 +455,12 @@ public class GridRoom {
         return !getSpawnRules().isEmpty();
     }
 
+    public boolean doSkipCollectionProcessors() {
+        return skipCollectionProcessors;
+    }
+
     public StructureProcessorList getStructureProcessors() {return structureProcessors;}
+
+    public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random);
 }
 

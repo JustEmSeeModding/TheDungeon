@@ -2,18 +2,19 @@
   "announcement.thedungeon.open_dungeon" : "A new dungeon has been opened",
   "announcement.thedungeon.seconds_left" : "%s-rank has %s seconds left until collapse",
   "announcement.thedungeon.minutes_left" : "%s-rank has %s minutes left until collapse",
+  "announcement.thedungeon.low_time_teleport": "This dungeon only has %s seconds left until collapse, Crouch-Click to confirm teleport",
 
-  "message.thedungeon.view_time_closed" : "The dungeon is closed",
   "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the gamerules",
-  "message.thedungeon.view_time_seconds" : "%s seconds left until dungeon collapse",
-  "message.thedungeon.view_time_minutes" : "%s minutes and %s seconds left until dungeon collapse",
+  "message.thedungeon.view_time_seconds" : "%s is next: %s seconds left until dungeon collapse",
+  "message.thedungeon.view_time_minutes" : "%s is next: %s minutes and %s seconds left until dungeon collapse",
 
   "message.thedungeon.equipped_wrong_armor" : "You feel the armor hurt your skin as you rush to take it off",
 
   "message.thedungeon.dungeon_portal.non_dungeon_items": "You are carrying items that don't belong in the dungeon",
   "message.thedungeon.dungeon_portal.dungeon_closed": "The dungeon is closed",
 
-  "jei.thedungeon.infusion_recipe_title" : "In World Infusion",
+  "jei.thedungeon.infusion_in_world_recipe_title" : "In World Infusion",
+  "jei.thedungeon.infusion_recipe_title" : "Infusion",
 
   "advancements.thedungeon.root.title" : "The Dungeon",
   "advancements.thedungeon.root.description" : "All things dungeneering",
@@ -85,7 +86,9 @@
   "block.thedungeon.dungeon_portal_unstable" : "Unstable Dungeon Portal",
 
   "block.thedungeon.pyrite_ore" : "Pyrite Ore",
+  "block.thedungeon.deepslate_pyrite_ore" : "Deepslate Pyrite Ore",
 
+  "block.thedungeon.infused_grass_block" : "Infused Grass Block",
   "block.thedungeon.infused_dirt" : "Infused Dirt",
   "block.thedungeon.infused_clay" : "Infused Clay",
   "block.thedungeon.infused_sand" : "Infused Sand",

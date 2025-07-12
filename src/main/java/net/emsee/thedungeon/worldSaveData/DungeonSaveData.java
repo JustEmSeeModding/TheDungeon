@@ -73,7 +73,6 @@ public final class DungeonSaveData extends SavedData {
         return dungeonData.GetLasSecondAnnouncement();
     }
 
-    //TODO remove this savedata and just use the gamerule
     public void SetLastExecutionTime(long lastExecutionTime) {
         dungeonData.SetLastExecutionTime(lastExecutionTime);
         setDirty();

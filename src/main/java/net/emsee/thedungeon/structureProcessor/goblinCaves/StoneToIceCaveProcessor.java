@@ -18,18 +18,18 @@ public class StoneToIceCaveProcessor extends BasicReplacementProcessor {
 
     public static final MapCodec<StoneToIceCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private StoneToIceCaveProcessor() {
-    }
-
-    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.PACKED_ICE::defaultBlockState, 10);
                 map.put(Blocks.BLUE_ICE::defaultBlockState, 7);
+                map.put(Blocks.SNOW_BLOCK::defaultBlockState, 10);
             });
 
-    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.STONE, defaultMap);
+                map.put(Blocks.GRANITE, defaultMap);
+                map.put(Blocks.DIORITE, defaultMap);
             });
 
 

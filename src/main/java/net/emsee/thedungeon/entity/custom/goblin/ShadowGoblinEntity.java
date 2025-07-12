@@ -24,7 +24,7 @@ public class ShadowGoblinEntity extends AbstractGoblinEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, .1)
                 .add(Attributes.STEP_HEIGHT, 1)
                 .add(ModAttributes.DUNGEON_MOB_REACH, 2.5)
-                .add(ModAttributes.MIN_PERCEPTION, 400)
-                .add(ModAttributes.MAX_PERCEPTION, 700);
+                .add(ModAttributes.DUNGEON_MOB_MIN_PERCEPTION, 400)
+                .add(ModAttributes.DUNGEON_MOB_MAX_PERCEPTION, 700);
     }
 }

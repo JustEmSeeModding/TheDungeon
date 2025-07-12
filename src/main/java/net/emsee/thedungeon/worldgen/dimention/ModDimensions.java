@@ -58,7 +58,6 @@ public final class ModDimensions {
 
         NoiseBasedChunkGenerator wrappedChunkGenerator =
                 new VoidChunkGenerator(
-                        //new NoiseBasedChunkGenerator(
                         new FixedBiomeSource(biomeRegistry.getOrThrow(ModBiomes.DUNGEON_BIOME)),
                         noiseGenSettings.getOrThrow(NoiseGeneratorSettings.END));
 

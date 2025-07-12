@@ -1,6 +1,5 @@
 package net.emsee.thedungeon.entity.custom.knight;
 
-import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
 import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
@@ -13,13 +12,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

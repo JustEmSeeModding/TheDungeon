@@ -30,7 +30,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
     @Override
     protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
         infusing(RecipeCategory.MISC, Blocks.DIRT, ModBlocks.INFUSED_DIRT, recipeOutput);
-        infusing(RecipeCategory.MISC, Blocks.GRASS_BLOCK, ModBlocks.INFUSED_DIRT, recipeOutput);
+        infusing(RecipeCategory.MISC, Blocks.GRASS_BLOCK, ModBlocks.INFUSED_GRASS_BLOCK, recipeOutput);
         infusing(RecipeCategory.MISC, Blocks.CLAY, ModBlocks.INFUSED_CLAY, recipeOutput);
         infusing(RecipeCategory.MISC, Blocks.SAND, ModBlocks.INFUSED_SAND, recipeOutput);
         infusing(RecipeCategory.MISC, Blocks.GRAVEL, ModBlocks.INFUSED_GRAVEL, recipeOutput);
@@ -45,6 +45,10 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         infusing(RecipeCategory.MISC, Blocks.GLASS, ModBlocks.INFUSED_GLASS, recipeOutput);
         infusing(RecipeCategory.MISC, Items.STRING, ModBlocks.INFUSED_THREAD, recipeOutput);
         infusing(RecipeCategory.MISC, Items.IRON_INGOT, ModItems.INFUSED_ALLOY_INGOT, recipeOutput);
+
+        infusing(RecipeCategory.MISC, Items.CLOCK, ModItems.DUNGEON_CLOCK, recipeOutput);
+        // for the compass once it's done
+        // infusing(RecipeCategory.MISC, Items.COMPASS, ModItems.DUNGEON_COMPASS, recipeOutput);
 
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, PatchouliAPI.get().getBookStack(TheDungeon.defaultResourceLocation("dungeon_guide")))
@@ -89,23 +93,18 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .requires(Items.IRON_INGOT)
                 .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
-        /*oreSmeltingAndBlasting(recipeOutput,
-                List.of(ModBlocks.INFUSED_STONE, ModBlocks.INFUSED_DEEPSLATE, ModBlocks.INFUSED_DIRT, ModBlocks.INFUSED_STONE_BRICKS, ModBlocks.INFUSED_GRAVEL, ModBlocks.INFUSED_CLAY, ModBlocks.INFUSED_NETHERRACK, ModBlocks.INFUSED_SOUL_SAND, ModBlocks.INFUSED_SOUL_SOIL),
-                RecipeCategory.MISC, ModItems.DUNGEON_ESSENCE_SHARD, 0.25f, 150, 75, "dungeon_essence_shard");
-        */
         oreSmeltingAndBlasting(recipeOutput,
                 List.of(ModBlocks.INFUSED_SAND),
                 RecipeCategory.BUILDING_BLOCKS, ModBlocks.INFUSED_GLASS, 0.25f, 200, 100, "infused_glass");
 
         oreSmeltingAndBlasting(recipeOutput,
-                List.of(ModBlocks.PYRITE_ORE),
-                RecipeCategory.BUILDING_BLOCKS, ModItems.PYRITE, 0.25f, 200, 100, "fools_pyrite");
+                List.of(ModBlocks.PYRITE_ORE, ModBlocks.DEEPSLATE_PYRITE_ORE),
+                RecipeCategory.BUILDING_BLOCKS, ModItems.PYRITE, 0.25f, 200, 100, "pyrite");
 
         /*oreBlasting(recipeOutput,
                 List.of(ModItems.DUNGEON_DEBUG_TOOL, Items.DIAMOND_AXE),
                 RecipeCategory.MISC, ModBlocks.DUNGEON_PORTAL.get(), 0.25f, 100, "portal");*/
 
-        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.CLOCK, ModItems.INFUSED_ALLOY_INGOT, ModItems.DUNGEON_CLOCK.get(), RecipeCategory.COMBAT, recipeOutput);
         smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_HELMET, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ALLOY_HELMET.get(), RecipeCategory.COMBAT, recipeOutput);
         smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_CHESTPLATE, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ALLOY_CHESTPLATE.get(), RecipeCategory.COMBAT, recipeOutput);
         smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_LEGGINGS, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ALLOY_LEGGINGS.get(), RecipeCategory.COMBAT, recipeOutput);

@@ -17,8 +17,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VoidChunkGenerator extends NoiseBasedChunkGenerator {
 
-    public VoidChunkGenerator(BiomeSource p_256415_, Holder<NoiseGeneratorSettings> p_256182_) {
-        super(p_256415_, p_256182_);
+    public VoidChunkGenerator(BiomeSource pbiomeSource, Holder<NoiseGeneratorSettings> noiseGeneratorSettingsHolder) {
+        super(pbiomeSource, noiseGeneratorSettingsHolder);
     }
 
     @Override

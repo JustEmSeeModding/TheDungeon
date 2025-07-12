@@ -21,6 +21,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.PYRITE_ORE.get())
+                .add(ModBlocks.DEEPSLATE_PYRITE_ORE.get())
         ;
 
         tag(BlockTags.NEEDS_IRON_TOOL)
@@ -46,6 +47,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.DUNGEON_PORTAL_SS.get())
                 .add(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get())
                 .add(ModBlocks.PYRITE_ORE.get())
+                .add(ModBlocks.DEEPSLATE_PYRITE_ORE.get())
                 .add(ModBlocks.INFUSED_STONE.get())
                 .add(ModBlocks.INFUSED_DEEPSLATE.get())
                 .add(ModBlocks.INFUSED_STONE_BRICKS.get())
@@ -58,6 +60,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ModBlocks.INFUSED_CLAY.get())
                 .add(ModBlocks.INFUSED_DIRT.get())
+                .add(ModBlocks.INFUSED_GRASS_BLOCK.get())
                 .add(ModBlocks.INFUSED_SAND.get())
                 .add(ModBlocks.INFUSED_GRAVEL.get())
                 .add(ModBlocks.INFUSED_SOUL_SAND.get())
@@ -91,21 +94,41 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.GOATS_SPAWNABLE_ON)
                 .add(ModBlocks.INFUSED_GRAVEL.get())
                 .add(ModBlocks.INFUSED_STONE.get())
+                .add(ModBlocks.INFUSED_GRASS_BLOCK.get())
         ;
 
-        tag(BlockTags.DIRT).add(ModBlocks.INFUSED_DIRT.get());
+        tag(BlockTags.DIRT)
+                .add(ModBlocks.INFUSED_DIRT.get())
+                .add(ModBlocks.INFUSED_GRASS_BLOCK.get())
+        ;
 
         tag(BlockTags.AXOLOTLS_SPAWNABLE_ON).add(ModBlocks.INFUSED_CLAY.get());
         tag(BlockTags.SMALL_DRIPLEAF_PLACEABLE).add(ModBlocks.INFUSED_CLAY.get());
         tag(BlockTags.LUSH_GROUND_REPLACEABLE).add(ModBlocks.INFUSED_CLAY.get());
 
         tag(BlockTags.SAND).add(ModBlocks.INFUSED_SAND.get());
-        tag(BlockTags.RABBITS_SPAWNABLE_ON).add(ModBlocks.INFUSED_SAND.get());
+        tag(BlockTags.RABBITS_SPAWNABLE_ON)
+                .add(ModBlocks.INFUSED_SAND.get())
+                .add(ModBlocks.INFUSED_GRASS_BLOCK.get())
+        ;
+
+        tag(BlockTags.SNIFFER_DIGGABLE_BLOCK)
+                .add(ModBlocks.INFUSED_DIRT.get())
+                .add(ModBlocks.INFUSED_GRASS_BLOCK.get())
+        ;
 
         tag(BlockTags.BASE_STONE_OVERWORLD)
                 .add(ModBlocks.INFUSED_STONE.get())
                 .add(ModBlocks.INFUSED_DEEPSLATE.get())
         ;
+
+        tag(BlockTags.FROGS_SPAWNABLE_ON).add(ModBlocks.INFUSED_GRASS_BLOCK.get());
+        tag(BlockTags.FOXES_SPAWNABLE_ON).add(ModBlocks.INFUSED_GRASS_BLOCK.get());
+        tag(BlockTags.ANIMALS_SPAWNABLE_ON).add(ModBlocks.INFUSED_GRASS_BLOCK.get());
+        tag(BlockTags.VALID_SPAWN).add(ModBlocks.INFUSED_GRASS_BLOCK.get());
+        tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.INFUSED_GRASS_BLOCK.get());
+        tag(BlockTags.ARMADILLO_SPAWNABLE_ON).add(ModBlocks.INFUSED_GRASS_BLOCK.get());
+        tag(BlockTags.PARROTS_SPAWNABLE_ON).add(ModBlocks.INFUSED_GRASS_BLOCK.get());
 
         tag(BlockTags.SNAPS_GOAT_HORN).add(ModBlocks.INFUSED_STONE.get());
 

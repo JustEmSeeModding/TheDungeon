@@ -55,7 +55,7 @@ public final class ModEvents {
                     dungeonArmorItem.EntityPreDamaged(event);
             });
 
-            float reduction = (float) player.getAttribute(ModAttributes.INCOMING_DAMAGE_REDUCTION).getValue();
+            float reduction = (float) player.getAttribute(ModAttributes.PLAYER_INCOMING_DAMAGE_REDUCTION).getValue();
             if (reduction > 0) {
                 event.setNewDamage(event.getNewDamage() - reduction);
             }
@@ -82,9 +82,10 @@ public final class ModEvents {
         }
     }
 
-    @SubscribeEvent
+    //TODO there is a lot of issues with this that need to be fixed
+    /*@SubscribeEvent
     public static void onLevelLoad(LevelEvent.Load event) {
         if(!event.getLevel().isClientSide())
-            GlobalDungeonManager.updateForcedChunks(event.getLevel().getServer());
-    }
+            GlobalDungeonManager.updateForcedChunks(Objects.requireNonNull(event.getLevel().getServer()));
+    }*/
 }

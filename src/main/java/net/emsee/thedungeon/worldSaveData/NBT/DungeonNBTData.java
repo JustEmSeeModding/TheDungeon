@@ -15,14 +15,8 @@ import java.util.*;
 public final class DungeonNBTData {
     private final Queue<Dungeon> dungeonProgressQueue = new LinkedList<>();
     private final Map<DungeonRank, Queue<Dungeon>> dungeonPassiveQueue = Util.make(Maps.newHashMap(), (map) -> {
-        map.put(DungeonRank.F, new LinkedList<>());
-        map.put(DungeonRank.E, new LinkedList<>());
-        map.put(DungeonRank.D, new LinkedList<>());
-        map.put(DungeonRank.C, new LinkedList<>());
-        map.put(DungeonRank.B, new LinkedList<>());
-        map.put(DungeonRank.A, new LinkedList<>());
-        map.put(DungeonRank.S, new LinkedList<>());
-        map.put(DungeonRank.SS, new LinkedList<>());
+        for (DungeonRank rank : DungeonRank.values())
+            map.put(rank, new LinkedList<>());
     });
     private int tickInterval = 10/*-minutes -> to Ticks*/ * 60 * 20;
     private long lastExecutionTime = -1;
@@ -32,25 +26,13 @@ public final class DungeonNBTData {
     private boolean finishedForcedChunks = false;
 
     private final Map<DungeonRank, Boolean> isOpen = Util.make(Maps.newHashMap(), (map) -> {
-        map.put(DungeonRank.F, false);
-        map.put(DungeonRank.E, false);
-        map.put(DungeonRank.D, false);
-        map.put(DungeonRank.C, false);
-        map.put(DungeonRank.B, false);
-        map.put(DungeonRank.A, false);
-        map.put(DungeonRank.S, false);
-        map.put(DungeonRank.SS, false);
+        for (DungeonRank rank : DungeonRank.values())
+            map.put(rank, false);
     });
-    private final Map<DungeonRank, List<BlockPos>> portalPositions = Map.of(
-            DungeonRank.F, new ArrayList<>(),
-            DungeonRank.E, new ArrayList<>(),
-            DungeonRank.D, new ArrayList<>(),
-            DungeonRank.C, new ArrayList<>(),
-            DungeonRank.B, new ArrayList<>(),
-            DungeonRank.A, new ArrayList<>(),
-            DungeonRank.S, new ArrayList<>(),
-            DungeonRank.SS, new ArrayList<>()
-    );
+    private final Map<DungeonRank, List<BlockPos>> portalPositions = Util.make(Maps.newHashMap(), (map) -> {
+        for (DungeonRank rank : DungeonRank.values())
+            map.put(rank, new ArrayList<>());
+    });
 
     /**
      * Serializes the current dungeon state and related metadata into a CompoundTag.
@@ -78,7 +60,7 @@ public final class DungeonNBTData {
 
         int i = 0;
         for (Dungeon dungeon : dungeonProgressQueue) {
-            toReturn.putString("dungeonProgressQueue" + i, dungeon.getResourceName());
+            toReturn.putString("dungeonProgressQueue_" + i, dungeon.getResourceName());
             i++;
         }
         DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
@@ -130,8 +112,8 @@ public final class DungeonNBTData {
 
         int i = 0;
         dungeonProgressQueue.clear();
-        while (tag.contains("dungeonProgressQueue" + i)) {
-            Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue" + i));
+        while (tag.contains("dungeonProgressQueue_" + i)) {
+            Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue_" + i));
             dungeonProgressQueue.add(toAdd.getCopy());
             i++;
         }
@@ -151,7 +133,7 @@ public final class DungeonNBTData {
         for (DungeonRank rank : portalPositions.keySet()) {
             i = 0;
             portalPositions.get(rank).clear();
-            while (tag.contains("PortalPosX" + i)) {
+            while (tag.contains("PortalPosX_" + rank.getName() + "_" + i)) {
                 portalPositions.get(rank).add(new BlockPos(
                         tag.getInt("PortalPosX_" + rank.getName() + "_" + i),
                         tag.getInt("PortalPosY_" + rank.getName() + "_" + i),

@@ -3,10 +3,7 @@ package net.emsee.thedungeon.item;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.ModEntities;
-import net.emsee.thedungeon.item.custom.*;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;

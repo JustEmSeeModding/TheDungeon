@@ -13,6 +13,7 @@ import net.emsee.thedungeon.recipe.DungeonInfusionRecipe;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
 public final class DungeonInfusionRecipeCategory implements IRecipeCategory<DungeonInfusionRecipe> {
@@ -22,17 +23,17 @@ public final class DungeonInfusionRecipeCategory implements IRecipeCategory<Dung
     private final IDrawable background;
     private final IDrawable icon;
 
-    public static final RecipeType<DungeonInfusionRecipe> IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE =
+    public static final RecipeType<DungeonInfusionRecipe> DUNGEON_INFUSION_RECIPE_RECIPE_TYPE =
             new RecipeType<>(UID, DungeonInfusionRecipe.class);
 
     public DungeonInfusionRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 0, 0, 179, 34);
-        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.DUNGEON_PORTAL_UNSTABLE));
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Blocks.DIRT));
     }
 
     @Override
     public RecipeType<DungeonInfusionRecipe> getRecipeType() {
-        return IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE;
+        return DUNGEON_INFUSION_RECIPE_RECIPE_TYPE;
     }
 
     @Override

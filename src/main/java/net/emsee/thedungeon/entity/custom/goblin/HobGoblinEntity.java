@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.entity.custom.goblin;
 
 import com.google.common.collect.Lists;
-import com.ibm.icu.impl.Pair;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.attribute.ModAttributes;
@@ -81,8 +81,8 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
                 .add(Attributes.KNOCKBACK_RESISTANCE, .1)
                 .add(Attributes.STEP_HEIGHT, 1)
                 .add(ModAttributes.DUNGEON_MOB_REACH, 2.5)
-                .add(ModAttributes.MIN_PERCEPTION, 500)
-                .add(ModAttributes.MAX_PERCEPTION, 800);
+                .add(ModAttributes.DUNGEON_MOB_MIN_PERCEPTION, 500)
+                .add(ModAttributes.DUNGEON_MOB_MAX_PERCEPTION, 800);
     }
 
     @Override

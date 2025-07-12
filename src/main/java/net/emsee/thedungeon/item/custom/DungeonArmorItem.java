@@ -12,22 +12,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.event.AddAttributeTooltipsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static net.emsee.thedungeon.item.custom.DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE;
 
 public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips {
-    protected static final Component fullSetBonusHeader = Component.translatable("item.thedungeon.tooltip.full_set_bonus").withStyle(ChatFormatting.GRAY);
-    protected static final ChatFormatting beneficialModifier = ChatFormatting.BLUE;
-    protected static final ChatFormatting harmfulModifier = ChatFormatting.RED;
-
-    //protected static Map<Holder<ArmorMaterial>, List<MobEffectInstance>> FULL_MATERIAL_TO_EFFECT_MAP = Map.of();
-
-
     public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
         super(material, type, properties.rarity(Rarity.RARE));
     }

@@ -20,7 +20,10 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(ItemTags.DIRT).add(ModBlocks.INFUSED_DIRT.get().asItem());
+        tag(ItemTags.DIRT)
+                .add(ModBlocks.INFUSED_DIRT.get().asItem())
+                .add(ModBlocks.INFUSED_GRASS_BLOCK.get().asItem())
+        ;
         tag(ItemTags.SAND).add(ModBlocks.INFUSED_SAND.get().asItem());
         tag(ItemTags.STONE_BRICKS).add(ModBlocks.INFUSED_STONE_BRICKS.get().asItem());
         tag(ItemTags.SOUL_FIRE_BASE_BLOCKS)

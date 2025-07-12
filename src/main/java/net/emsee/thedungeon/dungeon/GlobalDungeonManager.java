@@ -4,7 +4,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.types.Dungeon;
 import net.emsee.thedungeon.dungeon.util.DungeonRank;
-import net.emsee.thedungeon.events.ModDungeonDimensionEvents;
+import net.emsee.thedungeon.events.ModDungeonCalledEvents;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.utils.WeightedMap;
@@ -13,13 +13,13 @@ import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -30,7 +30,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import java.util.*;
 
 public final class GlobalDungeonManager {
-    private static final int forceLoadedChunkRadius = 30;
+    private static final int forceLoadedChunkRadius = 35;
     private static final int killRadius = 500;
 
     final static Map<Dungeon, Integer> dungeons = new HashMap<>();
@@ -77,6 +77,7 @@ public final class GlobalDungeonManager {
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"killing all entities");
             KillAllInDungeon(server, currentDungeon.getRank());
             DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"starting generation");
+            assert dungeonDimension != null;
             currentDungeon.generate(dungeonDimension);
         }
 
@@ -202,7 +203,7 @@ public final class GlobalDungeonManager {
                     if (entity instanceof ServerPlayer player) {
                         if ((!player.isCreative()) && (player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR)) {
                             player.hurt(dimension.damageSources().source(ModDamageTypes.DUNGEON_RESET), player.getHealth());
-                            ModDungeonDimensionEvents.setPlayerGameMode(player, true);
+                            ModDungeonCalledEvents.setPlayerGameMode(player, true);
                             if (!player.isDeadOrDying()) player.kill();
                         }
                     } else
@@ -211,33 +212,7 @@ public final class GlobalDungeonManager {
             }
         }
     }
-    /*
-    todo rework
-     needs to be made rank dependent somehow
-    */
-    public static void viewTime(Player player, MinecraftServer server) {
-        /*if(!GameruleRegistry.getBooleanGamerule(server, ModGamerules.AUTO_DUNGEON_CYCLING)){
-            player.sendSystemMessage(Component.translatable("message.thedungeon.cycling_disabled"));
-        }
-        long worldTime = server.overworld().getGameTime();
-        DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (!saveData.isDungeonOpen()) {
-            player.sendSystemMessage(Component.translatable("message.thedungeon.view_time_closed"));
-            return;
-        }
-        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - saveData.getTickInterval());
-        long secondsLeft = (long) Math.ceil(timeLeft / (20f));
-        long minutesLeft = (long) Math.floor(secondsLeft / (60f));
 
-        if (secondsLeft <= 60) {
-            player.sendSystemMessage(Component.translatable("message.thedungeon.view_time_seconds", secondsLeft));
-        } else {
-            player.sendSystemMessage(Component.translatable("message.thedungeon.view_time_minutes", minutesLeft, secondsLeft - minutesLeft * 60));
-        }*/
-
-        // temp code :
-        player.sendSystemMessage(Component.literal("this feature is WIP"));
-    }
     public static void CloseDungeon (MinecraftServer server, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         CloseDungeon(saveData, rank);
@@ -325,7 +300,7 @@ public final class GlobalDungeonManager {
      */
     public static void GenerateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
 
-        Dungeon newDungeon = getDungeonByID(selectedDungeonID).getCopy();
+        Dungeon newDungeon = Objects.requireNonNull(getDungeonByID(selectedDungeonID)).getCopy();
 
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
@@ -376,7 +351,6 @@ public final class GlobalDungeonManager {
     }
 
     public static void updateForcedChunks(MinecraftServer server) {
-
         ServerLevel level = server.getLevel(dungeonResourceKey);
         if (level == null) {
             DebugLog.logError(DebugLog.DebugLevel.WARNINGS, "UpdateForcedChunks: level is null");
@@ -385,15 +359,19 @@ public final class GlobalDungeonManager {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (saveData.isFinishedForcedChunks()) return;
         for (DungeonRank rank : DungeonRank.values()) {
+            DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES, "UpdateForcedChunks: Starting rank: {}", rank.getName());
             BlockPos center = rank.getDefaultCenterPos();
-            ChunkPos chunkPos = level.getChunkAt(center).getPos();
+            //ChunkPos chunkPos = level.getChunkAt(center).getPos();
+            ChunkPos chunkPos = new ChunkPos(SectionPos.blockToSectionCoord(center.getX()), SectionPos.blockToSectionCoord(center.getZ()));
 
             for (int x = -forceLoadedChunkRadius; x < forceLoadedChunkRadius; x++) {
                 for (int z = -forceLoadedChunkRadius; z < forceLoadedChunkRadius; z++) {
                     ChunkPos forcedChunkPos = new ChunkPos(chunkPos.x + x, chunkPos.z + z);
+                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Loading at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
                     level.getChunk(forcedChunkPos.x, forcedChunkPos.z, ChunkStatus.FULL, true);
+                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Adding at: {},{} to list", forcedChunkPos.x, forcedChunkPos.z);
                     level.setChunkForced(forcedChunkPos.x, forcedChunkPos.z, true);
-                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES, "UpdateForcedChunks: Updated chunk force status at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
+                    DebugLog.logInfo(DebugLog.DebugLevel.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Updated chunk force status at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
                 }
             }
         }

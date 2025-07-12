@@ -59,10 +59,29 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
                     map.put(Blocks.NETHER_GOLD_ORE, Blocks.NETHERRACK);
                     map.put(Blocks.NETHER_QUARTZ_ORE, Blocks.NETHERRACK);
 
+                    map.put(Blocks.RAW_IRON_BLOCK, Blocks.WHITE_TERRACOTTA);
+                    map.put(Blocks.RAW_GOLD_BLOCK, Blocks.YELLOW_TERRACOTTA);
+                    map.put(Blocks.RAW_COPPER_BLOCK, Blocks.TERRACOTTA);
+                    map.put(Blocks.ANCIENT_DEBRIS, Blocks.GRAY_TERRACOTTA);
+
                     map.put(ModBlocks.PYRITE_ORE.get(), Blocks.STONE);
 
                     map.put(ModBlocks.INFUSED_STONE.get(), Blocks.STONE);
                     map.put(ModBlocks.INFUSED_DEEPSLATE.get(), Blocks.DEEPSLATE);
+
+                    // can remove foliage (mainly to access ores behind it but als hidden entrances)
+                    map.put(Blocks.VINE, Blocks.AIR);
+                    map.put(Blocks.GLOW_LICHEN, Blocks.AIR);
+                    map.put(Blocks.OAK_LEAVES, Blocks.AIR);
+                    map.put(Blocks.SPRUCE_LEAVES, Blocks.AIR);
+                    map.put(Blocks.BIRCH_LEAVES, Blocks.AIR);
+                    map.put(Blocks.JUNGLE_LEAVES, Blocks.AIR);
+                    map.put(Blocks.ACACIA_LEAVES, Blocks.AIR);
+                    map.put(Blocks.DARK_OAK_LEAVES, Blocks.AIR);
+                    map.put(Blocks.MANGROVE_LEAVES, Blocks.AIR);
+                    map.put(Blocks.CHERRY_LEAVES, Blocks.AIR);
+                    map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
+                    map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
                 });
     }
 

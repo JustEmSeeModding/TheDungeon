@@ -29,8 +29,8 @@ public class SkeletonKnightEntity extends AbstractKnightEntity{
                 .add(Attributes.KNOCKBACK_RESISTANCE, .5)
                 .add(Attributes.STEP_HEIGHT, 1)
                 .add(ModAttributes.DUNGEON_MOB_REACH, 2.5)
-                .add(ModAttributes.MIN_PERCEPTION, 250)
-                .add(ModAttributes.MAX_PERCEPTION, 750);
+                .add(ModAttributes.DUNGEON_MOB_MIN_PERCEPTION, 250)
+                .add(ModAttributes.DUNGEON_MOB_MAX_PERCEPTION, 750);
     }
 
     @Override

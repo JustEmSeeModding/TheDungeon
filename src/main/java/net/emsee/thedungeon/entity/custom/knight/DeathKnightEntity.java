@@ -29,8 +29,8 @@ public class DeathKnightEntity extends AbstractKnightEntity{
                 .add(Attributes.KNOCKBACK_RESISTANCE, .5)
                 .add(Attributes.STEP_HEIGHT, 1)
                 .add(ModAttributes.DUNGEON_MOB_REACH, 3.5)
-                .add(ModAttributes.MIN_PERCEPTION, 150)
-                .add(ModAttributes.MAX_PERCEPTION, 550);
+                .add(ModAttributes.DUNGEON_MOB_MIN_PERCEPTION, 150)
+                .add(ModAttributes.DUNGEON_MOB_MAX_PERCEPTION, 550);
     }
 
     @Override

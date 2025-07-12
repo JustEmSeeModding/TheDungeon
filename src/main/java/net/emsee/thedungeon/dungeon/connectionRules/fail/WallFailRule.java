@@ -48,7 +48,7 @@ public class WallFailRule extends FailRule {
         maxFillX = width / 2;
         fillZ = -width / 2;
         maxFillZ = width / 2;
-        fillY = 0;
+        fillY = height - 1;
     }
 
 
@@ -66,7 +66,7 @@ public class WallFailRule extends FailRule {
         maxFillX = width / 2;
         fillZ = -width / 2;
         maxFillZ = width / 2;
-        fillY = 0;
+        fillY = height - 1;
     }
 
 
@@ -91,7 +91,7 @@ public class WallFailRule extends FailRule {
 
     @Override
     public boolean isFinished() {
-        return fillY>height-1 || offsetOut && exitMarkedObstructed;
+        return fillY<0 || offsetOut && exitMarkedObstructed;
     }
 
 
@@ -121,7 +121,7 @@ public class WallFailRule extends FailRule {
     private void Fill(BlockPos wallCenter, ServerLevel level, Connection connection, StructureProcessorList processors) {
         int i = blocksPerLoop;
         while (i > 0) {
-            if (fillY > height - 1) return;
+            if (fillY < 0) return;
             switch (connection) {
                 case NORTH, SOUTH -> {
                     fillZ = 0;
@@ -141,14 +141,14 @@ public class WallFailRule extends FailRule {
                     fillX++;
                     if (fillX > maxFillX) {
                         fillX = -width / 2;
-                        fillY++;
+                        fillY--;
                     }
                 }
                 case EAST, WEST -> {
                     fillZ++;
                     if (fillZ > maxFillZ) {
                         fillZ = -width / 2;
-                        fillY++;
+                        fillY--;
                     }
                 }
             }
