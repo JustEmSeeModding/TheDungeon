@@ -2,68 +2,60 @@ package net.emsee.thedungeon.dungeon.room;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.utils.StructureUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
 import java.util.Random;
 
 /** Similar to GridRoomGroup but only uses multiple resource locations */
-public class MultiResourceGridRoom extends GridRoom {
+public class GridRoomMultiResource extends AbstractGridRoom {
     WeightedMap.Int<ResourceLocation> resourceLocations = new WeightedMap.Int<>();
 
-    public MultiResourceGridRoom(int gridWidth, int gridHeight) {
+    public GridRoomMultiResource(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
     }
 
-    public MultiResourceGridRoom(int gridWidth, int gridHeight, int ID) {
+    public GridRoomMultiResource(int gridWidth, int gridHeight, int ID) {
         super(gridWidth, gridHeight, ID);
     }
 
-    @Deprecated
-    @Override
-    public GridRoom withResourceLocation(ResourceLocation resourceLocation) {
-        throw new IllegalStateException("Use withResourceLocation(R,I) instead");
-    }
-
-    @Override
-    public GridRoom withResourceLocation(String path) {
-        throw new IllegalStateException("Use withResourceLocation(S,I) instead");
-    }
-
-    @Override
-    public GridRoom withResourceLocation(String nameSpace, String path) {
-        throw new IllegalStateException("Use withResourceLocation(S,S,I) instead");
-    }
-
-    public MultiResourceGridRoom withResourceLocation(ResourceLocation resourceLocation, int weight) {
+    public GridRoomMultiResource withResourceLocation(ResourceLocation resourceLocation, int weight) {
         if (resourceLocations.containsKey(resourceLocation))
             throw new IllegalStateException("MultiResourceGridRoom already contains this ResourceLocation (" + resourceLocation + ")");
         resourceLocations.put(resourceLocation, weight);
         return this;
     }
 
-    public MultiResourceGridRoom withResourceLocation(String path, int weight) {
+    public GridRoomMultiResource withResourceLocation(String path, int weight) {
         return this.withResourceLocation(TheDungeon.MOD_ID, path, weight);
     }
 
-    public MultiResourceGridRoom withResourceLocation(String nameSpace, String path, int weight) {
+    public GridRoomMultiResource withResourceLocation(String nameSpace, String path, int weight) {
         return this.withResourceLocation(ResourceLocation.fromNamespaceAndPath(nameSpace, path), weight);
     }
 
-    protected MultiResourceGridRoom setResourceLocations(WeightedMap.Int<ResourceLocation> resourceLocations) {
+    protected GridRoomMultiResource setResourceLocations(WeightedMap.Int<ResourceLocation> resourceLocations) {
         this.resourceLocations.clear();
         this.resourceLocations.putAll(resourceLocations);
         return this;
     }
 
-    @Override
     public ResourceLocation getResourceLocation(Random random) {
         return resourceLocations.getRandom(random);
     }
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof MultiResourceGridRoom otherRoom &&
+        return other instanceof GridRoomMultiResource otherRoom &&
                 gridWidth == otherRoom.gridWidth &&
                 gridHeight == otherRoom.gridHeight &&
                 ListAndArrayUtils.mapEquals(connections, otherRoom.connections) &&
@@ -106,15 +98,15 @@ public class MultiResourceGridRoom extends GridRoom {
         result = 31 * result + structureProcessors.list().hashCode();
         result = 31 * result + differentiationID;
         result = 31 * result + resourceLocations.hashCode();
-        result = 31 * result + (skipCollectionProcessors ? 1:0);
+        result = 31 * result + (skipCollectionProcessors ? 1 : 0);
         return result;
     }
 
     /**
      * Creates a copy of this.
      */
-    public GridRoom getCopy() {
-        return new MultiResourceGridRoom(gridWidth, gridHeight, differentiationID)
+    public AbstractGridRoom getCopy() {
+        return new GridRoomMultiResource(gridWidth, gridHeight, differentiationID)
                 .setResourceLocations(resourceLocations)
                 .setSizeHeight(northSizeScale, eastSizeScale, heightScale)
                 .setOffsets(connectionOffsets)
@@ -132,6 +124,44 @@ public class MultiResourceGridRoom extends GridRoom {
 
     @Override
     public String toString() {
-        return "MultiResourceGridRoom:"+ListAndArrayUtils.mapToString(resourceLocations);
+        return "MultiResourceGridRoom:" + ListAndArrayUtils.mapToString(resourceLocations);
+    }
+
+    @Override
+    public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random) {
+        StructureTemplate template = StructureUtils.getTemplate(serverLevel, getResourceLocation(random));
+        if (template == null) {
+            throw new IllegalStateException(this + ": template was null");
+        }
+        if (centre == null) {
+            throw new IllegalStateException(this + ": Placement position was null");
+        }
+        if (roomRotation == null) {
+            throw new IllegalStateException(this + ": Placement rotation was null");
+        }
+
+        BlockPos origin = centre.subtract(new Vec3i(Math.round((getGridCellWidth()) * getRotatedEastSizeScale(Rotation.NONE) / 2f) - 1, 0, Math.round((getGridCellWidth()) * getRotatedNorthSizeScale(Rotation.NONE) / 2f) - 1));
+        BlockPos minCorner = centre.subtract(new Vec3i(getGridCellWidth() * getMaxSizeScale(), 0, getGridCellWidth() * getMaxSizeScale()));
+        BlockPos maxCorner = centre.offset(new Vec3i(getGridCellWidth() * getMaxSizeScale(), getGridCellHeight() * getHeightScale(), getGridCellWidth() * getMaxSizeScale()));
+        RandomSource rand = RandomSource.create(serverLevel.dimension().location().hashCode() + Math.round(Math.random() * 1000));
+        BoundingBox mbb = BoundingBox.fromCorners(minCorner, maxCorner);
+
+        StructurePlaceSettings placement = new StructurePlaceSettings()
+                .setRandom(rand)
+                .addProcessor(JigsawReplacementProcessor.INSTANCE)
+                //.addProcessor()
+                .setRotationPivot(new BlockPos(getGridCellWidth() * getRotatedEastSizeScale(Rotation.NONE) / 2, 0, getGridCellWidth() * getRotatedNorthSizeScale(Rotation.NONE) / 2))
+                .setRotation(roomRotation)
+                .setBoundingBox(mbb)
+                .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
+
+        //new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockStateMatchTest(Blocks.AIR.defaultBlockState(),.1f), AlwaysTrueTest.INSTANCE, ModBlocks.DUNGEON_MOD_SPAWNER.get().defaultBlockState())))
+
+        for (StructureProcessor processor : processors.list()) {
+            placement.addProcessor(processor);
+        }
+
+        template.placeInWorld(serverLevel, origin, origin, placement, rand, Block.UPDATE_ALL);
     }
 }
+

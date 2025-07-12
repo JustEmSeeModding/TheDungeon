@@ -8,7 +8,7 @@ import net.emsee.thedungeon.dungeon.util.DungeonUtils;
 import net.emsee.thedungeon.dungeon.types.GridDungeon;
 import net.emsee.thedungeon.dungeon.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.room.GeneratedRoom;
-import net.emsee.thedungeon.dungeon.room.GridRoom;
+import net.emsee.thedungeon.dungeon.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
@@ -79,7 +79,7 @@ public class GridDungeonGenerator {
         }
 
         // sellect the starting room
-        GridRoom startingRoom = dungeon.getStaringRoom();
+        AbstractGridRoom startingRoom = dungeon.getStaringRoom();
         if (startingRoom == null)
             startingRoom = dungeon.getRoomCollection().getRandomRoom(random);
         if (startingRoom == null)
@@ -322,7 +322,7 @@ public class GridDungeonGenerator {
         return dungeon;
     }
 
-    public GridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random) {
+    public AbstractGridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random) {
         return collection.getRandomRoomByConnection(connection, fromTag, collection.getConnectionRules(), random);
     }
 

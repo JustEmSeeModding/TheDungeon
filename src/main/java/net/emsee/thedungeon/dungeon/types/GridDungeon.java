@@ -1,10 +1,10 @@
 package net.emsee.thedungeon.dungeon.types;
 
 import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.dungeon.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.generators.GridDungeonGenerator;
-import net.emsee.thedungeon.dungeon.room.GridRoom;
 import net.emsee.thedungeon.dungeon.roomCollections.GridRoomCollection;
 import net.minecraft.server.level.ServerLevel;
 
@@ -175,8 +175,8 @@ public class GridDungeon extends Dungeon {
         return roomCollection.getCopy();
     }
 
-    public GridRoom getStaringRoom() {
-        GridRoom toReturn = roomCollection.getStartingRoom();
+    public AbstractGridRoom getStaringRoom() {
+        AbstractGridRoom toReturn = roomCollection.getStartingRoom();
         if (toReturn == null) return null;
         return toReturn.getCopy();
     }
