@@ -21,7 +21,7 @@ public class StoneToDeepCaveProcessor extends BasicReplacementProcessor {
 
     public static final MapCodec<StoneToDeepCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X), 150);
                 map.put(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), 150);
@@ -41,9 +41,11 @@ public class StoneToDeepCaveProcessor extends BasicReplacementProcessor {
                 map.put(() -> ModBlocks.INFUSED_DEEPSLATE.get().defaultBlockState(), 1);
             });
 
-    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.STONE, defaultMap);
+                map.put(Blocks.GRANITE, defaultMap);
+                map.put(Blocks.DIORITE, defaultMap);
             });
 
     @Override

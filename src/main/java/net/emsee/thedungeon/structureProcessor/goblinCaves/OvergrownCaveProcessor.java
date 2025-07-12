@@ -3,7 +3,6 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.ModBlocks;
-import net.emsee.thedungeon.structureProcessor.BasicReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;
@@ -16,12 +15,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class OvergrownCaveProcessor extends BasicReplacementProcessor {
+public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
     public static final OvergrownCaveProcessor INSTANCE = new OvergrownCaveProcessor();
 
     public static final MapCodec<OvergrownCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultStoneMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> overgrownStoneMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.STONE::defaultBlockState, 325);
                 map.put(Blocks.ANDESITE::defaultBlockState, 325);
@@ -39,14 +38,14 @@ public class OvergrownCaveProcessor extends BasicReplacementProcessor {
                 map.put(() -> ModBlocks.INFUSED_CLAY.get().defaultBlockState(), 1);
             });
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultGrassMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> grassMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.GRASS_BLOCK::defaultBlockState, 500);
                 map.put(Blocks.MOSS_BLOCK::defaultBlockState, 500);
                 map.put(() -> ModBlocks.INFUSED_GRASS_BLOCK.get().defaultBlockState(), 1);
             });
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultDirtMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> dirtMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.DIRT::defaultBlockState, 100);
                 map.put(Blocks.COARSE_DIRT::defaultBlockState, 100);
@@ -54,11 +53,10 @@ public class OvergrownCaveProcessor extends BasicReplacementProcessor {
                 map.put(Blocks.PACKED_MUD::defaultBlockState, 100);
                 map.put(Blocks.LIGHT_GRAY_TERRACOTTA::defaultBlockState, 30);
                 map.put(Blocks.TERRACOTTA::defaultBlockState, 10);
-                map.put(Blocks.GRANITE::defaultBlockState, 10);
                 map.put(() -> ModBlocks.INFUSED_DIRT.get().defaultBlockState(), 1);
             });
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultPlantMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> plantMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.AIR::defaultBlockState, 100);
                 map.put(Blocks.SHORT_GRASS::defaultBlockState, 100);
@@ -78,7 +76,7 @@ public class OvergrownCaveProcessor extends BasicReplacementProcessor {
                 map.put(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 4), 1);
             });
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultLeavesMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> leavesMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(() -> Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 100);
                 map.put(() -> Blocks.ACACIA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 100);
@@ -90,13 +88,15 @@ public class OvergrownCaveProcessor extends BasicReplacementProcessor {
                 map.put(() -> Blocks.BIRCH_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 10);
             });
 
-    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.STONE, defaultStoneMap);
-                map.put(Blocks.GRASS_BLOCK, defaultGrassMap);
-                map.put(Blocks.DIRT, defaultDirtMap);
-                map.put(Blocks.SHORT_GRASS, defaultPlantMap);
-                map.put(Blocks.OAK_LEAVES, defaultLeavesMap);
+                map.put(Blocks.STONE, overgrownStoneMap);
+                map.put(Blocks.GRASS_BLOCK, grassMap);
+                map.put(Blocks.DIRT, dirtMap);
+                map.put(Blocks.SHORT_GRASS, plantMap);
+                map.put(Blocks.OAK_LEAVES, leavesMap);
+                map.put(Blocks.RAW_IRON_BLOCK, ironOreVeinMap);
+                map.put(Blocks.RAW_COPPER_BLOCK, copperOreVeinMap);
             });
 
     @Override

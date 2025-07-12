@@ -19,7 +19,7 @@ public class StoneCaveOreProcessor extends BasicReplacementProcessor {
 
     public static final MapCodec<StoneCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> stoneMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(Blocks.STONE::defaultBlockState, 375);
                 map.put(Blocks.ANDESITE::defaultBlockState, 375);
@@ -35,9 +35,38 @@ public class StoneCaveOreProcessor extends BasicReplacementProcessor {
                 // TODO research if cyan Terracotta looks good? also concrete?
             });
 
-    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final WeightedMap.Int<Supplier<BlockState>> graniteMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(Blocks.GRANITE::defaultBlockState, 375);
+                map.put(Blocks.LIGHT_GRAY_TERRACOTTA::defaultBlockState, 175);
+                map.put(Blocks.TERRACOTTA::defaultBlockState, 175);
+            });
+
+    protected final WeightedMap.Int<Supplier<BlockState>> dioriteMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(Blocks.DIORITE::defaultBlockState, 375);
+                map.put(Blocks.CALCITE::defaultBlockState, 375);
+            });
+
+    protected final WeightedMap.Int<Supplier<BlockState>> ironOreVeinMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(Blocks.RAW_IRON_BLOCK::defaultBlockState, 150);
+                map.put(Blocks.IRON_ORE::defaultBlockState, 200);
+            });
+
+    protected final WeightedMap.Int<Supplier<BlockState>> copperOreVeinMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(Blocks.RAW_COPPER_BLOCK::defaultBlockState, 150);
+                map.put(Blocks.COPPER_ORE::defaultBlockState, 200);
+            });
+
+    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.STONE, defaultMap);
+                map.put(Blocks.STONE, stoneMap);
+                map.put(Blocks.GRANITE, graniteMap);
+                map.put(Blocks.DIORITE, dioriteMap);
+                map.put(Blocks.RAW_IRON_BLOCK, ironOreVeinMap);
+                map.put(Blocks.RAW_COPPER_BLOCK, copperOreVeinMap);
             });
 
     @Override

@@ -13,22 +13,18 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class StoneToGildedCaveProcessor extends BasicReplacementProcessor {
+public class StoneToGildedCaveProcessor extends GildedCaveOreProcessor {
     public static final StoneToGildedCaveProcessor INSTANCE = new StoneToGildedCaveProcessor();
 
     public static final MapCodec<StoneToGildedCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
-            Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.BLACKSTONE::defaultBlockState, 5);
-                map.put(Blocks.GILDED_BLACKSTONE::defaultBlockState, 1);
-            });
-
-    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.COBBLESTONE, defaultMap);
-                map.put(Blocks.MOSSY_COBBLESTONE, defaultMap);
-                map.put(Blocks.STONE, defaultMap);
+                map.put(Blocks.COBBLESTONE, blackstoneMap);
+                map.put(Blocks.MOSSY_COBBLESTONE, blackstoneMap);
+                map.put(Blocks.STONE, blackstoneMap);
+                map.put(Blocks.GRANITE, blackstoneMap);
+                map.put(Blocks.DIORITE, blackstoneMap);
                 map.put(Blocks.STONE_BRICKS, new WeightedMap.Int<>(Map.of(Blocks.POLISHED_BLACKSTONE_BRICKS::defaultBlockState, 1)));
                 map.put(Blocks.MOSSY_STONE_BRICKS, new WeightedMap.Int<>(Map.of(Blocks.POLISHED_BLACKSTONE_BRICKS::defaultBlockState, 1)));
                 map.put(Blocks.COBBLESTONE_STAIRS, new WeightedMap.Int<>(Map.of(Blocks.BLACKSTONE_STAIRS::defaultBlockState, 1)));

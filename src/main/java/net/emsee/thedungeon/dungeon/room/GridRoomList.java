@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon.room;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /** A better way of storing rooms, allows to edit all rooms at once for multiple variations of the same list */
@@ -20,5 +21,10 @@ public class GridRoomList extends ArrayList<GridRoom> {
         for(GridRoom room : this)
             toReturn.add(room.getCopy());
         return toReturn;
+    }
+
+    public GridRoomList addRooms(List<GridRoom> rooms) {
+        addAll(rooms);
+        return this;
     }
 }

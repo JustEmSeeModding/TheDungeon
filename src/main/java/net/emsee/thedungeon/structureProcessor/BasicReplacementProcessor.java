@@ -6,6 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -34,29 +35,25 @@ public abstract class BasicReplacementProcessor extends StructureProcessor {
     }
 
     protected BlockState copyProperties(BlockState from, BlockState to) {
-        if (from.hasProperty(StairBlock.FACING) &&
+        /*if (from.hasProperty(StairBlock.FACING) &&
                 to.hasProperty(StairBlock.FACING)) {
             to = to.setValue(StairBlock.FACING, from.getValue(StairBlock.FACING));
-        }
-        if (from.hasProperty(StairBlock.HALF) &&
-                to.hasProperty(StairBlock.HALF)) {
-            to = to.setValue(StairBlock.HALF, from.getValue(StairBlock.HALF));
-        }
+        }*/
 
-        if (from.hasProperty(SlabBlock.TYPE) &&
-                to.hasProperty(SlabBlock.TYPE)) {
-            to = to.setValue(SlabBlock.TYPE, from.getValue(SlabBlock.TYPE));
-        }
+        to=copyProperty(from,to,StairBlock.FACING);
+        to=copyProperty(from,to,StairBlock.HALF);
+        to=copyProperty(from,to,SlabBlock.TYPE);
+        to=copyProperty(from,to,RotatedPillarBlock.AXIS);
+        to=copyProperty(from,to,HorizontalDirectionalBlock.FACING);
 
-        if (from.hasProperty(RotatedPillarBlock.AXIS) &&
-                to.hasProperty(RotatedPillarBlock.AXIS)) {
-            to = to.setValue(RotatedPillarBlock.AXIS, from.getValue(RotatedPillarBlock.AXIS));
-        }
-        if (from.hasProperty(HorizontalDirectionalBlock.FACING) &&
-                to.hasProperty(HorizontalDirectionalBlock.FACING)) {
-            to = to.setValue(HorizontalDirectionalBlock.FACING, from.getValue(HorizontalDirectionalBlock.FACING));
-        }
+        return to;
+    }
 
+    protected final <T extends Comparable<T>> BlockState copyProperty(BlockState from, BlockState to, Property<T> property) {
+        if (from.hasProperty(property) &&
+                to.hasProperty(property)) {
+            return to.setValue(property, from.getValue(property));
+        }
         return to;
     }
 }
