@@ -13,6 +13,9 @@ public final class ModAttachmentTypes {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, TheDungeon.MOD_ID);
 
+    /**
+     * the gamemode saved before entering a dungeon
+     */
     public static final Supplier<AttachmentType<Integer>> SAVED_GAMEMODE = ATTACHMENT_TYPES.register(
             "saved_gamemode", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
     );

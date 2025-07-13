@@ -22,7 +22,7 @@ import java.util.List;
 
 public final class DungeonSaveData extends SavedData {
     private static final String DATA_NAME = TheDungeon.MOD_ID + "_dungeon_data";
-    final DungeonNBTData dungeonData = new DungeonNBTData();
+    private final DungeonNBTData dungeonData = new DungeonNBTData();
 
     /**
      * Returns a factory for creating and loading DungeonSaveData instances with the LEVEL data fix type.
