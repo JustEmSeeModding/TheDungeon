@@ -2,8 +2,6 @@ package net.emsee.thedungeon.events;
 
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.attribute.ModAttributes;
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.emsee.thedungeon.item.custom.DungeonPickaxeItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonItemSwapHandling;
@@ -16,13 +14,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.event.level.LevelEvent;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-@EventBusSubscriber(modid = TheDungeon.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-public final class ModEvents {
+@EventBusSubscriber(modid = TheDungeon.MOD_ID)
+public final class ModEquipmentEvents {
     @SubscribeEvent
-    public static void entityEquipmentChange(LivingEquipmentChangeEvent event) {
+    public static void entityEquipmentChanged(LivingEquipmentChangeEvent event) {
         if (event.getSlot().isArmor()) {
             if (event.getFrom().getItem() instanceof DungeonArmorItem dungeonArmorItem)
                 dungeonArmorItem.UnEquip(event.getEntity(), event.getFrom(), event.getSlot());
@@ -48,23 +44,13 @@ public final class ModEvents {
     }
 
     @SubscribeEvent
-    public static void entityDamaged(LivingDamageEvent.Pre event) {
+    public static void armorOnEntityDamaged(LivingDamageEvent.Pre event) {
         if (event.getEntity() instanceof Player player) {
             player.getArmorSlots().forEach(stack -> {
                 if (stack.getItem() instanceof DungeonArmorItem dungeonArmorItem)
                     dungeonArmorItem.EntityPreDamaged(event);
             });
-
-            float reduction = (float) player.getAttribute(ModAttributes.PLAYER_INCOMING_DAMAGE_REDUCTION).getValue();
-            if (reduction > 0) {
-                event.setNewDamage(event.getNewDamage() - reduction);
-            }
         }
-    }
-
-    @SubscribeEvent
-    public static void DungeonServerTick(ServerTickEvent.Pre event) {
-        GlobalDungeonManager.Tick(event);
     }
 
     private static void equippedNonDungeonInDungeon(LivingEquipmentChangeEvent event) {
@@ -76,13 +62,13 @@ public final class ModEvents {
     }
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+    public static void onDiggerItemBlockBreak(BlockEvent.BreakEvent event) {
         if (event.getPlayer().getMainHandItem().getItem() instanceof DungeonPickaxeItem diggerItem && event.getPlayer().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             diggerItem.breakEvent(event);
         }
     }
 
-    //TODO there is a lot of issues with this that need to be fixed
+    //TODO there is a lot of issues with this that need to be fixed (also might no longer be needed)
     /*@SubscribeEvent
     public static void onLevelLoad(LevelEvent.Load event) {
         if(!event.getLevel().isClientSide())

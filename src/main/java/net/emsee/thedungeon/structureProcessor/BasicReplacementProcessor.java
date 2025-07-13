@@ -28,18 +28,13 @@ public abstract class BasicReplacementProcessor extends StructureProcessor {
             return relativeBlockInfo;
         } else {
             BlockState oldBlockstate = relativeBlockInfo.state();
-            newBlockstate = copyProperties(oldBlockstate, newBlockstate);
+            newBlockstate = copyAllProperties(oldBlockstate, newBlockstate);
 
             return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos(), newBlockstate, relativeBlockInfo.nbt());
         }
     }
 
-    protected BlockState copyProperties(BlockState from, BlockState to) {
-        /*if (from.hasProperty(StairBlock.FACING) &&
-                to.hasProperty(StairBlock.FACING)) {
-            to = to.setValue(StairBlock.FACING, from.getValue(StairBlock.FACING));
-        }*/
-
+    protected BlockState copyAllProperties(BlockState from, BlockState to) {
         to=copyProperty(from,to,StairBlock.FACING);
         to=copyProperty(from,to,StairBlock.HALF);
         to=copyProperty(from,to,SlabBlock.TYPE);
@@ -50,9 +45,8 @@ public abstract class BasicReplacementProcessor extends StructureProcessor {
     }
 
     protected final <T extends Comparable<T>> BlockState copyProperty(BlockState from, BlockState to, Property<T> property) {
-        if (from.hasProperty(property) &&
-                to.hasProperty(property)) {
-            return to.setValue(property, from.getValue(property));
+        if (from.hasProperty(property)) {
+            return to.trySetValue(property, from.getValue(property));
         }
         return to;
     }

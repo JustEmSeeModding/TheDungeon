@@ -2,28 +2,28 @@ package net.emsee.thedungeon;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.Util;
-import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class DebugLog {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final List<DebugLevel> debugLevels = Util.make(Lists.newArrayList(), (list) -> {
-        list.add(DebugLevel.INSTANCE_SETUP);
-        list.add(DebugLevel.SAVE_DATA);
-        //list.add(DebugLevel.SAVE_DATA_DETAILED);
-        list.add(DebugLevel.GENERATING_STEPS);
-        //list.add(DebugLevel.GENERATING_TICKS);
-        //list.add(DebugLevel.GENERATING_TICKS_DETAILS);
-        //list.add(DebugLevel.GENERATING_REQUIRED_PLACEMENTS);
-        list.add(DebugLevel.FORCED_CHUNK_UPDATES);
-        list.add(DebugLevel.FORCED_CHUNK_UPDATES_DETAILS);
-        list.add(DebugLevel.GENERIC);
-        list.add(DebugLevel.WARNINGS);
-        list.add(DebugLevel.IMPORTANT);
+    private static final Map<DebugLevel, Boolean> debugLevels = Util.make(new HashMap<>(), (map) -> {
+        map.put(DebugLevel.INSTANCE_SETUP,true);
+        map.put(DebugLevel.SAVE_DATA,true);
+        map.put(DebugLevel.SAVE_DATA_DETAILED,false);
+        map.put(DebugLevel.GENERATING_STEPS,true);
+        map.put(DebugLevel.GENERATING_TICKS,false);
+        map.put(DebugLevel.GENERATING_TICKS_DETAILS,false);
+        map.put(DebugLevel.GENERATING_REQUIRED_PLACEMENTS,false);
+        map.put(DebugLevel.FORCED_CHUNK_UPDATES,true);
+        map.put(DebugLevel.FORCED_CHUNK_UPDATES_DETAILS,true);
+        map.put(DebugLevel.GENERIC,true);
+        map.put(DebugLevel.WARNINGS,true);
+        map.put(DebugLevel.IMPORTANT,true);
     });
 
     public enum DebugLevel {
@@ -79,6 +79,6 @@ public class DebugLog {
     }
 
     private static boolean isDebugMode(DebugLevel level) {
-        return debugLevels.contains(level);
+        return debugLevels.get(level);
     }
 }

@@ -101,7 +101,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     private boolean timeCheck(Player player, MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         long worldTime = server.overworld().getGameTime();
-        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - saveData.getTickInterval());
+        long timeLeft = saveData.getTickInterval() - (worldTime - saveData.GetLastExecutionTime());
         if (getExitRank() == saveData.getNextToCollapse() && timeLeft <= timeLeftWarning) {
             long secondsLeft = (long) Math.ceil(timeLeft / (20f));
             player.displayClientMessage(Component.translatable("announcement.thedungeon.low_time_teleport", secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE),true);

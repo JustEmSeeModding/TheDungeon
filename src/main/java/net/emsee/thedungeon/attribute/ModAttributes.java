@@ -13,7 +13,7 @@ public final class ModAttributes {
             DeferredRegister.create(BuiltInRegistries.ATTRIBUTE, TheDungeon.MOD_ID);
 
     /** the flat damage reduction for a player*/ // can be reworked to work for entities too
-    public static final Holder<Attribute> PLAYER_INCOMING_DAMAGE_REDUCTION = register("dungeon.incoming_damage_reduction", new RangedAttribute("attribute.thedungeon.name.generic.incoming_damage_reduction", 0, 0, 2048).setSyncable(true));
+    public static final Holder<Attribute> INCOMING_DAMAGE_REDUCTION = register("dungeon.incoming_damage_reduction", new RangedAttribute("attribute.thedungeon.name.generic.incoming_damage_reduction", 0, 0, 2048).setSyncable(true));
     /** the attack reach of a given dungeon mob in blocks */
     public static final Holder<Attribute> DUNGEON_MOB_REACH = register("dungeon.mob_reach", new RangedAttribute("attribute.thedungeon.name.generic.mob_reach", 0, 0, 2048).setSyncable(true));
     /** the amount of player agro the enemies see towards the player */

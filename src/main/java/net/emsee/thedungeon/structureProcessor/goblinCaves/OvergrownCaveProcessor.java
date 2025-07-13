@@ -62,7 +62,6 @@ public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
                 map.put(Blocks.SHORT_GRASS::defaultBlockState, 100);
                 map.put(Blocks.MOSS_CARPET::defaultBlockState, 20);
                 map.put(Blocks.FERN::defaultBlockState, 25);
-                //map.put(Blocks.BROWN_MUSHROOM::defaultBlockState, 5);
                 map.put(Blocks.AZURE_BLUET::defaultBlockState, 4);
                 map.put(Blocks.BLUE_ORCHID::defaultBlockState, 5);
                 map.put(Blocks.OXEYE_DAISY::defaultBlockState, 2);

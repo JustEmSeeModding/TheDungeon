@@ -9,7 +9,7 @@ import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
 import net.emsee.thedungeon.dungeon.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.ModDungeons;
 import net.emsee.thedungeon.entity.ModEntities;
-import net.emsee.thedungeon.events.entityCreation.ModEventBusClientEvents;
+import net.emsee.thedungeon.events.ModEntityRegisterEvents;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.emsee.thedungeon.item.ModCreativeModeTabs;
@@ -86,8 +86,7 @@ public final class TheDungeon
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Client Setup...");
-            ModEventBusClientEvents.ClientEntityRendererSetup(event);
-
+            ModEntityRegisterEvents.ClientEntityRendererSetup(event);
         }
     }
 

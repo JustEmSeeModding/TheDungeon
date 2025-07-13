@@ -1,13 +1,10 @@
 package net.emsee.thedungeon.item.custom;
 
-
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.util.DungeonRank;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +32,6 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
     }
 
     public static void viewTime(Player player, MinecraftServer server) {
-        //if (player instanceof AbstractClientPlayer clientPlayer)
         if(!GameruleRegistry.getBooleanGamerule(server, ModGamerules.AUTO_DUNGEON_CYCLING)){
             player.displayClientMessage(Component.translatable("message.thedungeon.cycling_disabled"),true);
             return;
@@ -45,7 +41,7 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
 
         DungeonRank nextRank = saveData.getNextToCollapse();
 
-        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - saveData.getTickInterval());
+        long timeLeft = saveData.getTickInterval() - (worldTime - saveData.GetLastExecutionTime());
         long secondsLeft = (long) Math.ceil(timeLeft / (20f));
         long minutesLeft = (long) Math.floor(secondsLeft / (60f));
 
