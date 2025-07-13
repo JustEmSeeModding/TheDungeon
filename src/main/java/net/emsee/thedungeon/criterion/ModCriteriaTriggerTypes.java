@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.criterion;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;

@@ -74,7 +74,6 @@ public class GridRoomGroup extends AbstractGridRoom {
 
     public GridRoomGroup applyToAll(Consumer<AbstractGridRoom> method) {
         ListAndArrayUtils.mapForEachSafe(gridRooms, (k, v)-> method.accept(k));
-        //gridRooms.keySet().forEach(method);
         return this;
     }
 

@@ -39,14 +39,14 @@ public final class TheDungeon
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
 
+        ModCriteriaTriggerTypes.register(modEventBus);
+
         loadClass(ModDungeons.class);
         loadClass(ModCleanupDungeons.class);
 
         ModCreativeModeTabs.register(modEventBus);
 
         ModAttributes.register(modEventBus);
-
-        ModCriteriaTriggerTypes.register(modEventBus);
 
         ModItems.register(modEventBus);
         ModArmorMaterials.register(modEventBus);

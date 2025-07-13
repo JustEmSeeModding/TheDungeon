@@ -33,7 +33,7 @@ public final class ModAdvancementProvider extends AdvancementProvider {
         AdvancementHolder dungeonRoot = createRootAdvancement("thedungeon", ModBlocks.DUNGEON_PORTAL_F, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"), Map.of("pickup_infused_alloy",  InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
         AdvancementHolder essenceShard = createItemAdvancement("thedungeon","dungeon_essence_shard", ModItems.DUNGEON_ESSENCE_SHARD, dungeonRoot, AdvancementType.TASK, false, saver,existingFileHelper);
         AdvancementHolder infusedAlloy = createItemAdvancement("thedungeon","infused_alloy", ModItems.INFUSED_ALLOY_INGOT, essenceShard, AdvancementType.TASK, false, saver,existingFileHelper);
-        AdvancementHolder FailedToTraveledToDungeon = createSimpleAdvancement("thedungeon", "failed_travel", new ItemStack(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get()), "has_tried", FailedDungeonTravelTrigger.criterion(), dungeonRoot, AdvancementType.TASK, true, saver, existingFileHelper);
+        AdvancementHolder FailedToTraveledToDungeon = createSimpleAdvancement("thedungeon", "failed_portal_travel", new ItemStack(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get()), "has_tried", FailedDungeonTravelTrigger.criterion(), dungeonRoot, AdvancementType.TASK, true, saver, existingFileHelper);
   }
 
     private static AdvancementHolder createItemAdvancement(String location, String name, ItemLike item, AdvancementHolder parent, AdvancementType advancementType, boolean hidden, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {

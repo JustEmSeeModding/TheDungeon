@@ -196,7 +196,7 @@ public class GridDungeonGenerator {
         }
         for (int i = 0; i < GameruleRegistry.getIntegerGamerule(server, ModGamerules.CALCULATOR_STEPS_PER_TICK); i++) {
             if (FillUnoccupied()) {
-                // if all placements have been calculated start the next step
+                // if all placements have been calculated, start the next step
                 currentTask = GenerationTask.PLACING_ROOMS;
                 DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"Fallback Placing Finished, Starting Room Placement");
             }
