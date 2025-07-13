@@ -33,6 +33,10 @@ Goblin Dungeon Biomes and connections
     Ice-Crystal
 
     magma?
-    Sculk Biome?
+    Sculk?
+
+Infusion table
+    for easier and quicker infusion recipes
+    also unlocks item infusion
 
 
