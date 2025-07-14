@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.Random;
 
 public abstract class Dungeon {
-    private static int lastID = 0;
+    private static int lastID = -1;
     protected final String resourceName;
     private final int ID;
     protected boolean utilDungeon = false;
@@ -20,17 +20,17 @@ public abstract class Dungeon {
 
     // constructor
     public Dungeon(String resourceName, DungeonRank rank, int weight) {
-        if (resourceName.isEmpty()) throw new IllegalStateException(this+":Dungeon cant have empty resource name");
-        if (weight<0) throw new IllegalStateException(this+":Dungeon weight cant be negative");
-        ID = lastID++;
+        if (resourceName.isEmpty()) throw new IllegalStateException(this + ":Dungeon cant have empty resource name");
+        if (weight < 0) throw new IllegalStateException(this + ":Dungeon weight cant be negative");
+        ID = ++lastID;
         this.resourceName = resourceName;
         this.rank = rank;
         this.weight = weight;
     }
 
     protected Dungeon(String resourceName, DungeonRank rank, int weight, int ID) {
-        if (resourceName.isEmpty()) throw new IllegalStateException(this+":Dungeon cant have empty resource name");
-        if (weight<0) throw new IllegalStateException(this+":Dungeon weight cant be negative");
+        if (resourceName.isEmpty()) throw new IllegalStateException(this + ":Dungeon cant have empty resource name");
+        if (weight < 0) throw new IllegalStateException(this + ":Dungeon weight cant be negative");
         this.ID = ID;
         this.resourceName = resourceName;
         this.rank = rank;
@@ -45,13 +45,15 @@ public abstract class Dungeon {
     }
 
     public Dungeon setOverrideGenerationHeight(int height) {
-        if (overrideCenter==null){overrideCenter = rank.getDefaultCenterPos();}
+        if (overrideCenter == null) {
+            overrideCenter = rank.getDefaultCenterPos();
+        }
         overrideCenter = overrideCenter.atY(height);
         return this;
     }
 
     protected Dungeon setOverrideCenter(BlockPos override) {
-        overrideCenter=override;
+        overrideCenter = override;
         return this;
     }
 
@@ -127,5 +129,9 @@ public abstract class Dungeon {
     @Override
     public String toString() {
         return (getResourceName() + "-weight:" + getWeight());
+    }
+
+    public static int getMaxID() {
+        return lastID;
     }
 }

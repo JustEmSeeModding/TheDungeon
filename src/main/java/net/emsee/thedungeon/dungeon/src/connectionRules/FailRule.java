@@ -5,21 +5,30 @@ import net.emsee.thedungeon.dungeon.src.Connection;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
+import java.util.List;
+
 /**
  * a fail rule is triggered when a tag fails placing the next room through any means
  */
 public abstract class FailRule {
     protected final String tag;
+    protected final boolean horizontalConnection;
+    protected final boolean verticalConnection;
 
-    protected FailRule(String tag) {
+    protected FailRule(String tag, boolean horizontalConnection, boolean verticalConnection) {
         this.tag = tag;
+        this.horizontalConnection = horizontalConnection;
+        this.verticalConnection = verticalConnection;
     }
 
     /**
      * returns true if the tag matches this rule
      */
-    public final boolean match(String tag) {
-        return tag.equals(this.tag);
+    public final boolean match(String tag, Connection connection) {
+        boolean connectionCorrect =
+                (connection.isHorizontal() && horizontalConnection) ||
+                (connection.isVertical() && verticalConnection);
+        return connectionCorrect && tag.equals(this.tag);
     }
 
     /**

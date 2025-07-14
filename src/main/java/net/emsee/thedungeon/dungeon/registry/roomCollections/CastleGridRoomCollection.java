@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.dungeon.dungeons.roomCollections;
+package net.emsee.thedungeon.dungeon.registry.roomCollections;
 
 import net.emsee.thedungeon.dungeon.src.connectionRules.connection.CanConnectBothWays;
 import net.emsee.thedungeon.dungeon.src.connectionRules.connection.CanConnectOneWay;
@@ -74,7 +74,7 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
                 .addTagRule(new CanConnectOneWay("stair", ConnectionRule.DEFAULT_CONNECTION_TAG))
                 .addTagRule(new CantConnectToSelf("stair"))
                 .addTagRule(new CanConnectBothWays("corner", ConnectionRule.DEFAULT_CONNECTION_TAG))
-                .addTagRule(new WallFailRule("main_hall", 27,36,0,true, () -> Blocks.ANDESITE, 27))
+                .addTagRule(new WallFailRule("main_hall", 27,36,0,true, Blocks.ANDESITE::defaultBlockState, 27))
         ;
 
     }

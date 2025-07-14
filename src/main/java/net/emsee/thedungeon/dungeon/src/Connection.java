@@ -54,4 +54,17 @@ public enum Connection {
             throw new IllegalStateException("connection should not exist: " + this);
         return toReturn;
     }
+
+    public boolean isHorizontal() {
+        return
+                this == NORTH ||
+                        this == EAST ||
+                        this == SOUTH ||
+                        this == WEST;
+    }
+    public boolean isVertical() {
+        return
+                this == UP ||
+                        this == DOWN;
+    }
 }

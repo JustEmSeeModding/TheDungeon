@@ -282,7 +282,7 @@ public class GridDungeonGenerator {
     public void RoomConnectionFail(String tag, GeneratedRoom room, Connection from, boolean placeFallback, boolean exitObstructed) {
         boolean doPlaceFallback = placeFallback;
         for (FailRule failRule : collection.getFailRules()) {
-            if (failRule.match(tag)) {
+            if (failRule.match(tag, from)) {
                 toPlaceInstances.add(new FailRule.Instance(failRule,room,from,placeFallback,exitObstructed));
                 if (failRule.stopFallbackPlacement())
                     doPlaceFallback=false;

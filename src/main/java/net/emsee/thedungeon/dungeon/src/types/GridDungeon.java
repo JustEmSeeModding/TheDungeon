@@ -45,7 +45,7 @@ public class GridDungeon extends Dungeon {
         roomCollection = collection;
     }
 
-    public GridDungeon(String resourceName, DungeonRank rank, int weight, int gridCellWidth, int gridCellHeight, GridRoomCollection collection, int ID) {
+    protected GridDungeon(String resourceName, DungeonRank rank, int weight, int gridCellWidth, int gridCellHeight, GridRoomCollection collection, int ID) {
         super(resourceName, rank, weight, ID);
         this.gridCellWidth = gridCellWidth;
         this.gridCellHeight = gridCellHeight;

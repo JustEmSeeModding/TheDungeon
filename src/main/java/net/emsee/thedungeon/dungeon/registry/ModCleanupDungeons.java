@@ -1,8 +1,8 @@
-package net.emsee.thedungeon.dungeon.dungeons;
+package net.emsee.thedungeon.dungeon.registry;
 
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.GridDungeon;
-import net.emsee.thedungeon.dungeon.dungeons.roomCollections.CleanupGridRoomCollection;
+import net.emsee.thedungeon.dungeon.registry.roomCollections.CleanupGridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 
 public class ModCleanupDungeons extends ModDungeons {

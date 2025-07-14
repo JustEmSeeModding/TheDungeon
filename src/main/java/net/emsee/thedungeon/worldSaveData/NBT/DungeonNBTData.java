@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.dungeon.dungeons.ModDungeons;
+import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;

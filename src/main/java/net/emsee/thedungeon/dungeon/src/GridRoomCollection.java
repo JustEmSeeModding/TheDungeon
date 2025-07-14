@@ -17,8 +17,8 @@ public abstract class GridRoomCollection {
     private final WeightedMap.Int<AbstractGridRoom> allGridRooms = new WeightedMap.Int<>();
     private final List<ConnectionRule> connectionRules = new ArrayList<>();
     private final List<FailRule> failRules = new ArrayList<>();
-    private final Map<AbstractGridRoom, RequiredRoomPlacements> requiredPlacements = new HashMap<>();
-    private final Map<List<AbstractGridRoom>, RequiredRoomPlacements> requiredListPlacements = new HashMap<>();
+    private final Map<AbstractGridRoom, RequiredRoomPlacements> requiredPlacements = new LinkedHashMap<>();
+    private final Map<List<AbstractGridRoom>, RequiredRoomPlacements> requiredListPlacements = new LinkedHashMap<>();
     private AbstractGridRoom fallbackGridRoom = null;
     private AbstractGridRoom startingRoom = null;
     private final int gridCellWidth;
@@ -253,6 +253,9 @@ public abstract class GridRoomCollection {
 
     /****
      * Updates the placement count for required rooms or required room groups when a room is placed.
+     * <p>
+     * in the case that the room is both separate or in a list, or mentioned in multiple list:
+     * the separate one will be marked first, then the first list found
      */
     public void updatePlacedRequirements(AbstractGridRoom placed) {
         if (requiredPlacements.containsKey(placed)) {

@@ -1,11 +1,11 @@
-package net.emsee.thedungeon.dungeon.dungeons;
+package net.emsee.thedungeon.dungeon.registry;
 
 
 import net.emsee.thedungeon.DebugLog;
-import net.emsee.thedungeon.dungeon.dungeons.roomCollections.CastleGridRoomCollection;
-import net.emsee.thedungeon.dungeon.dungeons.roomCollections.GoblinCavesGridRoomCollection;
-import net.emsee.thedungeon.dungeon.dungeons.roomCollections.LibraryGridRoomCollection;
-import net.emsee.thedungeon.dungeon.dungeons.roomCollections.TestGridRoomCollection;
+import net.emsee.thedungeon.dungeon.registry.roomCollections.CastleGridRoomCollection;
+import net.emsee.thedungeon.dungeon.registry.roomCollections.GoblinCavesGridRoomCollection;
+import net.emsee.thedungeon.dungeon.registry.roomCollections.LibraryGridRoomCollection;
+import net.emsee.thedungeon.dungeon.registry.roomCollections.TestGridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.GridDungeon;
@@ -65,10 +65,20 @@ public class ModDungeons {
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
     protected static Dungeon register(Dungeon dungeon) {
-        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Registering Dungeon :{}", dungeon);
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", dungeon);
         DUNGEONS.put(dungeon.getResourceName(), dungeon);
         GlobalDungeonManager.registerToAutoGenerator(dungeon, dungeon.getWeight());
         return dungeon;
+    }
+
+    public static Dungeon getByID(int ID) {
+        for (Dungeon dungeon : DUNGEONS.values())
+            if (dungeon.getID() == ID) return dungeon;
+        return null;
+    }
+
+    public static int getMaxID() {
+        return Dungeon.getMaxID();
     }
 
     public static Dungeon GetByResourceName(String resourceName) {

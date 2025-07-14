@@ -1,5 +1,7 @@
-package net.emsee.thedungeon.dungeon.dungeons.roomCollections;
+package net.emsee.thedungeon.dungeon.registry.roomCollections;
 
+import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
+import net.emsee.thedungeon.dungeon.src.connectionRules.fail.FloorFailRule;
 import net.emsee.thedungeon.dungeon.src.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.room.GridRoomBasic;
 import net.emsee.thedungeon.dungeon.src.room.GridRoomMultiResource;
@@ -7,6 +9,7 @@ import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.room.GridRoomGroup;
 import net.emsee.thedungeon.dungeon.src.GridRoomCollection;
 import net.emsee.thedungeon.structureProcessor.library.DefaultLibraryProcessor;
+import net.minecraft.world.level.block.Blocks;
 
 public final class LibraryGridRoomCollection extends GridRoomCollection {
     public LibraryGridRoomCollection() {
@@ -26,7 +29,9 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
 
                 .addRequiredRoom(1, 1, new GridRoomBasic("library/big/portal",13, 9).withWeight(4).setGenerationPriority(1).horizontalConnections().setSizeHeight(3, 3, 1))
                 .addRequiredRoom(3, 5, new GridRoomBasic("library/crosses/portal",13, 9).withWeight(4).setGenerationPriority(1).horizontalConnections())
-                .withStructureProcessor(DefaultLibraryProcessor.INSTANCE);
+                .withStructureProcessor(DefaultLibraryProcessor.INSTANCE)
+
+                .addTagRule(new FloorFailRule(ConnectionRule.DEFAULT_CONNECTION_TAG, 13, false, Blocks.OAK_PLANKS::defaultBlockState, 169));
     }
 
     static AbstractGridRoom straights = new GridRoomMultiResource(13, 9)

@@ -2,7 +2,8 @@ package net.emsee.thedungeon.dungeon.src;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
-import net.emsee.thedungeon.dungeon.dungeons.ModCleanupDungeons;
+import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
+import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.events.ModDungeonCalledEvents;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
@@ -12,6 +13,7 @@ import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
@@ -33,11 +35,11 @@ public final class GlobalDungeonManager {
     private static final int forceLoadedChunkRadius = 35;
     private static final int killRadius = 500;
 
-    private final static Map<Dungeon, Integer> dungeons = new HashMap<>();
+    private final static Map<DungeonRank,WeightedMap.Int<Dungeon>> cycleDungeons = Util.make(new HashMap<>(), map -> {for (DungeonRank rank : DungeonRank.values()) map.put(rank, new WeightedMap.Int<>());});
     private final static ResourceKey<Level> dungeonResourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
 
     public static void registerToAutoGenerator(Dungeon dungeon, Integer weight) {
-        dungeons.put(dungeon, weight);
+        cycleDungeons.get(dungeon.getRank()).put(dungeon, weight);
     }
 
     public static void tick(ServerTickEvent.Pre event) {
@@ -153,21 +155,18 @@ public final class GlobalDungeonManager {
     static private void selectNewProgressDungeon(MinecraftServer server, boolean skipPassiveQueue, DungeonRank rank) {
         progressQueueNULLCheck(server);
         passiveQueueNULLCheck(server, rank);
-        if (dungeons.isEmpty()) return;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
             cleanup(server, rank);
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Selecting new dungeon");
+        DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Checking passive queue");
         if (!skipPassiveQueue && !saveData.isPassiveQueueEmpty(rank)) {
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Dungeon found in passive queue");
             saveData.addToProgressQueue(saveData.removeFromPassiveQueue(rank));
         }
         else {
-            WeightedMap.Int<Dungeon> possibleDungeons = new WeightedMap.Int<>();
-            //DebugLog.logInfo(DebugLog.DebugLevel.GENERATING_STEPS,"All Dungeons: {}", ListAndArrayUtils.mapToString(dungeons));
-            for (Dungeon dungeon : dungeons.keySet())
-                if (dungeon.getRank()==rank && dungeons.get(dungeon)>0)
-                    possibleDungeons.put(dungeon, dungeons.get(dungeon));
+            WeightedMap.Int<Dungeon> possibleDungeons = cycleDungeons.get(rank);
+            DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"No dungeon in passive queue, selecting random");
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Possible Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
             if (possibleDungeons.isEmpty()) {
                 DebugLog.logWarn(DebugLog.DebugType.WARNINGS,"Rank: {} has no dungeons assigned", rank.toString());
@@ -176,7 +175,7 @@ public final class GlobalDungeonManager {
             ServerLevel overworld = server.getLevel(Level.OVERWORLD);
             if (overworld == null) throw new IllegalStateException("overworld not found");
             Dungeon newDungeon = possibleDungeons.getRandom(overworld.getRandom());
-            if (newDungeon== null) throw new IllegalStateException("no new dungeon found");
+            if (newDungeon== null) throw new IllegalStateException("error with selecting dungeon");
             saveData.addToProgressQueue(newDungeon.getCopy());
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "added {} to queue", newDungeon);
         }
@@ -316,7 +315,7 @@ public final class GlobalDungeonManager {
      */
     public static boolean isGenerating(MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        return saveData.isProgressQueueEmpty();
+        return !saveData.isProgressQueueEmpty();
     }
 
     /**
@@ -390,14 +389,11 @@ public final class GlobalDungeonManager {
     }
 
     public static Dungeon getDungeonByID(int ID) {
-        for (Dungeon dungeon: dungeons.keySet()) {
-            if (dungeon.getID() == ID) return dungeon;
-        }
-        return null;
+        return ModDungeons.getByID(ID);
     }
 
     public static int getDungeonCount() {
-        return dungeons.size();
+        return ModDungeons.getMaxID();
     }
 
     /**

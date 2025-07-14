@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.dungeon.dungeons.roomCollections;
+package net.emsee.thedungeon.dungeon.registry.roomCollections;
 
 import net.emsee.thedungeon.dungeon.src.connectionRules.fail.WallFailRule;
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules.SpawnInBox;
@@ -78,15 +78,15 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
 
                 )
 
-                .addTagRule(new WallFailRule("stone_caves", 11, 11, 0, false, () -> Blocks.STONE, 11 * 11)
+                .addTagRule(new WallFailRule("stone_caves", 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
-                .addTagRule(new WallFailRule("gilded_caves", 11, 11, 0, false, () -> Blocks.BLACKSTONE, 11 * 11)
+                .addTagRule(new WallFailRule("gilded_caves", 11, 11, 0, false, Blocks.BLACKSTONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE))
-                .addTagRule(new WallFailRule("deep_caves", 11, 11, 0, false, () -> Blocks.STONE, 11 * 11)
+                .addTagRule(new WallFailRule("deep_caves", 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE))
-                .addTagRule(new WallFailRule("ice_caves", 11, 11, 0, false, () -> Blocks.STONE, 11 * 11)
+                .addTagRule(new WallFailRule("ice_caves", 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(StoneToIceCaveProcessor.INSTANCE))
-                .addTagRule(new WallFailRule("overgrown_caves", 11, 11, 0, false, () -> Blocks.STONE, 11 * 11)
+                .addTagRule(new WallFailRule("overgrown_caves", 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(OvergrownCaveProcessor.INSTANCE))
         ;
     }
