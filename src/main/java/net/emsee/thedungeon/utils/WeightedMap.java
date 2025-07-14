@@ -2,12 +2,12 @@ package net.emsee.thedungeon.utils;
 
 import net.minecraft.util.RandomSource;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class WeightedMap {
-    public static class Int<T> extends HashMap<T, Integer> {
+    public static class Int<T> extends LinkedHashMap<T, Integer> {
         public Int() {
             super();
         }
@@ -49,7 +49,7 @@ public class WeightedMap {
         }
     }
 
-    public static class Dbl<T> extends HashMap<T, Double> {
+    public static class Dbl<T> extends LinkedHashMap<T, Double> {
         public Dbl() {
             super();
         }
@@ -58,6 +58,7 @@ public class WeightedMap {
             this();
             putAll(map);
         }
+
         public T getRandom(Random random) {
             if (size()==0) return null;
             double totalWeight = 0;

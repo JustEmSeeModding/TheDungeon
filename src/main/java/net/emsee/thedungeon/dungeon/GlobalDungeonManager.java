@@ -298,7 +298,7 @@ public final class GlobalDungeonManager {
     /**
      * called by the DungeonDebugTool
      */
-    public static void GenerateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
+    public static void generateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
 
         Dungeon newDungeon = Objects.requireNonNull(getDungeonByID(selectedDungeonID)).getCopy();
 
@@ -306,6 +306,14 @@ public final class GlobalDungeonManager {
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
             cleanup(server, newDungeon.getRank());
         saveData.addToProgressQueue(newDungeon);
+    }
+
+    /**
+     * returns true if actively generating any dungeon.
+     */
+    public static boolean isGenerating(MinecraftServer server) {
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        return saveData.isProgressQueueEmpty();
     }
 
     /**
