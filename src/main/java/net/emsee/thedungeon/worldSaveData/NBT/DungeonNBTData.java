@@ -2,9 +2,9 @@ package net.emsee.thedungeon.worldSaveData.NBT;
 
 import com.google.common.collect.Maps;
 import net.emsee.thedungeon.DebugLog;
-import net.emsee.thedungeon.dungeon.types.Dungeon;
-import net.emsee.thedungeon.dungeon.util.DungeonRank;
-import net.emsee.thedungeon.dungeon.ModDungeons;
+import net.emsee.thedungeon.dungeon.src.types.Dungeon;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.emsee.thedungeon.dungeon.dungeons.ModDungeons;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -35,28 +35,28 @@ public final class DungeonNBTData {
     });
 
     public CompoundTag SerializeNBT() {
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"Serializing:");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"Serializing:");
         CompoundTag toReturn = new CompoundTag();
         toReturn.putLong("lastExecutionTime", lastExecutionTime);
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
         toReturn.putLong("lastMinuteAnnouncement", lastMinuteAnnouncement);
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         toReturn.putLong("lastSecondAnnouncement", lastSecondAnnouncement);
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
         toReturn.putBoolean("finishedForcedChunks", finishedForcedChunks);
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"finishedForcedChunks: {}", finishedForcedChunks);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"finishedForcedChunks: {}", finishedForcedChunks);
         for (DungeonRank rank : isOpen.keySet())
             toReturn.putBoolean("isOpen_" + rank.getName(), isOpen.get(rank));
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
         if (nextToCollapse!= null) toReturn.putString("nextToCollapse", nextToCollapse.getName());
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
         int i = 0;
         for (Dungeon dungeon : dungeonProgressQueue) {
             toReturn.putString("dungeonProgressQueue_" + i, dungeon.getResourceName());
             i++;
         }
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
 
         i = 0;
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
@@ -65,7 +65,7 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
 
         i = 0;
         for (DungeonRank rank : portalPositions.keySet()) {
@@ -76,25 +76,25 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
         return toReturn;
     }
 
     public void DeserializeNBT(CompoundTag tag) {
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"Deserializing:");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"Deserializing:");
         lastExecutionTime = tag.getLong("lastExecutionTime");
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
         lastMinuteAnnouncement = tag.getLong("lastMinuteAnnouncement");
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastMinuteAnnouncement: {}", lastMinuteAnnouncement);
         lastSecondAnnouncement = tag.getLong("lastSecondAnnouncement");
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastSecondAnnouncement: {}", lastSecondAnnouncement);
         finishedForcedChunks = tag.getBoolean("finishedForcedChunks");
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"finishedForcedChunks: {}", finishedForcedChunks);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"finishedForcedChunks: {}", finishedForcedChunks);
         for (DungeonRank rank : DungeonRank.values())
             isOpen.put(rank,tag.getBoolean("isOpen_" + rank.getName()));
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
         nextToCollapse = DungeonRank.getByName(tag.getString("nextToCollapse"));
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
         int i = 0;
         dungeonProgressQueue.clear();
@@ -103,7 +103,7 @@ public final class DungeonNBTData {
             dungeonProgressQueue.add(toAdd.getCopy());
             i++;
         }
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
 
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
             i = 0;
@@ -114,7 +114,7 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
 
         for (DungeonRank rank : portalPositions.keySet()) {
             i = 0;
@@ -127,7 +127,7 @@ public final class DungeonNBTData {
                 i++;
             }
         }
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
     }
 
 

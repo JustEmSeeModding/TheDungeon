@@ -2,8 +2,8 @@ package net.emsee.thedungeon.block.custom.portal;
 
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
-import net.emsee.thedungeon.dungeon.util.DungeonRank;
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.events.ModDungeonCalledEvents;
 import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;

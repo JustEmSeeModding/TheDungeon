@@ -18,7 +18,7 @@ public final class StructureUtils {
         StructureTemplateManager templateManager = level.getStructureManager();
         Optional<StructureTemplate> template = templateManager.get(resourceLocation);
         if (template.isEmpty()) {
-            DebugLog.logError(DebugLog.DebugLevel.IMPORTANT,"Failed to load template for {}", resourceLocation);
+            DebugLog.logError(DebugLog.DebugType.IMPORTANT,"Failed to load template for {}", resourceLocation);
         }
         return template.orElse(null);
     }

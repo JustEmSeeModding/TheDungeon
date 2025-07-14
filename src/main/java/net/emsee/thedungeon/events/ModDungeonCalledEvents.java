@@ -2,8 +2,8 @@ package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
-import net.emsee.thedungeon.dungeon.util.DungeonRank;
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.core.BlockPos;

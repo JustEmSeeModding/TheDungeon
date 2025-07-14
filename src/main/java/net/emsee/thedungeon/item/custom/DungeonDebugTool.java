@@ -3,7 +3,7 @@ package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -39,7 +39,7 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
                         selectedDungeonID = 0;
                     }
 
-                    DebugLog.logInfo(DebugLog.DebugLevel.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, Objects.requireNonNull(GlobalDungeonManager.getDungeonByID(selectedDungeonID)).getResourceName());
+                    DebugLog.logInfo(DebugLog.DebugType.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, Objects.requireNonNull(GlobalDungeonManager.getDungeonByID(selectedDungeonID)).getResourceName());
                     player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", Objects.requireNonNull(GlobalDungeonManager.getDungeonByID(selectedDungeonID)).getResourceName()));
 
                 } else {

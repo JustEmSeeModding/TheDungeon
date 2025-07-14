@@ -6,8 +6,8 @@ import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.ModBlockEntities;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
-import net.emsee.thedungeon.dungeon.ModCleanupDungeons;
-import net.emsee.thedungeon.dungeon.ModDungeons;
+import net.emsee.thedungeon.dungeon.dungeons.ModCleanupDungeons;
+import net.emsee.thedungeon.dungeon.dungeons.ModDungeons;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.events.ModEntityRegisterEvents;
 import net.emsee.thedungeon.gameRule.ModGamerules;
@@ -35,7 +35,7 @@ public final class TheDungeon
 
     public TheDungeon(IEventBus modEventBus, ModContainer modContainer)
     {
-        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Constructing mod instance...");
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Constructing mod instance...");
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
 
@@ -63,14 +63,14 @@ public final class TheDungeon
 
         ModGamerules.registerRules();
 
-        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Mod instance constructed successfully.");
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Mod instance constructed successfully.");
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Common setup...");
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Common setup...");
 
-        DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Common setup phase finished successfully.");
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Common setup phase finished successfully.");
     }
 
 
@@ -85,7 +85,7 @@ public final class TheDungeon
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            DebugLog.logInfo(DebugLog.DebugLevel.INSTANCE_SETUP,"Client Setup...");
+            DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Client Setup...");
             ModEntityRegisterEvents.ClientEntityRendererSetup(event);
         }
     }

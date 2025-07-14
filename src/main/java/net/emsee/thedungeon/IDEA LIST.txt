@@ -37,6 +37,12 @@ Goblin Dungeon Biomes and connections
 
 Infusion table
     for easier and quicker infusion recipes
-    also unlocks item infusion
+    also unlocks item infusions
+
+Implement Curios API for custom artifacts
+    only custom slots, no generic belt slot etc. (debatable maybe)
+    check all Curios slots for unwanted items.
+    Trinket belt equipment
+        a Curios equip-able belt that can hold multiple found trinkets (small passive buffs). better belts offer more slots.
 
 

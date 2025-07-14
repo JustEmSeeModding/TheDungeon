@@ -2,8 +2,8 @@ package net.emsee.thedungeon.worldSaveData;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeon.types.Dungeon;
-import net.emsee.thedungeon.dungeon.util.DungeonRank;
+import net.emsee.thedungeon.dungeon.src.types.Dungeon;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -36,7 +36,7 @@ public final class DungeonSaveData extends SavedData {
      */
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData saving");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA,"DungeonData saving");
         tag.put("DungeonData", dungeonData.SerializeNBT());
         return tag;
     }
@@ -45,7 +45,7 @@ public final class DungeonSaveData extends SavedData {
      * Loads a DungeonSaveData instance from the provided NBT data.
      */
     private static DungeonSaveData load(CompoundTag nbt, HolderLookup.Provider provider) {
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData Loading");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA,"DungeonData Loading");
         DungeonSaveData data = new DungeonSaveData();
         data.dungeonData.DeserializeNBT(nbt.getCompound("DungeonData"));
         return data;

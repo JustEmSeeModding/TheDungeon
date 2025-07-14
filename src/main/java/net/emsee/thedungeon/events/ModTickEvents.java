@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -10,6 +10,6 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 public class ModTickEvents {
     @SubscribeEvent
     public static void DungeonServerTick(ServerTickEvent.Pre event) {
-        GlobalDungeonManager.Tick(event);
+        GlobalDungeonManager.tick(event);
     }
 }
