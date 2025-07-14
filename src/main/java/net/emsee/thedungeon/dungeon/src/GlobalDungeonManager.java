@@ -4,6 +4,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
+import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.events.ModDungeonCalledEvents;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
@@ -46,7 +47,7 @@ public final class GlobalDungeonManager {
         MinecraftServer server = event.getServer();
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         saveData.setTickInterval(GameruleRegistry.getIntegerGamerule(server, ModGamerules.TICKS_BETWEEN_COLLAPSES));
-        if (!GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING)) {
+        if (!(GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING) && getCurrentProgressDungeon(server).canManualStepNow())) {
             generationTick(server, saveData);
         }
         generationTimerTick(server, saveData);
@@ -56,7 +57,7 @@ public final class GlobalDungeonManager {
      * Send Generation tick to the current dungeon
      */
     public static void sendManualGenerationTick(MinecraftServer server) {
-        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING)) {
+        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING) && getCurrentProgressDungeon(server).canManualStepNow()) {
             DungeonSaveData saveData = DungeonSaveData.Get(server);
             generationTick(server, saveData);
         }

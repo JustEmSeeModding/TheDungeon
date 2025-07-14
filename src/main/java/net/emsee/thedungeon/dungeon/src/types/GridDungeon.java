@@ -195,6 +195,11 @@ public class GridDungeon extends Dungeon {
         return generator != null;
     }
 
+    @Override
+    public boolean canManualStepNow() {
+        return generator.currentStep()==GridDungeonGenerator.GenerationTask.PLACING_ROOMS;
+    }
+
     public int getGridCellWidth() {
         return gridCellWidth;
     }

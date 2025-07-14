@@ -134,4 +134,6 @@ public abstract class Dungeon {
     public static int getMaxID() {
         return lastID;
     }
+
+    public abstract boolean canManualStepNow();
 }

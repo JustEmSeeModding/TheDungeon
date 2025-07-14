@@ -22,7 +22,9 @@ import net.minecraft.world.level.block.Rotation;
 import java.util.*;
 
 public class GridDungeonGenerator {
-    private enum GenerationTask {
+
+
+    public enum GenerationTask {
         UN_STARTED,
         CALCULATING,
         CHECK_REQUIREMENTS,
@@ -337,5 +339,9 @@ public class GridDungeonGenerator {
     public void SetSeed(long seed) {
         this.seed = seed;
         random.setSeed(seed);
+    }
+
+    public GenerationTask currentStep() {
+        return currentTask;
     }
 }
