@@ -37,7 +37,7 @@ public class StoneToDeepCaveProcessor extends BasicReplacementProcessor {
                 map.put(Blocks.DEEPSLATE_COPPER_ORE::defaultBlockState, 1);
                 map.put(Blocks.DEEPSLATE_IRON_ORE::defaultBlockState, 3);
                 map.put(Blocks.DEEPSLATE_DIAMOND_ORE::defaultBlockState, 2);
-                map.put(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState(), 4);
+                map.put(() -> ModBlocks.DEEPSLATE_PYRITE_ORE.get().defaultBlockState(), 4);
                 map.put(() -> ModBlocks.INFUSED_DEEPSLATE.get().defaultBlockState(), 1);
             });
 
