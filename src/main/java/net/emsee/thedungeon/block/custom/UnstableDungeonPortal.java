@@ -41,13 +41,13 @@ public class UnstableDungeonPortal extends DungeonBlock implements IDungeonCarry
     }
 
     @Override
-    protected void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    protected void randomTick( BlockState state,  ServerLevel level,  BlockPos pos,  RandomSource random) {
         transformBlocks(level, pos);
         super.randomTick(state, level, pos, random);
     }
 
     @Override
-    public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    public void animateTick( BlockState state,  Level level,  BlockPos pos,  RandomSource random) {
         if (level instanceof ClientLevel clientLevel) {
             ParticleUtils.sphereExpand(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, 1, 2, clientLevel, ParticleTypes.WARPED_SPORE, 0, 0, 0, .5, 10);
             ParticleUtils.sphereExpand(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, 1, 2, clientLevel, ParticleTypes.CRIMSON_SPORE, 0, 0, 0, .5, 1);
@@ -56,14 +56,14 @@ public class UnstableDungeonPortal extends DungeonBlock implements IDungeonCarry
     }
 
     @Override
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected  InteractionResult useWithoutItem( BlockState state,  Level level,  BlockPos pos,  Player player,  BlockHitResult hitResult) {
         explode(state, level, pos);
         level.destroyBlock(pos, true);
         return InteractionResult.SUCCESS;
     }
 
     @Override
-    public boolean onDestroyedByPlayer(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, boolean willHarvest, @NotNull FluidState fluid) {
+    public boolean onDestroyedByPlayer( BlockState state,  Level level,  BlockPos pos, Player player, boolean willHarvest,  FluidState fluid) {
         if (!player.isCreative()) {
             //level.explode(player, pos.getX(), pos.getY() - 1, pos.getZ(), 10, Level.ExplosionInteraction.MOB);
             explode(state, level, pos);
@@ -116,7 +116,7 @@ public class UnstableDungeonPortal extends DungeonBlock implements IDungeonCarry
     }
 
     @Override
-    public int getLightEmission(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
+    public int getLightEmission( BlockState state,  BlockGetter level,  BlockPos pos) {
         return 15;
     }
 }

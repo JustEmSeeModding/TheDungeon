@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem {
-    private final long timeLeftWarning = 2400;
+    private static final long LOW_TIME_LOCK = 2400;
 
     public DungeonPortal(Properties properties) {
         super(properties.randomTicks());
@@ -102,7 +102,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         long worldTime = server.overworld().getGameTime();
         long timeLeft = saveData.getTickInterval() - (worldTime - saveData.GetLastExecutionTime());
-        if (getExitRank() == saveData.getNextToCollapse() && timeLeft <= timeLeftWarning) {
+        if (getExitRank() == saveData.getNextToCollapse() && timeLeft <= LOW_TIME_LOCK) {
             long secondsLeft = (long) Math.ceil(timeLeft / (20f));
             player.displayClientMessage(Component.translatable("announcement.thedungeon.low_time_teleport", secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE),true);
             return false;

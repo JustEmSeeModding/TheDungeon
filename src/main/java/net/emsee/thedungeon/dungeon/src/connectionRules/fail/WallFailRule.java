@@ -167,7 +167,7 @@ public class WallFailRule extends FailRule {
 
         for (StructureProcessor processor : processors.list()) {
             assert blockInfo != null;
-            blockInfo = processor.processBlock(level, new BlockPos(0,0,0), globalPos, blockInfo, blockInfo, new StructurePlaceSettings());
+            blockInfo = processor.process(level, new BlockPos(0,0,0), globalPos, blockInfo, blockInfo, new StructurePlaceSettings(),null);
         }
         // Return the processed block state (or fallback to initial state)
         return blockInfo != null ? blockInfo.state() : initialState;

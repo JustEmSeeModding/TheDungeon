@@ -56,15 +56,10 @@ public enum Connection {
     }
 
     public boolean isHorizontal() {
-        return
-                this == NORTH ||
-                        this == EAST ||
-                        this == SOUTH ||
-                        this == WEST;
+        return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
+
     public boolean isVertical() {
-        return
-                this == UP ||
-                        this == DOWN;
+        return this == UP || this == DOWN;
     }
 }

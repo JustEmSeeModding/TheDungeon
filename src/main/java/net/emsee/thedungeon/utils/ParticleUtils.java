@@ -10,6 +10,7 @@ import net.minecraft.world.phys.Vec3;
  * a class I originally made for a different mod
  * has a lot of cool particle shapes
  * maybe useful for some artifacts or Mob attacks
+ * might need to check if everything still works for this version and add some javadoc
  */
 public final class ParticleUtils {
     //client

@@ -5,8 +5,7 @@ import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.server.level.ServerLevel;  
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -148,7 +147,7 @@ public class FloorFailRule extends FailRule {
 
         for (StructureProcessor processor : processors.list()) {
             assert blockInfo != null;
-            blockInfo = processor.processBlock(level, new BlockPos(0,0,0), globalPos, blockInfo, blockInfo, new StructurePlaceSettings());
+            blockInfo = processor.process(level, new BlockPos(0,0,0), globalPos, blockInfo, blockInfo, new StructurePlaceSettings(),null);
         }
         // Return the processed block state (or fallback to initial state)
         return blockInfo != null ? blockInfo.state() : initialState;

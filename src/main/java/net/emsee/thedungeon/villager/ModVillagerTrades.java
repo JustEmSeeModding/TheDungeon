@@ -26,7 +26,7 @@ import net.neoforged.neoforge.event.village.WandererTradesEvent;
 import java.util.List;
 import java.util.Optional;
 
-@EventBusSubscriber(modid = TheDungeon.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public final class ModVillagerTrades {
     static final float VANILLA_LOW_MULTIPLIER = 0.05f;
     static final float VANILLA_HIGH_MULTIPLIER = 0.20f;

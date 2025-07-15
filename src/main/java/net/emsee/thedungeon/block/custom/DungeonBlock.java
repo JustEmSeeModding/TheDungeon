@@ -17,7 +17,7 @@ public class DungeonBlock extends Block implements IDungeonCarryItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+    public void appendHoverText( ItemStack stack, Item. TooltipContext context, List<Component> tooltipComponents,  TooltipFlag tooltipFlag) {
         tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
