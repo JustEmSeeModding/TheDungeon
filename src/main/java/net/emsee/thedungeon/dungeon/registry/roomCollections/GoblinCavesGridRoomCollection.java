@@ -108,7 +108,6 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(FungalCaveProcessor.INSTANCE))
         ;
     }
-
     private static GridRoomList spawn_rooms() {
         return new GridRoomList().addRoom(new GridRoomBasic("goblin_caves/stone/spawn",11, 11)
                                 .withWeight(1)
