@@ -70,6 +70,7 @@ public final class TheDungeon
     {
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Common setup...");
 
+
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Common setup phase finished successfully.");
     }
 

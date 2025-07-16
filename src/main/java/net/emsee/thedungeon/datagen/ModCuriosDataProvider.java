@@ -15,7 +15,8 @@ public class ModCuriosDataProvider extends CuriosDataProvider {
 
     @Override
     public void generate(HolderLookup.Provider registries, ExistingFileHelper fileHelper) {
-        this.copySlot("belt", "dungeon_belt");
-        this.createEntities("player_default").addPlayer().addSlots("dungeon_belt");
+        this.createSlot("trinket").size(1);
+        this.createSlot("effigy").size(1);
+        this.createEntities("player_default").addPlayer().addSlots("trinket", "effigy");
     }
 }

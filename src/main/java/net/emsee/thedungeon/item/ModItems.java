@@ -18,7 +18,6 @@ public final class ModItems {
     public static final DeferredItem<DungeonItem> SHATTERED_PORTAL_CORE = ITEMS.register("shattered_portal_core",
             () -> new DungeonItem(new Item.Properties().stacksTo(1)));
 
-
     public static final DeferredItem<DungeonItem> PORTAL_CORE = ITEMS.register("portal_core",
             () -> new DungeonItem(new Item.Properties().stacksTo(1)));
 
@@ -33,6 +32,9 @@ public final class ModItems {
 
     public static final DeferredItem<DungeonClock> DUNGEON_CLOCK = ITEMS.register("dungeon_clock",
             () -> new DungeonClock(new Item.Properties()));
+
+    public static final DeferredItem<TestBeltItem> TEST_BELT = ITEMS.register("test_belt",
+            () -> new TestBeltItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonSwordItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
             () -> new DungeonSwordItem(ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonSwordItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2F))));
