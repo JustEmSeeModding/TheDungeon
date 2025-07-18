@@ -2,6 +2,7 @@ package net.emsee.thedungeon.events;
 
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.emsee.thedungeon.item.custom.DungeonPickaxeItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonItemSwapHandling;
@@ -14,6 +15,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
+
+import java.util.Objects;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public final class ModEquipmentEvents {

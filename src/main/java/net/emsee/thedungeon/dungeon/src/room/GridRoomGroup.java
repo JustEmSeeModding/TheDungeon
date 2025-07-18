@@ -154,6 +154,9 @@ public class GridRoomGroup extends AbstractGridRoom {
     }
 
     @Override
+    public void handleBiomePlacement(ServerLevel level, BlockPos centre, Rotation roomRotation, Random random) {}
+
+    @Override
     @Deprecated
     protected AbstractGridRoom setSpawnRules(List<MobSpawnRule> list) {
         throw new IllegalStateException(this+ ":setSpawnRules(l) should not be used for groups");

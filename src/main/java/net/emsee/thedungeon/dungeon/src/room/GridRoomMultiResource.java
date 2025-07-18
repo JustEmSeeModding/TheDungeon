@@ -1,14 +1,17 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.utils.BiomeUtils;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -19,6 +22,7 @@ import java.util.Random;
 /** Similar to GridRoomGroup but only uses multiple resource locations */
 public class GridRoomMultiResource extends AbstractGridRoom {
     WeightedMap.Int<ResourceLocation> resourceLocations = new WeightedMap.Int<>();
+    protected ResourceKey<Biome> biome = null;
 
     public GridRoomMultiResource(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
@@ -51,6 +55,11 @@ public class GridRoomMultiResource extends AbstractGridRoom {
 
     public ResourceLocation getResourceLocation(Random random) {
         return resourceLocations.getRandom(random);
+    }
+
+    public GridRoomMultiResource setBiome(ResourceKey<Biome> biome) {
+        this.biome=biome;
+        return this;
     }
 
     @Override
@@ -162,6 +171,14 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         }
 
         template.placeInWorld(serverLevel, origin, origin, placement, rand, Block.UPDATE_ALL);
+    }
+
+    @Override
+    public void handleBiomePlacement(ServerLevel level, BlockPos centre, Rotation roomRotation, Random random) {
+        if (biome==null) return;
+        forEachBlockPosInBounds(level, centre, roomRotation,
+                blockPos -> BiomeUtils.setBiome(level, blockPos, biome)
+        );
     }
 }
 

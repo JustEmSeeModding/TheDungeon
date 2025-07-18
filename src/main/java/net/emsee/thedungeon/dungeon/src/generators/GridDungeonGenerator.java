@@ -247,6 +247,7 @@ public class GridDungeonGenerator {
             if (toPlace instanceof GeneratedRoom room) {
                 // if it's a room place it down
                 room.finalizePlacement(serverLevel, collection.getStructureProcessors(), random);
+                //serverLevel.getBiomeManager().
                 toPlaceInstances.remove();
             }
             else if (toPlace instanceof FailRule.Instance failInstance) {

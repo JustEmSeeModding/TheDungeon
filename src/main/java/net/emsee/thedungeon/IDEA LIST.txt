@@ -28,13 +28,49 @@ Goblin Dungeon Biomes and connections
     Deepslate-Gilded (done)
     Deepslate-Ice (done)
     Stone-Overgrown (done)
-    Overgrown-Fungal
+    Overgrown-Fungal (done)
     Stone-Crystal
     Ice-Crystal
 
-    magma?
-    Sculk?
+    Crystal Biome:
+        crystal potential blocks: prismarine, calsite, amythist, quartz , custom roseQuartz
+        new Blob Processor
+        Falling crystals?
+        Resonance Nodes - pulsating crystal formations that buff nearby crystal mobs or debuff players unless destroyed.
 
+        Luminous Crawler: Passive/neutral insectoid mob made of light and crystal. Drops Luminous Dust (glowstone alternative/ingredient). Flees from loud noises/combat. Provides ambient light.
+        Crystal Golem: Mini-boss. Slow, tanky, made of Quartz/Amethyst. Reflects projectile damage.
+        Shardling: Small, aggressive crystal shard creatures
+
+    magma Biome:
+        More dificult biome
+        no portals
+        needs special gear?
+        Goblin forges (mainly HobGoblins)
+
+    Sculk Biome?
+
+    Cave Lurker: Giant, blind cave-dwelling insect (like a centipede/crustacean hybrid). Relies on vibration/scent. Ambushes from ceilings/walls. Tough carapace. Drops Chitin Plates (armor).
+    Rock Grub: Small, passive mob that eats stone. Leaves behind "Softened Stone" blocks that are easier to mine but collapse faster. Drops Grub Meat (food) or Grub Silk (string alternative).
+    Shadow Goblin: Give them short-range teleport/blink ability (like Endermen but shorter cooldown/distance) within shadows. Maybe inflict Blindness briefly on hit. Weak to bright light (Slowness/Weakness).
+    Corupted Goblin: Sculk
+
+    HobGoblin Trading:
+        Option 1: Gifts. Drop specific "Valued Items" near them (e.g., Pyrite Nuggets, Shiny Crystals, Cooked Meat, specific Goblin Totems dropped by other goblins). After enough gifts, they become neutral/tradeable for a set time. Attacking breaks reputation.
+        Option 2: Totem of Truce. Craft a unique item (using rare drops like a Shaman's staff + gold + emerald) that, when held visibly, makes them passive for a short time, allowing trade. Consumable or has a cooldown.
+        (time can be tracked on a potion on the player)
+
+    Structures:
+        Abandoned Mines (Stone/Deep): Collapsed tunnels, minecart tracks, ore veins picked clean. Hazards: Cave-ins, weakened supports. Loot: Old tools, maybe a forgotten stash.
+        Crystal Geodes (Crystal Biome): Large hollow spheres lined with rare crystals. Contains valuable ores/crystals at the center, guarded by Crystal Golems/Shardlings.
+        Forging Pit Complex (Magma Biome): Larger structure built around lava flows with anvils, smelters (using magma), weapon racks. Guarded by Heatforged Goblins and Basalt Walkers. Loot: High-quality tempered ingots, unique weapon/armor pieces.
+
+    Mini Bosses?:
+        The Myconid Sovereign (Fungal Biome): A giant, intelligent mushroom entity controlling the fungal growth and smaller mushroom creatures. Uses spore attacks (AoE poison/confusion), summons Myconid Thralls.
+        Pyrite Golem (Stone/Deep Biome): A massive golem made of Pyrite ore and stone. Highly resistant to physical damage, weak to magic/pickaxes? Drops large Pyrite chunks.
+        Cryo-Queen (Ice Biome): A humanoid ice elemental. Creates ice spikes, blizzards (slowness/blindness), freezes water. Drops Frost Cores (for ice weapons/tools).
+        The Forgemaster (Magma Biome): A massive Heatforged Goblin wielding a colossal heated hammer. Creates shockwaves, ignites the ground. Found in the Forging Pit Complex.
+        The Sculk Abomination (Sculk Biome): A horrific fusion of Sculk, bone, and corrupted goblin remains. Emits constant Sculk pulses, summons Sculk Horrors, inflicts Warden-like sonic attacks (weaker). Found guarding a major Sculk Nest.
 Infusion table
     for easier and quicker infusion recipes
     also unlocks item infusions
@@ -44,5 +80,8 @@ Implement Curios API for custom artifacts
     check all Curios slots for unwanted items.
     Trinket belt equipment
         a Curios equip-able belt that can hold multiple found trinkets (small passive buffs). better belts offer more slots.
+
+Pyrite Compas:
+    points to nearest exit
 
 
