@@ -33,7 +33,6 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.SCHOLAR_CHESTPLATE);
                         output.accept(ModItems.SCHOLAR_LEGGINGS);
                         output.accept(ModItems.SCHOLAR_BOOTS);
-                        output.accept(ModItems.TEST_BELT);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_INGREDIENTS_TAB = CREATIVE_MODE_TAB.register("dungeon_ingredients_tab",

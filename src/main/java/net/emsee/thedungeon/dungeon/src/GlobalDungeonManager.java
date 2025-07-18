@@ -46,7 +46,6 @@ public final class GlobalDungeonManager {
     public static void tick(ServerTickEvent.Pre event) {
         MinecraftServer server = event.getServer();
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        saveData.setTickInterval(GameruleRegistry.getIntegerGamerule(server, ModGamerules.TICKS_BETWEEN_COLLAPSES));
         if (!(GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING) && getCurrentProgressDungeon(server).canManualStepNow())) {
             generationTick(server, saveData);
         }
@@ -103,7 +102,7 @@ public final class GlobalDungeonManager {
             return;
         }
 
-        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - saveData.getTickInterval());
+        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - GameruleRegistry.getIntegerGamerule(server,ModGamerules.TICKS_BETWEEN_COLLAPSES));
 
         long lastExecutionTime = saveData.GetLastExecutionTime();
 

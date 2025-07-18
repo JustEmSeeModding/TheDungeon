@@ -186,13 +186,6 @@ public final class DungeonSaveData extends SavedData {
         return new ArrayList<>(dungeonData.getPortalPositions().get(rank));
     }
 
-    public int getTickInterval() {return dungeonData.getTickInterval();}
-
-    public void setTickInterval(int interval) {
-        dungeonData.setTickInterval(interval);
-        setDirty();
-    }
-
     public DungeonRank getNextToCollapse() {
         return dungeonData.getNextToCollapse();
     }

@@ -18,7 +18,6 @@ public final class DungeonNBTData {
         for (DungeonRank rank : DungeonRank.values())
             map.put(rank, new LinkedList<>());
     });
-    private int tickInterval = 10/*-minutes -> to Ticks*/ * 60 * 20;
     private long lastExecutionTime = -1;
     private long lastMinuteAnnouncement = -1;
     private long lastSecondAnnouncement = -1;
@@ -175,14 +174,6 @@ public final class DungeonNBTData {
 
     public Map<DungeonRank, List<BlockPos>> getPortalPositions() {
         return portalPositions;
-    }
-
-    public void setTickInterval(int tickInterval) {
-        this.tickInterval = tickInterval;
-    }
-
-    public int getTickInterval() {
-        return this.tickInterval;
     }
 
     public DungeonRank getNextToCollapse() {

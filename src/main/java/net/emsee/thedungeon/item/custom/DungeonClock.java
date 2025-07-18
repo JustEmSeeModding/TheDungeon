@@ -41,7 +41,7 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
 
         DungeonRank nextRank = saveData.getNextToCollapse();
 
-        long timeLeft = saveData.getTickInterval() - (worldTime - saveData.GetLastExecutionTime());
+        long timeLeft = GameruleRegistry.getIntegerGamerule(server,ModGamerules.TICKS_BETWEEN_COLLAPSES) - (worldTime - saveData.GetLastExecutionTime());
         long secondsLeft = (long) Math.ceil(timeLeft / (20f));
         long minutesLeft = (long) Math.floor(secondsLeft / (60f));
 

@@ -5,6 +5,8 @@ import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.events.ModDungeonCalledEvents;
+import net.emsee.thedungeon.gameRule.GameruleRegistry;
+import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
@@ -101,7 +103,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     private boolean timeCheck(Player player, MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         long worldTime = server.overworld().getGameTime();
-        long timeLeft = saveData.getTickInterval() - (worldTime - saveData.GetLastExecutionTime());
+        long timeLeft = GameruleRegistry.getIntegerGamerule(server,ModGamerules.TICKS_BETWEEN_COLLAPSES) - (worldTime - saveData.GetLastExecutionTime());
         if (getExitRank() == saveData.getNextToCollapse() && timeLeft <= LOW_TIME_LOCK) {
             long secondsLeft = (long) Math.ceil(timeLeft / (20f));
             player.displayClientMessage(Component.translatable("announcement.thedungeon.low_time_teleport", secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE),true);
