@@ -34,7 +34,7 @@ public final class DungeonNBTData {
     });
 
     public CompoundTag SerializeNBT() {
-        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"Serializing:");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"Serializing NBT:");
         CompoundTag toReturn = new CompoundTag();
         toReturn.putLong("lastExecutionTime", lastExecutionTime);
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
@@ -80,7 +80,7 @@ public final class DungeonNBTData {
     }
 
     public void DeserializeNBT(CompoundTag tag) {
-        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"Deserializing:");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"Deserializing NBT:");
         lastExecutionTime = tag.getLong("lastExecutionTime");
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"lastExecutionTime: {}", lastExecutionTime);
         lastMinuteAnnouncement = tag.getLong("lastMinuteAnnouncement");

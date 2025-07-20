@@ -1,7 +1,6 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.utils.BiomeUtils;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.minecraft.core.BlockPos;
@@ -43,14 +42,6 @@ public class GridRoomBasic extends AbstractGridRoom{
     public GridRoomBasic setBiome(ResourceKey<Biome> biome) {
         this.biome=biome;
         return this;
-    }
-
-    @Override
-    public void handleBiomePlacement(ServerLevel level, BlockPos centre, Rotation roomRotation, Random random) {
-        if (biome==null) return;
-        forEachBlockPosInBounds(level, centre, roomRotation,
-                blockPos -> BiomeUtils.setBiome(level, blockPos, biome)
-        );
     }
 
     @Override

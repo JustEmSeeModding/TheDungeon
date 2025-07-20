@@ -1,7 +1,6 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.utils.BiomeUtils;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
@@ -171,14 +170,6 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         }
 
         template.placeInWorld(serverLevel, origin, origin, placement, rand, Block.UPDATE_ALL);
-    }
-
-    @Override
-    public void handleBiomePlacement(ServerLevel level, BlockPos centre, Rotation roomRotation, Random random) {
-        if (biome==null) return;
-        forEachBlockPosInBounds(level, centre, roomRotation,
-                blockPos -> BiomeUtils.setBiome(level, blockPos, biome)
-        );
     }
 }
 

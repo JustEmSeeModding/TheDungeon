@@ -463,11 +463,9 @@ public abstract class AbstractGridRoom {
 
     public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random);
 
-    public abstract void handleBiomePlacement(ServerLevel level, BlockPos centre, Rotation roomRotation, Random random);
-
     // TODO:  actually make this method
     public void forEachBlockPosInBounds(ServerLevel level, BlockPos centre, Rotation roomRotation, Consumer<BlockPos> consumer) {
-        consumer.accept(centre);
+        throw new RuntimeException("Method forEachBlockPosInBounds not implemented");
     }
 }
 

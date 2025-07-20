@@ -1,5 +1,4 @@
-package net.emsee.thedungeon.structureProcessor.library;
-
+package net.emsee.thedungeon.structureProcessor.goblinCaves.Pallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
@@ -14,25 +13,23 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class DefaultLibraryProcessor extends PalletReplacementProcessor {
+public class StoneToIceCaveProcessor extends PalletReplacementProcessor {
+    public static final StoneToIceCaveProcessor INSTANCE = new StoneToIceCaveProcessor();
 
+    public static final MapCodec<StoneToIceCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    public static final DefaultLibraryProcessor INSTANCE = new DefaultLibraryProcessor();
-
-    public static final MapCodec<DefaultLibraryProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
-
-    private DefaultLibraryProcessor() {
-    }
-
-    private final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.BOOKSHELF::defaultBlockState, 10);
-                map.put(Blocks.CHISELED_BOOKSHELF::defaultBlockState, 2);
+                map.put(Blocks.PACKED_ICE::defaultBlockState, 10);
+                map.put(Blocks.BLUE_ICE::defaultBlockState, 7);
+                map.put(Blocks.SNOW_BLOCK::defaultBlockState, 10);
             });
 
-    private final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.CHISELED_BOOKSHELF, defaultMap);
+                map.put(Blocks.STONE, defaultMap);
+                map.put(Blocks.GRANITE, defaultMap);
+                map.put(Blocks.DIORITE, defaultMap);
             });
 
 

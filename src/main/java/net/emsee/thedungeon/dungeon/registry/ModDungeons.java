@@ -25,7 +25,8 @@ public class ModDungeons {
             3,
             new TestGridRoomCollection())
             .setDepth(10)
-            .setRoomEndChance(0));
+            .setRoomEndChance(0)
+    );
 
 
     public static final Dungeon THE_LIBRARY = register(new GridDungeon(

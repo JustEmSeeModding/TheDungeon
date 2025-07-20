@@ -1,8 +1,7 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.Pallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.structureProcessor.BasicReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;
