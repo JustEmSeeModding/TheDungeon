@@ -22,8 +22,8 @@
   "advancements.thedungeon.dungeon_essence_shard.description" : "You can feel it resonating with something",
   "advancements.thedungeon.infused_alloy.title" : "Infused Alloying",
   "advancements.thedungeon.infused_alloy.description" : "A strong metal but quite heavy",
-  "advancements.thedungeon.failed_travel.title" : "YOU SHALL NOT PASS!",
-  "advancements.thedungeon.failed_travel.description" : "Only the Attuned may pass. The dungeon devours all else.",
+  "advancements.thedungeon.failed_portal_travel.title" : "YOU SHALL NOT PASS!",
+  "advancements.thedungeon.failed_portal_travel.description" : "Only the Attuned may pass. The dungeon devours all else.",
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
@@ -71,7 +71,8 @@
   "item.thedungeon.test_dummy": "Infused Test Dummy",
 
   "item.thedungeon.dungeon_debug_tool": "Dungeon Debug Tool",
-  "item.thedungeon.dungeon_debug_tool.use": "Dungeon Regenerated",
+  "item.thedungeon.dungeon_debug_tool.use": "Dungeon generating",
+  "item.thedungeon.dungeon_debug_tool.use_busy": "Dungeon generator is busy",
   "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
 
   "block.thedungeon.dungeon_portal_f" : "F Rank Dungeon Portal",
@@ -122,5 +123,7 @@
 
   "attribute.thedungeon.name.generic.incoming_damage_reduction" : "Incoming Damage Reduction",
   "attribute.thedungeon.name.generic.mob_reach" : "Mob Reach",
-  "attribute.thedungeon.name.generic.enemy_aggro" : "Aggro To Enemy"
+  "attribute.thedungeon.name.generic.enemy_aggro" : "Aggro To Enemy",
+  "attribute.thedungeon.name.generic.min_perception" : "Aggro for normal perception",
+  "attribute.thedungeon.name.generic.max_perception" : "Aggro for increased perception"
 }

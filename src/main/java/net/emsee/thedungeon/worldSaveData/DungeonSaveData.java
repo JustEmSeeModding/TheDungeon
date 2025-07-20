@@ -2,8 +2,8 @@ package net.emsee.thedungeon.worldSaveData;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeon.types.Dungeon;
-import net.emsee.thedungeon.dungeon.util.DungeonRank;
+import net.emsee.thedungeon.dungeon.src.types.Dungeon;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -22,40 +22,30 @@ import java.util.List;
 
 public final class DungeonSaveData extends SavedData {
     private static final String DATA_NAME = TheDungeon.MOD_ID + "_dungeon_data";
-    final DungeonNBTData dungeonData = new DungeonNBTData();
+    private final DungeonNBTData dungeonData = new DungeonNBTData();
 
     /**
      * Returns a factory for creating and loading DungeonSaveData instances with the LEVEL data fix type.
-     *
-     * @return a Factory configured for DungeonSaveData persistence and loading
      */
-    public static Factory<DungeonSaveData> factory() {
+    private static Factory<DungeonSaveData> factory() {
         return new Factory<>(DungeonSaveData::new, DungeonSaveData::load, DataFixTypes.LEVEL);
     }
 
     /**
      * Serializes the current dungeon data into the provided NBT tag.
-     *
-     * @param tag the NBT tag to write data into
-     * @param pRegistries the registry provider for data fixing
-     * @return the updated NBT tag containing the serialized dungeon data
      */
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData saving");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA,"DungeonData saving");
         tag.put("DungeonData", dungeonData.SerializeNBT());
         return tag;
     }
 
     /**
      * Loads a DungeonSaveData instance from the provided NBT data.
-     *
-     * @param nbt the compound tag containing serialized dungeon data
-     * @param provider the registry provider for data lookup
-     * @return a new DungeonSaveData instance with its state restored from NBT
      */
     private static DungeonSaveData load(CompoundTag nbt, HolderLookup.Provider provider) {
-        DebugLog.logInfo(DebugLog.DebugLevel.SAVE_DATA,"DungeonData Loading");
+        DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA,"DungeonData Loading");
         DungeonSaveData data = new DungeonSaveData();
         data.dungeonData.DeserializeNBT(nbt.getCompound("DungeonData"));
         return data;
@@ -83,23 +73,12 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    /****
-     * Updates the timestamp for the last second announcement and marks the data as dirty for saving.
-     *
-     * @param lastSecondAnnouncement the new timestamp for the last second announcement
-     */
+
     public void SetLastSecondAnnouncement(long lastSecondAnnouncement) {
         dungeonData.SetLastSecondAnnouncement(lastSecondAnnouncement);
         setDirty();
     }
 
-    /**
-     * Retrieves the persistent DungeonSaveData instance for the overworld from the given Minecraft server,
-     * creating it if it does not already exist.
-     *
-     * @param server the Minecraft server from which to obtain the dungeon save data
-     * @return the DungeonSaveData instance associated with the overworld
-     */
     public static DungeonSaveData Get(MinecraftServer server) {
         ResourceKey<Level> overworldResourceKey = Level.OVERWORLD;
         ServerLevel overworld = server.getLevel(overworldResourceKey);
@@ -142,41 +121,23 @@ public final class DungeonSaveData extends SavedData {
         setDirty();
     }
 
-    /****
-     * Removes and returns the first dungeon from the passive queue.
-     * @return the dungeon removed from the passive queue
-     */
     public Dungeon removeFromPassiveQueue(DungeonRank rank) {
         Dungeon toReturn = dungeonData.getDungeonPassiveQueue(rank).remove();
         setDirty();
         return toReturn;
     }
 
-    /**
-     * Removes and returns the next dungeon from the progress queue, or returns null if the queue is empty.
-     * @return the next Dungeon in the progress queue, or null if the queue is empty
-     */
     public Dungeon pollFromProgressQueue() {
         Dungeon toReturn = dungeonData.getDungeonProgresQueue().poll();
         setDirty();
         return toReturn;
     }
 
-    /**
-     * Adds all dungeons from the provided list to the progress queue and marks the data as dirty for saving.
-     *
-     * @param list the list of dungeons to add to the progress queue
-     */
     public void addAllToProgressQueue(List<Dungeon> list) {
         dungeonData.getDungeonProgresQueue().addAll(list);
         setDirty();
     }
 
-    /**
-     * Returns whether the dungeon is currently open.
-     *
-     * @return true if the dungeon is open; false otherwise
-     */
     public boolean isDungeonOpen(DungeonRank rank) {
         return dungeonData.getDungeonOpen(rank);
     }
@@ -223,13 +184,6 @@ public final class DungeonSaveData extends SavedData {
     public List<BlockPos> getAllPortalPositions(DungeonRank rank) {
         if (rank==null) return null;
         return new ArrayList<>(dungeonData.getPortalPositions().get(rank));
-    }
-
-    public int getTickInterval() {return dungeonData.getTickInterval();}
-
-    public void setTickInterval(int interval) {
-        dungeonData.setTickInterval(interval);
-        setDirty();
     }
 
     public DungeonRank getNextToCollapse() {

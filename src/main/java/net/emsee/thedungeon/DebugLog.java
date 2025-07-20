@@ -2,31 +2,33 @@ package net.emsee.thedungeon;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.Util;
-import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class DebugLog {
     private static final Logger LOGGER = LogUtils.getLogger();
+    
+    private static final Boolean ENABLED = true;
 
-    private static final List<DebugLevel> debugLevels = Util.make(Lists.newArrayList(), (list) -> {
-        list.add(DebugLevel.INSTANCE_SETUP);
-        list.add(DebugLevel.SAVE_DATA);
-        //list.add(DebugLevel.SAVE_DATA_DETAILED);
-        list.add(DebugLevel.GENERATING_STEPS);
-        //list.add(DebugLevel.GENERATING_TICKS);
-        //list.add(DebugLevel.GENERATING_TICKS_DETAILS);
-        //list.add(DebugLevel.GENERATING_REQUIRED_PLACEMENTS);
-        list.add(DebugLevel.FORCED_CHUNK_UPDATES);
-        list.add(DebugLevel.FORCED_CHUNK_UPDATES_DETAILS);
-        list.add(DebugLevel.GENERIC);
-        list.add(DebugLevel.WARNINGS);
-        list.add(DebugLevel.IMPORTANT);
+    private static final Map<DebugType, Boolean> DebugTypes = Util.make(new HashMap<>(), (map) -> {
+        map.put(DebugType.INSTANCE_SETUP,true);
+        map.put(DebugType.SAVE_DATA,true);
+        map.put(DebugType.SAVE_DATA_DETAILED,false);
+        map.put(DebugType.GENERATING_STEPS,true);
+        map.put(DebugType.GENERATING_TICKS,false);
+        map.put(DebugType.GENERATING_TICKS_DETAILS,false);
+        map.put(DebugType.GENERATING_REQUIRED_PLACEMENTS,false);
+        map.put(DebugType.FORCED_CHUNK_UPDATES,true);
+        map.put(DebugType.FORCED_CHUNK_UPDATES_DETAILS,true);
+        map.put(DebugType.GENERIC,true);
+        map.put(DebugType.WARNINGS,true);
+        map.put(DebugType.IMPORTANT,true);
     });
 
-    public enum DebugLevel {
+    public enum DebugType {
         INSTANCE_SETUP,
         SAVE_DATA,
         SAVE_DATA_DETAILED,
@@ -41,44 +43,44 @@ public class DebugLog {
         IMPORTANT
     }
 
-    public static void logInfo(DebugLevel debugLevel, String msg) {
-        if (isDebugMode(debugLevel)) LOGGER.info(msg);
+    public static void logInfo(DebugType DebugType, String msg) {
+        if (isDebugMode(DebugType)) LOGGER.info(msg);
     }
 
-    public static void logInfo(DebugLevel debugLevel, String msg, Object... objects) {
-        if (isDebugMode(debugLevel)) LOGGER.info(msg, objects);
+    public static void logInfo(DebugType DebugType, String msg, Object... objects) {
+        if (isDebugMode(DebugType)) LOGGER.info(msg, objects);
     }
 
-    public static void logInfo(DebugLevel debugLevel, Supplier<String> msg) {
-        if (isDebugMode(debugLevel)) LOGGER.info(msg.get());
+    public static void logInfo(DebugType DebugType, Supplier<String> msg) {
+        if (isDebugMode(DebugType)) LOGGER.info(msg.get());
     }
 
 
-    public static void logWarn(DebugLevel debugLevel, String msg) {
-        if (isDebugMode(debugLevel)) LOGGER.warn(msg);
+    public static void logWarn(DebugType DebugType, String msg) {
+        if (isDebugMode(DebugType)) LOGGER.warn(msg);
     }
 
-    public static void logWarn(DebugLevel debugLevel, Supplier<String> msg) {
-        if (isDebugMode(debugLevel)) LOGGER.warn(msg.get());
+    public static void logWarn(DebugType DebugType, Supplier<String> msg) {
+        if (isDebugMode(DebugType)) LOGGER.warn(msg.get());
     }
 
-    public static void logWarn(DebugLevel debugLevel, String msg, Object... objects) {
-        if (isDebugMode(debugLevel)) LOGGER.warn(msg, objects);
+    public static void logWarn(DebugType DebugType, String msg, Object... objects) {
+        if (isDebugMode(DebugType)) LOGGER.warn(msg, objects);
     }
 
-    public static void logError(DebugLevel debugLevel, String msg) {
-        if (isDebugMode(debugLevel)) LOGGER.error(msg);
+    public static void logError(DebugType DebugType, String msg) {
+        if (isDebugMode(DebugType)) LOGGER.error(msg);
     }
 
-    public static void logError(DebugLevel debugLevel, Supplier<String> msg) {
-        if (isDebugMode(debugLevel)) LOGGER.error(msg.get());
+    public static void logError(DebugType DebugType, Supplier<String> msg) {
+        if (isDebugMode(DebugType)) LOGGER.error(msg.get());
     }
 
-    public static void logError(DebugLevel debugLevel, String msg, Object... objects) {
-        if (isDebugMode(debugLevel)) LOGGER.error(msg, objects);
+    public static void logError(DebugType DebugType, String msg, Object... objects) {
+        if (isDebugMode(DebugType)) LOGGER.error(msg, objects);
     }
 
-    private static boolean isDebugMode(DebugLevel level) {
-        return debugLevels.contains(level);
+    private static boolean isDebugMode(DebugType DebugType) {
+        return ENABLED && DebugTypes.containsKey(DebugType) && DebugTypes.get(DebugType);
     }
 }

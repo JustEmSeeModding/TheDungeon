@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.block.entity.portal;
 
 import net.emsee.thedungeon.block.custom.portal.DungeonPortal;
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

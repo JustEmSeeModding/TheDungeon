@@ -2,8 +2,8 @@ package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
-import net.emsee.thedungeon.dungeon.util.DungeonRank;
-import net.emsee.thedungeon.dungeon.GlobalDungeonManager;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.core.BlockPos;
@@ -20,6 +20,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 
 public final class ModDungeonCalledEvents {
@@ -55,17 +58,34 @@ public final class ModDungeonCalledEvents {
     }
 
     private static boolean CheckInventory(Player player) {
+        boolean hasInvalidItem = false;
         for (ItemStack stack : player.getInventory().items) {
+            if (hasInvalidItem) break;
             if (stack.getCount() == 0) continue;
             if (!(stack.getItem() instanceof IDungeonCarryItem ||
                     (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof  IDungeonCarryItem))) {
-                player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items"), true);
-                if (player instanceof ServerPlayer serverPlayer)
-                    ModCriteriaTriggerTypes.FAILED_DUNGEON_TRAVEL.get().trigger(serverPlayer);
-                return false;
+                hasInvalidItem = true;
             }
         }
-        return true;
+        if (CuriosApi.getCuriosInventory(player).isPresent()) {
+            IItemHandlerModifiable curios = CuriosApi.getCuriosInventory(player).get().getEquippedCurios();
+            for (int i = 0; i<curios.getSlots();i++) {
+                if (hasInvalidItem) break;
+                ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getCount() == 0) continue;
+                if (!(stack.getItem() instanceof IDungeonCarryItem ||
+                        (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IDungeonCarryItem))) {
+                    hasInvalidItem = true;
+                }
+            }
+        }
+
+        if (hasInvalidItem) {
+            player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items"), true);
+            if (player instanceof ServerPlayer serverPlayer)
+                ModCriteriaTriggerTypes.FAILED_DUNGEON_TRAVEL.get().trigger(serverPlayer);
+        }
+        return !hasInvalidItem;
     }
 
     private static void teleport(Player player, ServerLevel portalDimension, BlockPos teleportPos) {

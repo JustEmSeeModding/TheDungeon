@@ -34,7 +34,6 @@ public final class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.DEEPSLATE_PYRITE_ORE);
 
         blockWithItem(ModBlocks.INFUSED_DIRT);
-        //blockWithItem(ModBlocks.INFUSED_GRASS_BLOCK);
         blockWithItem(ModBlocks.INFUSED_CLAY);
         blockWithItem(ModBlocks.INFUSED_SAND);
         blockWithItem(ModBlocks.INFUSED_GRAVEL);

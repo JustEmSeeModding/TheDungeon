@@ -4,7 +4,7 @@ import net.minecraft.util.RandomSource;
 
 import java.util.*;
 
-public class PriorityMap<T> extends HashMap<T,Integer> {
+public class PriorityMap<T> extends LinkedHashMap<T,Integer> {
     public PriorityMap(){
         super();
     }

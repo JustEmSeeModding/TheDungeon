@@ -231,7 +231,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Offers")) {
             DataResult<MerchantOffers> dataResult = MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(NbtOps.INSTANCE), compound.get("Offers"));
-            dataResult.resultOrPartial(Util.prefix("Failed to load offers: ", string -> DebugLog.logWarn(DebugLog.DebugLevel.WARNINGS, string))).ifPresent((p_323775_) -> {
+            dataResult.resultOrPartial(Util.prefix("Failed to load offers: ", string -> DebugLog.logWarn(DebugLog.DebugType.WARNINGS, string))).ifPresent((p_323775_) -> {
                 this.offers = p_323775_;
             });
         }
