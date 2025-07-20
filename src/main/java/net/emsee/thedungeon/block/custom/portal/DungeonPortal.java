@@ -41,12 +41,12 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     }
 
     @Override
-    protected @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
+    protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof DungeonPortalBlockEntity entity) {
             MinecraftServer server = level.getServer();
             if (player.isCreative() || GlobalDungeonManager.isOpen(server, getExitRank())) {
@@ -56,19 +56,19 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
                 player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), true);
             }
         } else {
-            level.playLocalSound(pos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1,1,false);
+            level.playLocalSound(pos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 1, 1, false);
         }
         return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
     @Override
-    protected void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
         }
@@ -76,7 +76,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     }
 
     @Override
-    protected void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             if (this instanceof DungeonPortalExit)
                 GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
@@ -88,7 +88,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
 
 
     @Override
-    protected void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!level.isClientSide && state.getBlock() != newState.getBlock() && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             GlobalDungeonManager.removePortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
         }
@@ -96,17 +96,17 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     }
 
     @Override
-    public int getLightEmission(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
         return 15;
     }
 
     private boolean timeCheck(Player player, MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         long worldTime = server.overworld().getGameTime();
-        long timeLeft = GameruleRegistry.getIntegerGamerule(server,ModGamerules.TICKS_BETWEEN_COLLAPSES) - (worldTime - saveData.GetLastExecutionTime());
+        long timeLeft = GameruleRegistry.getIntegerGamerule(server, ModGamerules.TICKS_BETWEEN_COLLAPSES) - (worldTime - saveData.GetLastExecutionTime());
         if (getExitRank() == saveData.getNextToCollapse() && timeLeft <= LOW_TIME_LOCK) {
             long secondsLeft = (long) Math.ceil(timeLeft / (20f));
-            player.displayClientMessage(Component.translatable("announcement.thedungeon.low_time_teleport", secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE),true);
+            player.displayClientMessage(Component.translatable("announcement.thedungeon.low_time_teleport", secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE), true);
             return false;
         }
         return true;

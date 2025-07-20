@@ -47,7 +47,7 @@ public interface IDungeonToolTips {
             entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry);
         });
 
-        // add suffix component
+        // add prefix component
         addComponentArray(getPrefixComponents(), event);
 
         // handle every SlotType
@@ -67,7 +67,7 @@ public interface IDungeonToolTips {
                 Component.literal("YOU FOUND AN ERROR, these are not bound to a slot:"),
                 entries.get(SlotType.DEFAULT), event);
 
-        // add prefix components
+        // add suffix components
         addComponentArray(getSuffixComponents(), event);
 
     }
@@ -87,9 +87,10 @@ public interface IDungeonToolTips {
                 if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
                     totalDamage += entry.modifier().amount();
                 // add all total damage as a component
-                MutableComponent component = Component.literal("| ").withStyle(TITLE_FORMATTING);
-                component.append(entry.attribute().value().toBaseComponent(totalDamage + 1, 1, false, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
             }
+            MutableComponent component = Component.literal("| ").withStyle(TITLE_FORMATTING);
+            component.append(Attributes.ATTACK_DAMAGE.value().toBaseComponent(totalDamage + 1, 1, false, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+
         }
 
         // handle every entry

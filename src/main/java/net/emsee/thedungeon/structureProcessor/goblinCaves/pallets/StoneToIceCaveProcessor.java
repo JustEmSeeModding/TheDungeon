@@ -1,7 +1,8 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.Pallets;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.pallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+import net.emsee.thedungeon.structureProcessor.PalletReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;
@@ -12,28 +13,30 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class FungalVegetationOnlyProcessor extends FungalCaveProcessor {
-    public static final FungalVegetationOnlyProcessor INSTANCE = new FungalVegetationOnlyProcessor();
+public class StoneToIceCaveProcessor extends PalletReplacementProcessor {
+    public static final StoneToIceCaveProcessor INSTANCE = new StoneToIceCaveProcessor();
 
-    public static final MapCodec<FungalVegetationOnlyProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<StoneToIceCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    protected final WeightedMap.Int<Supplier<BlockState>> plantMap =
+    protected final WeightedMap.Int<Supplier<BlockState>> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.AIR::defaultBlockState, 100);
-                map.put(Blocks.BROWN_MUSHROOM::defaultBlockState, 10);
-                map.put(Blocks.RED_MUSHROOM::defaultBlockState, 1);
+                map.put(Blocks.PACKED_ICE::defaultBlockState, 10);
+                map.put(Blocks.BLUE_ICE::defaultBlockState, 7);
+                map.put(Blocks.SNOW_BLOCK::defaultBlockState, 10);
             });
-
 
     protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BROWN_MUSHROOM, plantMap);
+                map.put(Blocks.STONE, defaultMap);
+                map.put(Blocks.GRANITE, defaultMap);
+                map.put(Blocks.DIORITE, defaultMap);
             });
 
-    @Override
+
     protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
         return replacements;
     }
+
 
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;

@@ -5,11 +5,9 @@ import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -19,7 +17,6 @@ import java.util.Random;
 
 public class GridRoomBasic extends AbstractGridRoom{
     protected final ResourceLocation resourceLocation;
-    protected ResourceKey<Biome> biome = null;
 
     public GridRoomBasic(String path, int gridWidth, int gridHeight) {
         this(TheDungeon.defaultResourceLocation(path), gridWidth, gridHeight);
@@ -37,11 +34,6 @@ public class GridRoomBasic extends AbstractGridRoom{
     public GridRoomBasic(ResourceLocation resourceLocation,int gridWidth, int gridHeight, int ID) {
         super(gridWidth, gridHeight, ID);
         this.resourceLocation = resourceLocation;
-    }
-
-    public GridRoomBasic setBiome(ResourceKey<Biome> biome) {
-        this.biome=biome;
-        return this;
     }
 
     @Override

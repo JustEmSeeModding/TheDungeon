@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.Pallets;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.pallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;

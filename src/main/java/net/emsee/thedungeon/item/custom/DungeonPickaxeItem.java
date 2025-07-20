@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
     // List of blocks this tool can break
-    protected static Map<Block,Block> getBreakableBlocks() {
+    protected static Map<Block, Block> getBreakableBlocks() {
         return
                 Util.make(Maps.newHashMap(), (map) -> {
                     map.put(Blocks.GILDED_BLACKSTONE, Blocks.BLACKSTONE);
@@ -86,7 +86,7 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(DUNGEON_ITEM_HOVER_MESSAGE);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }

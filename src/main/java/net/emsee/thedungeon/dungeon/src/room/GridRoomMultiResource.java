@@ -6,11 +6,9 @@ import net.emsee.thedungeon.utils.StructureUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -21,7 +19,6 @@ import java.util.Random;
 /** Similar to GridRoomGroup but only uses multiple resource locations */
 public class GridRoomMultiResource extends AbstractGridRoom {
     WeightedMap.Int<ResourceLocation> resourceLocations = new WeightedMap.Int<>();
-    protected ResourceKey<Biome> biome = null;
 
     public GridRoomMultiResource(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
@@ -54,11 +51,6 @@ public class GridRoomMultiResource extends AbstractGridRoom {
 
     public ResourceLocation getResourceLocation(Random random) {
         return resourceLocations.getRandom(random);
-    }
-
-    public GridRoomMultiResource setBiome(ResourceKey<Biome> biome) {
-        this.biome=biome;
-        return this;
     }
 
     @Override

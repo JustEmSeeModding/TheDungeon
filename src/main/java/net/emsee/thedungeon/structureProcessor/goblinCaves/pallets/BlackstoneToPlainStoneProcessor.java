@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.Pallets;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.pallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
@@ -13,26 +13,20 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class StoneToIceCaveProcessor extends PalletReplacementProcessor {
-    public static final StoneToIceCaveProcessor INSTANCE = new StoneToIceCaveProcessor();
+public class BlackstoneToPlainStoneProcessor extends PalletReplacementProcessor {
+    public static final BlackstoneToPlainStoneProcessor INSTANCE = new BlackstoneToPlainStoneProcessor();
 
-    public static final MapCodec<StoneToIceCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<BlackstoneToPlainStoneProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    protected final WeightedMap.Int<Supplier<BlockState>> defaultMap =
-            Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.PACKED_ICE::defaultBlockState, 10);
-                map.put(Blocks.BLUE_ICE::defaultBlockState, 7);
-                map.put(Blocks.SNOW_BLOCK::defaultBlockState, 10);
-            });
+    private BlackstoneToPlainStoneProcessor() {
+    }
 
     protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.STONE, defaultMap);
-                map.put(Blocks.GRANITE, defaultMap);
-                map.put(Blocks.DIORITE, defaultMap);
+                map.put(Blocks.BLACKSTONE, Util.make(new WeightedMap.Int<>(), replace -> replace.put(Blocks.STONE::defaultBlockState, 1)));
             });
 
-
+    @Override
     protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
         return replacements;
     }

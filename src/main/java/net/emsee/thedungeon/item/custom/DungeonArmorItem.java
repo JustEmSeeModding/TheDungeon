@@ -2,7 +2,6 @@ package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -13,9 +12,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips {
@@ -24,7 +23,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(DUNGEON_ITEM_HOVER_MESSAGE);
     }
 
@@ -32,7 +31,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity) {
             if (livingEntity instanceof Player player) {
-                if(!level.isClientSide && playerHasFullSetOfArmor(player) && playerHasFullArmorOn(player)) {
+                if (!level.isClientSide && playerHasFullSetOfArmor(player) && playerHasFullArmorOn(player)) {
                     onFullSetTick(player);
                 }
             }
@@ -65,10 +64,10 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         Item chestplate = removedStack.getItem();
         Item helmet = removedStack.getItem();
 
-        if (slot != EquipmentSlot.FEET)  boots = player.getInventory().getArmor(0).getItem();
-        if (slot != EquipmentSlot.LEGS)  leggings = player.getInventory().getArmor(1).getItem();
-        if (slot != EquipmentSlot.CHEST)  chestplate = player.getInventory().getArmor(2).getItem();
-        if (slot != EquipmentSlot.HEAD)  helmet = player.getInventory().getArmor(3).getItem();
+        if (slot != EquipmentSlot.FEET) boots = player.getInventory().getArmor(0).getItem();
+        if (slot != EquipmentSlot.LEGS) leggings = player.getInventory().getArmor(1).getItem();
+        if (slot != EquipmentSlot.CHEST) chestplate = player.getInventory().getArmor(2).getItem();
+        if (slot != EquipmentSlot.HEAD) helmet = player.getInventory().getArmor(3).getItem();
 
         if (boots instanceof DungeonArmorItem armorBoots && helmet instanceof DungeonArmorItem armorHelmet && leggings instanceof DungeonArmorItem armorLeggings && chestplate instanceof DungeonArmorItem armorChestplate)
             return armorBoots.getMaterial() == armorHelmet.getMaterial() && armorLeggings.getMaterial() == armorHelmet.getMaterial() && armorChestplate.getMaterial() == armorHelmet.getMaterial();
@@ -78,13 +77,13 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     private boolean playerHasFullSetOfArmor(Player player) {
         return
                 !player.getInventory().getArmor(0).isEmpty() &&
-                !player.getInventory().getArmor(1).isEmpty() &&
-                !player.getInventory().getArmor(2).isEmpty() &&
-                !player.getInventory().getArmor(3).isEmpty();
+                        !player.getInventory().getArmor(1).isEmpty() &&
+                        !player.getInventory().getArmor(2).isEmpty() &&
+                        !player.getInventory().getArmor(3).isEmpty();
     }
 
     public final void UnEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
-        if (slot.isArmor() )
+        if (slot.isArmor())
             onPieceUnEquip(entity, stack, slot);
         if (entity instanceof Player player) {
             if (playerHadFullArmorOn(player, stack, slot)) {
@@ -93,6 +92,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
             }
         }
     }
+
     public final void equip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
         if (slot.isArmor())
             onPieceEquip(entity, stack, slot);
@@ -108,14 +108,14 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         if (entity instanceof Player player) {
             if (playerHasFullArmorOn(player))
                 onFullSetHandItemSwitched(entity, oldHandItem, newHandItem, handSlot, armorItem, armorSlot);
-            onPieceHandItemSwitched(entity,oldHandItem, newHandItem,handSlot,armorItem,armorSlot);
+            onPieceHandItemSwitched(entity, oldHandItem, newHandItem, handSlot, armorItem, armorSlot);
         }
     }
 
     private void addFullSetAttributes(LivingEntity entity, ItemStack stack) {
         stack.getAttributeModifiers().modifiers().forEach(entry -> {
             if (entry.slot() == EquipmentSlotGroup.BODY) {
-                entity.getAttribute(entry.attribute()).addOrUpdateTransientModifier(entry.modifier());
+                Objects.requireNonNull(entity.getAttribute(entry.attribute())).addOrUpdateTransientModifier(entry.modifier());
             }
         });
     }
@@ -123,7 +123,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     private void removeFullSetAttributes(LivingEntity entity, ItemStack stack) {
         stack.getAttributeModifiers().modifiers().forEach(entry -> {
             if (entry.slot() == EquipmentSlotGroup.BODY) {
-                entity.getAttribute(entry.attribute()).removeModifier(entry.modifier());
+                Objects.requireNonNull(entity.getAttribute(entry.attribute())).removeModifier(entry.modifier());
             }
         });
     }
@@ -132,12 +132,27 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         preWearerDamaged(event);
     }
 
-    protected void preWearerDamaged(LivingDamageEvent.Pre event) {}
-    protected void onFullSetTick(LivingEntity entity) {}
-    protected void onPieceEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {}
-    protected void onPieceUnEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {}
-    protected void onFullSetEquipped(LivingEntity entity) {}
-    protected void onFullSetUnEquipped(LivingEntity entity) {}
-    protected void onPieceHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {}
-    protected void onFullSetHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {}
+    protected void preWearerDamaged(LivingDamageEvent.Pre event) {
+    }
+
+    protected void onFullSetTick(LivingEntity entity) {
+    }
+
+    protected void onPieceEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
+    }
+
+    protected void onPieceUnEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
+    }
+
+    protected void onFullSetEquipped(LivingEntity entity) {
+    }
+
+    protected void onFullSetUnEquipped(LivingEntity entity) {
+    }
+
+    protected void onPieceHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
+    }
+
+    protected void onFullSetHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
+    }
 }

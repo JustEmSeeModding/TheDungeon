@@ -24,17 +24,17 @@ public class DungeonSwordItem extends SwordItem implements IDungeonCarryItem, ID
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
 
-    public static @NotNull ItemAttributeModifiers createAttributes(Tier tier, int attackDamage, float attackSpeed) {
-        return createAttributes(tier, (float)attackDamage, attackSpeed);
+    public static ItemAttributeModifiers createAttributes(Tier tier, int attackDamage, float attackSpeed) {
+        return createAttributes(tier, (float) attackDamage, attackSpeed);
     }
 
-    public static @NotNull ItemAttributeModifiers createAttributes(Tier tier, float attackDamage , float attackSpeed) {
+    public static ItemAttributeModifiers createAttributes(Tier tier, float attackDamage, float attackSpeed) {
         return ItemAttributeModifiers.builder()
                 .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, (attackDamage + tier.getAttackDamageBonus()), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                 .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, attackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND).build();
