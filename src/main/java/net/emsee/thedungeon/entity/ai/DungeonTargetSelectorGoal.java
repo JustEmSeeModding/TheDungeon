@@ -17,7 +17,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
     // must all return true for the player to be considered "valid"
     Predicate<Player> selectionPredicate = p -> true;
     boolean ignoreLOS = false;
-    boolean ignoreInvisibilityCheck = false;
+    boolean ignoreVisibilityCheck = false;
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee) {
         super(mob, Player.class, mustSee);
@@ -43,6 +43,11 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
 
     public DungeonTargetSelectorGoal ignoreLOS() {
         ignoreLOS = true;
+        return this;
+    }
+
+    public DungeonTargetSelectorGoal ignoreVisibilityCheck() {
+        ignoreVisibilityCheck = true;
         return this;
     }
 
@@ -86,7 +91,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
     }
 
     private double getPlayerVisibilityPercent(Player player) {
-        if (ignoreInvisibilityCheck) return 1;
+        if (ignoreVisibilityCheck) return 1;
         return player.getVisibilityPercent(mob);
     }
 
