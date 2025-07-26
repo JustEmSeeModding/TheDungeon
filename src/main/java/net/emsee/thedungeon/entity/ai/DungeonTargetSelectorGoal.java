@@ -76,6 +76,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         playerAggro *= getPlayerVisibilityPercent(player);
         if (playerAggro >= maxPerception) multiplier *=2;
         else if (playerAggro < minPerception) multiplier /=2;
+        else if (playerAggro < minPerception/10) multiplier = 0;
         return playerAggro * multiplier;
     }
 
