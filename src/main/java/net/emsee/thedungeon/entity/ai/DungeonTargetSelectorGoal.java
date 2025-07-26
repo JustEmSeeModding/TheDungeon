@@ -60,7 +60,8 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         for (Entity entity : nearEntities) {
             if (entity instanceof Player player && !player.isCreative()) {
                 double playerAggro = getPlayerAggro(player, minPerception, maxPerception);
-                if (checkPredicates(player) &&
+                if (playerAggro>0&&
+                        checkPredicates(player) &&
                         hasLineOfSight(player))
                     nearPlayers.put(player, playerAggro);
             }
@@ -72,12 +73,16 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
     protected double getPlayerAggro(Player player, double minPerception, double maxPerception) {
         double playerAggro = player.getAttributeValue(ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY);
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
-        double multiplier = ((maxRange - mob.distanceTo(player))/maxRange);
+        playerAggro *= ((maxRange - mob.distanceTo(player))/maxRange);
         playerAggro *= getPlayerVisibilityPercent(player);
-        if (playerAggro >= maxPerception) multiplier *=2;
-        else if (playerAggro < minPerception) multiplier /=2;
-        else if (playerAggro < minPerception/10) multiplier = 0;
-        return playerAggro * multiplier;
+
+        double perceptionMultiplier = 1;
+        if (playerAggro >= maxPerception) perceptionMultiplier *=2;
+        else if (playerAggro < minPerception/10) perceptionMultiplier = 0;
+        else if (playerAggro < minPerception) perceptionMultiplier /=2;
+
+        playerAggro*=perceptionMultiplier;
+        return playerAggro;
     }
 
     private double getPlayerVisibilityPercent(Player player) {

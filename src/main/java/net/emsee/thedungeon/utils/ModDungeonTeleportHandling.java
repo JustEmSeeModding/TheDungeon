@@ -35,6 +35,8 @@ public final class ModDungeonTeleportHandling {
     private static final List<Holder<MobEffect>> ignoredTeleportRemovalEffects = Util.make(new ArrayList<>(), list -> {
         list.add(MobEffects.HERO_OF_THE_VILLAGE);
         list.add(MobEffects.BAD_OMEN);
+        list.add(MobEffects.RAID_OMEN);
+        list.add(MobEffects.TRIAL_OMEN);
         list.add(ModMobEffects.HOB_GOBLIN_TRADEABLE);
     });
 
@@ -110,8 +112,8 @@ public final class ModDungeonTeleportHandling {
     private static void handlePotionEffects(Player player) {
         if (!player.isCreative()) {
             player.getActiveEffects().forEach(mobEffectInstance -> {
-                if (ignoredTeleportRemovalEffects.contains(mobEffectInstance.getEffect())) return;
-                player.removeEffect(mobEffectInstance.getEffect());
+                if (!ignoredTeleportRemovalEffects.contains(mobEffectInstance.getEffect()))
+                        player.removeEffect(mobEffectInstance.getEffect());
             });
         }
         player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0), player);
