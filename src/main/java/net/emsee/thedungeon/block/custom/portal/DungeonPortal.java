@@ -4,7 +4,7 @@ import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
-import net.emsee.thedungeon.events.ModDungeonCalledEvents;
+import net.emsee.thedungeon.utils.ModDungeonTeleportHandling;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.custom.DungeonItem;
@@ -29,7 +29,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -51,7 +50,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
             MinecraftServer server = level.getServer();
             if (player.isCreative() || GlobalDungeonManager.isOpen(server, getExitRank())) {
                 if (timeCheck(player, server) || player.isCrouching() || player.isCreative())
-                    ModDungeonCalledEvents.playerTeleportDungeon(player, entity.getExitID(server, this), getExitRank());
+                    ModDungeonTeleportHandling.playerTeleportDungeon(player, entity.getExitID(server, this), getExitRank());
             } else {
                 player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), true);
             }

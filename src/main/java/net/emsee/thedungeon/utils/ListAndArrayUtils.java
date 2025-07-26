@@ -13,7 +13,7 @@ public final class ListAndArrayUtils {
      */
     public static <T> T getRandomFromList(List<T> list, Random random) {
         if (list.isEmpty()) return null;
-        return list.get((int)Math.round(random.nextDouble()*(list.size()-1)));
+        return list.get((int) Math.round(random.nextDouble() * (list.size() - 1)));
     }
 
     /**
@@ -21,7 +21,7 @@ public final class ListAndArrayUtils {
      */
     public static <T> T getRandomFromList(List<T> list, RandomSource random) {
         if (list.isEmpty()) return null;
-        return list.get((int)Math.round(random.nextDouble()*(list.size()-1)));
+        return list.get((int) Math.round(random.nextDouble() * (list.size() - 1)));
     }
 
     public static <T, M> boolean mapEquals(Map<T, M> mapOne, Map<T, M> mapTwo) {
@@ -37,7 +37,7 @@ public final class ListAndArrayUtils {
         return true;
     }
 
-    public static <T,M> String mapToString(Map<T,M> map) {
+    public static <T, M> String mapToString(Map<T, M> map) {
         StringBuilder toReturn = new StringBuilder("{");
         for (T t : map.keySet()) {
             toReturn.append("[").append(t).append("-=-").append(map.get(t)).append("],");
@@ -59,7 +59,7 @@ public final class ListAndArrayUtils {
     /**
      * removes the old key and assigned its value to the new one
      */
-    public static <K,V> Map<K,V> replaceKey(Map<K,V> map, K key, K newKey) {
+    public static <K, V> Map<K, V> replaceKey(Map<K, V> map, K key, K newKey) {
         if (!map.containsKey(key)) throw new IllegalStateException("map does not contain key");
         V value = map.get(key);
         map.remove(key);
@@ -70,11 +70,11 @@ public final class ListAndArrayUtils {
     /**
      * a foreach method for maps that makes sure the value stays assigned even if the hash changes
      */
-    public static <K,V> Map<K,V> mapForEachSafe(Map<K,V> map, BiConsumer<K,V> consumer) {
-        List<Map.Entry<K,V>> entries = new ArrayList<>(map.entrySet());
+    public static <K, V> Map<K, V> mapForEachSafe(Map<K, V> map, BiConsumer<K, V> consumer) {
+        List<Map.Entry<K, V>> entries = new ArrayList<>(map.entrySet());
         map.clear();
 
-        for (Map.Entry<K,V> entry : entries) {
+        for (Map.Entry<K, V> entry : entries) {
             consumer.accept(entry.getKey(), entry.getValue());
             map.put(entry.getKey(), entry.getValue());
         }

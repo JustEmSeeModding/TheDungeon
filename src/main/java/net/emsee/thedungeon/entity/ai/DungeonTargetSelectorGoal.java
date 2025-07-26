@@ -16,6 +16,8 @@ import java.util.function.Predicate;
 public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Player> {
     // must all return true for the player to be considered "valid"
     Predicate<Player> selectionPredicate = p -> true;
+    boolean ignoreLOS = false;
+    boolean ignoreInvisibilityCheck = false;
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee) {
         super(mob, Player.class, mustSee);
@@ -39,6 +41,11 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         return this;
     }
 
+    public DungeonTargetSelectorGoal ignoreLOS() {
+        ignoreLOS = true;
+        return this;
+    }
+
     @Override
     protected void findTarget() {
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
@@ -53,7 +60,8 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         for (Entity entity : nearEntities) {
             if (entity instanceof Player player && !player.isCreative()) {
                 double playerAggro = getPlayerAggro(player, minPerception, maxPerception);
-                if (checkPredicates(player))
+                if (checkPredicates(player) &&
+                        hasLineOfSight(player))
                     nearPlayers.put(player, playerAggro);
             }
         }
@@ -65,12 +73,22 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         double playerAggro = player.getAttributeValue(ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY);
         double maxRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
         double multiplier = ((maxRange - mob.distanceTo(player))/maxRange);
+        playerAggro *= getPlayerVisibilityPercent(player);
         if (playerAggro >= maxPerception) multiplier *=2;
         else if (playerAggro < minPerception) multiplier /=2;
         return playerAggro * multiplier;
     }
 
+    private double getPlayerVisibilityPercent(Player player) {
+        if (ignoreInvisibilityCheck) return 1;
+        return player.getVisibilityPercent(mob);
+    }
+
     private boolean checkPredicates(Player player) {
         return selectionPredicate.test(player);
+    }
+
+    private boolean hasLineOfSight(Player player) {
+        return ignoreLOS || mob.getSensing().hasLineOfSight(player);
     }
 }

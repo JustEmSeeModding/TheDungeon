@@ -1,17 +1,21 @@
-package net.emsee.thedungeon.events;
+package net.emsee.thedungeon.utils;
 
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.RelativeMovement;
@@ -22,10 +26,18 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public final class ModDungeonCalledEvents {
+public final class ModDungeonTeleportHandling {
+    private static final List<Holder<MobEffect>> ignoredTeleportRemovalEffects = Util.make(new ArrayList<>(), list -> {
+        list.add(MobEffects.HERO_OF_THE_VILLAGE);
+        list.add(MobEffects.BAD_OMEN);
+        list.add(ModMobEffects.HOB_GOBLIN_TRADEABLE);
+    });
+
     public static void playerTeleportDungeon(Player player, int portalID, DungeonRank rank) {
         Level level = player.level();
         if (!level.isClientSide) {
@@ -91,13 +103,21 @@ public final class ModDungeonCalledEvents {
     private static void teleport(Player player, ServerLevel portalDimension, BlockPos teleportPos) {
         if (portalDimension != null/* && !eventPlayer.isPassenger()*/) {
             player.teleportTo(portalDimension, teleportPos.getX() + .5, teleportPos.getY(), teleportPos.getZ() + .5, RelativeMovement.ALL, player.getYRot(), player.getXRot());
-            if (!player.isCreative()) {
-                player.removeAllEffects();
-                player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0), player);
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, 5), player);
-                player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 5), player);
-            }
+            handlePotionEffects(player);
         }
+    }
+
+    private static void handlePotionEffects(Player player) {
+        if (!player.isCreative()) {
+            player.getActiveEffects().forEach(mobEffectInstance -> {
+                if (ignoredTeleportRemovalEffects.contains(mobEffectInstance.getEffect())) return;
+                player.removeEffect(mobEffectInstance.getEffect());
+            });
+        }
+        player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0), player);
+        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, 5), player);
+        player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 5), player);
+        player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 0), player);
     }
 
     public static void setPlayerGameMode(Player player, boolean returnFromDungeon) {

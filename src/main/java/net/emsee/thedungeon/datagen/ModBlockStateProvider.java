@@ -69,8 +69,8 @@ public final class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(deferredBlock.get(), cubeAll(deferredBlock.get()));
     }
 
-    private void blockWithItem(DeferredBlock<?> deferredBlock, ResourceLocation texture){
-        simpleBlockWithItem(deferredBlock.get(), this.models().cubeAll( BuiltInRegistries.BLOCK.getKey(deferredBlock.get()).getPath(), texture));
+    private void blockWithItem(DeferredBlock<?> deferredBlock, ResourceLocation texture) {
+        simpleBlockWithItem(deferredBlock.get(), this.models().cubeAll(BuiltInRegistries.BLOCK.getKey(deferredBlock.get()).getPath(), texture));
     }
 
     private void blockWithItemCopyFromOtherBlock(DeferredBlock<?> deferredBlock, DeferredBlock<?> copyDeferredBlock) {

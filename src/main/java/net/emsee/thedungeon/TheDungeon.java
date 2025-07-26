@@ -14,6 +14,7 @@ import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.emsee.thedungeon.item.ModCreativeModeTabs;
 import net.emsee.thedungeon.item.ModItems;
+import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.recipe.ModRecipes;
 import net.emsee.thedungeon.villager.ModVillagers;
 import net.minecraft.resources.ResourceLocation;
@@ -52,6 +53,7 @@ public final class TheDungeon
         ModArmorMaterials.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModMobEffects.register(modEventBus);
 
         ModDataComponentTypes.register(modEventBus);
 
