@@ -2,9 +2,7 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blobCreation;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.structureProcessor.OrganicClusterProcessor;
-import net.emsee.thedungeon.structureProcessor.PalletReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;

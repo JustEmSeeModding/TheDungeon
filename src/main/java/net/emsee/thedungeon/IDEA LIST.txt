@@ -22,19 +22,21 @@ Soul bound Totem
 Goblin Tinkerer
     throws makeshift grenades
 
-Goblin Dungeon Biomes and connections
-    Stone-Deepslate (done)
-    Stone-Gilded (done)
-    Deepslate-Gilded (done)
-    Deepslate-Ice (done)
-    Stone-Overgrown (done)
-    Overgrown-Fungal (done)
-    Stone-Crystal
-    Ice-Crystal
+Goblin Dungeon
+
+    connections
+        Stone-Deep (done)
+        Stone-Gilded (done)
+        Deep-Gilded (done)
+        Deep-Ice (done)
+        Stone-Overgrown (done)
+        Overgrown-Fungal (done)
+        Stone-Crystal
+        Ice-Crystal
 
     Crystal Biome:
         crystal potential blocks: prismarine, calsite, amythist, quartz , custom roseQuartz
-        new Blob Processor
+        new Blob Processor (done)
         Falling crystals?
         Resonance Nodes - pulsating crystal formations that buff nearby crystal mobs or debuff players unless destroyed.
 
@@ -78,7 +80,7 @@ Infusion table
 Implement Curios API for custom artifacts
     only custom slots, no generic belt slot etc. (debatable maybe)
     check all Curios slots for unwanted items.
-    Trinket belt equipment
+    Trinket belt/Pouch equipment
         a Curios equip-able belt that can hold multiple found trinkets (small passive buffs). better belts offer more slots.
 
 Pyrite Compas:

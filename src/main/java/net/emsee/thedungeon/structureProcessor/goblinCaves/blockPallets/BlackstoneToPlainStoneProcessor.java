@@ -1,7 +1,8 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.pallets;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;
@@ -12,28 +13,24 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class FungalVegetationOnlyProcessor extends FungalCaveProcessor {
-    public static final FungalVegetationOnlyProcessor INSTANCE = new FungalVegetationOnlyProcessor();
+public class BlackstoneToPlainStoneProcessor extends BlockPalletReplacementProcessor {
+    public static final BlackstoneToPlainStoneProcessor INSTANCE = new BlackstoneToPlainStoneProcessor();
 
-    public static final MapCodec<FungalVegetationOnlyProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<BlackstoneToPlainStoneProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    protected final WeightedMap.Int<Supplier<BlockState>> plantMap =
-            Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.AIR::defaultBlockState, 100);
-                map.put(Blocks.BROWN_MUSHROOM::defaultBlockState, 10);
-                map.put(Blocks.RED_MUSHROOM::defaultBlockState, 1);
-            });
-
+    private BlackstoneToPlainStoneProcessor() {
+    }
 
     protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BROWN_MUSHROOM, plantMap);
+                map.put(Blocks.BLACKSTONE, Util.make(new WeightedMap.Int<>(), replace -> replace.put(Blocks.STONE::defaultBlockState, 1)));
             });
 
     @Override
     protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
         return replacements;
     }
+
 
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;

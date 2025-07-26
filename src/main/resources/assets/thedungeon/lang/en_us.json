@@ -45,6 +45,9 @@
   "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
 
   "item.thedungeon.tooltip.full_set_bonus": "Full Set Bonus:",
+  "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
+  "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
+  "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",

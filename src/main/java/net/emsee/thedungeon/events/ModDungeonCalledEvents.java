@@ -31,9 +31,9 @@ public final class ModDungeonCalledEvents {
         if (!level.isClientSide) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
             MinecraftServer server = level.getServer();
-            assert server!=null;
+            assert server != null;
 
-            BlockPos teleportPos = new BlockPos(0,0,0);
+            BlockPos teleportPos = new BlockPos(0, 0, 0);
             ResourceKey<Level> resourceKey = null;
 
             boolean returnFromDungeon = player.level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY);
@@ -43,7 +43,7 @@ public final class ModDungeonCalledEvents {
                     teleportPos = server.overworld().getSharedSpawnPos();
                 }
                 resourceKey = serverPlayer.getRespawnDimension();
-            } else if(rank != null) {
+            } else if (rank != null) {
                 if (!player.isCreative() && !CheckInventory(player)) return;
                 teleportPos = GlobalDungeonManager.getPortalPosition(server, portalID, rank).above(2);
                 resourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
@@ -63,13 +63,13 @@ public final class ModDungeonCalledEvents {
             if (hasInvalidItem) break;
             if (stack.getCount() == 0) continue;
             if (!(stack.getItem() instanceof IDungeonCarryItem ||
-                    (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof  IDungeonCarryItem))) {
+                    (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IDungeonCarryItem))) {
                 hasInvalidItem = true;
             }
         }
         if (CuriosApi.getCuriosInventory(player).isPresent()) {
             IItemHandlerModifiable curios = CuriosApi.getCuriosInventory(player).get().getEquippedCurios();
-            for (int i = 0; i<curios.getSlots();i++) {
+            for (int i = 0; i < curios.getSlots(); i++) {
                 if (hasInvalidItem) break;
                 ItemStack stack = curios.getStackInSlot(i);
                 if (stack.getCount() == 0) continue;
@@ -109,7 +109,6 @@ public final class ModDungeonCalledEvents {
                 player.setData(ModAttachmentTypes.SAVED_GAMEMODE, serverPlayer.gameMode.getGameModeForPlayer().getId());
                 serverPlayer.setGameMode(GameType.ADVENTURE);
             }
-
         }
     }
 }

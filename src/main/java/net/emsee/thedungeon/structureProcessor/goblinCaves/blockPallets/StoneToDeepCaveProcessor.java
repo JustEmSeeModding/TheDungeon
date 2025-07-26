@@ -1,9 +1,9 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.pallets;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.ModBlocks;
-import net.emsee.thedungeon.structureProcessor.PalletReplacementProcessor;
+import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class StoneToDeepCaveProcessor extends PalletReplacementProcessor {
+public class StoneToDeepCaveProcessor extends BlockPalletReplacementProcessor {
     public static final StoneToDeepCaveProcessor INSTANCE = new StoneToDeepCaveProcessor();
 
     public static final MapCodec<StoneToDeepCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);

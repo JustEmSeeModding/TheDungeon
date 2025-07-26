@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public abstract class PalletReplacementProcessor extends AbstractReplacementProcessor {
+public abstract class BlockPalletReplacementProcessor extends AbstractReplacementProcessor {
     protected abstract Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements();
 
     @Override

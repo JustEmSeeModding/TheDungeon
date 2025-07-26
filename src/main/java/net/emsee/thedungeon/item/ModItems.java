@@ -36,8 +36,8 @@ public final class ModItems {
     public static final DeferredItem<TestBeltItem> TEST_BELT = ITEMS.register("test_belt",
             () -> new TestBeltItem(new Item.Properties()));
 
-    public static final DeferredItem<DungeonSwordItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
-            () -> new DungeonSwordItem(ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonSwordItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2F))));
+    public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2F))));
 
     public static final DeferredItem<DungeonPickaxeItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
             () ->new DungeonPickaxeItem(ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonPickaxeItem.createAttributes(ModTiers.INFUSED_ALLOY, 0, -2f))));

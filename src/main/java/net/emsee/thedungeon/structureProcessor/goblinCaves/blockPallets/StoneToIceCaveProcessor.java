@@ -1,8 +1,8 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.pallets;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.structureProcessor.PalletReplacementProcessor;
+import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class StoneToIceCaveProcessor extends PalletReplacementProcessor {
+public class StoneToIceCaveProcessor extends BlockPalletReplacementProcessor {
     public static final StoneToIceCaveProcessor INSTANCE = new StoneToIceCaveProcessor();
 
     public static final MapCodec<StoneToIceCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);

@@ -6,7 +6,7 @@ import net.emsee.thedungeon.dungeon.src.room.*;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.GridRoomCollection;
 import net.emsee.thedungeon.entity.ModEntities;
-import net.emsee.thedungeon.structureProcessor.goblinCaves.pallets.*;
+import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.*;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.blobCreation.StoneCaveDioriteAndGraniteProcessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
