@@ -18,20 +18,20 @@ public class GildedCaveOreProcessor extends BlockPalletReplacementProcessor {
 
     public static final MapCodec<GildedCaveOreProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    protected final WeightedMap.Int<Supplier<BlockState>> blackstoneMap =
+    protected final WeightedMap.Int<ReplaceInstance> blackstoneMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.BLACKSTONE::defaultBlockState, 5);
-                map.put(Blocks.GILDED_BLACKSTONE::defaultBlockState, 1);
+                map.put(new ReplaceInstance(Blocks.BLACKSTONE::defaultBlockState), 5);
+                map.put(new ReplaceInstance(Blocks.GILDED_BLACKSTONE::defaultBlockState), 1);
             });
 
-    protected final WeightedMap.Int<Supplier<BlockState>> veinMap =
+    protected final WeightedMap.Int<ReplaceInstance> veinMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.RAW_GOLD_BLOCK::defaultBlockState, 2);
-                map.put(Blocks.GILDED_BLACKSTONE::defaultBlockState, 3);
+                map.put(new ReplaceInstance(Blocks.RAW_GOLD_BLOCK::defaultBlockState), 2);
+                map.put(new ReplaceInstance(Blocks.GILDED_BLACKSTONE::defaultBlockState), 3);
             });
 
 
-    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.BLACKSTONE, blackstoneMap);
                 map.put(Blocks.RAW_GOLD_BLOCK, veinMap);
@@ -39,7 +39,7 @@ public class GildedCaveOreProcessor extends BlockPalletReplacementProcessor {
 
 
     @Override
-    protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
+    protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
         return replacements;
     }
 

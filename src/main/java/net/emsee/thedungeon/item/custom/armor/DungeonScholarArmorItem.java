@@ -1,6 +1,7 @@
-package net.emsee.thedungeon.item.custom;
+package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -10,7 +11,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.NotNull;
 
-public class DungeonScholarArmorItem extends DungeonArmorItem{
+public class DungeonScholarArmorItem extends DungeonArmorItem {
     private final double movementSpeedBonus = .005d;
     private final double setMovementSpeedBonus = .0075d;
     private final double bootsStepBonus = .5d;

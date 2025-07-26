@@ -15,31 +15,37 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public abstract class OrganicClusterProcessor extends AbstractReplacementProcessor {
-    protected abstract Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements();
+    protected abstract long getBaseSeed();
 
-    private final long SEED = 8976545;
+    /**
+     * when true has a different seed per original block
+     */
+    protected boolean getIsSeparateSeedPerReplacementBlock() {return true;}
 
-    // Cluster size parameters
+    /** Cluster size parameters*/
     protected int getBaseClusterRadius() {
         return 5;
     }  // Average cluster size
 
+    /** 0-1, how much size varies*/
     protected float getClusterSizeVariation() {
         return 0.3f;
-    } // 0-1, how much size varies
+    }
 
+    /** 0-1, how smooth edges are*/
     protected float getClusterEdgeSmoothness() {
         return 0.4f;
-    } // 0-1, how smooth edges are
+    }
 
-    // Noise parameters for organic shapes
+    /** Noise parameters for organic shapes, Smaller = smoother blobs */
     protected float getNoiseScale() {
         return 0.15f;
-    } // Smaller = smoother blobs
+    }
 
+    /** More octaves = more detail */
     protected int getNoiseOctaves() {
-        return 2;
-    }    // More octaves = more detail
+        return 20;
+    }
 
     protected float getClusterDensity() {
         return 1.0f;
@@ -57,7 +63,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
 
         BlockPos worldPos = relativeBlockInfo.pos();
         Block currentBlock = relativeBlockInfo.state().getBlock();
-        Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements = getReplacements();
+        Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = getReplacements();
 
         if (!replacements.containsKey(currentBlock)) {
             return relativeBlockInfo;
@@ -70,7 +76,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         int gridY = Math.floorDiv(worldPos.getY(), gridSize); // Use same grid for Y
 
         // Unique seed for cluster center (shared across all blocks in this grid cell)
-        long centerSeed = calculateCenterSeed(SEED, gridX, gridY, gridZ);
+        long centerSeed = calculateCenterSeed(getBaseSeed(), gridX, gridY, gridZ);
         ClusterContext context = new ClusterContext(centerSeed, getBaseClusterRadius());
         context.variation = getClusterSizeVariation();
         context.smoothness = getClusterEdgeSmoothness();
@@ -85,34 +91,45 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         // Check if this position should be replaced
         if (shouldReplace(worldPos, center, radius, context)) {
             // Unique seed per cluster AND block type
-            long replacementSeed = calculateReplacementSeed(SEED, gridX, gridY, gridZ, currentBlock);
-            return getReplacement(relativeBlockInfo, replacements, replacementSeed);
+            long replacementSeed = calculateReplacementSeed(getBaseSeed(), gridX, gridY, gridZ, currentBlock);
+            return getReplacement(level, offset, pos, blockInfo ,relativeBlockInfo, settings, template, replacements, replacementSeed);
         }
 
         return relativeBlockInfo;
     }
 
     private StructureTemplate.StructureBlockInfo getReplacement(
-            StructureTemplate.StructureBlockInfo blockInfo,
-            Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements,
+            LevelReader level, BlockPos offset, BlockPos pos,
+            StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo,
+            StructurePlaceSettings settings, @Nullable StructureTemplate template,
+            Map<Block, WeightedMap.Int<ReplaceInstance>> replacements,
             long seed) {
 
-        Block currentBlock = blockInfo.state().getBlock();
+        Block currentBlock = relativeBlockInfo.state().getBlock();
         RandomSource random = RandomSource.create(seed);
-        WeightedMap.Int<Supplier<BlockState>> options = replacements.get(currentBlock);
+        WeightedMap.Int<ReplaceInstance> allOptions = replacements.get(currentBlock);
 
-        if (options == null) return blockInfo;
+        if (allOptions == null || allOptions.isEmpty()) return relativeBlockInfo;
+
+        final WeightedMap.Int<Supplier<BlockState>> options = new WeightedMap.Int<>();
+
+        allOptions.forEach((instance, weight) -> {
+            if (instance.test(level, offset, pos, blockInfo ,relativeBlockInfo, settings, template))
+                options.put(instance.stateSupplier, weight);
+        });
+
+        if (options.isEmpty()) return relativeBlockInfo;
 
         Supplier<BlockState> newStateSupplier = options.getRandom(random);
-        if (newStateSupplier == null) return blockInfo;
+        if (newStateSupplier == null) return relativeBlockInfo;
 
         BlockState newBlockState = newStateSupplier.get();
-        if (newBlockState == null) return blockInfo;
+        if (newBlockState == null) return relativeBlockInfo;
 
-        BlockState oldState = blockInfo.state();
+        BlockState oldState = relativeBlockInfo.state();
         newBlockState = copyAllProperties(oldState, newBlockState);
 
-        return new StructureTemplate.StructureBlockInfo(blockInfo.pos(), newBlockState, blockInfo.nbt());
+        return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos(), newBlockState, relativeBlockInfo.nbt());
     }
 
     private boolean shouldReplace(BlockPos worldPos, BlockPos center, float radius, ClusterContext context) {
@@ -203,7 +220,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
 
     // Unique seed per cluster AND block type
     private long calculateReplacementSeed(long baseSeed, int gridX, int gridY, int gridZ, Block block) {
-        return calculateCenterSeed(baseSeed, gridX, gridY, gridZ) + block.hashCode();
+        return calculateCenterSeed(baseSeed, gridX, gridY, gridZ) + (getIsSeparateSeedPerReplacementBlock()? block.hashCode():0);
     }
 
     private static class ClusterContext {

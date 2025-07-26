@@ -74,7 +74,7 @@
   "item.thedungeon.test_dummy": "Infused Test Dummy",
 
   "item.thedungeon.dungeon_debug_tool": "Dungeon Debug Tool",
-  "item.thedungeon.dungeon_debug_tool.use": "Dungeon generating",
+  "item.thedungeon.dungeon_debug_tool.use": "Dungeon started generating",
   "item.thedungeon.dungeon_debug_tool.use_busy": "Dungeon generator is busy",
   "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
 

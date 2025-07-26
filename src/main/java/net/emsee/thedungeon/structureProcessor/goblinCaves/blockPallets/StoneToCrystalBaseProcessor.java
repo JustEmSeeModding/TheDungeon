@@ -13,21 +13,27 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class BlackstoneToPlainStoneProcessor extends BlockPalletReplacementProcessor {
-    public static final BlackstoneToPlainStoneProcessor INSTANCE = new BlackstoneToPlainStoneProcessor();
+public class StoneToCrystalBaseProcessor extends BlockPalletReplacementProcessor {
+    public static final StoneToCrystalBaseProcessor INSTANCE = new StoneToCrystalBaseProcessor();
 
-    public static final MapCodec<BlackstoneToPlainStoneProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<StoneToCrystalBaseProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+
+    protected final WeightedMap.Int<ReplaceInstance> defaultMap =
+            Util.make(new WeightedMap.Int<>(), (map) -> {
+                map.put(new ReplaceInstance(Blocks.CALCITE::defaultBlockState), 150);
+            });
 
     protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BLACKSTONE, Util.make(new WeightedMap.Int<>(), replace -> replace.put( new ReplaceInstance(Blocks.STONE::defaultBlockState), 1)));
+                map.put(Blocks.STONE, defaultMap);
+                map.put(Blocks.GRANITE, defaultMap);
+                map.put(Blocks.DIORITE, defaultMap);
             });
 
     @Override
     protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
         return replacements;
     }
-
 
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;

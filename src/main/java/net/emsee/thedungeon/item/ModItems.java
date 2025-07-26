@@ -3,6 +3,8 @@ package net.emsee.thedungeon.item;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.item.custom.*;
+import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
+import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;

@@ -21,27 +21,27 @@ public class StoneToDeepCaveProcessor extends BlockPalletReplacementProcessor {
 
     public static final MapCodec<StoneToDeepCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    protected final WeightedMap.Int<Supplier<BlockState>> defaultMap =
+    protected final WeightedMap.Int<ReplaceInstance> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X), 150);
-                map.put(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), 150);
-                map.put(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), 150);
-                map.put(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X), 100);
-                map.put(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), 100);
-                map.put(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z), 100);
-                map.put(Blocks.COBBLED_DEEPSLATE::defaultBlockState, 300);
-                map.put(Blocks.SMOOTH_BASALT::defaultBlockState, 200);
-                map.put(Blocks.BEDROCK::defaultBlockState, 200);
-                map.put(Blocks.DEEPSLATE_GOLD_ORE::defaultBlockState, 11);
-                map.put(Blocks.DEEPSLATE_COAL_ORE::defaultBlockState, 4);
-                map.put(Blocks.DEEPSLATE_COPPER_ORE::defaultBlockState, 1);
-                map.put(Blocks.DEEPSLATE_IRON_ORE::defaultBlockState, 3);
-                map.put(Blocks.DEEPSLATE_DIAMOND_ORE::defaultBlockState, 2);
-                map.put(() -> ModBlocks.DEEPSLATE_PYRITE_ORE.get().defaultBlockState(), 4);
-                map.put(() -> ModBlocks.INFUSED_DEEPSLATE.get().defaultBlockState(), 1);
+                map.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X)), 150);
+                map.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)), 150);
+                map.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z)), 150);
+                map.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X)), 100);
+                map.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)), 100);
+                map.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z)), 100);
+                map.put(new ReplaceInstance(Blocks.COBBLED_DEEPSLATE::defaultBlockState), 300);
+                map.put(new ReplaceInstance(Blocks.SMOOTH_BASALT::defaultBlockState), 200);
+                map.put(new ReplaceInstance(Blocks.BEDROCK::defaultBlockState), 200);
+                map.put(new ReplaceInstance(Blocks.DEEPSLATE_GOLD_ORE::defaultBlockState), 11);
+                map.put(new ReplaceInstance(Blocks.DEEPSLATE_COAL_ORE::defaultBlockState), 4);
+                map.put(new ReplaceInstance(Blocks.DEEPSLATE_COPPER_ORE::defaultBlockState), 1);
+                map.put(new ReplaceInstance(Blocks.DEEPSLATE_IRON_ORE::defaultBlockState), 3);
+                map.put(new ReplaceInstance(Blocks.DEEPSLATE_DIAMOND_ORE::defaultBlockState), 2);
+                map.put(new ReplaceInstance(() -> ModBlocks.DEEPSLATE_PYRITE_ORE.get().defaultBlockState()), 4);
+                map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_DEEPSLATE.get().defaultBlockState()), 1);
             });
 
-    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.STONE, defaultMap);
                 map.put(Blocks.GRANITE, defaultMap);
@@ -49,7 +49,7 @@ public class StoneToDeepCaveProcessor extends BlockPalletReplacementProcessor {
             });
 
     @Override
-    protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
+    protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
         return replacements;
     }
 

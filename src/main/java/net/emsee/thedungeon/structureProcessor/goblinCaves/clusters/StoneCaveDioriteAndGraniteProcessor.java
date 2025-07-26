@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.blobCreation;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.clusters;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
@@ -19,28 +19,32 @@ public class StoneCaveDioriteAndGraniteProcessor extends OrganicClusterProcessor
     public static final MapCodec<StoneCaveDioriteAndGraniteProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
     @Override
+    protected long getBaseSeed() {
+        return 186345735;
+    }
+    @Override
     protected int getBaseClusterRadius() {
-        return 6;
+        return 4;
     }
     @Override
     protected float getClusterDensity() {
         return .85f;
     }
 
-    protected final WeightedMap.Int<Supplier<BlockState>> basicMap =
+    protected final WeightedMap.Int<ReplaceInstance> basicMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.STONE::defaultBlockState, 4);
-                map.put(Blocks.DIORITE::defaultBlockState, 5);
-                map.put(Blocks.GRANITE::defaultBlockState, 5);
+                map.put(new ReplaceInstance(Blocks.STONE::defaultBlockState), 4);
+                map.put(new ReplaceInstance(Blocks.DIORITE::defaultBlockState), 5);
+                map.put(new ReplaceInstance(Blocks.GRANITE::defaultBlockState), 5);
             });
 
-    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.STONE, basicMap);
             });
 
     @Override
-    protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
+    protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
         return replacements;
     }
 

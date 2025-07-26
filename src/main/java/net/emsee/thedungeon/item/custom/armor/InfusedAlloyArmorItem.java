@@ -1,7 +1,8 @@
-package net.emsee.thedungeon.item.custom;
+package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
+import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -12,7 +13,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.NotNull;
 
 public class InfusedAlloyArmorItem extends DungeonArmorItem {
-    private final double speedPenalty = -.0075d;
+    private final double speedPenalty = -.006d;
     private final double aggroBoost = 25;
     private final double setHealthBonus = 4;
 

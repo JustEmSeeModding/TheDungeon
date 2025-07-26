@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public abstract class BlockPalletReplacementProcessor extends AbstractReplacementProcessor {
-    protected abstract Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements();
 
     @Override
     public StructureTemplate.StructureBlockInfo process(LevelReader level, BlockPos offset, BlockPos pos,
@@ -22,9 +21,18 @@ public abstract class BlockPalletReplacementProcessor extends AbstractReplacemen
                                                         StructurePlaceSettings settings, @Nullable StructureTemplate template) {
 
         RandomSource random = settings.getRandom(relativeBlockInfo.pos());
-        WeightedMap.Int<Supplier<BlockState>> options = this.getReplacements().get(relativeBlockInfo.state().getBlock());
+        WeightedMap.Int<ReplaceInstance> allOptions = this.getReplacements().get(relativeBlockInfo.state().getBlock());
 
-        if (options == null) return relativeBlockInfo;
+        final WeightedMap.Int<Supplier<BlockState>> options = new WeightedMap.Int<>();
+
+        if (allOptions == null || allOptions.isEmpty()) return relativeBlockInfo;
+
+        allOptions.forEach((instance, weight) -> {
+            if (instance.test(level, offset, pos, blockInfo, relativeBlockInfo, settings, template))
+                options.put(instance.stateSupplier, weight);
+        });
+
+        if (options.isEmpty()) return relativeBlockInfo;
 
         Supplier<BlockState> newStateSupplier = options.getRandom(random);
         if (newStateSupplier == null) return relativeBlockInfo;

@@ -20,76 +20,78 @@ public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
 
     public static final MapCodec<OvergrownCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    protected final WeightedMap.Int<Supplier<BlockState>> overgrownStoneMap =
+    protected final WeightedMap.Int<ReplaceInstance> overgrownStoneMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.STONE::defaultBlockState, 325);
-                map.put(Blocks.ANDESITE::defaultBlockState, 325);
-                map.put(Blocks.CLAY::defaultBlockState, 50);
-                map.put(Blocks.COBBLESTONE::defaultBlockState, 275);
-                map.put(Blocks.MOSSY_COBBLESTONE::defaultBlockState, 100);
-                map.put(Blocks.TUFF::defaultBlockState, 375);
-                map.put(Blocks.GOLD_ORE::defaultBlockState, 10);
-                map.put(Blocks.COAL_ORE::defaultBlockState, 7);
-                map.put(Blocks.COPPER_ORE::defaultBlockState, 2);
-                map.put(Blocks.IRON_ORE::defaultBlockState, 4);
-                map.put(Blocks.DIAMOND_ORE::defaultBlockState, 1);
-                map.put(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState(), 4);
-                map.put(() -> ModBlocks.INFUSED_STONE.get().defaultBlockState(), 2);
-                map.put(() -> ModBlocks.INFUSED_CLAY.get().defaultBlockState(), 1);
+                map.put(new ReplaceInstance(Blocks.STONE::defaultBlockState), 325);
+                map.put(new ReplaceInstance(Blocks.ANDESITE::defaultBlockState), 325);
+                map.put(new ReplaceInstance(Blocks.CLAY::defaultBlockState), 50);
+                map.put(new ReplaceInstance(Blocks.COBBLESTONE::defaultBlockState), 275);
+                map.put(new ReplaceInstance(Blocks.MOSSY_COBBLESTONE::defaultBlockState), 100);
+                map.put(new ReplaceInstance(Blocks.TUFF::defaultBlockState), 375);
+                map.put(new ReplaceInstance(Blocks.GOLD_ORE::defaultBlockState), 10);
+                map.put(new ReplaceInstance(Blocks.COAL_ORE::defaultBlockState), 7);
+                map.put(new ReplaceInstance(Blocks.COPPER_ORE::defaultBlockState), 2);
+                map.put(new ReplaceInstance(Blocks.IRON_ORE::defaultBlockState), 4);
+                map.put(new ReplaceInstance(Blocks.DIAMOND_ORE::defaultBlockState), 1);
+                map.put(new ReplaceInstance(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState()), 4);
+                map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_STONE.get().defaultBlockState()), 2);
+                map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_CLAY.get().defaultBlockState()), 1);
             });
 
-    protected final WeightedMap.Int<Supplier<BlockState>> grassMap =
+    protected final WeightedMap.Int<ReplaceInstance> grassMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.GRASS_BLOCK::defaultBlockState, 500);
-                map.put(Blocks.MOSS_BLOCK::defaultBlockState, 500);
-                map.put(() -> ModBlocks.INFUSED_GRASS_BLOCK.get().defaultBlockState(), 1);
+                map.put(new ReplaceInstance(Blocks.GRASS_BLOCK::defaultBlockState), 500);
+                map.put(new ReplaceInstance(Blocks.MOSS_BLOCK::defaultBlockState), 500);
+                map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_GRASS_BLOCK.get().defaultBlockState()), 1);
             });
 
-    protected final WeightedMap.Int<Supplier<BlockState>> dirtMap =
+    protected final WeightedMap.Int<ReplaceInstance> dirtMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.DIRT::defaultBlockState, 100);
-                map.put(Blocks.COARSE_DIRT::defaultBlockState, 100);
-                map.put(Blocks.ROOTED_DIRT::defaultBlockState, 100);
-                map.put(Blocks.PACKED_MUD::defaultBlockState, 100);
-                map.put(Blocks.LIGHT_GRAY_TERRACOTTA::defaultBlockState, 30);
-                map.put(Blocks.TERRACOTTA::defaultBlockState, 10);
-                map.put(() -> ModBlocks.INFUSED_DIRT.get().defaultBlockState(), 1);
+                map.put(new ReplaceInstance(Blocks.DIRT::defaultBlockState), 100);
+                map.put(new ReplaceInstance(Blocks.COARSE_DIRT::defaultBlockState), 100);
+                map.put(new ReplaceInstance(Blocks.ROOTED_DIRT::defaultBlockState), 100);
+                map.put(new ReplaceInstance(Blocks.PACKED_MUD::defaultBlockState), 100);
+                map.put(new ReplaceInstance(Blocks.LIGHT_GRAY_TERRACOTTA::defaultBlockState), 30);
+                map.put(new ReplaceInstance(Blocks.TERRACOTTA::defaultBlockState), 10);
+                map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_DIRT.get().defaultBlockState()), 1);
             });
 
-    protected final WeightedMap.Int<Supplier<BlockState>> plantMap =
+    protected final WeightedMap.Int<ReplaceInstance> plantMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.AIR::defaultBlockState, 100);
-                map.put(Blocks.SHORT_GRASS::defaultBlockState, 100);
-                map.put(Blocks.MOSS_CARPET::defaultBlockState, 20);
-                map.put(Blocks.FERN::defaultBlockState, 25);
-                map.put(Blocks.AZURE_BLUET::defaultBlockState, 4);
-                map.put(Blocks.BLUE_ORCHID::defaultBlockState, 5);
-                map.put(Blocks.OXEYE_DAISY::defaultBlockState, 2);
-                map.put(Blocks.CORNFLOWER::defaultBlockState, 5);
-                map.put(Blocks.LILY_OF_THE_VALLEY::defaultBlockState, 3);
-                map.put(Blocks.WHITE_TULIP::defaultBlockState, 2);
-                map.put(Blocks.PINK_TULIP::defaultBlockState, 2);
-                map.put(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 1), 1);
-                map.put(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 2), 1);
-                map.put(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 3), 1);
-                map.put(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 4), 1);
+                map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState), 100);
+                map.put(new ReplaceInstance(Blocks.SHORT_GRASS::defaultBlockState), 100);
+                map.put(new ReplaceInstance(Blocks.MOSS_CARPET::defaultBlockState), 20);
+                map.put(new ReplaceInstance(Blocks.FERN::defaultBlockState), 25);
+                map.put(new ReplaceInstance(Blocks.AZURE_BLUET::defaultBlockState), 4);
+                map.put(new ReplaceInstance(Blocks.BLUE_ORCHID::defaultBlockState), 5);
+                map.put(new ReplaceInstance(Blocks.OXEYE_DAISY::defaultBlockState), 2);
+                map.put(new ReplaceInstance(Blocks.CORNFLOWER::defaultBlockState), 5);
+                map.put(new ReplaceInstance(Blocks.LILY_OF_THE_VALLEY::defaultBlockState), 3);
+                map.put(new ReplaceInstance(Blocks.WHITE_TULIP::defaultBlockState), 2);
+                map.put(new ReplaceInstance(Blocks.PINK_TULIP::defaultBlockState), 2);
+                map.put(new ReplaceInstance(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 1)), 1);
+                map.put(new ReplaceInstance(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 2)), 1);
+                map.put(new ReplaceInstance(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 3)), 1);
+                map.put(new ReplaceInstance(()->Blocks.PINK_PETALS.defaultBlockState().setValue(PinkPetalsBlock.AMOUNT, 4)), 1);
             });
 
-    protected final WeightedMap.Int<Supplier<BlockState>> leavesMap =
+    protected final WeightedMap.Int<ReplaceInstance> leavesMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(() -> Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 100);
-                map.put(() -> Blocks.ACACIA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 100);
-                map.put(() -> Blocks.DARK_OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 100);
-                map.put(() -> Blocks.JUNGLE_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 50);
-                map.put(() -> Blocks.AZALEA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 20);
-                map.put(() -> Blocks.FLOWERING_AZALEA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 5);
-                map.put(() -> Blocks.MANGROVE_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 10);
-                map.put(() -> Blocks.BIRCH_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true), 10);
+                map.put(new ReplaceInstance(() -> Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 100);
+                map.put(new ReplaceInstance(() -> Blocks.ACACIA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 100);
+                map.put(new ReplaceInstance(() -> Blocks.DARK_OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 100);
+                map.put(new ReplaceInstance(() -> Blocks.JUNGLE_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 50);
+                map.put(new ReplaceInstance(() -> Blocks.AZALEA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 20);
+                map.put(new ReplaceInstance(() -> Blocks.FLOWERING_AZALEA_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 5);
+                map.put(new ReplaceInstance(() -> Blocks.MANGROVE_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 10);
+                map.put(new ReplaceInstance(() -> Blocks.BIRCH_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)), 10);
             });
 
-    protected final Map<Block, WeightedMap.Int<Supplier<BlockState>>> replacements =
+    protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.STONE, overgrownStoneMap);
+                map.put(Blocks.DIORITE, dioriteMap);
+                map.put(Blocks.GRANITE, graniteMap);
                 map.put(Blocks.GRASS_BLOCK, grassMap);
                 map.put(Blocks.DIRT, dirtMap);
                 map.put(Blocks.SHORT_GRASS, plantMap);
@@ -99,7 +101,7 @@ public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
             });
 
     @Override
-    protected Map<Block, WeightedMap.Int<Supplier<BlockState>>> getReplacements() {
+    protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
         return replacements;
     }
 

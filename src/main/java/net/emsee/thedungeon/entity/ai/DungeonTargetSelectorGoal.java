@@ -57,7 +57,7 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
         double minPerception = mob.getAttributeValue(ModAttributes.DUNGEON_MOB_MIN_PERCEPTION);
         double maxPerception = mob.getAttributeValue(ModAttributes.DUNGEON_MOB_MAX_PERCEPTION);
 
-        List<Entity> nearEntities = mob.level().getEntities(mob, mob.getBoundingBox().inflate(maxRange));
+        List<Entity> nearEntities = mob.level().getEntities(mob, mob.getBoundingBox().inflate(maxRange+2));
 
         // creates a weighted map of all players using aggro
         WeightedMap.Dbl<Player> nearPlayers = new WeightedMap.Dbl<>();
