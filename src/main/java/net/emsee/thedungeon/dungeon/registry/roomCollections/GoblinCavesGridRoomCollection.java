@@ -10,6 +10,7 @@ import net.emsee.thedungeon.dungeon.src.room.GridRoomList;
 import net.emsee.thedungeon.dungeon.src.room.GridRoomMultiResource;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.*;
+import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post.CrystalCaveBuddingProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.CrystalCaveClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.DirtClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.StoneCaveDioriteAndGraniteProcessor;
@@ -105,6 +106,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(StoneToCrystalBaseProcessor.INSTANCE)
                         .withStructureProcessor(CrystalCaveProcessor.INSTANCE)
+                        .withStructurePostProcessor(CrystalCaveBuddingProcessor.INSTANCE)
                         .withStructureProcessor(BlackstoneToPlainStoneProcessor.INSTANCE)
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                         .setOverrideEndChance(0)
@@ -137,7 +139,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(FungalCaveProcessor.INSTANCE))
                 .addTagRule(new WallFailRule(CRYSTAL_TAG, 11, 11, 0, false, Blocks.CALCITE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(CrystalCaveClusterProcessor.INSTANCE)
-                        .withStructureProcessor(CrystalCaveProcessor.INSTANCE))
+                        .withStructureProcessor(CrystalCaveProcessor.INSTANCE)
+                        .withStructureProcessor(CrystalCaveBuddingProcessor.INSTANCE))
         ;
     }
 
@@ -182,7 +185,16 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(DirtClusterProcessor.INSTANCE)
                         .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
-                        .withStructureProcessor(FungalCaveProcessor.INSTANCE));
+                        .withStructureProcessor(FungalCaveProcessor.INSTANCE))
+                .addRoom(new GridRoomBasic("goblin_caves/stone/spawn", 11, 11)
+                        .withWeight(1)
+                        .addConnection(Connection.NORTH)
+                        .setAllConnectionTags(CRYSTAL_TAG)
+                        .doAllowRotation()
+                        .withStructureProcessor(StoneToCrystalBaseProcessor.INSTANCE)
+                        .withStructureProcessor(CrystalCaveClusterProcessor.INSTANCE)
+                        .withStructureProcessor(CrystalCaveProcessor.INSTANCE)
+                        .withStructurePostProcessor(CrystalCaveBuddingProcessor.INSTANCE));
     }
 
     private static GridRoomList dens() {
@@ -270,6 +282,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .applyToAll(room -> room.withStructureProcessor(StoneToCrystalBaseProcessor.INSTANCE))
                         .applyToAll(room -> room.withStructureProcessor(CrystalCaveClusterProcessor.INSTANCE))
                         .applyToAll(room -> room.withStructureProcessor(CrystalCaveProcessor.INSTANCE))
+                        .applyToAll(room -> room.withStructurePostProcessor(CrystalCaveBuddingProcessor.INSTANCE))
                         .applyToAll(room -> room.setAllConnectionTags(CRYSTAL_TAG)));
     }
 

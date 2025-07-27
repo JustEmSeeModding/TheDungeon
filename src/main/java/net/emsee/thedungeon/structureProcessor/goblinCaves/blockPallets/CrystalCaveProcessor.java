@@ -3,6 +3,8 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
+import net.emsee.thedungeon.structureProcessor.PostProcessor;
+import net.emsee.thedungeon.utils.BlockUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
@@ -31,24 +33,13 @@ public class CrystalCaveProcessor extends BlockPalletReplacementProcessor {
                 map.put(new ReplaceInstance(Blocks.ANDESITE::defaultBlockState), 475);
                 map.put(new ReplaceInstance(Blocks.COBBLESTONE::defaultBlockState), 175);
                 map.put(new ReplaceInstance(Blocks.TUFF::defaultBlockState), 475);
-                // TODO research if cyan Terracotta looks good? also concrete?
             });
 
-    protected final WeightedMap.Int<ReplaceInstance> clusterMap =
-            Util.make(new WeightedMap.Int<>(), (map) -> {
-                for (Direction direction : Direction.values()) {
-                    map.put(new ReplaceInstance(() -> Blocks.SMALL_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)), 4);
-                    map.put(new ReplaceInstance(() -> Blocks.MEDIUM_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)), 3);
-                    map.put(new ReplaceInstance(() -> Blocks.LARGE_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)), 2);
-                    map.put(new ReplaceInstance(() -> Blocks.AMETHYST_CLUSTER.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)), 1);
-                }
-            });
 
     protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.STONE, stoneMap);
                 map.put(Blocks.CALCITE, defaultMap);
-                map.put(Blocks.BUDDING_AMETHYST, clusterMap);
             });
 
     @Override

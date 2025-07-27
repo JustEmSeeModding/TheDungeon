@@ -47,6 +47,14 @@ public class WeightedMap {
             }
             return null;
         }
+
+        public int totalWeight() {
+            int toReturn = 0;
+            for (int i : values()) {
+                toReturn+=i;
+            }
+            return toReturn;
+        }
     }
 
     public static class Dbl<T> extends LinkedHashMap<T, Double> {
@@ -89,6 +97,14 @@ public class WeightedMap {
                 if (chosenWeight <= 0) return t;
             }
             return null;
+        }
+
+        public double totalWeight() {
+            double toReturn = 0;
+            for (double i : values()) {
+                toReturn+=i;
+            }
+            return toReturn;
         }
     }
 }

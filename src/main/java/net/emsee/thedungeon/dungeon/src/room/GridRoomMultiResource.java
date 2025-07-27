@@ -1,6 +1,8 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
@@ -10,7 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
@@ -117,8 +121,8 @@ public class GridRoomMultiResource extends AbstractGridRoom {
                 .setGenerationPriority(generationPriority)
                 .setOverrideEndChance(overrideEndChance, doOverrideEndChance)
                 .setSpawnRules(spawnRules)
-                .setStructureProcessors(structureProcessors)
-                .setSkipCollectionProcessors(skipCollectionProcessors);
+                .setStructureProcessors(structureProcessors, structurePostProcessors)
+                .setSkipCollectionProcessors(skipCollectionProcessors, skipCollectionPostProcessors);
 
     }
 
@@ -128,7 +132,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
     }
 
     @Override
-    public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random) {
+    public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors,StructureProcessorList postProcessors, Random random) {
         StructureTemplate template = StructureUtils.getTemplate(serverLevel, getResourceLocation(random));
         if (template == null) {
             throw new IllegalStateException(this + ": template was null");
@@ -158,10 +162,31 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         //new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockStateMatchTest(Blocks.AIR.defaultBlockState(),.1f), AlwaysTrueTest.INSTANCE, ModBlocks.DUNGEON_MOD_SPAWNER.get().defaultBlockState())))
 
         for (StructureProcessor processor : processors.list()) {
+            if (processor instanceof PostProcessor)
+                throw new IllegalStateException("Adding post processor as normal processor");
             placement.addProcessor(processor);
         }
 
         template.placeInWorld(serverLevel, origin, origin, placement, rand, Block.UPDATE_ALL);
+
+        for (StructureProcessor processor : postProcessors.list()) {
+            if (processor instanceof PostProcessor postProcessorData)
+                forEachBlockPosInBounds(serverLevel, centre, roomRotation, postProcessorData.getMethod(), pos -> {
+                    BlockState initialState = serverLevel.getBlockState(pos);
+                    // Create a StructureBlockInfo for the block
+                    StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(
+                            pos,
+                            initialState,
+                            null
+                    );
+
+                    blockInfo = processor.process(serverLevel, new BlockPos(0, 0, 0), pos, blockInfo, blockInfo, new StructurePlaceSettings(), null);
+
+                    // Place processed block state (or fallback to initial state)
+                    serverLevel.setBlockAndUpdate(pos, blockInfo != null ? blockInfo.state() : initialState);
+                });
+            else throw new IllegalStateException("Adding normal processor as post processor");
+        }
     }
 }
 

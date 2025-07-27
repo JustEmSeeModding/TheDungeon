@@ -138,17 +138,21 @@ public final class GeneratedRoom {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: returning success", this);
     }
 
-    public void finalizePlacement(ServerLevel serverLevel, StructureProcessorList collectionProcessors, Random random) {
+    public void finalizePlacement(ServerLevel serverLevel, StructureProcessorList collectionProcessors, StructureProcessorList collectionPostProcessors, Random random) {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: finalizing placement", this);
         StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
+        StructureProcessorList finalPostProcessors = new StructureProcessorList(new ArrayList<>());
         finalProcessors.list().addAll(room.getStructureProcessors().list());
+        finalPostProcessors.list().addAll(room.getStructurePostProcessors().list());
         if (!room.doSkipCollectionProcessors())
             finalProcessors.list().addAll(collectionProcessors.list());
-        placeTemplate(serverLevel, placedWorldPos, placedRotation, finalProcessors, random);
+        if (!room.doSkipCollectionPostProcessors())
+            finalProcessors.list().addAll(collectionPostProcessors.list());
+        placeTemplate(serverLevel, placedWorldPos, placedRotation, finalProcessors, finalPostProcessors, random);
     }
 
-    protected void placeTemplate(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random) {
-        room.placeFeature(serverLevel, centre, roomRotation, processors, random); //StructureUtils.getTemplate(serverLevel, room.getResourceLocation(random));
+    private void placeTemplate(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, StructureProcessorList postProcessors, Random random) {
+        room.placeFeature(serverLevel, centre, roomRotation, processors, postProcessors, random); //StructureUtils.getTemplate(serverLevel, room.getResourceLocation(random));
     }
 
     private void generateRoomFrom(GridDungeonGenerator generator, int arrayX, int arrayY, int arrayZ, BlockPos worldPos, Rotation roomRotation, Connection fromConnection) {

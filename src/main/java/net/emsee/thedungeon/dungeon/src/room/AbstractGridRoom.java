@@ -1,10 +1,13 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
 import com.ibm.icu.impl.Pair;
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.Connection;
+import net.emsee.thedungeon.dungeon.src.DungeonUtils;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.MobSpawnRule;
-import net.emsee.thedungeon.dungeon.src.DungeonUtils;
+import net.emsee.thedungeon.structureProcessor.PostProcessor;
+import net.emsee.thedungeon.utils.BlockUtils;
 import net.emsee.thedungeon.utils.PriorityMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -17,8 +20,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.*;
 import java.util.function.Consumer;
 
+import static net.emsee.thedungeon.dungeon.src.DungeonUtils.getInvertedRotation;
+import static net.emsee.thedungeon.dungeon.src.DungeonUtils.getRotatedConnectionMap;
 import static net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule.DEFAULT_CONNECTION_TAG;
-import static net.emsee.thedungeon.dungeon.src.DungeonUtils.*;
 
 public abstract class AbstractGridRoom {
     protected final int gridWidth;
@@ -33,12 +37,14 @@ public abstract class AbstractGridRoom {
     protected boolean allowRotation = false;
     protected boolean allowUpDownConnectedRotation = false;
     protected boolean skipCollectionProcessors = false;
+    protected boolean skipCollectionPostProcessors = false;
 
     protected final PriorityMap<Connection> connections = new PriorityMap<>();
     protected final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>(); /* Offset map */
     protected final Map<Connection, String> connectionTags = new HashMap<>();
     protected final List<MobSpawnRule> spawnRules = new ArrayList<>();
     protected final StructureProcessorList structureProcessors = new StructureProcessorList(new ArrayList<>());
+    protected final StructureProcessorList structurePostProcessors = new StructureProcessorList(new ArrayList<>());
 
     // for when the room is the same, but it requires a different equals and hash
     protected final int differentiationID;
@@ -46,7 +52,7 @@ public abstract class AbstractGridRoom {
     //// constructor
 
     public AbstractGridRoom(int gridWidth, int gridHeight) {
-        this (gridWidth, gridHeight, 0);
+        this(gridWidth, gridHeight, 0);
     }
 
     public AbstractGridRoom(int gridWidth, int gridHeight, int ID) {
@@ -58,13 +64,13 @@ public abstract class AbstractGridRoom {
             connections.put(connection, 0);
         }
 
-        differentiationID=ID;
+        differentiationID = ID;
     }
 
     //// construction methods
 
     public AbstractGridRoom setConnections(boolean north, boolean east, boolean south, boolean west, boolean up, boolean down) {
-        return setConnections(north?1:0,east?1:0,south?1:0,west?1:0,up?1:0,down?1:0);
+        return setConnections(north ? 1 : 0, east ? 1 : 0, south ? 1 : 0, west ? 1 : 0, up ? 1 : 0, down ? 1 : 0);
     }
 
     public AbstractGridRoom setConnections(int northPriority, int eastPriority, int southPriority, int westPriority, int upPriority, int downPriority) {
@@ -85,7 +91,7 @@ public abstract class AbstractGridRoom {
     }
 
     public AbstractGridRoom horizontalConnections() {
-        return horizontalConnections(1,1,1,1);
+        return horizontalConnections(1, 1, 1, 1);
     }
 
     public AbstractGridRoom horizontalConnections(int northPriority, int eastPriority, int southPriority, int westPriority) {
@@ -97,7 +103,7 @@ public abstract class AbstractGridRoom {
     }
 
     public AbstractGridRoom addConnection(Connection connection) {
-        return addConnection(connection,1);
+        return addConnection(connection, 1);
     }
 
     public AbstractGridRoom addConnection(Connection connection, int priority) {
@@ -149,7 +155,7 @@ public abstract class AbstractGridRoom {
      * the offset is as viewed from the outside (-=left +=right)
      */
     public AbstractGridRoom setHorizontalConnectionOffset(Connection connection, int widthOffset, int heightOffset) {
-        if (Mth.abs(widthOffset)>(northSizeScale-1)/2 || heightOffset>(heightScale-1) || heightOffset<0)
+        if (Mth.abs(widthOffset) > (northSizeScale - 1) / 2 || heightOffset > (heightScale - 1) || heightOffset < 0)
             throw new IllegalStateException("offset is more than the room size");
         if (connection == Connection.UP || connection == Connection.DOWN) return this;
         connectionOffsets.put(connection, Pair.of(widthOffset, heightOffset));
@@ -160,7 +166,7 @@ public abstract class AbstractGridRoom {
      * offsets a specific connection along its vertical face
      */
     public AbstractGridRoom setVerticalConnectionOffset(Connection connection, int northOffset, int eastOffset) {
-        if (Mth.abs(northOffset)>(northSizeScale-1)/2 || Mth.abs(eastOffset)>(eastSizeScale-1)/2)
+        if (Mth.abs(northOffset) > (northSizeScale - 1) / 2 || Mth.abs(eastOffset) > (eastSizeScale - 1) / 2)
             throw new IllegalStateException("offset is more than the room size");
         if (connection == Connection.NORTH || connection == Connection.EAST || connection == Connection.SOUTH || connection == Connection.WEST)
             return this;
@@ -227,7 +233,16 @@ public abstract class AbstractGridRoom {
     }
 
     public AbstractGridRoom withStructureProcessor(StructureProcessor processor) {
+        if (processor instanceof PostProcessor)
+            throw new IllegalStateException("Adding post processor as normal processor");
         this.structureProcessors.list().add(processor);
+        return this;
+    }
+
+    public AbstractGridRoom withStructurePostProcessor(StructureProcessor processor) {
+        if (!(processor instanceof PostProcessor))
+            throw new IllegalStateException("Adding normal processor as post processor");
+        this.structurePostProcessors.list().add(processor);
         return this;
     }
 
@@ -236,9 +251,16 @@ public abstract class AbstractGridRoom {
         return this;
     }
 
-    protected AbstractGridRoom setStructureProcessors(StructureProcessorList processors) {
+    public AbstractGridRoom clearStructurePostProcessors() {
+        this.structurePostProcessors.list().clear();
+        return this;
+    }
+
+    protected AbstractGridRoom setStructureProcessors(StructureProcessorList processors, StructureProcessorList postProcessors) {
         this.structureProcessors.list().clear();
         this.structureProcessors.list().addAll(processors.list());
+        this.structurePostProcessors.list().clear();
+        this.structurePostProcessors.list().addAll(postProcessors.list());
         return this;
     }
 
@@ -247,8 +269,14 @@ public abstract class AbstractGridRoom {
         return this;
     }
 
-    protected AbstractGridRoom setSkipCollectionProcessors(boolean skip) {
+    public AbstractGridRoom skipCollectionPostProcessors() {
+        skipCollectionPostProcessors = true;
+        return this;
+    }
+
+    protected AbstractGridRoom setSkipCollectionProcessors(boolean skip, boolean skipPost) {
         skipCollectionProcessors = skip;
+        skipCollectionPostProcessors = skipPost;
         return this;
     }
     // methods
@@ -273,16 +301,16 @@ public abstract class AbstractGridRoom {
         }
 
 
-        if (connections.get(connection)>0 &&
+        if (connections.get(connection) > 0 &&
                 isValidConnection(connection, Rotation.NONE, fromTag, connectionRules))
             toReturn.add(Rotation.NONE);
-        if (getRotatedConnectionMap(connections, Rotation.COUNTERCLOCKWISE_90).get(connection)>0 &&
+        if (getRotatedConnectionMap(connections, Rotation.COUNTERCLOCKWISE_90).get(connection) > 0 &&
                 isValidConnection(connection, Rotation.COUNTERCLOCKWISE_90, fromTag, connectionRules))
             toReturn.add(Rotation.COUNTERCLOCKWISE_90);
-        if (getRotatedConnectionMap(connections, Rotation.CLOCKWISE_90).get(connection)>0 &&
+        if (getRotatedConnectionMap(connections, Rotation.CLOCKWISE_90).get(connection) > 0 &&
                 isValidConnection(connection, Rotation.CLOCKWISE_90, fromTag, connectionRules))
             toReturn.add(Rotation.CLOCKWISE_90);
-        if (getRotatedConnectionMap(connections, Rotation.CLOCKWISE_180).get(connection)>0 &&
+        if (getRotatedConnectionMap(connections, Rotation.CLOCKWISE_180).get(connection) > 0 &&
                 isValidConnection(connection, Rotation.CLOCKWISE_180, fromTag, connectionRules))
             toReturn.add(Rotation.CLOCKWISE_180);
         return toReturn;
@@ -306,15 +334,15 @@ public abstract class AbstractGridRoom {
     }
 
     protected boolean hasConnection(Connection connection) {
-        return connections.get(connection)>0;
+        return connections.get(connection) > 0;
     }
 
     public boolean hasConnection(Connection connection, String withTag) {
-        return connections.get(connection)>0 && connectionTags.get(connection).equals(withTag);
+        return connections.get(connection) > 0 && connectionTags.get(connection).equals(withTag);
     }
 
     public boolean hasConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
-        return connections.get(connection)>0 && ConnectionRule.isValid(fromTag, connectionTags.get(connection), connectionRules);
+        return connections.get(connection) > 0 && ConnectionRule.isValid(fromTag, connectionTags.get(connection), connectionRules);
     }
 
     /**
@@ -407,13 +435,15 @@ public abstract class AbstractGridRoom {
      * Creates a copy of this GridRoom.
      */
     public abstract AbstractGridRoom getCopy();
+
     @Override
     public abstract boolean equals(Object other);
+
     @Override
     public abstract int hashCode();
 
     private boolean isValidConnection(Connection connection, Rotation placementRotation, String fromTag, List<ConnectionRule> rules) {
-        return ConnectionRule.isValid(fromTag, DungeonUtils.getRotatedTags(connectionTags,placementRotation).get(connection), rules);
+        return ConnectionRule.isValid(fromTag, DungeonUtils.getRotatedTags(connectionTags, placementRotation).get(connection), rules);
     }
 
     public String getConnectionTag(Connection connection, Rotation placedRotation) {
@@ -455,17 +485,34 @@ public abstract class AbstractGridRoom {
         return !getSpawnRules().isEmpty();
     }
 
-    public boolean doSkipCollectionProcessors() {
+    public final boolean doSkipCollectionProcessors() {
         return skipCollectionProcessors;
     }
 
-    public StructureProcessorList getStructureProcessors() {return structureProcessors;}
+    public final boolean doSkipCollectionPostProcessors() {
+        return skipCollectionPostProcessors;
+    }
 
-    public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random);
+    public StructureProcessorList getStructureProcessors() {
+        return structureProcessors;
+    }
 
-    // TODO:  actually make this method
-    public void forEachBlockPosInBounds(ServerLevel level, BlockPos centre, Rotation roomRotation, Consumer<BlockPos> consumer) {
-        throw new RuntimeException("Method forEachBlockPosInBounds not implemented");
+    public StructureProcessorList getStructurePostProcessors() {
+        return structurePostProcessors;
+    }
+
+    public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, StructureProcessorList postProcessors, Random random);
+
+    public void forEachBlockPosInBounds(ServerLevel level, BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Consumer<BlockPos> consumer) {
+        int XO1 = -(getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
+        int XO2 = getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
+        int ZO1 = -(getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
+        int ZO2 = getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
+
+        BlockPos min = centre.offset(XO1, 0, ZO1);
+        BlockPos max = centre.offset(XO2, heightScale * gridHeight, ZO2);
+
+        BlockUtils.forEachInArea(min, max, method, consumer);
     }
 }
 

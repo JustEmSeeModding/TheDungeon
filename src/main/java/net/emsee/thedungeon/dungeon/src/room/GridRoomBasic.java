@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.minecraft.core.BlockPos;
@@ -10,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
@@ -48,8 +50,8 @@ public class GridRoomBasic extends AbstractGridRoom{
                 .setGenerationPriority(generationPriority)
                 .setOverrideEndChance(overrideEndChance, doOverrideEndChance)
                 .setSpawnRules(spawnRules)
-                .setStructureProcessors(structureProcessors)
-                .setSkipCollectionProcessors(skipCollectionProcessors);
+                .setStructureProcessors(structureProcessors, structurePostProcessors)
+                .setSkipCollectionProcessors(skipCollectionProcessors, skipCollectionPostProcessors);
 
     }
 
@@ -112,17 +114,15 @@ public class GridRoomBasic extends AbstractGridRoom{
     }
 
     @Override
-    public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random) {
+    public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, StructureProcessorList postProcessors, Random random) {
         StructureTemplate template = StructureUtils.getTemplate(serverLevel, getResourceLocation());
-        if (template == null) {
+        if (template == null)
             throw new IllegalStateException(this + ": template was null");
-        }
-        if (centre == null) {
+        if (centre == null)
             throw new IllegalStateException(this + ": Placement position was null");
-        }
-        if (roomRotation == null) {
+        if (roomRotation == null)
             throw new IllegalStateException(this + ": Placement rotation was null");
-        }
+
 
         BlockPos origin = centre.subtract(new Vec3i(Math.round((getGridCellWidth()) * getRotatedEastSizeScale(Rotation.NONE) / 2f) - 1, 0, Math.round((getGridCellWidth()) * getRotatedNorthSizeScale(Rotation.NONE) / 2f) - 1));
         BlockPos minCorner = centre.subtract(new Vec3i(getGridCellWidth() * getMaxSizeScale(), 0, getGridCellWidth() * getMaxSizeScale()));
@@ -142,9 +142,31 @@ public class GridRoomBasic extends AbstractGridRoom{
         //new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockStateMatchTest(Blocks.AIR.defaultBlockState(),.1f), AlwaysTrueTest.INSTANCE, ModBlocks.DUNGEON_MOD_SPAWNER.get().defaultBlockState())))
 
         for (StructureProcessor processor : processors.list()) {
+            if (processor instanceof PostProcessor)
+                throw new IllegalStateException("Adding post processor as normal processor");
             placement.addProcessor(processor);
         }
 
         template.placeInWorld(serverLevel, origin, origin, placement, rand, Block.UPDATE_ALL);
+
+
+        for (StructureProcessor processor : postProcessors.list()) {
+            if (processor instanceof PostProcessor postProcessorData)
+                forEachBlockPosInBounds(serverLevel, centre, roomRotation, postProcessorData.getMethod(), pos -> {
+                    BlockState initialState = serverLevel.getBlockState(pos);
+                    // Create a StructureBlockInfo for the block
+                    StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(
+                            pos,
+                            initialState,
+                            null
+                    );
+
+                    blockInfo = processor.process(serverLevel, new BlockPos(0, 0, 0), pos, blockInfo, blockInfo, new StructurePlaceSettings(), null);
+
+                    // Place processed block state (or fallback to initial state)
+                    serverLevel.setBlockAndUpdate(pos, blockInfo != null ? blockInfo.state() : initialState);
+                });
+            else throw new IllegalStateException("Adding normal processor as post processor");
+        }
     }
 }

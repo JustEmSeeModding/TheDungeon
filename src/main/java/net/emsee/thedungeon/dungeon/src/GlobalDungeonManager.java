@@ -167,7 +167,7 @@ public final class GlobalDungeonManager {
             WeightedMap.Int<Dungeon> possibleDungeons = cycleDungeons.get(rank);
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"No dungeon in passive queue, selecting random");
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Possible Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
-            if (possibleDungeons.isEmpty()) {
+            if (possibleDungeons.isEmpty() || possibleDungeons.totalWeight() <= 0) {
                 DebugLog.logWarn(DebugLog.DebugType.WARNINGS,"Rank: {} has no dungeons assigned", rank.toString());
                 return;
             }
