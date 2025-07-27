@@ -152,7 +152,7 @@ public class GridRoomBasic extends AbstractGridRoom{
 
         for (StructureProcessor processor : postProcessors.list()) {
             if (processor instanceof PostProcessor postProcessorData)
-                forEachBlockPosInBounds(serverLevel, centre, roomRotation, postProcessorData.getMethod(), pos -> {
+                forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(), pos -> {
                     BlockState initialState = serverLevel.getBlockState(pos);
                     // Create a StructureBlockInfo for the block
                     StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(

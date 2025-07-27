@@ -41,7 +41,7 @@ public class CrystalCaveBuddingProcessor extends BlockPalletReplacementProcessor
 
     protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BUDDING_AMETHYST, clusterMap);
+                map.put(Blocks.AIR, clusterMap);
             });
 
     @Override

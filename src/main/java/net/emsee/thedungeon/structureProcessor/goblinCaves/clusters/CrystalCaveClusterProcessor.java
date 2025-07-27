@@ -57,7 +57,7 @@ public class CrystalCaveClusterProcessor extends OrganicClusterProcessor {
 
                 map.put(new ReplaceInstance(Blocks.AMETHYST_BLOCK::defaultBlockState), 5);
             });
-
+/*
     //IMPORTANT MAKE SURE WEIGHTS MATCH WITH THE ABOVE MAP
     protected final WeightedMap.Int<ReplaceInstance> clusterMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
@@ -73,11 +73,13 @@ public class CrystalCaveClusterProcessor extends OrganicClusterProcessor {
                 // weight of the rest, ORDER MATTERS
                 //map.put(new ReplaceInstance(Blocks.BUDDING_AMETHYST::defaultBlockState), 5);
             });
+            */
+
 
     protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
                 map.put(Blocks.CALCITE, basicMap);
-                map.put(Blocks.AIR, clusterMap);
+                //map.put(Blocks.AIR, clusterMap);
             });
 
     @Override

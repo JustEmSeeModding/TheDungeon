@@ -159,8 +159,6 @@ public class GridRoomMultiResource extends AbstractGridRoom {
                 .setBoundingBox(mbb)
                 .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
 
-        //new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockStateMatchTest(Blocks.AIR.defaultBlockState(),.1f), AlwaysTrueTest.INSTANCE, ModBlocks.DUNGEON_MOD_SPAWNER.get().defaultBlockState())))
-
         for (StructureProcessor processor : processors.list()) {
             if (processor instanceof PostProcessor)
                 throw new IllegalStateException("Adding post processor as normal processor");
@@ -171,7 +169,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
 
         for (StructureProcessor processor : postProcessors.list()) {
             if (processor instanceof PostProcessor postProcessorData)
-                forEachBlockPosInBounds(serverLevel, centre, roomRotation, postProcessorData.getMethod(), pos -> {
+                forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(), pos -> {
                     BlockState initialState = serverLevel.getBlockState(pos);
                     // Create a StructureBlockInfo for the block
                     StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(

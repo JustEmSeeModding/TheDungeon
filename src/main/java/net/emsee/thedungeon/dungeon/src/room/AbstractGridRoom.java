@@ -503,14 +503,14 @@ public abstract class AbstractGridRoom {
 
     public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, StructureProcessorList postProcessors, Random random);
 
-    public void forEachBlockPosInBounds(ServerLevel level, BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Consumer<BlockPos> consumer) {
+    public void forEachBlockPosInBounds(BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Consumer<BlockPos> consumer) {
         int XO1 = -(getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
         int XO2 = getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
         int ZO1 = -(getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
         int ZO2 = getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
 
         BlockPos min = centre.offset(XO1, 0, ZO1);
-        BlockPos max = centre.offset(XO2, heightScale * gridHeight, ZO2);
+        BlockPos max = centre.offset(XO2, heightScale * gridHeight-1, ZO2);
 
         BlockUtils.forEachInArea(min, max, method, consumer);
     }
