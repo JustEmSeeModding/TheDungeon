@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,7 +62,7 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
                     map.put(Blocks.RAW_GOLD_BLOCK, Blocks.YELLOW_TERRACOTTA);
                     map.put(Blocks.RAW_COPPER_BLOCK, Blocks.TERRACOTTA);
                     map.put(Blocks.ANCIENT_DEBRIS, Blocks.GRAY_TERRACOTTA);
-                    map.put(Blocks.AMETHYST_BLOCK, Blocks.PURPLE_CONCRETE);
+                    //map.put(Blocks.AMETHYST_BLOCK, Blocks.PURPLE_CONCRETE);
 
                     map.put(ModBlocks.PYRITE_ORE.get(), Blocks.STONE);
 
@@ -84,6 +83,9 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
                     map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
                     map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
                     map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
+                    map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
+                    map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
+                    map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
                 });
     }
 
