@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class CrystalCaveBuddingProcessor extends BlockPalletReplacementProcessor implements PostProcessor {
-    public static final CrystalCaveProcessor INSTANCE = new CrystalCaveProcessor();
+    public static final CrystalCaveBuddingProcessor INSTANCE = new CrystalCaveBuddingProcessor();
 
-    public static final MapCodec<CrystalCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<CrystalCaveBuddingProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
     @Override
     public BlockUtils.ForEachMethod getMethod() {

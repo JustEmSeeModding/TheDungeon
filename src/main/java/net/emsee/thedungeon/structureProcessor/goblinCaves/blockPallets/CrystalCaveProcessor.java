@@ -3,18 +3,13 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
-import net.emsee.thedungeon.structureProcessor.PostProcessor;
-import net.emsee.thedungeon.utils.BlockUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.Map;
-import java.util.function.Predicate;
 
 public class CrystalCaveProcessor extends BlockPalletReplacementProcessor {
     public static final CrystalCaveProcessor INSTANCE = new CrystalCaveProcessor();
