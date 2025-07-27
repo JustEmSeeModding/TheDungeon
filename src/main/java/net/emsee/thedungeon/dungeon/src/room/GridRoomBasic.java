@@ -79,8 +79,10 @@ public class GridRoomBasic extends AbstractGridRoom{
                 doOverrideEndChance == otherRoom.doOverrideEndChance &&
                 ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
                 ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
+                ListAndArrayUtils.listEquals(structurePostProcessors.list(), otherRoom.structurePostProcessors.list()) &&
                 differentiationID == otherRoom.differentiationID &&
-                skipCollectionProcessors == otherRoom.skipCollectionProcessors;
+                skipCollectionProcessors == otherRoom.skipCollectionProcessors &&
+                skipCollectionPostProcessors == otherRoom.skipCollectionPostProcessors;
     }
 
     @Override
@@ -103,8 +105,10 @@ public class GridRoomBasic extends AbstractGridRoom{
         result = 31 * result + (doOverrideEndChance ? 1 : 0);
         result = 31 * result + spawnRules.hashCode();
         result = 31 * result + structureProcessors.list().hashCode();
+        result = 31 * result + structurePostProcessors.list().hashCode();
         result = 31 * result + differentiationID;
         result = 31 * result + (skipCollectionProcessors ? 1 : 0);
+        result = 31 * result + (skipCollectionPostProcessors ? 1 : 0);
         return result;
     }
 
