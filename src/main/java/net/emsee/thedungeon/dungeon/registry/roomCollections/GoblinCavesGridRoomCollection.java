@@ -3,7 +3,7 @@ package net.emsee.thedungeon.dungeon.registry.roomCollections;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.fail.WallFailRule;
-import net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules.SpawnInBox;
+import net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules.SpawnInRoom;
 import net.emsee.thedungeon.dungeon.src.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.room.GridRoomBasic;
 import net.emsee.thedungeon.dungeon.src.room.GridRoomList;
@@ -14,7 +14,6 @@ import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post.Cry
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.CrystalCaveClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.DirtClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.StoneCaveDioriteAndGraniteProcessor;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
 
 public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
@@ -98,7 +97,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(FungalVegetationOnlyProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1))
-                .addRequiredRoom(1, 2, new GridRoomBasic("goblin_caves/convert/stone_blackstone", 11, 11)
+                .addRequiredRoom(0, 2, new GridRoomBasic("goblin_caves/convert/stone_blackstone", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, CRYSTAL_TAG)
@@ -208,7 +207,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
-                        .addMobSpawnRule(new SpawnInBox<>(ModEntities.CAVE_GOBLIN, new BlockPos(-22, 3, -22), new BlockPos(22, 27, 22), 2, 5, 1)))
+                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 2, 5, 1)))
                 .addRoom(new GridRoomBasic("goblin_caves/stone/den", 11, 11)
                         .setSizeHeight(5, 5, 3)
                         .horizontalConnections(1, 1, 1, 0)
@@ -217,7 +216,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setAllConnectionTags(GILDED_TAG)
                         .doAllowRotation()
                         .withStructureProcessor(StoneToGildedCaveProcessor.INSTANCE)
-                        .addMobSpawnRule(new SpawnInBox<>(ModEntities.SHADOW_GOBLIN, new BlockPos(-22, 3, -22), new BlockPos(22, 27, 22), 2, 5, 1)))
+                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.SHADOW_GOBLIN, 2, 5, 1)))
                 .addRoom(new GridRoomBasic("goblin_caves/stone/den", 11, 11)
                         .setSizeHeight(5, 5, 3)
                         .horizontalConnections(1, 1, 1, 0)
@@ -226,7 +225,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setAllConnectionTags(DEEP_TAG)
                         .doAllowRotation()
                         .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE)
-                        .addMobSpawnRule(new SpawnInBox<>(ModEntities.SHADOW_GOBLIN, new BlockPos(-22, 3, -22), new BlockPos(22, 27, 22), 2, 5, 1)));
+                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 2, 5, 1)));
     }
 
     private static GridRoomList stone_biome() {
@@ -235,7 +234,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .applyToAll(room -> room.withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE))
                         .applyToAll(room -> room.withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
                         .applyToAll(room -> room.setAllConnectionTags(STONE_TAG)))
-                .addRoom(l_stone_vein().withWeight(5).withStructureProcessor(StoneCaveOreProcessor.INSTANCE).setAllConnectionTags(STONE_TAG));
+                .addRoom(l_stone_vein().withWeight(5).withStructureProcessor(StoneCaveOreProcessor.INSTANCE).setAllConnectionTags(STONE_TAG))
+
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 1, 2, .15f)));
     }
 
     private static GridRoomList gilded_biome() {
@@ -243,15 +244,18 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .addRooms(unassigned_generic_path_caves()
                         .applyToAll(room -> room.withStructureProcessor(StoneToGildedCaveProcessor.INSTANCE))
                         .applyToAll(room -> room.setAllConnectionTags(GILDED_TAG))
-                        .addRoom(l_blackstone_vein().withWeight(5).withStructureProcessor(GildedCaveOreProcessor.INSTANCE).setAllConnectionTags(GILDED_TAG)));
+                        .addRoom(l_blackstone_vein().withWeight(5).withStructureProcessor(GildedCaveOreProcessor.INSTANCE).setAllConnectionTags(GILDED_TAG)))
+
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.SHADOW_GOBLIN, 1, 2, .12f)));
     }
 
     private static GridRoomList deep_biome() {
         return new GridRoomList()
                 .addRooms(unassigned_generic_path_caves()
                         .applyToAll(room -> room.withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE))
-                        .applyToAll(room -> room.setAllConnectionTags(DEEP_TAG))
-                );
+                        .applyToAll(room -> room.setAllConnectionTags(DEEP_TAG)))
+
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 1, 2, .15f)));
     }
 
     private static GridRoomList ice_biome() {

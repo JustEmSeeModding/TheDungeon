@@ -22,6 +22,7 @@ public final class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.DUNGEON_DEBUG_TOOL);//TODO comment out at release
                         output.accept(ModItems.DUNGEON_CLOCK);
+                        output.accept(ModItems.PYRITE_COMPASS);
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
                         output.accept(ModItems.INFUSED_CHISEL);

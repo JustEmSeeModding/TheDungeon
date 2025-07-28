@@ -8,7 +8,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.level.block.Rotation;
 
 import java.util.function.Supplier;
 
@@ -30,7 +29,7 @@ public class SpawnAt<T extends Entity> extends MobSpawnRule {
         this.chance = chance;
     }
 
-    public SpawnAt withRotation(float rotation) {
+    public SpawnAt<T> withRotation(float rotation) {
         spawnRotation=rotation;
         return this;
     }

@@ -35,6 +35,9 @@ public final class ModItems {
     public static final DeferredItem<DungeonClock> DUNGEON_CLOCK = ITEMS.register("dungeon_clock",
             () -> new DungeonClock(new Item.Properties()));
 
+    public static final DeferredItem<DungeonPortalCompas> PYRITE_COMPASS = ITEMS.register("pyrite_compass",
+            () -> new DungeonPortalCompas(new Item.Properties()));
+
     public static final DeferredItem<TestBeltItem> TEST_BELT = ITEMS.register("test_belt",
             () -> new TestBeltItem(new Item.Properties()));
 

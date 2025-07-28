@@ -30,7 +30,7 @@ public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
         this.entity = entity;
         this.chance = chance;
         this.min = min;
-        this.max = max+1;
+        this.max = max;
     }
 
 
@@ -43,8 +43,8 @@ public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
         BlockPos cornerTwo = room.getRoom().getMaxCorner(roomCenter, roomRotation);
 
         RandomSource random = level.random;
-        int count = random.nextInt(min, max+1);
         if (chance == 1 || chance > random.nextFloat()) {
+            int count = random.nextInt(min, max+1);
             Iterable<BlockPos> positions = BlockPos.randomBetweenClosed(random, count, cornerOne.getX(), cornerOne.getY(), cornerOne.getZ(), cornerTwo.getX(), cornerTwo.getY(), cornerTwo.getZ());
 
             for (BlockPos pos : positions) {

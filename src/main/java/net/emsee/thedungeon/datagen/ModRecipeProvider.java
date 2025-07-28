@@ -80,6 +80,22 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('o', Items.ENDER_EYE)
                 .unlockedBy("has_shattered_portal_core", has(ModItems.SHATTERED_PORTAL_CORE)).save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.DUNGEON_CLOCK.get(), 1)
+                .pattern(" # ")
+                .pattern("#*#")
+                .pattern(" # ")
+                .define('*', Items.CLOCK)
+                .define('#', ModItems.DUNGEON_ESSENCE_SHARD.get())
+                .unlockedBy("has_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.PYRITE_COMPASS.get(), 1)
+                .pattern(" # ")
+                .pattern("#*#")
+                .pattern(" # ")
+                .define('*', Items.COMPASS)
+                .define('#', ModItems.PYRITE.get())
+                .unlockedBy("has_pyrite", has(ModItems.PYRITE_COMPASS)).save(recipeOutput);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.DUNGEON_PORTAL_F.get(), 1)
                 .pattern("###")
                 .pattern("#*#")

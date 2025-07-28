@@ -343,6 +343,11 @@ public final class GlobalDungeonManager {
             return saveData.getPortalPosition(portalID, rank);
     }
 
+    public static List<BlockPos> getPortalPositions(MinecraftServer server, DungeonRank rank) {
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        return saveData.getAllPortalPositions(rank);
+    }
+
     public static int giveRandomPortalID(MinecraftServer server, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (saveData.portalPositionsEmpty(rank)) return -1;

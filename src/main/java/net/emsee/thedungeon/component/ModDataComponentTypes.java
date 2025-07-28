@@ -2,6 +2,7 @@ package net.emsee.thedungeon.component;
 
 import com.mojang.serialization.Codec;
 import net.emsee.thedungeon.TheDungeon;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
@@ -17,6 +18,9 @@ public class ModDataComponentTypes {
 
     public static final DeferredHolder<DataComponentType<?>,DataComponentType<Integer>> ITEM_SAVED_DUNGEON_ID = register("item_dungeon_id",
             builder -> builder.persistent(Codec.INT));
+
+    public static final DeferredHolder<DataComponentType<?>,DataComponentType<BlockPos>> COMPAS_SAVED_BLOCK_POS= register("compas_block_pos",
+            builder -> builder.persistent(BlockPos.CODEC));
 
     private static <T>DeferredHolder<DataComponentType<?>,DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return DATA_COMPONENT_TYPES.register(name, () -> builderOperator.apply(DataComponentType.builder()).build());
