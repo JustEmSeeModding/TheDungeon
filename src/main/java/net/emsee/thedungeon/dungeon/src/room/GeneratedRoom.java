@@ -553,7 +553,7 @@ public final class GeneratedRoom {
      */
     public void spawnMobs(ServerLevel level) {
         for (MobSpawnRule rule : room.getSpawnRules()) {
-            rule.spawn(level, placedWorldPos, placedRotation);
+            rule.spawn(level, this);
         }
     }
 
@@ -594,6 +594,10 @@ public final class GeneratedRoom {
 
     public BlockPos getPlacedWorldPos() {
         return placedWorldPos;
+    }
+
+    public Rotation getPlacedWorldRotation() {
+        return placedRotation;
     }
 
     public int getGridCellWidth() {

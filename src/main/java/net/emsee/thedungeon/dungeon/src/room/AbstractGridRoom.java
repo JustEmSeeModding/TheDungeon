@@ -508,16 +508,20 @@ public abstract class AbstractGridRoom {
 
     public abstract void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random);
 
+    public BlockPos getMinCorner(BlockPos centre, Rotation roomRotation) {
+        int XO = -(getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
+        int ZO = -(getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
+        return centre.offset(XO, 0, ZO);
+    }
+
+    public BlockPos getMaxCorner(BlockPos centre, Rotation roomRotation) {
+        int XO = getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
+        int ZO = getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
+        return centre.offset(XO, heightScale * gridHeight-1, ZO);
+    }
+
     public void forEachBlockPosInBounds(BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Consumer<BlockPos> consumer) {
-        int XO1 = -(getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
-        int XO2 = getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
-        int ZO1 = -(getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);
-        int ZO2 = getRotatedNorthSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2;
-
-        BlockPos min = centre.offset(XO1, 0, ZO1);
-        BlockPos max = centre.offset(XO2, heightScale * gridHeight-1, ZO2);
-
-        BlockUtils.forEachInArea(min, max, method, consumer);
+        BlockUtils.forEachInArea(getMinCorner(centre, roomRotation), getMaxCorner(centre,roomRotation), method, consumer);
     }
 }
 

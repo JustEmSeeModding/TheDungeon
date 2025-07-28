@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules;
 
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.MobSpawnRule;
+import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -36,14 +37,14 @@ public class SpawnAt<T extends Entity> extends MobSpawnRule {
 
 
     @Override
-    public void spawn(ServerLevel level, BlockPos roomCenter, Rotation roomRotation) {
+    public void spawn(ServerLevel level, GeneratedRoom room) {
         RandomSource random = level.random;
         if (chance == 1 || chance > random.nextFloat()) {
             int tempCount = count;
             while (tempCount > 0) {
-                Entity spawned = entity.get().spawn(level, roomCenter.offset(pos.rotate(roomRotation)), MobSpawnType.STRUCTURE);
+                Entity spawned = entity.get().spawn(level, room.getPlacedWorldPos().offset(pos.rotate(room.getPlacedWorldRotation())), MobSpawnType.STRUCTURE);
                 assert spawned != null;
-                spawned.setYRot(spawnRotation+spawned.rotate(roomRotation));
+                spawned.setYRot(spawnRotation+spawned.rotate(room.getPlacedWorldRotation()));
                 tempCount--;
             }
         }
