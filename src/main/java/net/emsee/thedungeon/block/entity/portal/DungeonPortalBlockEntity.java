@@ -31,7 +31,7 @@ public abstract class DungeonPortalBlockEntity extends BlockEntity {
     }
 
     public int getExitID(MinecraftServer server, DungeonPortal block) {
-        if (exitPortalID < 0)
+        if (exitPortalID < 0 || exitPortalID >= GlobalDungeonManager.getPortalPositions(server, block.getExitRank()).size())
             exitPortalID = GlobalDungeonManager.giveRandomPortalID(server, block.getExitRank());
         return exitPortalID;
     }
