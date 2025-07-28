@@ -1,0 +1,20 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "thedungeon:item/dungeon_clock/clock_00"
+    },
+    "overrides": [
+        { "predicate": { "thedungeon:in_next_collapse": 0}, "model": "thedungeon:item/dungeon_clock" },
+        { "predicate": { "thedungeon:time_left": 0.00 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_11" },
+        { "predicate": { "thedungeon:time_left": 0.05 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_10" },
+        { "predicate": { "thedungeon:time_left": 0.10}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_09" },
+        { "predicate": { "thedungeon:time_left": 0.15}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_08" },
+        { "predicate": { "thedungeon:time_left": 0.20}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_07" },
+        { "predicate": { "thedungeon:time_left": 0.25}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_06" },
+        { "predicate": { "thedungeon:time_left": 0.30}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_05" },
+        { "predicate": { "thedungeon:time_left": 0.35}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_04" },
+        { "predicate": { "thedungeon:time_left": 0.40}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_03" },
+        { "predicate": { "thedungeon:time_left": 0.45 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_02" },
+        { "predicate": { "thedungeon:time_left": 0.50 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_01" }
+    ]
+}

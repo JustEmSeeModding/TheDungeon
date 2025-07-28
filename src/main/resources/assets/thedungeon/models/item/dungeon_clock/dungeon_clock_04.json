@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thedungeon:item/dungeon_clock/clock_04"
+  }
+}
