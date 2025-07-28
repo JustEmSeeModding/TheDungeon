@@ -30,7 +30,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
     public GoblinCavesGridRoomCollection() {
         super(11, 11);
         this
-                .addRequiredRoomsOf(15, 50, spawn_rooms())
+                .addRequiredRoomsOf(25, 50, spawn_rooms())
                 .addRequiredRoomsOf(5, dens())
 
                 .addRequiredRoom(0, 2, new GridRoomBasic("goblin_caves/convert/stone_blackstone", 11, 11)

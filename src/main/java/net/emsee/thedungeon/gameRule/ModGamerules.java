@@ -25,6 +25,6 @@ public final class ModGamerules {
 
         GameruleRegistry.register(DUNGEON_SEED_OVERRIDE, Category.UPDATES, -1);
         GameruleRegistry.register(DUNGEON_KILL_ON_REGEN, Category.UPDATES, true);
-        GameruleRegistry.register(DUNGEON_CLEAN_ON_REGEN, Category.UPDATES, false);
+        GameruleRegistry.register(DUNGEON_CLEAN_ON_REGEN, Category.UPDATES, true);
     }
 }

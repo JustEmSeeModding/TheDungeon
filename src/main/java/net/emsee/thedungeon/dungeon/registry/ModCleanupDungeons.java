@@ -1,16 +1,23 @@
 package net.emsee.thedungeon.dungeon.registry;
 
+import net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup.CleanupLightGridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.GridDungeon;
-import net.emsee.thedungeon.dungeon.registry.roomCollections.CleanupGridRoomCollection;
+import net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup.CleanupGridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 
 public class ModCleanupDungeons extends ModDungeons {
-    static final int cleanupDepth = 8;
-    static final int cleanupHeight = 15;
+    // on true, wipes the complete dungeon. on false only removes illegal blocks
+    private static final boolean fullCleanup = false;
+    
+    private static final GridRoomCollection collection = fullCleanup?new CleanupGridRoomCollection(): new CleanupLightGridRoomCollection();
 
-    static final int cleanupCellWidth = 47;
-    static final int cleanupCellHeight = 47;
+    static final int cleanupDepth = fullCleanup?10:5;
+    static final int cleanupHeight = fullCleanup?10:5;
+
+    static final int cleanupCellWidth = fullCleanup?47:101;
+    static final int cleanupCellHeight = fullCleanup?47:101;
 
     public static final Dungeon CLEANUP_F = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_f",
@@ -18,7 +25,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
@@ -30,7 +37,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
@@ -42,7 +49,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
@@ -53,7 +60,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
@@ -64,7 +71,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
@@ -75,7 +82,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
@@ -86,7 +93,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)
@@ -97,7 +104,7 @@ public class ModCleanupDungeons extends ModDungeons {
             0,
             cleanupCellWidth,
             cleanupCellHeight,
-            new CleanupGridRoomCollection())
+            collection)
             .setDepth(cleanupDepth)
             .setMaxFloorHeight(cleanupHeight)
             .setRoomEndChance(0)

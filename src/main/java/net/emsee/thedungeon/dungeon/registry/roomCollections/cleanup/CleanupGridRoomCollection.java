@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.dungeon.registry.roomCollections;
+package net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup;
 
 import net.emsee.thedungeon.dungeon.src.room.GridRoomBasic;
 import net.emsee.thedungeon.dungeon.src.GridRoomCollection;

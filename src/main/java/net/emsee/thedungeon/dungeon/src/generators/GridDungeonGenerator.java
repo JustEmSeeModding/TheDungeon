@@ -72,7 +72,7 @@ public class GridDungeonGenerator {
         toPlaceInstances.add(room);
         if (room.hasMobSpawns())
             toSpawnMobsRooms.add(room);
-        if (room.hasPostProcessing())
+        if (room.hasPostProcessing() || collection.hasPostProcessing())
             toPostProcessRooms.add(room);
     }
 
@@ -180,8 +180,8 @@ public class GridDungeonGenerator {
         if (!collection.requiredRoomsDone()) {
             // if not all rooms were generated, discard this generator and start a new one with seed+1
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Not All Required Rooms where generated, regenerating with Seed+1");
-            if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
-                GlobalDungeonManager.priorityCleanup(server, dungeon.getRank());
+            //if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
+            //    GlobalDungeonManager.priorityCleanup(server, dungeon.getRank());
             dungeon.generateSeeded(GetSeed() + 1);
             return;
         }
@@ -325,7 +325,7 @@ public class GridDungeonGenerator {
         if (collection.getFallback()==null) {return;}
         GeneratedRoom fallback = GeneratedRoom.createInstance(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, Occupation.AVAILABLE, true, random);
         toPlaceInstances.add(fallback);
-        if (fallback.hasPostProcessing())
+        if (fallback.hasPostProcessing() || collection.hasPostProcessing())
             toPostProcessRooms.add(fallback);
         //return fallback;
     }
@@ -335,7 +335,7 @@ public class GridDungeonGenerator {
         if (collection.getFallback()==null) {return;}
         GeneratedRoom fallback = GeneratedRoom.createInstance(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, occupation, true, random);
         toPlaceInstances.add(fallback);
-        if (fallback.hasPostProcessing())
+        if (fallback.hasPostProcessing() || collection.hasPostProcessing())
             toPostProcessRooms.add(fallback);
         //return fallback;
     }

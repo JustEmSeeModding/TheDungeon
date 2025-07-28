@@ -321,6 +321,10 @@ public abstract class GridRoomCollection {
         return structurePostProcessors;
     }
 
+    public boolean hasPostProcessing() {
+        return !structurePostProcessors.list().isEmpty();
+    }
+
     public static class RequiredRoomPlacements {
         private final int min;
         private final int max;
