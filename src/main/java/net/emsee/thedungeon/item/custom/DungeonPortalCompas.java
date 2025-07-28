@@ -56,7 +56,7 @@ public class DungeonPortalCompas extends DungeonItem {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
 
         if (!(entity instanceof Player player)) return;
-        boolean stackInHand = (player.getMainHandItem() == stack || player.getOffhandItem() == stack))
+        boolean stackInHand = (player.getMainHandItem() == stack || player.getOffhandItem() == stack);
         if (ONLY_UPDATE_IN_HAND && !stackInHand) return;
 
         UUID playerId = player.getUUID();
