@@ -1,6 +1,5 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
-import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
@@ -12,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -136,7 +134,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
     }
 
     @Override
-    public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors,StructureProcessorList postProcessors, Random random) {
+    public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random) {
         StructureTemplate template = StructureUtils.getTemplate(serverLevel, getResourceLocation(random));
         if (template == null) {
             throw new IllegalStateException(this + ": template was null");
@@ -170,7 +168,10 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         }
 
         template.placeInWorld(serverLevel, origin, origin, placement, rand, Block.UPDATE_ALL);
+    }
 
+    @Override
+    public void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random) {
         for (StructureProcessor processor : postProcessors.list()) {
             if (processor instanceof PostProcessor postProcessorData)
                 forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(), pos -> {

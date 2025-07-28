@@ -1,7 +1,6 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
 import com.ibm.icu.impl.Pair;
-import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.DungeonUtils;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
@@ -501,7 +500,13 @@ public abstract class AbstractGridRoom {
         return structurePostProcessors;
     }
 
-    public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, StructureProcessorList postProcessors, Random random);
+    public boolean hasPostProcessing() {
+        return !structurePostProcessors.list().isEmpty();
+    }
+
+    public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random);
+
+    public abstract void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random);
 
     public void forEachBlockPosInBounds(BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Consumer<BlockPos> consumer) {
         int XO1 = -(getRotatedEastSizeScale(roomRotation) / 2 * gridWidth + (gridWidth - 1) / 2);

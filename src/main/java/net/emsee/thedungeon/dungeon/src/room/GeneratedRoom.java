@@ -138,21 +138,25 @@ public final class GeneratedRoom {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: returning success", this);
     }
 
-    public void finalizePlacement(ServerLevel serverLevel, StructureProcessorList collectionProcessors, StructureProcessorList collectionPostProcessors, Random random) {
+    public void finalizePlacement(ServerLevel serverLevel, StructureProcessorList collectionProcessors , Random random) {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: finalizing placement", this);
         StructureProcessorList finalProcessors = new StructureProcessorList(new ArrayList<>());
-        StructureProcessorList finalPostProcessors = new StructureProcessorList(new ArrayList<>());
         finalProcessors.list().addAll(room.getStructureProcessors().list());
-        finalPostProcessors.list().addAll(room.getStructurePostProcessors().list());
         if (!room.doSkipCollectionProcessors())
             finalProcessors.list().addAll(collectionProcessors.list());
-        if (!room.doSkipCollectionPostProcessors())
-            finalProcessors.list().addAll(collectionPostProcessors.list());
-        placeTemplate(serverLevel, placedWorldPos, placedRotation, finalProcessors, finalPostProcessors, random);
+        room.placeFeature(serverLevel, placedWorldPos, placedRotation, finalProcessors, random);
     }
 
-    private void placeTemplate(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, StructureProcessorList postProcessors, Random random) {
-        room.placeFeature(serverLevel, centre, roomRotation, processors, postProcessors, random); //StructureUtils.getTemplate(serverLevel, room.getResourceLocation(random));
+    public void finalizePostProcessing(ServerLevel serverLevel , StructureProcessorList collectionPostProcessors, Random random) {
+        StructureProcessorList finalPostProcessors = new StructureProcessorList(new ArrayList<>());
+        finalPostProcessors.list().addAll(room.getStructurePostProcessors().list());
+        if (!room.doSkipCollectionPostProcessors())
+            finalPostProcessors.list().addAll(collectionPostProcessors.list());
+        room.postProcess(serverLevel, placedWorldPos, placedRotation, finalPostProcessors, random);
+    }
+
+    public boolean hasPostProcessing() {
+        return room.hasPostProcessing();
     }
 
     private void generateRoomFrom(GridDungeonGenerator generator, int arrayX, int arrayY, int arrayZ, BlockPos worldPos, Rotation roomRotation, Connection fromConnection) {
@@ -203,7 +207,7 @@ public final class GeneratedRoom {
                             return false;
                         }
                     } catch (Exception e) {
-                        // in case of checking outside of bounds just return false
+                        // in case of checking outside of bounds, return false
                         return false;
                     }
                 }
