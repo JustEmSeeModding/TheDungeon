@@ -35,4 +35,8 @@ public abstract class DungeonPortalBlockEntity extends BlockEntity {
             exitPortalID = GlobalDungeonManager.giveRandomPortalID(server, block.getExitRank());
         return exitPortalID;
     }
+
+    public void resetID() {
+        exitPortalID = -1;
+    }
 }

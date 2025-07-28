@@ -71,6 +71,8 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
         }
+        if (!GlobalDungeonManager.isOpen(level.getServer(), getExitRank()) && level.getBlockEntity(pos) instanceof DungeonPortalBlockEntity entity)
+            entity.resetID();
         super.randomTick(state, level, pos, random);
     }
 
@@ -100,6 +102,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     }
 
     private boolean timeCheck(Player player, MinecraftServer server) {
+        if (player.level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) return true;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         long worldTime = server.overworld().getGameTime();
         long timeLeft = GameruleRegistry.getIntegerGamerule(server, ModGamerules.TICKS_BETWEEN_COLLAPSES) - (worldTime - saveData.GetLastExecutionTime());
