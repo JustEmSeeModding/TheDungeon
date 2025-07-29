@@ -19,12 +19,6 @@ public class ModDataComponentTypes {
     public static final DeferredHolder<DataComponentType<?>,DataComponentType<Integer>> ITEM_SAVED_DUNGEON_ID = register("item_dungeon_id",
             builder -> builder.persistent(Codec.INT));
 
-    public static final DeferredHolder<DataComponentType<?>,DataComponentType<Long>> CLOCK_SAVED_TIME = register("clock_time_memory",
-            builder -> builder.persistent(Codec.LONG));
-
-    public static final DeferredHolder<DataComponentType<?>,DataComponentType<Boolean>> CLOCK_SAVED_IN_RANK = register("clock_in_rank_memory",
-            builder -> builder.persistent(Codec.BOOL));
-
     public static final DeferredHolder<DataComponentType<?>,DataComponentType<BlockPos>> COMPAS_SAVED_BLOCK_POS= register("compas_block_pos",
             builder -> builder.persistent(BlockPos.CODEC));
 

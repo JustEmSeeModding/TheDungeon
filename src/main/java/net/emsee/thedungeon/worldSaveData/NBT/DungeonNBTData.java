@@ -1,14 +1,26 @@
 package net.emsee.thedungeon.worldSaveData.NBT;
 
 import com.google.common.collect.Maps;
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
+import net.emsee.thedungeon.gameRule.GameruleRegistry;
+import net.emsee.thedungeon.gameRule.ModGamerules;
+import net.emsee.thedungeon.network.ModNetworking;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.MinecraftServer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.*;
 
@@ -18,6 +30,7 @@ public final class DungeonNBTData {
         for (DungeonRank rank : DungeonRank.values())
             map.put(rank, new LinkedList<>());
     });
+    private long timeLeft = -1;
     private long lastExecutionTime = -1;
     private long lastMinuteAnnouncement = -1;
     private long lastSecondAnnouncement = -1;
@@ -130,27 +143,27 @@ public final class DungeonNBTData {
     }
 
 
-    public long GetLastExecutionTime() {
+    public long getLastExecutionTime() {
         return lastExecutionTime;
     }
 
-    public long GetLastMinuteAnnouncement() {
+    public long getLastMinuteAnnouncement() {
         return lastMinuteAnnouncement;
     }
 
-    public long GetLasSecondAnnouncement() {
+    public long getLasSecondAnnouncement() {
         return lastSecondAnnouncement;
     }
 
-    public void SetLastExecutionTime(long lastExecutionTime) {
+    public void setLastExecutionTime(long lastExecutionTime) {
         this.lastExecutionTime = lastExecutionTime;
     }
 
-    public void SetLastMinuteAnnouncement(long lastMinuteAnnouncement) {
+    public void setLastMinuteAnnouncement(long lastMinuteAnnouncement) {
         this.lastMinuteAnnouncement = lastMinuteAnnouncement;
     }
 
-    public void SetLastSecondAnnouncement(long lastSecondAnnouncement) {
+    public void setLastSecondAnnouncement(long lastSecondAnnouncement) {
         this.lastSecondAnnouncement = lastSecondAnnouncement;
     }
 
@@ -189,7 +202,43 @@ public final class DungeonNBTData {
         this.finishedForcedChunks = finishedForcedChunks;
     }
 
+    public long getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void serverUpdateTimeLeft(MinecraftServer server) {
+        long worldTime = server.overworld().getGameTime();
+        timeLeft = GameruleRegistry.getIntegerGamerule(server, ModGamerules.TICKS_BETWEEN_COLLAPSES) - (worldTime - lastExecutionTime);
+    }
+
+    public DataPacket createPacket() {
+        return new DataPacket(timeLeft, nextToCollapse, finishedForcedChunks);
+    }
+
     public Boolean getFinishedForcedChunks() {
         return finishedForcedChunks;
+    }
+
+    public record DataPacket(
+    long timeLeft,
+    DungeonRank nextToCollapse,
+    boolean finishedForcedChunks
+    ) implements CustomPacketPayload {
+        public static final CustomPacketPayload.Type<DataPacket> TYPE = new CustomPacketPayload.Type<>(ModNetworking.DUNGEON_DATA_SYNC);
+
+        public static final StreamCodec<ByteBuf, DataPacket> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_LONG,
+                DataPacket::timeLeft,
+                ByteBufCodecs.fromCodec(DungeonRank.CODEC),
+                DataPacket::nextToCollapse,
+                ByteBufCodecs.BOOL,
+                DataPacket::finishedForcedChunks,
+                DataPacket::new
+                );
+
+        @Override
+        public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
     }
 }

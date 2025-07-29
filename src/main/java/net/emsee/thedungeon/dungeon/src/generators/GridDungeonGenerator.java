@@ -5,6 +5,7 @@ import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.DungeonUtils;
+import net.emsee.thedungeon.dungeon.src.room.GridRoomEmpty;
 import net.emsee.thedungeon.dungeon.src.types.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
@@ -252,6 +253,8 @@ public class GridDungeonGenerator {
                 room.finalizePlacement(serverLevel, collection.getStructureProcessors(), random);
                 //serverLevel.getBiomeManager().
                 toPlaceInstances.remove();
+                if (room.getRoom() instanceof GridRoomEmpty)
+                    i--;
             }
             else if (toPlace instanceof FailRule.Instance failInstance) {
                 // if it's a fail rule place it tick it end check if it's done
@@ -269,7 +272,7 @@ public class GridDungeonGenerator {
     }
 
     private void postProcessRoomsStep(ServerLevel serverLevel) {
-        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.PLACER_STEPS_PER_TICK); i++) {
+        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.POST_PROCESSOR_STEPS_PER_TICK); i++) {
             if (toPostProcessRooms.isEmpty()) {
                 // if done start next task
                 GlobalDungeonManager.killAllInDungeon(serverLevel.getServer(), dungeon.getRank());

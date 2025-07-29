@@ -7,9 +7,15 @@ import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.BlockUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +29,13 @@ public class CleanIllegalBlocksProcessor extends BlockPalletReplacementProcessor
     @Override
     public BlockUtils.ForEachMethod getMethod() {
         return BlockUtils.ForEachMethod.BOTTOM_TO_TOP;
+    }
+
+    @Override
+    public boolean skipBlockForProcessing(LevelReader level, BlockPos pos, BlockState state) {
+        if (state.getBlock() == Blocks.AIR) return true;
+        return PostProcessor.super.skipBlockForProcessing(level, pos, state) ||
+                getReplacements().get(state.getBlock()) != null;
     }
 
     protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =

@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
@@ -520,8 +521,8 @@ public abstract class AbstractGridRoom {
         return centre.offset(XO, heightScale * gridHeight-1, ZO);
     }
 
-    public void forEachBlockPosInBounds(BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Consumer<BlockPos> consumer) {
-        BlockUtils.forEachInArea(getMinCorner(centre, roomRotation), getMaxCorner(centre,roomRotation), method, consumer);
+    public void forEachBlockPosInBounds(BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Level level, Consumer<BlockPos> consumer) {
+        BlockUtils.forEachInArea(getMinCorner(centre, roomRotation), getMaxCorner(centre,roomRotation), method,level, consumer);
     }
 }
 

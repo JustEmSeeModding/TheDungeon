@@ -7,10 +7,10 @@ import net.emsee.thedungeon.structureProcessor.cleanup.CleanIllegalBlocksProcess
 
 public final class CleanupLightGridRoomCollection extends GridRoomCollection {
     public CleanupLightGridRoomCollection() {
-        super(101, 101);
-        this.setFallback(new GridRoomEmpty(101, 101)
+        super(51,51);
+        this.setFallback(new GridRoomEmpty(51, 51)
                         .withStructurePostProcessor(CleanIllegalBlocksProcessor.INSTANCE))
-                .addRoom(new GridRoomEmpty(101, 101)
+                .addRoom(new GridRoomEmpty(51, 51)
                         .withWeight(1)
                         .allConnections()
                         .withStructurePostProcessor(CleanIllegalBlocksProcessor.INSTANCE));

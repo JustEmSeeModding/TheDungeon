@@ -23,6 +23,8 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -31,7 +33,7 @@ public class DungeonPortalCompas extends DungeonItem {
     // Optimization parameters
     private static final boolean ONLY_UPDATE_IN_HAND = false;
 
-    private static final int MAX_RANGE = 150;
+    private static final int MAX_RANGE = 250;
     private static final int NODE_LIMIT = 300;
     private static final int SERVER_UPDATE_INTERVAL = 30; // ticks
     private static final int CLIENT_UPDATE_INTERVAL = 20;  // ticks
@@ -64,10 +66,10 @@ public class DungeonPortalCompas extends DungeonItem {
         BlockPos currentPos = player.blockPosition();
 
         if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
-            handleServer(serverLevel, player, stack, playerId, currentTime, currentPos);
+            handleServer(serverLevel, player, stack, slotId, playerId, currentTime, currentPos);
         }
         else if (stackInHand && level.isClientSide && level instanceof ClientLevel clientLevel) {
-            handleClient(clientLevel, player, stack, playerId, currentTime, currentPos);
+            handleClient(clientLevel, player, stack, slotId, playerId, currentTime, currentPos);
         }
     }
 
@@ -77,7 +79,7 @@ public class DungeonPortalCompas extends DungeonItem {
         return target != null ? GlobalPos.of(ModDimensions.DUNGEON_LEVEL_KEY, target) : null;
     }
 
-    protected void handleClient(ClientLevel level, Player player, ItemStack itemStack,
+    protected void handleClient(ClientLevel level, Player player, ItemStack itemStack, int slotID,
                                 UUID playerId, long currentTime, BlockPos currentPos) {
         // Only update if enough time has passed or player moved significantly
         Long lastUpdate = lastClientUpdate.get(playerId);
@@ -102,7 +104,7 @@ public class DungeonPortalCompas extends DungeonItem {
         lastPlayerPosition.put(playerId, currentPos);
     }
 
-    protected void handleServer(ServerLevel level, Player player, ItemStack itemStack,
+    protected void handleServer(ServerLevel level, Player player, ItemStack itemStack, int slotID,
                                 UUID playerId, long currentTime, BlockPos currentPos) {
         // Only update if enough time has passed or player moved significantly
         Long lastUpdate = lastServerUpdate.get(playerId);

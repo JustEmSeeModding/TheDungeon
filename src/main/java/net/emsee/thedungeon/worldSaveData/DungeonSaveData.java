@@ -1,13 +1,22 @@
 package net.emsee.thedungeon.worldSaveData;
 
+import io.netty.buffer.ByteBuf;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.emsee.thedungeon.gameRule.GameruleRegistry;
+import net.emsee.thedungeon.gameRule.ModGamerules;
+import net.emsee.thedungeon.network.ModNetworking;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -15,6 +24,11 @@ import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -23,6 +37,11 @@ import java.util.List;
 public final class DungeonSaveData extends SavedData {
     private static final String DATA_NAME = TheDungeon.MOD_ID + "_dungeon_data";
     private final DungeonNBTData dungeonData = new DungeonNBTData();
+
+    private static MinecraftServer savedServer = null;
+
+    @OnlyIn(Dist.CLIENT)
+    private static DungeonNBTData.DataPacket CLIENT_DATA = null;
 
     /**
      * Returns a factory for creating and loading DungeonSaveData instances with the LEVEL data fix type.
@@ -41,6 +60,12 @@ public final class DungeonSaveData extends SavedData {
         return tag;
     }
 
+    @Override
+    public void setDirty() {
+        this.setDirty(true);
+        PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
+    }
+
     /**
      * Loads a DungeonSaveData instance from the provided NBT data.
      */
@@ -52,30 +77,30 @@ public final class DungeonSaveData extends SavedData {
     }
 
     public long GetLastExecutionTime() {
-        return dungeonData.GetLastExecutionTime();
+        return dungeonData.getLastExecutionTime();
     }
 
     public long GetLastMinuteAnnouncement() {
-        return dungeonData.GetLastMinuteAnnouncement();
+        return dungeonData.getLastMinuteAnnouncement();
     }
 
     public long GetLasSecondAnnouncement() {
-        return dungeonData.GetLasSecondAnnouncement();
+        return dungeonData.getLasSecondAnnouncement();
     }
 
     public void SetLastExecutionTime(long lastExecutionTime) {
-        dungeonData.SetLastExecutionTime(lastExecutionTime);
+        dungeonData.setLastExecutionTime(lastExecutionTime);
         setDirty();
     }
 
     public void SetLastMinuteAnnouncement(long lastMinuteAnnouncement) {
-        dungeonData.SetLastMinuteAnnouncement(lastMinuteAnnouncement);
+        dungeonData.setLastMinuteAnnouncement(lastMinuteAnnouncement);
         setDirty();
     }
 
 
     public void SetLastSecondAnnouncement(long lastSecondAnnouncement) {
-        dungeonData.SetLastSecondAnnouncement(lastSecondAnnouncement);
+        dungeonData.setLastSecondAnnouncement(lastSecondAnnouncement);
         setDirty();
     }
 
@@ -84,7 +109,17 @@ public final class DungeonSaveData extends SavedData {
         ServerLevel overworld = server.getLevel(overworldResourceKey);
         assert overworld != null;
         DimensionDataStorage storage = overworld.getDataStorage();
+        savedServer = server;
         return storage.computeIfAbsent(factory(), DATA_NAME);
+    }
+
+    public long getTimeLeft() {
+        return dungeonData.getTimeLeft();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static DungeonNBTData.DataPacket GetClient() {
+        return CLIENT_DATA;
     }
 
     public boolean isProgressQueueEmpty() {
@@ -202,5 +237,24 @@ public final class DungeonSaveData extends SavedData {
     public void setFinishedForcedChunks() {
         dungeonData.setFinishedForcedChunks(true);
         setDirty();
+    }
+
+    public void serverUpdateTimeLeft(MinecraftServer server) {
+        dungeonData.serverUpdateTimeLeft(server);
+    }
+
+    public static class PayloadHandler implements IPayloadHandler<DungeonNBTData.DataPacket> {
+        @Override
+        public void handle(DungeonNBTData.DataPacket dataPacket, IPayloadContext iPayloadContext) {
+            iPayloadContext.enqueueWork(() -> {
+                        CLIENT_DATA = dataPacket;
+                    })
+                    .exceptionally(e -> {
+                        // Handle exception
+                        iPayloadContext.disconnect(Component.translatable("thedungeon.networking.failed", e.getMessage()));
+                        return null;
+                    });
+
+        }
     }
 }
