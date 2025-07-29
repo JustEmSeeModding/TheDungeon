@@ -14,8 +14,8 @@ public class ModItemProperties {
     public static void addCustomItemProperties() {
         ItemProperties.register(ModItems.PYRITE_COMPASS.get(), TheDungeon.defaultResourceLocation("angle"), new CompassItemPropertyFunction((level, stack, entity) -> DungeonPortalCompas.getTargetPosition(stack)));
         ItemProperties.register(ModItems.DUNGEON_CLOCK.get(), TheDungeon.defaultResourceLocation("time_left"), (itemStack, clientLevel, livingEntity, i) -> {
-            if (DungeonSaveData.GetClient() == null) return 0;
-            return Math.clamp(DungeonSaveData.GetClient().timeLeft()/24000f,0f,1f);
+            if (DungeonSaveData.GetClient() == null) return 1f;
+            return Math.clamp(DungeonSaveData.GetClient().timeLeft()/12000f,0f,1f);
         });
         ItemProperties.register(ModItems.DUNGEON_CLOCK.get(), TheDungeon.defaultResourceLocation("in_next_collapse_or_outside"), (itemStack, clientLevel, livingEntity, i) -> (DungeonClock.isInNextToCollapseOrOutside(livingEntity, clientLevel))?1:0);
     }

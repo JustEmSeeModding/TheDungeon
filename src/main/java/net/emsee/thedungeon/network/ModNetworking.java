@@ -7,18 +7,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public class ModNetworking {
-    private static final String networkVersion = "1";
+    private static final String networkVersion = "2";
 
     public static final ResourceLocation DUNGEON_DATA_SYNC = TheDungeon.defaultResourceLocation("dungeon_data_sync");
 
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar(networkVersion).executesOn(HandlerThread.MAIN);
+        final PayloadRegistrar registrar = event.registrar(networkVersion);
         registrar.playToClient(
                 DungeonNBTData.DataPacket.TYPE,
                 DungeonNBTData.DataPacket.STREAM_CODEC,

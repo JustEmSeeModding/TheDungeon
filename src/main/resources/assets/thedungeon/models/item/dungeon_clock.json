@@ -5,16 +5,16 @@
     },
     "overrides": [
         { "predicate": { "thedungeon:in_next_collapse_or_outside": 0}, "model": "thedungeon:item/dungeon_clock" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.00 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_11" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.05 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_10" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.10}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_09" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.15}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_08" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.20}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_07" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.25}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_06" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.30}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_05" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.35}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_04" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.40}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_03" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.45 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_02" },
-        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.50 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_01" }
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.0 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_10" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.1}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_09" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.2}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_08" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.3}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_07" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.4}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_06" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.5}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_05" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.6}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_04" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.7}, "model": "thedungeon:item/dungeon_clock/dungeon_clock_03" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.8 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_02" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 0.9 }, "model": "thedungeon:item/dungeon_clock/dungeon_clock_01" },
+        { "predicate": { "thedungeon:in_next_collapse_or_outside": 1, "thedungeon:time_left": 1.0 }, "model": "thedungeon:item/dungeon_clock" }
     ]
 }

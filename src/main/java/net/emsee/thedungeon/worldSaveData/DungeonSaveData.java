@@ -1,22 +1,14 @@
 package net.emsee.thedungeon.worldSaveData;
 
-import io.netty.buffer.ByteBuf;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.gameRule.GameruleRegistry;
-import net.emsee.thedungeon.gameRule.ModGamerules;
-import net.emsee.thedungeon.network.ModNetworking;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -38,8 +30,6 @@ public final class DungeonSaveData extends SavedData {
     private static final String DATA_NAME = TheDungeon.MOD_ID + "_dungeon_data";
     private final DungeonNBTData dungeonData = new DungeonNBTData();
 
-    private static MinecraftServer savedServer = null;
-
     @OnlyIn(Dist.CLIENT)
     private static DungeonNBTData.DataPacket CLIENT_DATA = null;
 
@@ -57,6 +47,7 @@ public final class DungeonSaveData extends SavedData {
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA,"DungeonData saving");
         tag.put("DungeonData", dungeonData.SerializeNBT());
+        PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
         return tag;
     }
 
@@ -73,6 +64,7 @@ public final class DungeonSaveData extends SavedData {
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA,"DungeonData Loading");
         DungeonSaveData data = new DungeonSaveData();
         data.dungeonData.DeserializeNBT(nbt.getCompound("DungeonData"));
+        PacketDistributor.sendToAllPlayers(data.dungeonData.createPacket());
         return data;
     }
 
@@ -109,7 +101,6 @@ public final class DungeonSaveData extends SavedData {
         ServerLevel overworld = server.getLevel(overworldResourceKey);
         assert overworld != null;
         DimensionDataStorage storage = overworld.getDataStorage();
-        savedServer = server;
         return storage.computeIfAbsent(factory(), DATA_NAME);
     }
 
@@ -241,6 +232,7 @@ public final class DungeonSaveData extends SavedData {
 
     public void serverUpdateTimeLeft(MinecraftServer server) {
         dungeonData.serverUpdateTimeLeft(server);
+        PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
     }
 
     public static class PayloadHandler implements IPayloadHandler<DungeonNBTData.DataPacket> {

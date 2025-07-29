@@ -32,16 +32,6 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
         super(pProperties.stacksTo(1));
     }
 
-/*    @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        super.inventoryTick(stack, level, entity, slotId, isSelected);
-        if (level instanceof ServerLevel serverLevel) {
-            long time = DungeonSaveData.Get(serverLevel.getServer()).getTimeLeft(serverLevel.getServer());
-            time = (time + 600) / 1200 * 1200; //round up to next multiple of 1200
-            stack.set(ModDataComponentTypes.CLOCK_SAVED_TIME, time);
-            stack.set(ModDataComponentTypes.CLOCK_SAVED_IN_RANK, DungeonRank.getClosestTo(entity.blockPosition()) == DungeonSaveData.Get(serverLevel.getServer()).getNextToCollapse());
-        }
-    }*/
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
@@ -72,13 +62,6 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
         }
     }
 
-    /*public static long getTimeLeft(ItemStack itemStack) {
-        if (itemStack.get(ModDataComponentTypes.CLOCK_SAVED_TIME)!=null) {
-            return itemStack.get(ModDataComponentTypes.CLOCK_SAVED_TIME);
-        }
-        return 0;
-    }*/
-
     public static boolean isInNextToCollapseOrOutside(LivingEntity livingEntity, ClientLevel clientLevel) {
         if (clientLevel.dimension() != ModDimensions.DUNGEON_LEVEL_KEY) return true;
         if (DungeonSaveData.GetClient() == null) return false;
@@ -86,12 +69,6 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
         return DungeonRank.getClosestTo(livingEntity.blockPosition()) == DungeonSaveData.GetClient().nextToCollapse();
     }
 
-    /*public static boolean isInNextToCollapseOrOutside(ItemStack itemStack, ClientLevel clientLevel) {
-        if (clientLevel.dimension() != ModDimensions.DUNGEON_LEVEL_KEY) return true;
-        if (itemStack.get(ModDataComponentTypes.CLOCK_SAVED_IN_RANK)!=null)
-            return itemStack.get(ModDataComponentTypes.CLOCK_SAVED_IN_RANK);
-        return false;
-    }*/
 
     @Override
     public @NotNull InteractionResult useOn(UseOnContext context) {

@@ -370,7 +370,6 @@ public final class GlobalDungeonManager {
     public static void updateForcedChunks(MinecraftServer server) {
         ServerLevel level = server.getLevel(dungeonResourceKey);
         if (level == null) {
-            DebugLog.logError(DebugLog.DebugType.WARNINGS, "UpdateForcedChunks: level is null");
             return;
         }
         DungeonSaveData saveData = DungeonSaveData.Get(server);
