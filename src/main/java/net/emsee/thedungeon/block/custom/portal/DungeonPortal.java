@@ -49,7 +49,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof DungeonPortalBlockEntity entity) {
             MinecraftServer server = level.getServer();
             if (player.isCreative() || GlobalDungeonManager.isOpen(server, getExitRank())) {
-                if (timeCheck(player, server) || player.isCrouching() || player.isCreative())
+                if (timeCheck(player, server) || player.isCreative())
                     ModDungeonTeleportHandling.playerTeleportDungeon(player, entity.getExitID(server, this), getExitRank());
             } else {
                 player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), true);
@@ -102,6 +102,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
     }
 
     private boolean timeCheck(Player player, MinecraftServer server) {
+        if (player.isCrouching()) return true;
         if (player.level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) return true;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         long worldTime = server.overworld().getGameTime();

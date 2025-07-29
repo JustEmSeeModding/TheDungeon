@@ -19,8 +19,8 @@ public final class ModGamerules {
         GameruleRegistry.register(MANUAL_STEPPING, Category.UPDATES, false);
         GameruleRegistry.register(AUTO_DUNGEON_CYCLING, Category.UPDATES, true);
 
-        GameruleRegistry.register(CALCULATOR_STEPS_PER_TICK, Category.UPDATES, 80);
-        GameruleRegistry.register(PLACER_STEPS_PER_TICK, Category.UPDATES, 2);
+        GameruleRegistry.register(CALCULATOR_STEPS_PER_TICK, Category.UPDATES, 400);
+        GameruleRegistry.register(PLACER_STEPS_PER_TICK, Category.UPDATES, 1);
         GameruleRegistry.register(POST_PROCESSOR_STEPS_PER_TICK, Category.UPDATES, 1);
         GameruleRegistry.register(SPAWNER_STEPS_PER_TICK, Category.UPDATES, 10);
         GameruleRegistry.register(TICKS_BETWEEN_COLLAPSES, Category.UPDATES, 10/*minutes*/*60*20);
