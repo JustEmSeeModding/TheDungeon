@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules;
 
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.MobSpawnRule;
+import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -33,12 +34,15 @@ public class SpawnInBox<T extends Entity> extends MobSpawnRule {
         this.cornerTwo = cornerTwo;
         this.chance = chance;
         this.min = min;
-        this.max = max+1;
+        this.max = max;
     }
 
 
     @Override
-    public void spawn(ServerLevel level, BlockPos roomCenter, Rotation roomRotation) {
+    public void spawn(ServerLevel level, GeneratedRoom room) {
+        BlockPos roomCenter = room.getPlacedWorldPos();
+        Rotation roomRotation = room.getPlacedWorldRotation();
+
         RandomSource random = level.random;
         int count = random.nextInt(min, max+1);
         if (chance == 1 || chance > random.nextFloat()) {
@@ -53,7 +57,7 @@ public class SpawnInBox<T extends Entity> extends MobSpawnRule {
         }
     }
 
-    private BlockPos findClosestValidSpawn(BlockPos chosenPos, BlockPos roomCenter, Rotation rotation, Level world, Entity entity) {
+    protected BlockPos findClosestValidSpawn(BlockPos chosenPos, BlockPos roomCenter, Rotation rotation, Level world, Entity entity) {
         BlockPos finalCornerOne = roomCenter.offset(cornerOne.rotate(rotation));
         BlockPos finalCornerTwo = roomCenter.offset(cornerTwo.rotate(rotation));
         int minX = Math.min(finalCornerOne.getX(), finalCornerTwo.getX());
@@ -86,7 +90,7 @@ public class SpawnInBox<T extends Entity> extends MobSpawnRule {
         return closestPos;
     }
 
-    private static boolean isValidSpawnPosition(BlockPos pos, Level level, Entity entity) {
+    protected static boolean isValidSpawnPosition(BlockPos pos, Level level, Entity entity) {
         for (int i = 0; i < entity.getBbHeight(); i++) {
             BlockState posState = level.getBlockState(pos.above(i));
             if (!posState.isAir()) {
@@ -96,10 +100,6 @@ public class SpawnInBox<T extends Entity> extends MobSpawnRule {
 
         BlockPos groundPos = pos.below();
         BlockState groundState = level.getBlockState(groundPos);
-        if (!groundState.isFaceSturdy(level, groundPos, Direction.UP)) {
-            return false;
-        }
-
-        return true;
+        return groundState.isFaceSturdy(level, groundPos, Direction.UP);
     }
 }

@@ -4,6 +4,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.src.room.AbstractGridRoom;
+import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -24,6 +25,7 @@ public abstract class GridRoomCollection {
     private final int gridCellWidth;
     private final int gridCellHeight;
     private final StructureProcessorList structureProcessors = new StructureProcessorList(new ArrayList<>());
+    private final StructureProcessorList structurePostProcessors = new StructureProcessorList(new ArrayList<>());
 
     // constructor
 
@@ -143,7 +145,16 @@ public abstract class GridRoomCollection {
     }
 
     public GridRoomCollection withStructureProcessor(StructureProcessor processor) {
+        if (processor instanceof PostProcessor)
+            throw new IllegalStateException("Adding post processor as normal processor");
         structureProcessors.list().add(processor);
+        return this;
+    }
+
+    public GridRoomCollection withStructurePostProcessor(StructureProcessor processor) {
+        if (!(processor instanceof PostProcessor))
+            throw new IllegalStateException("Adding normal processor as post processor");
+        structurePostProcessors.list().add(processor);
         return this;
     }
 
@@ -304,6 +315,14 @@ public abstract class GridRoomCollection {
 
     public StructureProcessorList getStructureProcessors() {
         return structureProcessors;
+    }
+
+    public StructureProcessorList getStructurePostProcessors() {
+        return structurePostProcessors;
+    }
+
+    public boolean hasPostProcessing() {
+        return !structurePostProcessors.list().isEmpty();
     }
 
     public static class RequiredRoomPlacements {

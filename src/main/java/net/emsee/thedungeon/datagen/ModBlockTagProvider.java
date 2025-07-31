@@ -162,7 +162,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.DUNGEON_PORTAL_F.get())
                 .add(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get())
                 .add(ModBlocks.INFUSED_END_STONE.get())
-                ;
+        ;
 
 
         //tag(BlockTags.FALL_DAMAGE_RESETTING).add(ModBlocks.INFUSED_COBWEB.get());

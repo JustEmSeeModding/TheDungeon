@@ -98,7 +98,7 @@ public class GridDungeon extends Dungeon {
     /**
      * when set to false the dungeon will not generate below the main floor
      */
-    private GridDungeon allowDownGeneration(boolean value) {
+    public GridDungeon allowDownGeneration(boolean value) {
         canGenerateDown = value;
         return this;
     }

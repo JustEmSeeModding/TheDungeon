@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.item.interfaces;
 
+import net.emsee.thedungeon.DebugLog;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -47,7 +48,7 @@ public interface IDungeonToolTips {
             entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry);
         });
 
-        // add suffix component
+        // add prefix component
         addComponentArray(getPrefixComponents(), event);
 
         // handle every SlotType
@@ -67,7 +68,7 @@ public interface IDungeonToolTips {
                 Component.literal("YOU FOUND AN ERROR, these are not bound to a slot:"),
                 entries.get(SlotType.DEFAULT), event);
 
-        // add prefix components
+        // add suffix components
         addComponentArray(getSuffixComponents(), event);
 
     }
@@ -82,25 +83,59 @@ public interface IDungeonToolTips {
 
         // for hand weapons count all damage
         if (slot==SlotType.HAND) {
-            double totalDamage =0;
+            double mainDamage =0;
+            double mainSpeed =0;
+            List<ItemAttributeModifiers.Entry> otherDamage = new ArrayList<>();
+            List<ItemAttributeModifiers.Entry> otherSpeed = new ArrayList<>();
             for (ItemAttributeModifiers.Entry entry : list) {
-                if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
-                    totalDamage += entry.modifier().amount();
+                //if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
+                if (entry.attribute() == Attributes.ATTACK_DAMAGE) {
+                    if(entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
+                        mainDamage = entry.modifier().amount();
+                    else
+                        otherDamage.add(entry);
+                }
+                else if (entry.attribute() == Attributes.ATTACK_SPEED) {
+                    if (entry.matches(Attributes.ATTACK_SPEED, Item.BASE_ATTACK_SPEED_ID))
+                        mainSpeed = entry.modifier().amount();
+                    else
+                        otherSpeed.add(entry);
+                }
                 // add all total damage as a component
-                MutableComponent component = Component.literal("| ").withStyle(TITLE_FORMATTING);
-                component.append(entry.attribute().value().toBaseComponent(totalDamage + 1, 1, false, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
             }
-        }
+            MutableComponent mainDamageComponent = Component.literal("| ").withStyle(TITLE_FORMATTING);
+            mainDamageComponent.append(Attributes.ATTACK_DAMAGE.value().toBaseComponent(mainDamage + 1, 1, true, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+            event.addTooltipLines(mainDamageComponent);
+            for(ItemAttributeModifiers.Entry entry : otherDamage){
+                MutableComponent damageComponent = Component.literal("|  ").withStyle(TITLE_FORMATTING);
+                damageComponent.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(entry.modifier().amount()>0 ? POSITIVE_FORMATTING_EXTRA : NEGATIVE_FORMATTING_EXTRA));
+                event.addTooltipLines(damageComponent);
+            }
+            MutableComponent mainSpeedComponent = Component.literal("| ").withStyle(TITLE_FORMATTING);
+            mainSpeedComponent.append(Attributes.ATTACK_SPEED.value().toBaseComponent(mainSpeed+4, 4, false, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+            event.addTooltipLines(mainSpeedComponent);
+            for(ItemAttributeModifiers.Entry entry : otherSpeed){
+                MutableComponent speedComponent = Component.literal("|  ").withStyle(TITLE_FORMATTING);
+                speedComponent.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(entry.modifier().amount()>0 ? POSITIVE_FORMATTING_EXTRA : NEGATIVE_FORMATTING_EXTRA));
+                event.addTooltipLines(speedComponent);
+            }
+
+             }
 
         // handle every entry
         list.forEach(entry -> {
             MutableComponent component = Component.literal("| ").withStyle(TITLE_FORMATTING);
             if (entry.modifier().amount()==0) return;
 
-            // add added damage for all things not hand weapons
-            if (slot != SlotType.HAND && entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
-                component.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+            // we want to skip this as this is handled above
+            if (slot == SlotType.HAND && entry.attribute() == Attributes.ATTACK_DAMAGE)
+                return;
+            if (slot == SlotType.HAND && entry.attribute() == Attributes.ATTACK_SPEED)
+                return;
 
+            // add added damage for all things not hand weapons
+            if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
+                component.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
             // custom attack speed
             else if (entry.matches(Attributes.ATTACK_SPEED, Item.BASE_ATTACK_SPEED_ID))
                 component.append(entry.attribute().value().toBaseComponent(entry.modifier().amount()+4, 4, false, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
@@ -137,7 +172,7 @@ public interface IDungeonToolTips {
         // add empty line spacing (vanilla has it and it looks cleaner)
         // then add the title (if it exists)
         event.addTooltipLines(Component.empty());
-        Component title = components[0];
+        Component title = components[0].copy().withStyle(TITLE_FORMATTING);
         if (title!=null) event.addTooltipLines(title);
 
         // now add every other component

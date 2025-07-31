@@ -138,7 +138,7 @@ public class GridRoomGroup extends AbstractGridRoom {
 
     @Override
     @Deprecated
-    protected AbstractGridRoom setStructureProcessors(StructureProcessorList processors) {
+    protected AbstractGridRoom setStructureProcessors(StructureProcessorList processors, StructureProcessorList postProcessors) {
         throw new IllegalStateException(this+ ":setStructureProcessors(p) should not be used for groups");
     }
 
@@ -148,9 +148,16 @@ public class GridRoomGroup extends AbstractGridRoom {
         throw new IllegalStateException(this+ ":getStructureProcessors() should not be used for groups");
     }
 
+    @Deprecated
     @Override
     public void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random) {
         throw new IllegalStateException("placeFeature cant be called on a group");
+    }
+
+    @Deprecated
+    @Override
+    public void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random) {
+        throw new IllegalStateException("postProcess cant be called on a group");
     }
 
     @Override

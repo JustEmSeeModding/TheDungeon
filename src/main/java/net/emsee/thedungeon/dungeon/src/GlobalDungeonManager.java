@@ -4,9 +4,8 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
-import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
-import net.emsee.thedungeon.events.ModDungeonCalledEvents;
+import net.emsee.thedungeon.utils.ModDungeonTeleportHandling;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.utils.WeightedMap;
@@ -31,8 +30,10 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 public final class GlobalDungeonManager {
+
     private static final int forceLoadedChunkRadius = 35;
     private static final int killRadius = 500;
 
@@ -107,7 +108,7 @@ public final class GlobalDungeonManager {
         long lastExecutionTime = saveData.GetLastExecutionTime();
 
         announceChatDecayTime(timeLeft, saveData, server);
-        // if timeLeft is less than 0 select a new dungeon and generate it.
+        // if timeLeft is less than 0, select a new dungeon and generate it.
         if ((timeLeft <= 0 || worldTime < lastExecutionTime)) {
             closeDungeon(saveData, saveData.getNextToCollapse());
             saveData.clearPortalPositions(saveData.getNextToCollapse());
@@ -168,7 +169,7 @@ public final class GlobalDungeonManager {
             WeightedMap.Int<Dungeon> possibleDungeons = cycleDungeons.get(rank);
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"No dungeon in passive queue, selecting random");
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Possible Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
-            if (possibleDungeons.isEmpty()) {
+            if (possibleDungeons.isEmpty() || possibleDungeons.totalWeight() <= 0) {
                 DebugLog.logWarn(DebugLog.DebugType.WARNINGS,"Rank: {} has no dungeons assigned", rank.toString());
                 return;
             }
@@ -185,18 +186,19 @@ public final class GlobalDungeonManager {
         if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_KILL_ON_REGEN)) {
             ServerLevel dimension = server.getLevel(dungeonResourceKey);
 
+            assert dimension != null;
             BlockPos blockPos = rank.getDefaultCenterPos();
 
             double centerX = blockPos.getX() + 0.5;
             double centerY = blockPos.getY() + 0.5;
             double centerZ = blockPos.getZ() + 0.5;
 
+
             AABB area = new AABB(
-                    centerX - killRadius, centerY - 150, centerZ - killRadius, // Min corner
-                    centerX + killRadius, centerY + 200, centerZ + killRadius  // Max corner
+                    centerX - killRadius, dimension.getMinBuildHeight(), centerZ - killRadius, // Min corner
+                    centerX + killRadius, dimension.getMaxBuildHeight(), centerZ + killRadius  // Max corner
             );
 
-            assert dimension != null;
             List<Entity> entities = dimension.getEntitiesOfClass(Entity.class, area, e -> true);
 
 
@@ -205,7 +207,7 @@ public final class GlobalDungeonManager {
                     if (entity instanceof ServerPlayer player) {
                         if ((!player.isCreative()) && (player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR)) {
                             player.hurt(dimension.damageSources().source(ModDamageTypes.DUNGEON_RESET), player.getHealth());
-                            ModDungeonCalledEvents.setPlayerGameMode(player, true);
+                            ModDungeonTeleportHandling.setPlayerGameMode(player, true);
                             if (!player.isDeadOrDying()) player.kill();
                         }
                     } else
@@ -344,6 +346,11 @@ public final class GlobalDungeonManager {
             return saveData.getPortalPosition(portalID, rank);
     }
 
+    public static List<BlockPos> getPortalPositions(MinecraftServer server, DungeonRank rank) {
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        return saveData.getAllPortalPositions(rank);
+    }
+
     public static int giveRandomPortalID(MinecraftServer server, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (saveData.portalPositionsEmpty(rank)) return -1;
@@ -363,7 +370,6 @@ public final class GlobalDungeonManager {
     public static void updateForcedChunks(MinecraftServer server) {
         ServerLevel level = server.getLevel(dungeonResourceKey);
         if (level == null) {
-            DebugLog.logError(DebugLog.DebugType.WARNINGS, "UpdateForcedChunks: level is null");
             return;
         }
         DungeonSaveData saveData = DungeonSaveData.Get(server);
@@ -377,9 +383,7 @@ public final class GlobalDungeonManager {
             for (int x = -forceLoadedChunkRadius; x < forceLoadedChunkRadius; x++) {
                 for (int z = -forceLoadedChunkRadius; z < forceLoadedChunkRadius; z++) {
                     ChunkPos forcedChunkPos = new ChunkPos(chunkPos.x + x, chunkPos.z + z);
-                    DebugLog.logInfo(DebugLog.DebugType.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Loading at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
                     level.getChunk(forcedChunkPos.x, forcedChunkPos.z, ChunkStatus.FULL, true);
-                    DebugLog.logInfo(DebugLog.DebugType.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Adding at: {},{} to list", forcedChunkPos.x, forcedChunkPos.z);
                     level.setChunkForced(forcedChunkPos.x, forcedChunkPos.z, true);
                     DebugLog.logInfo(DebugLog.DebugType.FORCED_CHUNK_UPDATES_DETAILS, "UpdateForcedChunks: Updated chunk force status at: {},{}", forcedChunkPos.x, forcedChunkPos.z);
                 }
@@ -397,7 +401,7 @@ public final class GlobalDungeonManager {
     }
 
     /**
-     * generates this dungeon the next time this rank collapses, if this rank ir already occupied it goes in the queue for the next collapse after etc.
+     * generates this dungeon the next time this rank collapses, if this rank ir already occupied, it goes in the queue for the next collapse after etc.
      */
     public static void addToPassiveQueue(Dungeon dungeon, MinecraftServer server) {
         if (dungeon==null) return;

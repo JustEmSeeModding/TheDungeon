@@ -70,7 +70,7 @@ public class WallFailRule extends FailRule {
     }
 
 
-    public FailRule withStructureProcessor(StructureProcessor processor) {
+    public WallFailRule withStructureProcessor(StructureProcessor processor) {
         processorList.list().add(processor);
         return this;
     }

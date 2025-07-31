@@ -5,6 +5,7 @@ import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.DungeonUtils;
+import net.emsee.thedungeon.dungeon.src.room.GridRoomEmpty;
 import net.emsee.thedungeon.dungeon.src.types.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
@@ -30,6 +31,7 @@ public class GridDungeonGenerator {
         CHECK_REQUIREMENTS,
         FILLING_UNOCCUPIED,
         PLACING_ROOMS,
+        POST_PROCESSING_ROOMS,
         FILLING_WITH_MOBS,
         DONE
     }
@@ -44,6 +46,7 @@ public class GridDungeonGenerator {
     private final BlockPos placedCenterPos;
     private final Queue<GeneratedRoom> todoRooms = new LinkedList<>();
     private final Queue<Object> toPlaceInstances = new LinkedList<>();
+    private final Queue<GeneratedRoom> toPostProcessRooms = new LinkedList<>();
     private final Queue<GeneratedRoom> toSpawnMobsRooms = new LinkedList<>();
 
     private int lastFallbackFillX = 0;
@@ -65,6 +68,15 @@ public class GridDungeonGenerator {
         this.seed = seed;
     }
 
+    private void addRoomToLists(GeneratedRoom room) {
+        todoRooms.add(room);
+        toPlaceInstances.add(room);
+        if (room.hasMobSpawns())
+            toSpawnMobsRooms.add(room);
+        if (room.hasPostProcessing() || collection.hasPostProcessing())
+            toPostProcessRooms.add(room);
+    }
+
     private GridDungeonGenerator(GridDungeon dungeon, Random random) {
         this.random = random;
         this.dungeon = dungeon;
@@ -80,7 +92,7 @@ public class GridDungeonGenerator {
             }
         }
 
-        // sellect the starting room
+        // select the starting room
         AbstractGridRoom startingRoom = dungeon.getStaringRoom();
         if (startingRoom == null)
             startingRoom = dungeon.getRoomCollection().getRandomRoom(random);
@@ -91,12 +103,8 @@ public class GridDungeonGenerator {
         GeneratedRoom generatedStartingRoom = GeneratedRoom.createInstance(startingRoom, this, listCentreOffset, listCentreOffset, listCentreOffset, placedCenterPos, DungeonUtils.getRandomRotation(random), random);
 
         // add the room to all the lists
-        todoRooms.add(generatedStartingRoom);
-        collection.updatePlacedRequirements(startingRoom); //TODO decide if the starting room should be doing this
-        toPlaceInstances.add(generatedStartingRoom);
-        if (generatedStartingRoom.hasMobSpawns()) {
-            toSpawnMobsRooms.add(generatedStartingRoom);
-        }
+        collection.updatePlacedRequirements(startingRoom);
+        addRoomToLists(generatedStartingRoom);
     }
 
 
@@ -111,6 +119,7 @@ public class GridDungeonGenerator {
         else if (currentTask == GenerationTask.CHECK_REQUIREMENTS) checkRequirementStep(serverLevel.getServer());
         else if (currentTask == GenerationTask.FILLING_UNOCCUPIED) fillUnoccupiedStep(serverLevel.getServer());
         else if (currentTask == GenerationTask.PLACING_ROOMS) placeRoomStep(serverLevel);
+        else if (currentTask == GenerationTask.POST_PROCESSING_ROOMS) postProcessRoomsStep(serverLevel);
         else if (currentTask == GenerationTask.FILLING_WITH_MOBS) fillWithMobsStep(serverLevel);
 
     }
@@ -128,7 +137,7 @@ public class GridDungeonGenerator {
 
             final GeneratedRoom roomToDo;
 
-            // selects a room to generate its connection according to the dungeons rules
+            // selects a room to generate its connection according to the dungeon rules
             switch (dungeon.getRoomPickMethod()) {
                 case LAST -> roomToDo = nextGenerationOptions.getLast();
                 case RANDOM -> roomToDo = ListAndArrayUtils.getRandomFromList(nextGenerationOptions, random);
@@ -143,12 +152,8 @@ public class GridDungeonGenerator {
                 todoRooms.remove(roomToDo);
             if (newRoom != null) {
                 // if placement was success add the room to all required lists
-                todoRooms.add(newRoom);
                 collection.updatePlacedRequirements(newRoom.getRoom());
-                toPlaceInstances.add(newRoom);
-                if (newRoom.hasMobSpawns()) {
-                    toSpawnMobsRooms.add(newRoom);
-                }
+                addRoomToLists(newRoom);
             }
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Dungeon calculation tick completed");
@@ -174,24 +179,24 @@ public class GridDungeonGenerator {
 
     private void checkRequirementStep(MinecraftServer server) {
         if (!collection.requiredRoomsDone()) {
-            // if not all rooms were generated discard this generator and start a new one with seed+1
+            // if not all rooms were generated, discard this generator and start a new one with seed+1
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Not All Required Rooms where generated, regenerating with Seed+1");
-            if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
-                GlobalDungeonManager.priorityCleanup(server, dungeon.getRank());
+            //if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
+            //    GlobalDungeonManager.priorityCleanup(server, dungeon.getRank());
             dungeon.generateSeeded(GetSeed() + 1);
             return;
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"All Required Rooms where generated");
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Filling Unoccupied Placements");
 
-        // start next task
+        // start the next task
         currentTask = GenerationTask.FILLING_UNOCCUPIED;
         lastFallbackFillY = Math.max(dungeon.getDungeonDepth() - dungeon.getMaxFloorHeightFromCenterOffset() - 1, 0);
     }
 
     private void fillUnoccupiedStep(MinecraftServer server) {
         if (!dungeon.shouldFillWithFallback()) {
-            // if the dungeon has this setting disabled just start next task
+            // if the dungeon has this setting disabled, start the next task
             currentTask = GenerationTask.PLACING_ROOMS;
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Fallback Fill Disabled, Starting Room Placement");
             return;
@@ -236,19 +241,20 @@ public class GridDungeonGenerator {
         for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.PLACER_STEPS_PER_TICK); i++) {
             if (toPlaceInstances.isEmpty()) {
                 // if done start next task
-                GlobalDungeonManager.killAllInDungeon(serverLevel.getServer(), dungeon.getRank());
-                DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"All Rooms Placed, Starting Mob Spawning");
-                currentTask = GenerationTask.FILLING_WITH_MOBS;
+                DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"All Rooms Placed, Starting Post Processing");
+                currentTask = GenerationTask.POST_PROCESSING_ROOMS;
                 return;
             }
-            // get te object to place in the world
+            // get the object to place in the world
             Object toPlace = toPlaceInstances.peek();
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS,"to Place:" + toPlace);
             if (toPlace instanceof GeneratedRoom room) {
-                // if it's a room place it down
+                // if it's a room, place it down
                 room.finalizePlacement(serverLevel, collection.getStructureProcessors(), random);
                 //serverLevel.getBiomeManager().
                 toPlaceInstances.remove();
+                if (room.getRoom() instanceof GridRoomEmpty)
+                    i--;
             }
             else if (toPlace instanceof FailRule.Instance failInstance) {
                 // if it's a fail rule place it tick it end check if it's done
@@ -265,10 +271,26 @@ public class GridDungeonGenerator {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Room place tick complete");
     }
 
+    private void postProcessRoomsStep(ServerLevel serverLevel) {
+        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.POST_PROCESSOR_STEPS_PER_TICK); i++) {
+            if (toPostProcessRooms.isEmpty()) {
+                // if done start next task
+                GlobalDungeonManager.killAllInDungeon(serverLevel.getServer(), dungeon.getRank());
+                DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "All Rooms Post Processed, Starting Mob Spawning");
+                currentTask = GenerationTask.FILLING_WITH_MOBS;
+                return;
+            }
+            GeneratedRoom toProcess = toPostProcessRooms.remove();
+            DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS,"to Process:" + toProcess);
+            toProcess.finalizePostProcessing(serverLevel, collection.getStructurePostProcessors(), random);
+            DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Post Process tick complete");
+        }
+    }
+
     private void fillWithMobsStep(ServerLevel serverLevel) {
         for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.SPAWNER_STEPS_PER_TICK); i++) {
             if (toSpawnMobsRooms.isEmpty()) {
-                // if all mobs spawned, start next task
+                // if all mobs spawned, start the next task
                 currentTask = GenerationTask.DONE;
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Mob Spawning Complete");
                 return;
@@ -306,6 +328,8 @@ public class GridDungeonGenerator {
         if (collection.getFallback()==null) {return;}
         GeneratedRoom fallback = GeneratedRoom.createInstance(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, Occupation.AVAILABLE, true, random);
         toPlaceInstances.add(fallback);
+        if (fallback.hasPostProcessing() || collection.hasPostProcessing())
+            toPostProcessRooms.add(fallback);
         //return fallback;
     }
 
@@ -314,6 +338,8 @@ public class GridDungeonGenerator {
         if (collection.getFallback()==null) {return;}
         GeneratedRoom fallback = GeneratedRoom.createInstance(collection.getFallback(), this, arrayX, arrayY, arrayZ, worldPos, Rotation.NONE, true, occupation, true, random);
         toPlaceInstances.add(fallback);
+        if (fallback.hasPostProcessing() || collection.hasPostProcessing())
+            toPostProcessRooms.add(fallback);
         //return fallback;
     }
 

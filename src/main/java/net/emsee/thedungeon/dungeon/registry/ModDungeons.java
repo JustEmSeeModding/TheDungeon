@@ -68,7 +68,8 @@ public class ModDungeons {
     protected static Dungeon register(Dungeon dungeon) {
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", dungeon);
         DUNGEONS.put(dungeon.getResourceName(), dungeon);
-        GlobalDungeonManager.registerToAutoGenerator(dungeon, dungeon.getWeight());
+        if (dungeon.getWeight()>0)
+            GlobalDungeonManager.registerToAutoGenerator(dungeon, dungeon.getWeight());
         return dungeon;
     }
 

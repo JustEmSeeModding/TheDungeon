@@ -23,8 +23,6 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
         super(pProperties.stacksTo(1));
     }
 
-    //private int selectedDungeonID = 0;
-
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);

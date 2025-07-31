@@ -37,8 +37,8 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.DUNGEON_PORTAL_EXIT.get());
         dropOther(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get(), ModItems.SHATTERED_PORTAL_CORE);
 
-        oreDrops(ModBlocks.PYRITE_ORE.get(), ModItems.PYRITE, 2,3);
-        oreDrops(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), ModItems.PYRITE, 2,3);
+        oreDrops(ModBlocks.PYRITE_ORE.get(), ModItems.PYRITE, 2, 3);
+        oreDrops(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), ModItems.PYRITE, 2, 3);
 
         simpleItemDropWithSilk(ModBlocks.INFUSED_DIRT.get(), ModItems.DUNGEON_ESSENCE_SHARD);
         simpleItemDropWithSilk(ModBlocks.INFUSED_GRASS_BLOCK.get(), ModItems.DUNGEON_ESSENCE_SHARD);
@@ -73,6 +73,6 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     private void oreDrops(Block block, ItemLike item, float min, float max) {
         HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
-        add(block,createSilkTouchDispatchTable(block, this.applyExplosionDecay(block, LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))).apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))))));
+        add(block, createSilkTouchDispatchTable(block, this.applyExplosionDecay(block, LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))).apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))))));
     }
 }

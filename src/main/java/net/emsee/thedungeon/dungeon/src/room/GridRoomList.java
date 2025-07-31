@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/** A better way of storing rooms, allows to edit all rooms at once for multiple variations of the same list */
+/** A better way of storing rooms, allows editing all rooms at once for multiple variations of the same list */
 public class GridRoomList extends ArrayList<AbstractGridRoom> {
     public GridRoomList addRoom(AbstractGridRoom room) {
         add(room);

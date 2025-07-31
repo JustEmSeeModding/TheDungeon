@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +33,7 @@ import java.util.Map;
 
 public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
     // List of blocks this tool can break
-    protected static Map<Block,Block> getBreakableBlocks() {
+    protected static Map<Block, Block> getBreakableBlocks() {
         return
                 Util.make(Maps.newHashMap(), (map) -> {
                     map.put(Blocks.GILDED_BLACKSTONE, Blocks.BLACKSTONE);
@@ -63,13 +62,15 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
                     map.put(Blocks.RAW_GOLD_BLOCK, Blocks.YELLOW_TERRACOTTA);
                     map.put(Blocks.RAW_COPPER_BLOCK, Blocks.TERRACOTTA);
                     map.put(Blocks.ANCIENT_DEBRIS, Blocks.GRAY_TERRACOTTA);
+                    //map.put(Blocks.AMETHYST_BLOCK, Blocks.PURPLE_CONCRETE);
 
                     map.put(ModBlocks.PYRITE_ORE.get(), Blocks.STONE);
+                    map.put(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), Blocks.DEEPSLATE);
 
                     map.put(ModBlocks.INFUSED_STONE.get(), Blocks.STONE);
                     map.put(ModBlocks.INFUSED_DEEPSLATE.get(), Blocks.DEEPSLATE);
 
-                    // can remove foliage (mainly to access ores behind it but als hidden entrances)
+                    // can remove foliage (mainly to access ores behind it but also maybe hidden entrances)
                     map.put(Blocks.VINE, Blocks.AIR);
                     map.put(Blocks.GLOW_LICHEN, Blocks.AIR);
                     map.put(Blocks.OAK_LEAVES, Blocks.AIR);
@@ -82,11 +83,15 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
                     map.put(Blocks.CHERRY_LEAVES, Blocks.AIR);
                     map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
                     map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
+                    map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
+                    map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
+                    map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
+                    map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
                 });
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(DUNGEON_ITEM_HOVER_MESSAGE);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }

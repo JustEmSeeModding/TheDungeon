@@ -30,14 +30,14 @@ public final class ModAdvancementProvider extends AdvancementProvider {
     }
 
     private static void generateAdvancements(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-        AdvancementHolder dungeonRoot = createRootAdvancement("thedungeon", ModBlocks.DUNGEON_PORTAL_F, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"), Map.of("pickup_infused_alloy",  InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
-        AdvancementHolder essenceShard = createItemAdvancement("thedungeon","dungeon_essence_shard", ModItems.DUNGEON_ESSENCE_SHARD, dungeonRoot, AdvancementType.TASK, false, saver,existingFileHelper);
-        AdvancementHolder infusedAlloy = createItemAdvancement("thedungeon","infused_alloy", ModItems.INFUSED_ALLOY_INGOT, essenceShard, AdvancementType.TASK, false, saver,existingFileHelper);
+        AdvancementHolder dungeonRoot = createRootAdvancement("thedungeon", ModBlocks.DUNGEON_PORTAL_F, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"), Map.of("pickup_infused_alloy", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
+        AdvancementHolder essenceShard = createItemAdvancement("thedungeon", "dungeon_essence_shard", ModItems.DUNGEON_ESSENCE_SHARD, dungeonRoot, AdvancementType.TASK, false, saver, existingFileHelper);
+        AdvancementHolder infusedAlloy = createItemAdvancement("thedungeon", "infused_alloy", ModItems.INFUSED_ALLOY_INGOT, essenceShard, AdvancementType.TASK, false, saver, existingFileHelper);
         AdvancementHolder FailedToTraveledToDungeon = createSimpleAdvancement("thedungeon", "failed_portal_travel", new ItemStack(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get()), "has_tried", FailedDungeonTravelTrigger.criterion(), dungeonRoot, AdvancementType.TASK, true, saver, existingFileHelper);
-  }
+    }
 
     private static AdvancementHolder createItemAdvancement(String location, String name, ItemLike item, AdvancementHolder parent, AdvancementType advancementType, boolean hidden, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-        String criterionName = "pickup_"+ getItemName(item);
+        String criterionName = "pickup_" + getItemName(item);
         return createSimpleAdvancement(
                 location,
                 name,
@@ -55,8 +55,8 @@ public final class ModAdvancementProvider extends AdvancementProvider {
         Advancement.Builder builder = Advancement.Builder.advancement()
                 .display(
                         icon,
-                        Component.translatable("advancements."+location+"."+name+".title"),
-                        Component.translatable("advancements."+location+"."+name+".description"),
+                        Component.translatable("advancements." + location + "." + name + ".title"),
+                        Component.translatable("advancements." + location + "." + name + ".description"),
                         null,
                         advancementType,
                         true,
@@ -65,18 +65,18 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                 )
                 .addCriterion(criterionName, criterion)
                 .requirements(AdvancementRequirements.allOf(List.of(criterionName)));
-        if (parent!=null) {
+        if (parent != null) {
             builder.parent(parent);
         }
-        return builder.save(saver, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, location+"/"+name), existingFileHelper);
+        return builder.save(saver, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, location + "/" + name), existingFileHelper);
     }
 
     private static AdvancementHolder createRootAdvancement(String location, ItemLike icon, ResourceLocation background, Map<String, Criterion> criterions, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-        Advancement.Builder builder =  Advancement.Builder.advancement()
+        Advancement.Builder builder = Advancement.Builder.advancement()
                 .display(
                         new ItemStack(icon),
-                        Component.translatable("advancements."+location+".root.title"),
-                        Component.translatable("advancements."+location+".root.description"),
+                        Component.translatable("advancements." + location + ".root.title"),
+                        Component.translatable("advancements." + location + ".root.description"),
                         background,
                         AdvancementType.TASK,
                         false,
@@ -89,7 +89,7 @@ public final class ModAdvancementProvider extends AdvancementProvider {
         }
         builder.requirements(AdvancementRequirements.allOf(criterions.keySet()));
 
-        return builder.save(saver, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, location+"/root"), existingFileHelper);
+        return builder.save(saver, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, location + "/root"), existingFileHelper);
     }
 
     static String getItemName(ItemLike itemLike) {

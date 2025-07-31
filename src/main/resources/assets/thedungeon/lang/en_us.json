@@ -45,6 +45,9 @@
   "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
 
   "item.thedungeon.tooltip.full_set_bonus": "Full Set Bonus:",
+  "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
+  "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
+  "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
@@ -66,12 +69,14 @@
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
+  "item.thedungeon.goblin_meat": "Goblin Meat",
 
   "item.thedungeon.dungeon_clock": "Dungeon Clock",
+  "item.thedungeon.pyrite_compass": "Pyrite Compass",
   "item.thedungeon.test_dummy": "Infused Test Dummy",
 
   "item.thedungeon.dungeon_debug_tool": "Dungeon Debug Tool",
-  "item.thedungeon.dungeon_debug_tool.use": "Dungeon generating",
+  "item.thedungeon.dungeon_debug_tool.use": "Dungeon started generating",
   "item.thedungeon.dungeon_debug_tool.use_busy": "Dungeon generator is busy",
   "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
 
@@ -123,7 +128,9 @@
 
   "attribute.thedungeon.name.generic.incoming_damage_reduction" : "Incoming Damage Reduction",
   "attribute.thedungeon.name.generic.mob_reach" : "Mob Reach",
-  "attribute.thedungeon.name.generic.enemy_aggro" : "Aggro To Enemy",
+  "attribute.thedungeon.name.generic.aggro_to_enemy" : "Aggro To Enemy",
   "attribute.thedungeon.name.generic.min_perception" : "Aggro for normal perception",
-  "attribute.thedungeon.name.generic.max_perception" : "Aggro for increased perception"
+  "attribute.thedungeon.name.generic.max_perception" : "Aggro for increased perception",
+
+  "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable"
 }

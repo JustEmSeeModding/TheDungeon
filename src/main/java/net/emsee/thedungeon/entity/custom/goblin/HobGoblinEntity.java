@@ -9,6 +9,7 @@ import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.item.ModItems;
+import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.villager.ModVillagerTrades;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +21,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -258,6 +260,6 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     }
 
     protected boolean isFriendlyToPlayer(Player player) {
-        return player.isCreative();
+        return player.isCreative() || player.hasEffect(ModMobEffects.HOB_GOBLIN_TRADEABLE);
     }
 }

@@ -1,18 +1,18 @@
 package net.emsee.thedungeon.dungeon.src.room;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.StructureUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
@@ -21,7 +21,6 @@ import java.util.Random;
 /** Similar to GridRoomGroup but only uses multiple resource locations */
 public class GridRoomMultiResource extends AbstractGridRoom {
     WeightedMap.Int<ResourceLocation> resourceLocations = new WeightedMap.Int<>();
-    protected ResourceKey<Biome> biome = null;
 
     public GridRoomMultiResource(int gridWidth, int gridHeight) {
         super(gridWidth, gridHeight);
@@ -56,11 +55,6 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         return resourceLocations.getRandom(random);
     }
 
-    public GridRoomMultiResource setBiome(ResourceKey<Biome> biome) {
-        this.biome=biome;
-        return this;
-    }
-
     @Override
     public boolean equals(Object other) {
         return other instanceof GridRoomMultiResource otherRoom &&
@@ -80,9 +74,11 @@ public class GridRoomMultiResource extends AbstractGridRoom {
                 doOverrideEndChance == otherRoom.doOverrideEndChance &&
                 ListAndArrayUtils.listEquals(spawnRules, otherRoom.spawnRules) &&
                 ListAndArrayUtils.listEquals(structureProcessors.list(), otherRoom.structureProcessors.list()) &&
+                ListAndArrayUtils.listEquals(structurePostProcessors.list(), otherRoom.structurePostProcessors.list()) &&
                 differentiationID == otherRoom.differentiationID &&
                 ListAndArrayUtils.mapEquals(resourceLocations, otherRoom.resourceLocations) &&
-                skipCollectionProcessors == otherRoom.skipCollectionProcessors;
+                skipCollectionProcessors == otherRoom.skipCollectionProcessors &&
+                skipCollectionPostProcessors == otherRoom.skipCollectionPostProcessors;
     }
 
     @Override
@@ -104,9 +100,11 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         result = 31 * result + (doOverrideEndChance ? 1 : 0);
         result = 31 * result + spawnRules.hashCode();
         result = 31 * result + structureProcessors.list().hashCode();
+        result = 31 * result + structurePostProcessors.list().hashCode();
         result = 31 * result + differentiationID;
         result = 31 * result + resourceLocations.hashCode();
         result = 31 * result + (skipCollectionProcessors ? 1 : 0);
+        result = 31 * result + (skipCollectionPostProcessors ? 1 : 0);
         return result;
     }
 
@@ -125,8 +123,8 @@ public class GridRoomMultiResource extends AbstractGridRoom {
                 .setGenerationPriority(generationPriority)
                 .setOverrideEndChance(overrideEndChance, doOverrideEndChance)
                 .setSpawnRules(spawnRules)
-                .setStructureProcessors(structureProcessors)
-                .setSkipCollectionProcessors(skipCollectionProcessors);
+                .setStructureProcessors(structureProcessors, structurePostProcessors)
+                .setSkipCollectionProcessors(skipCollectionProcessors, skipCollectionPostProcessors);
 
     }
 
@@ -163,13 +161,37 @@ public class GridRoomMultiResource extends AbstractGridRoom {
                 .setBoundingBox(mbb)
                 .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
 
-        //new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockStateMatchTest(Blocks.AIR.defaultBlockState(),.1f), AlwaysTrueTest.INSTANCE, ModBlocks.DUNGEON_MOD_SPAWNER.get().defaultBlockState())))
-
         for (StructureProcessor processor : processors.list()) {
+            if (processor instanceof PostProcessor)
+                throw new IllegalStateException("Adding post processor as normal processor");
             placement.addProcessor(processor);
         }
 
         template.placeInWorld(serverLevel, origin, origin, placement, rand, Block.UPDATE_ALL);
+    }
+
+    @Override
+    public void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random) {
+        for (StructureProcessor processor : postProcessors.list()) {
+            if (processor instanceof PostProcessor postProcessorData)
+                forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(),serverLevel, pos -> {
+                    BlockState initialState = serverLevel.getBlockState(pos);
+                    if (!postProcessorData.skipBlockForProcessing(serverLevel, pos, initialState))
+                        return;
+                    // Create a StructureBlockInfo for the block
+                    StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(
+                            pos,
+                            initialState,
+                            null
+                    );
+
+                    blockInfo = processor.process(serverLevel, new BlockPos(0, 0, 0), pos, blockInfo, blockInfo, new StructurePlaceSettings(), null);
+
+                    // Place processed block state (or fallback to initial state)
+                    serverLevel.setBlockAndUpdate(pos, blockInfo != null ? blockInfo.state() : initialState);
+                });
+            else throw new IllegalStateException("Adding normal processor as post processor");
+        }
     }
 }
 
