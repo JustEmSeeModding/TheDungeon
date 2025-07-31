@@ -27,7 +27,7 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     public static final ResourceLocation WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_damage");
     public static final ResourceLocation  WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_speed");
 
-    final WeaponType weaponType;
+    private final WeaponType weaponType;
     
 
     public DungeonWeaponItem(WeaponType weaponType, Tier tier, Properties properties) {

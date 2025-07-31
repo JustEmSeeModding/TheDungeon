@@ -26,11 +26,12 @@ public class StoneToGildedCaveProcessor extends GildedCaveOreProcessor {
                 map.put(Blocks.DIORITE, blackstoneMap);});
 
 
+    @Override
     protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
         return replacements;
     }
 
-
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }
