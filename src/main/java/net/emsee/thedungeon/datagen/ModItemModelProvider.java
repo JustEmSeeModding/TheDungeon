@@ -22,6 +22,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SHATTERED_PORTAL_CORE.asItem());
         basicItem(ModItems.DUNGEON_ESSENCE_SHARD.asItem());
         basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
+        basicItem(ModItems.GOBLIN_MEAT.asItem());
         basicItem(ModItems.PYRITE.asItem());
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");
         basicItemOtherTexturePath(ModItems.DUNGEON_DEBUG_TOOL, "minecraft", "item/stick");

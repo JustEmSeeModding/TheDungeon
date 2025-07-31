@@ -5,10 +5,14 @@ import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.item.custom.*;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.List;
+import java.util.Optional;
 
 public final class ModItems {
     public static final DeferredRegister.Items ITEMS =
@@ -47,9 +51,11 @@ public final class ModItems {
     public static final DeferredItem<DungeonPickaxeItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
             () ->new DungeonPickaxeItem(ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonPickaxeItem.createAttributes(ModTiers.INFUSED_ALLOY, 0, -2f))));
 
-
     public static final DeferredItem<TestDummyItem> TEST_DUMMY = ITEMS.register("test_dummy",
             () -> new TestDummyItem((new Item.Properties())));
+
+    public static final DeferredItem<DungeonItem> GOBLIN_MEAT = ITEMS.register("goblin_meat",
+            () -> new DungeonItem((new Item.Properties().food(new FoodProperties(2,1,false, 2, Optional.empty(), List.of())))));
 
 
     public static final DeferredItem<InfusedAlloyArmorItem> INFUSED_ALLOY_HELMET = ITEMS.register("infused_alloy_helmet",

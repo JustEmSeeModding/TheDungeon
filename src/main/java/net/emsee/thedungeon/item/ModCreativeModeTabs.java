@@ -21,6 +21,7 @@ public final class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.thedungeon.dungeon_tools"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.DUNGEON_DEBUG_TOOL);//TODO comment out at release
+                        output.accept(ModItems.GOBLIN_MEAT);
                         output.accept(ModItems.DUNGEON_CLOCK);
                         output.accept(ModItems.PYRITE_COMPASS);
                         output.accept(ModItems.TEST_DUMMY);
