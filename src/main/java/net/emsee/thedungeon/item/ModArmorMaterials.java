@@ -27,7 +27,7 @@ public final class ModArmorMaterials {
                     map.put(ArmorItem.Type.CHESTPLATE, 9);
                     map.put(ArmorItem.Type.HELMET, 4);
                     map.put(ArmorItem.Type.BODY, 7);
-                }), 10, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.INFUSED_ALLOY_INGOT.get()),
+                }), 10, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.INFUSED_ALLOY_INGOT),
                     List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "infused_alloy"))),
                     1, .25f));
 
@@ -41,6 +41,18 @@ public final class ModArmorMaterials {
                         map.put(ArmorItem.Type.BODY, 3);
                     }), 15, SoundEvents.ARMOR_EQUIP_LEATHER, Ingredient::of,
                     List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "scholar"))),
+                    0, 0));
+
+    public static final Holder<ArmorMaterial> KOBALT =
+            ARMOR_MATERIALS.register("kobalt", () -> new ArmorMaterial(
+                    Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                        map.put(ArmorItem.Type.BOOTS, 2);
+                        map.put(ArmorItem.Type.LEGGINGS, 5);
+                        map.put(ArmorItem.Type.CHESTPLATE, 6);
+                        map.put(ArmorItem.Type.HELMET, 2);
+                        map.put(ArmorItem.Type.BODY, 5);
+                    }), 7, SoundEvents.ARMOR_EQUIP_IRON, ()->Ingredient.of(ModItems.KOBALT_INGOT),
+                    List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "kobalt"))),
                     0, 0));
 
     /*

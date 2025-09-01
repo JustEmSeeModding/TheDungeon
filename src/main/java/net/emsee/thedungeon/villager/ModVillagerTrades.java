@@ -5,10 +5,12 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.entity.client.Goblin.hobGoblin.HobGoblinVariant;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,8 +22,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.BasicItemListing;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +42,7 @@ public final class ModVillagerTrades {
     @SubscribeEvent
     public static void addCustomTrades(VillagerTradesEvent event){
         if (event.getType() == ModVillagers.DUNGEON_SCHOLAR.value()) {
-            Int2ObjectMap<List<net.minecraft.world.entity.npc.VillagerTrades.ItemListing>> trades = event.getTrades();
+            Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
 
             trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(Items.EMERALD, 4),
@@ -122,8 +126,8 @@ public final class ModVillagerTrades {
 
     @SubscribeEvent
     public static void addWanderingTrades(WandererTradesEvent event){
-        List<net.minecraft.world.entity.npc.VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
-        List<net.minecraft.world.entity.npc.VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
+        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
+        List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
 
         rareTrades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemCost(Items.EMERALD, 25),
@@ -134,30 +138,49 @@ public final class ModVillagerTrades {
         ));
     }
 
-    public static Int2ObjectMap<net.minecraft.world.entity.npc.VillagerTrades.ItemListing[]> getHobGoblinTrades() {
-        return toIntMap(ImmutableMap.of(
-                // common trades
-                1, new net.minecraft.world.entity.npc.VillagerTrades.ItemListing[]{
-                        new ItemsForPyrite(ModItems.INFUSED_ALLOY_INGOT.get(), 2, 1, 1),
-                        new ItemsForPyrite(ModItems.INFUSED_DAGGER.get(), 4, 1, 1),
-                        new ItemsForPyrite(ModItems.INFUSED_CHISEL.get(), 4, 1, 1),
+    public static Int2ObjectMap<VillagerTrades.ItemListing[]> getHobGoblinTrades(HobGoblinVariant variant) {
+        return switch (variant) {
+            case DEFAULT ->
+                    toIntMap(ImmutableMap.of(
+                            // common trades
+                            1, new VillagerTrades.ItemListing[]{
+                                    new ItemsForPyrite(ModItems.INFUSED_DAGGER.get(), 4, 1,2, 1),
+                                    new ItemsForPyrite(ModItems.INFUSED_CHISEL.get(), 4, 1,2, 1),
+                                    new ItemsForPyrite(ModItems.PYRITE_COMPASS.get(), 5, 1,2, 1)
+                            },
 
-                },
+                            // rare trades
+                            2,new VillagerTrades.ItemListing[]{
+                                    new ItemsForPyrite(ModItems.PORTAL_CORE.get(), 14, 1, 1),
+                            }));
+            case FORGER ->
+                    toIntMap(ImmutableMap.of(
+                            // common trades
+                            1, new VillagerTrades.ItemListing[]{
+                                    new ItemsForPyrite(ModItems.INFUSED_ALLOY_INGOT.get(), 3, 1,7, 1),
+                                    new ItemsForPyrite(ModItems.KOBALT_INGOT.get(), 2, 1,5, 1),
+                                    new BasicItemListing(new ItemStack(Items.COPPER_INGOT), new ItemStack(ModItems.PYRITE.get()),8,1, .05f),
+                                    new BasicItemListing(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.PYRITE.get(),2),10,1, .05f),
+                                    new BasicItemListing(new ItemStack(ModItems.DUNGEON_ESSENCE_SHARD.get()), new ItemStack(ModItems.PYRITE.get()),10,1, .05f),
+                                    new ItemsForPyrite(ModItems.GOBLINS_FORGEHAMMER.get(), 16, 1,1, 1),
+                            },
 
-                // rare trades
-                2,new net.minecraft.world.entity.npc.VillagerTrades.ItemListing[]{
-                        new ItemsForPyrite(ModItems.PORTAL_CORE.get(), 14, 1, 1),
-                }));
+                            // rare trades
+                            2,new VillagerTrades.ItemListing[]{
+                                    new ItemsForPyrite(ModItems.PORTAL_CORE.get(), 14, 1,1, 1),
+                            }));
+        };
+
     }
 
 
 
 
-    private static Int2ObjectMap<net.minecraft.world.entity.npc.VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, net.minecraft.world.entity.npc.VillagerTrades.ItemListing[]> map) {
+    private static Int2ObjectMap<VillagerTrades.ItemListing[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> map) {
         return new Int2ObjectOpenHashMap<>(map);
     }
 
-    static class ItemsForPyrite implements net.minecraft.world.entity.npc.VillagerTrades.ItemListing {
+    static class ItemsForPyrite implements VillagerTrades.ItemListing {
         private final ItemStack itemStack;
         private final int pyriteCost;
         private final int maxUses;

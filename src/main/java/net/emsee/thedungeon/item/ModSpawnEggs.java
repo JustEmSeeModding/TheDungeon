@@ -30,7 +30,7 @@ public final class ModSpawnEggs {
                     new Item.Properties()));
 
     public static final DeferredItem<Item> HOB_GOBLIN_SPAWN_EGG = ITEMS.register("hob_goblin_spawn_egg",
-            () -> new DeferredSpawnEggItem(ModEntities.HOB_GOBLIN, 0x000000, 0x000000,
+            () -> new DeferredSpawnEggItem(ModEntities.HOB_GOBLIN, 0xA10101, 0x414141,
                     new Item.Properties()));
 
     public static void register(IEventBus eventBus) {

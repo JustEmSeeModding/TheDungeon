@@ -16,29 +16,6 @@ public class FungalCaveProcessor extends StoneCaveOreProcessor {
 
     public static final MapCodec<FungalCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    /*protected final WeightedMap.Int<Supplier<BlockState>> overgrownStoneMap =
-            Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.STONE::defaultBlockState, 325);
-                map.put(Blocks.ANDESITE::defaultBlockState, 325);
-                map.put(Blocks.CLAY::defaultBlockState, 50);
-                map.put(Blocks.COBBLESTONE::defaultBlockState, 275);
-                map.put(Blocks.MOSSY_COBBLESTONE::defaultBlockState, 100);
-                map.put(Blocks.TUFF::defaultBlockState, 375);
-                map.put(Blocks.GOLD_ORE::defaultBlockState, 10);
-                map.put(Blocks.COAL_ORE::defaultBlockState, 7);
-                map.put(Blocks.COPPER_ORE::defaultBlockState, 2);
-                map.put(Blocks.IRON_ORE::defaultBlockState, 4);
-                map.put(Blocks.DIAMOND_ORE::defaultBlockState, 1);
-                map.put(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState(), 4);
-                map.put(() -> ModBlocks.INFUSED_STONE.get().defaultBlockState(), 2);
-                map.put(() -> ModBlocks.INFUSED_CLAY.get().defaultBlockState(), 1);
-            });*/
-
-    /*protected final WeightedMap.Int<Supplier<BlockState>> MyceliumMap =
-            Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(Blocks.MYCELIUM::defaultBlockState, 500);
-            });*/
-
     protected final WeightedMap.Int<ReplaceInstance> dirtMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(new ReplaceInstance(Blocks.DIRT::defaultBlockState), 100);

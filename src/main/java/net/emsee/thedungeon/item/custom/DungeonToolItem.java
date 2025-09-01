@@ -2,10 +2,8 @@ package net.emsee.thedungeon.item.custom;
 
 import com.google.common.collect.Maps;
 import net.emsee.thedungeon.block.ModBlocks;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
-import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
-import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.BlockPos;
@@ -17,21 +15,19 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
-public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
+public class DungeonToolItem extends DungeonWeaponItem {
     // List of blocks this tool can break
     protected static Map<Block, Block> getBreakableBlocks() {
         return
@@ -90,14 +86,8 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
                 });
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.add(DUNGEON_ITEM_HOVER_MESSAGE);
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-    }
-
-    public DungeonPickaxeItem(Tier tier, Properties properties) {
-        super(tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier, BlockTags.MINEABLE_WITH_PICKAXE)));
+    public DungeonToolItem(WeaponType weaponType, Tier tier, Properties properties) {
+        super(weaponType, tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier, BlockTags.MINEABLE_WITH_PICKAXE)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
     }
 
     @Override
@@ -139,8 +129,23 @@ public class DungeonPickaxeItem extends PickaxeItem implements IDungeonCarryItem
         }
     }
 
-    public static boolean isThisCorrectToolForDrops(Tier tier, TagKey<Block> blocks, BlockState state) {
+    /*public static boolean isThisCorrectToolForDrops(Tier tier, TagKey<Block> blocks, BlockState state) {
         Tool tool = tier.createToolProperties(blocks);
         return tool.isCorrectForDrops(state);
+    }*/
+
+    @Override
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(itemAbility) || super.canPerformAction(stack, itemAbility);
+    }
+
+    @Override
+    public LinkedHashMap<Component, Component[]> getPrefixComponents() {
+        LinkedHashMap<Component, Component[]> toReturn = super.getPrefixComponents();
+        toReturn.put(Component.translatable("item.thedungeon.tooltip.tool_type"),
+                new Component[]{
+                        Component.translatable("item.thedungeon.tooltip.tool_type.pickaxe").withStyle(ChatFormatting.GREEN)
+                });
+        return toReturn;
     }
 }

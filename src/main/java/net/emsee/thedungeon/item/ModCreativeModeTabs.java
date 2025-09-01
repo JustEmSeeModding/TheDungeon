@@ -13,6 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public final class ModCreativeModeTabs {
+
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TheDungeon.MOD_ID);
 
@@ -21,12 +22,13 @@ public final class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.thedungeon.dungeon_tools"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.DUNGEON_DEBUG_TOOL);//TODO comment out at release
-                        output.accept(ModItems.GOBLIN_MEAT);
                         output.accept(ModItems.DUNGEON_CLOCK);
                         output.accept(ModItems.PYRITE_COMPASS);
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
                         output.accept(ModItems.INFUSED_CHISEL);
+                        output.accept(ModItems.GOBLINS_DAGGER);
+                        output.accept(ModItems.GOBLINS_FORGEHAMMER);
                         output.accept(ModItems.INFUSED_ALLOY_HELMET);
                         output.accept(ModItems.INFUSED_ALLOY_CHESTPLATE);
                         output.accept(ModItems.INFUSED_ALLOY_LEGGINGS);
@@ -47,12 +49,22 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
+                        output.accept(ModItems.RAW_KOBALT);
+                        output.accept(ModItems.KOBALT_INGOT);
                         output.accept(ModItems.PYRITE);
+                    }).build());
+
+    public static final Supplier<CreativeModeTab> DUNGEON_FOOD_TAB = CREATIVE_MODE_TAB.register("dungeon_food_tab",
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.GOBLIN_MEAT.get()))
+                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_ingredients_tab"))
+                    .title(Component.translatable("creativetab.thedungeon.dungeon_food"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModItems.GOBLIN_MEAT);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_BLOCKS_TAB = CREATIVE_MODE_TAB.register("dungeon_blocks_tab",
             () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.DUNGEON_PORTAL_F.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_ingredients_tab"))
+                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_food_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.DUNGEON_PORTAL_F);
@@ -86,7 +98,7 @@ public final class ModCreativeModeTabs {
     public static final Supplier<CreativeModeTab> DUNGEON_SPAWN_EGGS_TAB = CREATIVE_MODE_TAB.register("dungeon_spawn_eggs_tab",
             () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModSpawnEggs.DEATH_KNIGHT_SPAWN_EGG.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_blocks_tab"))
-                    .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
+                    .title(Component.translatable("creativetab.thedungeon.dungeon_spawn_eggs"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModSpawnEggs.DEATH_KNIGHT_SPAWN_EGG);
                         output.accept(ModSpawnEggs.SKELETON_KNIGHT_SPAWN_EGG);

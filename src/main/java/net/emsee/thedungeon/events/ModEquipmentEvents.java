@@ -3,7 +3,7 @@ package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
-import net.emsee.thedungeon.item.custom.DungeonPickaxeItem;
+import net.emsee.thedungeon.item.custom.DungeonToolItem;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonItemSwapHandling;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
@@ -96,7 +96,7 @@ public final class ModEquipmentEvents {
 
     @SubscribeEvent
     public static void onDiggerItemBlockBreak(BlockEvent.BreakEvent event) {
-        if (event.getPlayer().getMainHandItem().getItem() instanceof DungeonPickaxeItem diggerItem && event.getPlayer().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
+        if (event.getPlayer().getMainHandItem().getItem() instanceof DungeonToolItem diggerItem && event.getPlayer().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             diggerItem.breakEvent(event);
         }
     }

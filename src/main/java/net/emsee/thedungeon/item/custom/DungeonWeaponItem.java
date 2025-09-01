@@ -4,12 +4,14 @@ import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -20,8 +22,11 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
     public static final ResourceLocation WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_damage");
@@ -31,13 +36,17 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     
 
     public DungeonWeaponItem(WeaponType weaponType, Tier tier, Properties properties) {
-        super(tier, properties.rarity(Rarity.RARE));
+        super(tier, properties.rarity(Rarity.RARE), createToolProperties());
         this.weaponType = weaponType;
     }
 
     public DungeonWeaponItem(WeaponType weaponType, Tier tier, Item.Properties properties, Tool toolComponentData) {
         super(tier, properties.rarity(Rarity.RARE), toolComponentData);
         this.weaponType = weaponType;
+    }
+
+    public static Tool createToolProperties() {
+        return new Tool(List.of(Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15.0F), Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, 1.5F)), 1.0F, 2);
     }
 
     @Override
@@ -139,13 +148,14 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
         thisStack.applyComponentsAndValidate(patch);
     }
 
-    // TODO make translatable
     @Override
-    public Component[] getPrefixComponents() {
-        Component[] toReturn = new Component[2];
-        toReturn[0] = Component.translatable("item.thedungeon.tooltip.weapon_type");
-        toReturn[1] = weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN);
-        return toReturn;
+    public LinkedHashMap<Component, Component[]> getPrefixComponents() {
+        return Util.make(new LinkedHashMap<>(), map -> {
+            map.put(Component.translatable("item.thedungeon.tooltip.weapon_type"),
+                    new Component[]{
+                            weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN)
+                    });
+        });
     }
 
     public boolean allowOffhandAttack() {

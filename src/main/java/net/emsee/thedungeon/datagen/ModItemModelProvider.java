@@ -21,11 +21,14 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.PORTAL_CORE.asItem());
         basicItem(ModItems.SHATTERED_PORTAL_CORE.asItem());
         basicItem(ModItems.DUNGEON_ESSENCE_SHARD.asItem());
-        basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
         basicItem(ModItems.GOBLIN_MEAT.asItem());
-        basicItem(ModItems.PYRITE.asItem());
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");
         basicItemOtherTexturePath(ModItems.DUNGEON_DEBUG_TOOL, "minecraft", "item/stick");
+
+        basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
+        basicItem(ModItems.PYRITE.asItem());
+        basicItem(ModItems.RAW_KOBALT.asItem());
+        basicItem(ModItems.KOBALT_INGOT.asItem());
 
         basicItem(ModItems.INFUSED_ALLOY_HELMET.asItem());
         basicItem(ModItems.INFUSED_ALLOY_CHESTPLATE.asItem());
@@ -37,8 +40,10 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SCHOLAR_LEGGINGS.asItem());
         basicItem(ModItems.SCHOLAR_BOOTS.asItem());
 
-        withExistingParent(ModItems.INFUSED_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger"));
-        withExistingParent(ModItems.INFUSED_CHISEL.getId().getPath(), TheDungeon.defaultResourceLocation("item/chisel"));
+        withExistingParent(ModItems.INFUSED_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/infused_dagger"));
+        withExistingParent(ModItems.INFUSED_CHISEL.getId().getPath(), TheDungeon.defaultResourceLocation("item/chisel")).texture("0", TheDungeon.defaultResourceLocation("item/infused_chisel"));
+        withExistingParent(ModItems.GOBLINS_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/goblins_dagger"));
+        withExistingParent(ModItems.GOBLINS_FORGEHAMMER.getId().getPath(), TheDungeon.defaultResourceLocation("item/small_hammer")).texture("0", TheDungeon.defaultResourceLocation("item/goblins_forgehammer"));
 
         withExistingParent(ModBlocks.INFUSED_GRASS_BLOCK.getId().getPath(), TheDungeon.defaultResourceLocation("block/infused_grass_block"));
 

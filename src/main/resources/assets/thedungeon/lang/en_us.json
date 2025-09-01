@@ -27,7 +27,9 @@
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
+  "creativetab.thedungeon.dungeon_food" : "Dungeon Food",
   "creativetab.thedungeon.dungeon_blocks" : "Dungeon Blocks",
+  "creativetab.thedungeon.dungeon_spawn_eggs" : "Dungeon Spawn Egg",
 
   "entity.thedungeon.test_dummy" : "Test Dummy",
   "entity.thedungeon.death_knight" : "Death Knight",
@@ -35,6 +37,10 @@
   "entity.thedungeon.cave_goblin" : "Cave Goblin",
   "entity.thedungeon.shadow_goblin" : "Shadow Goblin",
   "entity.thedungeon.hob_goblin" : "Hob Goblin",
+  "entity.thedungeon.hob_goblin.fighter" : "Fighter",
+  "entity.thedungeon.hob_goblin.forge_worker" : "Forge Worker",
+
+  "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
 
   "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
   "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
@@ -48,9 +54,13 @@
   "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
   "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
   "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
+  "item.thedungeon.tooltip.tool_type" : "Tool Type",
+  "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
+  "item.thedungeon.goblins_dagger": "Goblin's Dagger",
+  "item.thedungeon.goblins_forgehammer": "Goblin's Forgehammer",
 
   "item.thedungeon.infused_alloy_helmet": "Infused Alloy Helmet",
   "item.thedungeon.infused_alloy_chestplate": "Infused Alloy Chestplate",
@@ -69,6 +79,8 @@
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
+  "item.thedungeon.raw_kobalt": "Raw Kobalt",
+  "item.thedungeon.kobalt_ingot": "Kobalt Ingot",
   "item.thedungeon.goblin_meat": "Goblin Meat",
 
   "item.thedungeon.dungeon_clock": "Dungeon Clock",
@@ -117,9 +129,6 @@
   "death.attack.thedungeon.unstable_portal":"%1$s tried to use an unstable portal",
   "death.attack.thedungeon.dungeon_reset":"%1$s was consumed by the dungeon",
 
-  "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
-
-
   "attribute.thedungeon.title.hand" : "When Held:",
   "attribute.thedungeon.title.mainhand" : "When In Main Hand:",
   "attribute.thedungeon.title.offhand" : "When In Off Hand:",
@@ -131,6 +140,8 @@
   "attribute.thedungeon.name.generic.aggro_to_enemy" : "Aggro To Enemy",
   "attribute.thedungeon.name.generic.min_perception" : "Aggro for normal perception",
   "attribute.thedungeon.name.generic.max_perception" : "Aggro for increased perception",
+
+  "attribute.thedungeon.extra.hob_goblin_friendly" : "Hob Goblin's Friend",
 
   "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable"
 }
