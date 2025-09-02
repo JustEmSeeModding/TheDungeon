@@ -50,21 +50,24 @@ public interface IDungeonToolTips {
         LinkedHashMap<SlotType, Component[]> extraComponents = getExtraComponents();
 
         // handle every SlotType
-        addAttributeList(SlotType.HAND,
+        addAttributeList(SlotType.MAIN_HAND,
                 Component.translatable("attribute.thedungeon.title.mainhand").withStyle(TITLE_FORMATTING),
-                entries.get(SlotType.HAND), extraComponents.get(SlotType.HAND), event);
+                entries.get(SlotType.MAIN_HAND), extraComponents.get(SlotType.MAIN_HAND), event);
         addAttributeList(SlotType.OFFHAND,
                 Component.translatable("attribute.thedungeon.title.offhand").withStyle(TITLE_FORMATTING),
                 entries.get(SlotType.OFFHAND), extraComponents.get(SlotType.OFFHAND), event);
+        addAttributeList(SlotType.ANY_HAND,
+                Component.translatable("attribute.thedungeon.title.anyhand").withStyle(TITLE_FORMATTING),
+                entries.get(SlotType.ANY_HAND), extraComponents.get(SlotType.ANY_HAND), event);
         addAttributeList(SlotType.EQUIPPED,
                 Component.translatable("attribute.thedungeon.title.armor").withStyle(TITLE_FORMATTING),
                 entries.get(SlotType.EQUIPPED), extraComponents.get(SlotType.EQUIPPED), event);
         addAttributeList(SlotType.FULL_BODY,
                 Component.translatable("attribute.thedungeon.title.full_armor_set").withStyle(TITLE_FORMATTING),
                 entries.get(SlotType.FULL_BODY), extraComponents.get(SlotType.FULL_BODY), event);
-        addAttributeList(SlotType.DEFAULT,
+        addAttributeList(SlotType.UNASSIGNED,
                 Component.literal("YOU FOUND AN ERROR, these are not bound to a slot:"),
-                entries.get(SlotType.DEFAULT), extraComponents.get(SlotType.DEFAULT), event);
+                entries.get(SlotType.UNASSIGNED), extraComponents.get(SlotType.UNASSIGNED), event);
 
         // add suffix components
         addFixedComponents(getSuffixComponents(), event);
@@ -80,7 +83,7 @@ public interface IDungeonToolTips {
         if (title != null) event.addTooltipLines(title);
 
         // for hand weapons count all damage
-        if (!list.isEmpty() && slot == SlotType.HAND)
+        if (!list.isEmpty() && slot == SlotType.MAIN_HAND)
             handleHandAttributes(list, event);
 
         if (!list.isEmpty() && event.getStack().getItem() instanceof ArmorItem armorItem)
@@ -100,9 +103,9 @@ public interface IDungeonToolTips {
             if (entry.modifier().amount()==0) return;
 
             // we want to skip this as this is handled above
-            if (slot == SlotType.HAND && entry.attribute() == Attributes.ATTACK_DAMAGE)
+            if (slot == SlotType.MAIN_HAND && entry.attribute() == Attributes.ATTACK_DAMAGE)
                 return;
-            if (slot == SlotType.HAND && entry.attribute() == Attributes.ATTACK_SPEED)
+            if (slot == SlotType.MAIN_HAND && entry.attribute() == Attributes.ATTACK_SPEED)
                 return;
 
             // add added damage for all things not hand weapons
@@ -153,9 +156,11 @@ public interface IDungeonToolTips {
             }
             // add all total damage as a component
         }
-        MutableComponent mainDamageComponent = Component.literal("| ").withStyle(TITLE_FORMATTING);
-        mainDamageComponent.append(Attributes.ATTACK_DAMAGE.value().toBaseComponent(mainDamage + 1, 1, true, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
-        event.addTooltipLines(mainDamageComponent);
+        if (mainDamage>0) {
+            MutableComponent mainDamageComponent = Component.literal("| ").withStyle(TITLE_FORMATTING);
+            mainDamageComponent.append(Attributes.ATTACK_DAMAGE.value().toBaseComponent(mainDamage + 1, 1, true, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+            event.addTooltipLines(mainDamageComponent);
+        }
         for (ItemAttributeModifiers.Entry entry : otherDamage) {
             MutableComponent damageComponent = Component.literal("|  ").withStyle(TITLE_FORMATTING);
             damageComponent.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(getFormat(entry, false)));
@@ -184,9 +189,11 @@ public interface IDungeonToolTips {
                     otherArmor.add(entry);
             }
         }
-        MutableComponent mainDamageComponent = Component.literal("| ").withStyle(TITLE_FORMATTING);
-        mainDamageComponent.append(Attributes.ARMOR.value().toBaseComponent(mainArmor, 0, true, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
-        event.addTooltipLines(mainDamageComponent);
+        if (mainArmor>0) {
+            MutableComponent mainArmorComponent = Component.literal("| ").withStyle(TITLE_FORMATTING);
+            mainArmorComponent.append(Attributes.ARMOR.value().toBaseComponent(mainArmor, 0, true, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+            event.addTooltipLines(mainArmorComponent);
+        }
         for (ItemAttributeModifiers.Entry entry : otherArmor) {
             MutableComponent damageComponent = Component.literal("|  ").withStyle(TITLE_FORMATTING);
             damageComponent.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(getFormat(entry, false)));
@@ -214,20 +221,23 @@ public interface IDungeonToolTips {
     }
 
     enum SlotType {
-        DEFAULT,
-        HAND,
+        UNASSIGNED,
+        MAIN_HAND,
         OFFHAND,
+        ANY_HAND,
         EQUIPPED,
         FULL_BODY;
 
         static SlotType fromDefaultSlotGroup(EquipmentSlotGroup slotGroup) {
-            SlotType toReturn = DEFAULT;
-            switch (slotGroup) {
-                case MAINHAND -> toReturn = HAND;
-                case OFFHAND -> toReturn = OFFHAND;
-                case HEAD, CHEST, LEGS, FEET -> toReturn = EQUIPPED;
-                case BODY -> toReturn = FULL_BODY;
-            }
+            SlotType toReturn = UNASSIGNED;
+            toReturn = switch (slotGroup) {
+                case ANY,ARMOR -> UNASSIGNED;
+                case MAINHAND ->  MAIN_HAND;
+                case OFFHAND -> OFFHAND;
+                case HAND -> ANY_HAND;
+                case HEAD, CHEST, LEGS, FEET ->  EQUIPPED;
+                case BODY ->  FULL_BODY;
+            };
             return toReturn;
         }
     }

@@ -86,8 +86,8 @@ public class DungeonToolItem extends DungeonWeaponItem {
                 });
     }
 
-    public DungeonToolItem(WeaponType weaponType, Tier tier, Properties properties) {
-        super(weaponType, tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier, BlockTags.MINEABLE_WITH_PICKAXE)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
+    public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
+        super(weaponType, isSweeping, tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier, BlockTags.MINEABLE_WITH_PICKAXE)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
     }
 
     @Override

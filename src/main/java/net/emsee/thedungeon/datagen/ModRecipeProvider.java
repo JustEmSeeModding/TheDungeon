@@ -8,6 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -109,6 +110,17 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .requires(Items.IRON_INGOT)
                 .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
+        simpleArmor(ModItems.KOBALT_INGOT, ModItems.KOBALT_HELMET, ModItems.KOBALT_CHESTPLATE, ModItems.KOBALT_LEGGINGS, ModItems.KOBALT_BOOTS, recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.KOBALT_SHIELD, 1)
+                .pattern(" # ")
+                .pattern("#*#")
+                .pattern(" # ")
+                .define('*', ItemTags.PLANKS)
+                .define('#', ModItems.KOBALT_INGOT)
+                .unlockedBy("has_"+getItemName(ModItems.KOBALT_INGOT), has(ModItems.KOBALT_INGOT)).save(recipeOutput);
+
+
         oreSmeltingAndBlasting(recipeOutput,
                 List.of(ModBlocks.INFUSED_SAND),
                 RecipeCategory.BUILDING_BLOCKS, ModBlocks.INFUSED_GLASS, 0.25f, 200, 100, "infused_glass");
@@ -116,6 +128,10 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         oreSmeltingAndBlasting(recipeOutput,
                 List.of(ModBlocks.PYRITE_ORE, ModBlocks.DEEPSLATE_PYRITE_ORE),
                 RecipeCategory.BUILDING_BLOCKS, ModItems.PYRITE, 0.25f, 200, 100, "pyrite");
+
+        oreSmeltingAndBlasting(recipeOutput,
+                List.of(ModItems.RAW_KOBALT),
+                RecipeCategory.BUILDING_BLOCKS, ModItems.KOBALT_INGOT, 0.25f, 200, 100, "kobalt_ingot");
 
         /*oreBlasting(recipeOutput,
                 List.of(ModItems.DUNGEON_DEBUG_TOOL, Items.DIAMOND_AXE),
@@ -171,12 +187,39 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         oreCooking(recipeOutput, RecipeSerializer.CAMPFIRE_COOKING_RECIPE, CampfireCookingRecipe::new, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_campfire");
     }
 
-    protected static <T extends AbstractCookingRecipe> void oreCooking(@NotNull RecipeOutput recipeOutput, RecipeSerializer<T> pCookingSerializer, AbstractCookingRecipe.@NotNull Factory<T> factory,
-                                                                       List<ItemLike> pIngredients, @NotNull RecipeCategory pCategory, @NotNull ItemLike pResult, float pExperience, int pCookingTime, @NotNull String pGroup, String pRecipeName) {
+    protected static <T extends AbstractCookingRecipe> void oreCooking(@NotNull RecipeOutput recipeOutput, RecipeSerializer<T> pCookingSerializer, AbstractCookingRecipe.@NotNull Factory<T> factory, List<ItemLike> pIngredients, @NotNull RecipeCategory pCategory, @NotNull ItemLike pResult, float pExperience, int pCookingTime, @NotNull String pGroup, String pRecipeName) {
         for (ItemLike itemLike : pIngredients) {
             SimpleCookingRecipeBuilder.generic(Ingredient.of(itemLike), pCategory, pResult, pExperience, pCookingTime, pCookingSerializer, factory).group(pGroup).unlockedBy(getHasName(itemLike), has(itemLike))
                     .save(recipeOutput, TheDungeon.MOD_ID + ":" + getItemName(pResult) + pRecipeName + "_" + getItemName(itemLike));
         }
+    }
 
+    private static void simpleArmor(ItemLike ingredient, ItemLike helmet, ItemLike chestplate, ItemLike leggings, ItemLike boots, RecipeOutput recipeOutput) {
+        if (helmet != null)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, helmet, 1)
+                    .pattern("###")
+                    .pattern("# #")
+                    .define('#', ingredient)
+                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+        if (chestplate != null)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, chestplate, 1)
+                    .pattern("# #")
+                    .pattern("###")
+                    .pattern("###")
+                    .define('#', ingredient)
+                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+        if (leggings != null)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, leggings, 1)
+                    .pattern("###")
+                    .pattern("# #")
+                    .pattern("# #")
+                    .define('#', ingredient)
+                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+        if (boots != null)
+            ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, boots, 1)
+                    .pattern("# #")
+                    .pattern("# #")
+                    .define('#', ingredient)
+                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
     }
 }

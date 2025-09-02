@@ -23,6 +23,8 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,16 +35,18 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     public static final ResourceLocation  WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_speed");
 
     private final WeaponType weaponType;
-    
+    private final boolean isSweeping;
 
-    public DungeonWeaponItem(WeaponType weaponType, Tier tier, Properties properties) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
         super(tier, properties.rarity(Rarity.RARE), createToolProperties());
         this.weaponType = weaponType;
+        this.isSweeping = isSweeping;
     }
 
-    public DungeonWeaponItem(WeaponType weaponType, Tier tier, Item.Properties properties, Tool toolComponentData) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Item.Properties properties, Tool toolComponentData) {
         super(tier, properties.rarity(Rarity.RARE), toolComponentData);
         this.weaponType = weaponType;
+        this.isSweeping = isSweeping;
     }
 
     public static Tool createToolProperties() {
@@ -123,6 +127,10 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
 //
 //    }
 
+    private boolean allowSweep() {
+        return isSweeping;
+    }
+
 
 
     @Override
@@ -156,6 +164,12 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
                             weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN)
                     });
         });
+    }
+
+    @Override
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        if (itemAbility == ItemAbilities.SWORD_SWEEP) return allowSweep();
+        return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
     }
 
     public boolean allowOffhandAttack() {

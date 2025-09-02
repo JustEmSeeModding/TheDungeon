@@ -29,6 +29,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.INFUSED_CHISEL);
                         output.accept(ModItems.GOBLINS_DAGGER);
                         output.accept(ModItems.GOBLINS_FORGEHAMMER);
+                        output.accept(ModItems.KOBALT_SHIELD);
                         output.accept(ModItems.INFUSED_ALLOY_HELMET);
                         output.accept(ModItems.INFUSED_ALLOY_CHESTPLATE);
                         output.accept(ModItems.INFUSED_ALLOY_LEGGINGS);
@@ -37,6 +38,10 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.SCHOLAR_CHESTPLATE);
                         output.accept(ModItems.SCHOLAR_LEGGINGS);
                         output.accept(ModItems.SCHOLAR_BOOTS);
+                        output.accept(ModItems.KOBALT_HELMET);
+                        output.accept(ModItems.KOBALT_CHESTPLATE);
+                        output.accept(ModItems.KOBALT_LEGGINGS);
+                        output.accept(ModItems.KOBALT_BOOTS);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_INGREDIENTS_TAB = CREATIVE_MODE_TAB.register("dungeon_ingredients_tab",

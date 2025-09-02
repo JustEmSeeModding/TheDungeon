@@ -116,7 +116,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
                     this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
                 } else {
                     this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
+                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_SHIELD.get()));
                 }
             }
             case FORGER -> {
