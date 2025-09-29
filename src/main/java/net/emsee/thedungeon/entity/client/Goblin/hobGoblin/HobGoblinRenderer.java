@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.client.ModModelLayers;
-import net.emsee.thedungeon.entity.custom.goblin.HobGoblinEntity;
+import net.emsee.thedungeon.entity.custom.goblin.hobGoblin.HobGoblinEntity;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class HobGoblinRenderer extends MobRenderer<HobGoblinEntity, HobGoblinModel> {
-    private static final Map<HobGoblinVariant, ResourceLocation> LOCATION_BY_VARIANTS= Util.make(Maps.newEnumMap(HobGoblinVariant.class), map -> {
-        for (HobGoblinVariant variant : HobGoblinVariant.values()) {
+    private static final Map<HobGoblinEntity.Variant, ResourceLocation> LOCATION_BY_VARIANTS= Util.make(Maps.newEnumMap(HobGoblinEntity.Variant.class), map -> {
+        for (HobGoblinEntity.Variant variant : HobGoblinEntity.Variant.values()) {
             map.put(variant,
                     TheDungeon.defaultResourceLocation("textures/entity/goblin/hob_goblin/"+variant.getResource()+".png"));
         }

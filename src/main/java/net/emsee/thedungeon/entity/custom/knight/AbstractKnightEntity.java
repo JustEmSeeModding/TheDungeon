@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractKnightEntity extends DungeonPathfinderMob implements IBasicAnimatedEntity, IMultiAttackAnimatedEntity {
     protected static final EntityDataAccessor<Boolean> RUNNING =
             SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_ID =
-            SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
+            SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_VERSION =
             SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.BYTE);
 
@@ -62,8 +62,8 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
 
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack(15,5,1,1, 1)
-                .withAttack(7,3,.5f,.25f, .9f)
+                .withAttack(0,15,5,1,1, 1)
+                .withAttack(1,7,3,.5f,.25f, .9f)
         );
     }
 
@@ -127,7 +127,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         this.entityData.set(RUNNING, false);
     }
 
-    void setAnimationID(byte id, byte version) {
+    void setAnimationID(int id, byte version) {
         this.entityData.set(ATTACK_ANIMATION_ID, id);
         this.entityData.set(ATTACK_ANIMATION_VERSION, version);
     }
@@ -143,7 +143,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(RUNNING, false);
-        builder.define(ATTACK_ANIMATION_ID, (byte)-1);
+        builder.define(ATTACK_ANIMATION_ID, -1);
         builder.define(ATTACK_ANIMATION_VERSION, (byte)-1);
     }
 
@@ -153,7 +153,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
     }
 
     @Override
-    public void attackAnimation(byte id, byte version) {
+    public void attackAnimation(int id, byte version) {
         setAnimationID(id, version);
     }
 

@@ -5,7 +5,6 @@ import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
@@ -28,9 +27,12 @@ import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
+    private static final float TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER = -.30f;
+    private static final float TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER = -.35f;
+
+
     public static final ResourceLocation WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_damage");
     public static final ResourceLocation  WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_speed");
 
@@ -104,10 +106,6 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
         thisStack.applyComponentsAndValidate(patch);
     }
 
-
-    private final float TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER = -.30f;
-    private final float TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER = -.35f;
-
     protected void handsChangedSingleHanded(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
                                           ItemAttributeModifiers.Builder attributeBuilder,
                                           double baseDamage, double baseSpeed) {
@@ -121,17 +119,10 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
         attributeBuilder.add(Attributes.ATTACK_SPEED, new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID, TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND);
 
     }
-//    protected void handsChangedDualWield(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
-//                                       ItemAttributeModifiers.Builder attributeBuilder,
-//                                       double baseDamage, double baseSpeed) {
-//
-//    }
 
     private boolean allowSweep() {
         return isSweeping;
     }
-
-
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
@@ -157,7 +148,7 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     }
 
     @Override
-    public LinkedHashMap<Component, Component[]> getPrefixComponents() {
+    public LinkedHashMap<Component, Component[]> getPrefixComponents(ItemStack stack) {
         return Util.make(new LinkedHashMap<>(), map -> {
             map.put(Component.translatable("item.thedungeon.tooltip.weapon_type"),
                     new Component[]{
@@ -179,7 +170,6 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     public enum WeaponType{
         SINGLE_HANDED("single_hand"),
         TWO_HANDED("two_hand"),
-        //DUAL_WIELD("dual_wield"),
         ;
 
         final String resourceName;

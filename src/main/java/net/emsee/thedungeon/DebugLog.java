@@ -16,13 +16,13 @@ public class DebugLog {
     private static final Map<DebugType, Boolean> DebugTypes = Util.make(new HashMap<>(), (map) -> {
         map.put(DebugType.INSTANCE_SETUP, true);
         map.put(DebugType.SAVE_DATA, true);
-        map.put(DebugType.SAVE_DATA_DETAILED, false);
+        map.put(DebugType.SAVE_DATA_DETAILED, true);
         map.put(DebugType.GENERATING_STEPS, true);
         map.put(DebugType.GENERATING_TICKS, false);
         map.put(DebugType.GENERATING_TICKS_DETAILS, false);
         map.put(DebugType.GENERATING_REQUIRED_PLACEMENTS, false);
         map.put(DebugType.FORCED_CHUNK_UPDATES, true);
-        map.put(DebugType.FORCED_CHUNK_UPDATES_DETAILS, true);
+        map.put(DebugType.FORCED_CHUNK_UPDATES_DETAILS, false);
         map.put(DebugType.GENERIC, true);
         map.put(DebugType.WARNINGS, true);
         map.put(DebugType.IMPORTANT, true);

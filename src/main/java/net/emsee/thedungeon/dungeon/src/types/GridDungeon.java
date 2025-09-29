@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 /**
  * custom generation in a grid based system
  */
-public class GridDungeon extends Dungeon {
+public class GridDungeon extends Dungeon<GridDungeon> {
     public enum RoomGenerationPickMethod {
         FIRST, LAST, RANDOM
     }

@@ -4,7 +4,7 @@ package net.emsee.thedungeon.entity;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
-import net.emsee.thedungeon.entity.custom.goblin.HobGoblinEntity;
+import net.emsee.thedungeon.entity.custom.goblin.hobGoblin.HobGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.ShadowGoblinEntity;
 import net.emsee.thedungeon.entity.custom.knight.DeathKnightEntity;
 import net.emsee.thedungeon.entity.custom.knight.SkeletonKnightEntity;

@@ -49,8 +49,8 @@ public final class ModItems {
     public static final DeferredItem<DungeonPortalCompas> PYRITE_COMPASS = ITEMS.register("pyrite_compass",
             () -> new DungeonPortalCompas(new Item.Properties()));
 
-    public static final DeferredItem<TestBeltItem> TEST_BELT = ITEMS.register("test_belt",
-            () -> new TestBeltItem(new Item.Properties()));
+    public static final DeferredItem<DungeonCurio> TEST_BELT = ITEMS.register("test_belt",
+            () -> new DungeonCurio(new Item.Properties()));
 
     public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
             () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));

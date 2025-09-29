@@ -1,7 +1,6 @@
 package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

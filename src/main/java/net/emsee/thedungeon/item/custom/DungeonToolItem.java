@@ -15,6 +15,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -28,7 +29,9 @@ import java.util.*;
 
 
 public class DungeonToolItem extends DungeonWeaponItem {
-    // List of blocks this tool can break
+    /**
+     * A list of blocks this tool can break and what they would be replaced with
+     */
     protected static Map<Block, Block> getBreakableBlocks() {
         return
                 Util.make(Maps.newHashMap(), (map) -> {
@@ -129,19 +132,14 @@ public class DungeonToolItem extends DungeonWeaponItem {
         }
     }
 
-    /*public static boolean isThisCorrectToolForDrops(Tier tier, TagKey<Block> blocks, BlockState state) {
-        Tool tool = tier.createToolProperties(blocks);
-        return tool.isCorrectForDrops(state);
-    }*/
-
     @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
         return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(itemAbility) || super.canPerformAction(stack, itemAbility);
     }
 
     @Override
-    public LinkedHashMap<Component, Component[]> getPrefixComponents() {
-        LinkedHashMap<Component, Component[]> toReturn = super.getPrefixComponents();
+    public LinkedHashMap<Component, Component[]> getPrefixComponents(ItemStack stack) {
+        LinkedHashMap<Component, Component[]> toReturn = super.getPrefixComponents(stack);
         toReturn.put(Component.translatable("item.thedungeon.tooltip.tool_type"),
                 new Component[]{
                         Component.translatable("item.thedungeon.tooltip.tool_type.pickaxe").withStyle(ChatFormatting.GREEN)

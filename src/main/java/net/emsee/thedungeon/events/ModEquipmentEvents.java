@@ -30,7 +30,7 @@ public final class ModEquipmentEvents {
     private static void armorSwapChanges(LivingEquipmentChangeEvent event) {
         if (!event.getSlot().isArmor()) return;
         if (event.getFrom().getItem() instanceof DungeonArmorItem dungeonArmorItem)
-            dungeonArmorItem.UnEquip(event.getEntity(), event.getFrom(), event.getSlot());
+            dungeonArmorItem.unEquip(event.getEntity(), event.getFrom(), event.getSlot());
         if (event.getTo().getItem() instanceof DungeonArmorItem dungeonArmorItem)
             dungeonArmorItem.equip(event.getEntity(), event.getTo(), event.getSlot());
         else if (!event.getTo().isEmpty() && event.getEntity().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
@@ -85,11 +85,21 @@ public final class ModEquipmentEvents {
     }
 
     @SubscribeEvent
-    public static void armorOnEntityDamaged(LivingDamageEvent.Pre event) {
+    public static void armorOnEntityDamagedPre(LivingDamageEvent.Pre event) {
         if (event.getEntity() instanceof Player player) {
             player.getArmorSlots().forEach(stack -> {
                 if (stack.getItem() instanceof DungeonArmorItem dungeonArmorItem)
                     dungeonArmorItem.EntityPreDamaged(event);
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void armorOnEntityDamagedPost(LivingDamageEvent.Post event) {
+        if (event.getEntity() instanceof Player player) {
+            player.getArmorSlots().forEach(stack -> {
+                if (stack.getItem() instanceof DungeonArmorItem dungeonArmorItem)
+                    dungeonArmorItem.EntityPostDamaged(event);
             });
         }
     }

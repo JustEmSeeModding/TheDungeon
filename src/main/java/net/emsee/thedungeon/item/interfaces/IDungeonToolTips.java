@@ -1,5 +1,7 @@
 package net.emsee.thedungeon.item.interfaces;
 
+import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.item.custom.DungeonCurio;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -12,6 +14,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.neoforge.client.event.AddAttributeTooltipsEvent;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurio;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.*;
 
@@ -24,17 +29,21 @@ public interface IDungeonToolTips {
     /**
      * Component[0] = title, leave NULL for no title
      */
-    default LinkedHashMap<Component, Component[]> getPrefixComponents () {return null;}
+    default LinkedHashMap<Component, Component[]> getPrefixComponents (ItemStack stack) {return null;}
 
-    default LinkedHashMap<Component, Component[]> getSuffixComponents () {return null;}
+    default LinkedHashMap<Component, Component[]> getSuffixComponents (ItemStack stack) {return null;}
 
-    default LinkedHashMap<SlotType, Component[]> getExtraComponents () {return new LinkedHashMap<>();}
+    default LinkedHashMap<SlotType, Component[]> getExtraComponents (ItemStack stack) {return new LinkedHashMap<>();}
 
     default void addAttributeTooltips(AddAttributeTooltipsEvent event) {
         ItemStack stack = event.getStack();
 
         // create a map with an empty list linked to each SlotType
-        Map<SlotType, List<ItemAttributeModifiers.Entry>> entries = Util.make(new HashMap<>(), map -> {for (SlotType slot : SlotType.values()){map.put(slot, new ArrayList<>());}});
+        Map<SlotType, List<ItemAttributeModifiers.Entry>> entries = Util.make(new HashMap<>(), map -> {
+            for (SlotType slot : SlotType.values()) {
+                map.put(slot, new ArrayList<>());
+            }
+        });
 
         // get all modifiers
         List<ItemAttributeModifiers.Entry> modifiers = stack.getAttributeModifiers().modifiers();
@@ -44,10 +53,16 @@ public interface IDungeonToolTips {
             entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry);
         });
 
-        // add prefix component
-        addFixedComponents(getPrefixComponents(), event);
+        if (stack.getItem() instanceof DungeonCurio curioItem) {
+            curioItem.getAttributeModifiers(stack).forEach((holder, modifier) -> {
+                entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY));
+            });
+        }
 
-        LinkedHashMap<SlotType, Component[]> extraComponents = getExtraComponents();
+        // add prefix component
+        addFixedComponents(getPrefixComponents(stack), event);
+
+        LinkedHashMap<SlotType, Component[]> extraComponents = getExtraComponents(stack);
 
         // handle every SlotType
         addAttributeList(SlotType.MAIN_HAND,
@@ -59,6 +74,9 @@ public interface IDungeonToolTips {
         addAttributeList(SlotType.ANY_HAND,
                 Component.translatable("attribute.thedungeon.title.anyhand").withStyle(TITLE_FORMATTING),
                 entries.get(SlotType.ANY_HAND), extraComponents.get(SlotType.ANY_HAND), event);
+        addAttributeList(SlotType.CURIO,
+                Component.translatable("attribute.thedungeon.title.curio").withStyle(TITLE_FORMATTING),
+                entries.get(SlotType.CURIO), extraComponents.get(SlotType.CURIO), event);
         addAttributeList(SlotType.EQUIPPED,
                 Component.translatable("attribute.thedungeon.title.armor").withStyle(TITLE_FORMATTING),
                 entries.get(SlotType.EQUIPPED), extraComponents.get(SlotType.EQUIPPED), event);
@@ -70,8 +88,7 @@ public interface IDungeonToolTips {
                 entries.get(SlotType.UNASSIGNED), extraComponents.get(SlotType.UNASSIGNED), event);
 
         // add suffix components
-        addFixedComponents(getSuffixComponents(), event);
-
+        addFixedComponents(getSuffixComponents(stack), event);
     }
 
     static void addAttributeList(SlotType slot, Component title, List<ItemAttributeModifiers.Entry> list, Component[] otherComponents, AddAttributeTooltipsEvent event) {
@@ -99,37 +116,20 @@ public interface IDungeonToolTips {
 
         // handle every entry
         list.forEach(entry -> {
-            MutableComponent component = Component.literal("| ").withStyle(TITLE_FORMATTING);
             if (entry.modifier().amount()==0) return;
-
             // we want to skip this as this is handled above
-            if (slot == SlotType.MAIN_HAND && entry.attribute() == Attributes.ATTACK_DAMAGE)
+            else if (slot == SlotType.MAIN_HAND && entry.attribute() == Attributes.ATTACK_DAMAGE)
                 return;
-            if (slot == SlotType.MAIN_HAND && entry.attribute() == Attributes.ATTACK_SPEED)
+            else if (slot == SlotType.MAIN_HAND && entry.attribute() == Attributes.ATTACK_SPEED)
                 return;
-
-            // add added damage for all things not hand weapons
-            if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
-                component.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
-            // custom attack speed
-            else if (entry.matches(Attributes.ATTACK_SPEED, Item.BASE_ATTACK_SPEED_ID))
-                component.append(entry.attribute().value().toBaseComponent(entry.modifier().amount()+4, 4, false, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
-
-            // custom armor values
             else if (entry.attribute() == Attributes.ARMOR && event.getStack().getItem() instanceof ArmorItem)
-               return;
+                return;
+            else if (entry.attribute() == Attributes.ARMOR_TOUGHNESS && event.getStack().getItem() instanceof ArmorItem)
+                return;
 
-            // custom armor toughness values
-            else if (entry.matches(Attributes.ARMOR_TOUGHNESS, ResourceLocation.withDefaultNamespace("armor.helmet")) ||
-                    entry.matches(Attributes.ARMOR_TOUGHNESS, ResourceLocation.withDefaultNamespace("armor.chestplate")) ||
-                    entry.matches(Attributes.ARMOR_TOUGHNESS, ResourceLocation.withDefaultNamespace("armor.leggings")) ||
-                    entry.matches(Attributes.ARMOR_TOUGHNESS, ResourceLocation.withDefaultNamespace("armor.boots")) ||
-                    entry.matches(Attributes.ARMOR_TOUGHNESS, ResourceLocation.withDefaultNamespace("armor.body")))
-                component.append(entry.attribute().value().toBaseComponent(entry.modifier().amount(), 0, true, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+            MutableComponent component = Component.literal("| ").withStyle(TITLE_FORMATTING);
 
-            // add all leftover values
-            else
-                component.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(getFormat(entry, false)));
+            component.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(getFormat(entry, false)));
 
             // add converted component to the tooltip
             event.addTooltipLines(component);
@@ -142,7 +142,6 @@ public interface IDungeonToolTips {
         List<ItemAttributeModifiers.Entry> otherDamage = new ArrayList<>();
         List<ItemAttributeModifiers.Entry> otherSpeed = new ArrayList<>();
         for (ItemAttributeModifiers.Entry entry : list) {
-            //if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
             if (entry.attribute() == Attributes.ATTACK_DAMAGE) {
                 if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
                     mainDamage = entry.modifier().amount();
@@ -178,8 +177,10 @@ public interface IDungeonToolTips {
 
     private static void handleArmorAttributes(ArmorItem armorItem, List<ItemAttributeModifiers.Entry> list, AddAttributeTooltipsEvent event) {
         double mainArmor = 0;
+        double mainArmorToughness = 0;
         ArmorItem.Type armorType = armorItem.getType();
         List<ItemAttributeModifiers.Entry> otherArmor = new ArrayList<>();
+        List<ItemAttributeModifiers.Entry> otherArmorToughness = new ArrayList<>();
         for (ItemAttributeModifiers.Entry entry : list) {
             //if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
             if (entry.attribute() == Attributes.ARMOR) {
@@ -187,6 +188,15 @@ public interface IDungeonToolTips {
                     mainArmor = entry.modifier().amount();
                 else
                     otherArmor.add(entry);
+            }
+        }
+        for (ItemAttributeModifiers.Entry entry : list) {
+            //if (entry.matches(Attributes.ATTACK_DAMAGE, Item.BASE_ATTACK_DAMAGE_ID))
+            if (entry.attribute() == Attributes.ARMOR_TOUGHNESS) {
+                if (entry.matches(Attributes.ARMOR_TOUGHNESS, ResourceLocation.withDefaultNamespace("armor." + armorType.getName())))
+                    mainArmorToughness = entry.modifier().amount();
+                else
+                    otherArmorToughness.add(entry);
             }
         }
         if (mainArmor>0) {
@@ -199,6 +209,16 @@ public interface IDungeonToolTips {
             damageComponent.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(getFormat(entry, false)));
             event.addTooltipLines(damageComponent);
         }
+        if (mainArmorToughness>0) {
+            MutableComponent mainArmorComponent = Component.literal("| ").withStyle(TITLE_FORMATTING);
+            mainArmorComponent.append(Attributes.ARMOR_TOUGHNESS.value().toBaseComponent(mainArmorToughness, 0, true, event.getContext().flag()).withStyle(MAIN_STAT_FORMATTING));
+            event.addTooltipLines(mainArmorComponent);
+        }
+        for (ItemAttributeModifiers.Entry entry : otherArmorToughness) {
+            MutableComponent damageComponent = Component.literal("|  ").withStyle(TITLE_FORMATTING);
+            damageComponent.append(entry.attribute().value().toComponent(entry.modifier(), event.getContext().flag()).withStyle(getFormat(entry, false)));
+            event.addTooltipLines(damageComponent);
+        }
     }
 
     static void addFixedComponents(Map<Component, Component[]> components, AddAttributeTooltipsEvent event) {
@@ -206,7 +226,7 @@ public interface IDungeonToolTips {
         if (components == null) return;
 
         components.forEach((title, lines) -> {
-            // add empty line spacing (vanilla has it and it looks cleaner)
+            // add empty line spacing (vanilla has it, and it looks cleaner)
             event.addTooltipLines(Component.empty());
             // then add the title
             event.addTooltipLines(title.copy().withStyle(TITLE_FORMATTING));
@@ -225,6 +245,7 @@ public interface IDungeonToolTips {
         MAIN_HAND,
         OFFHAND,
         ANY_HAND,
+        CURIO,
         EQUIPPED,
         FULL_BODY;
 

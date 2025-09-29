@@ -37,8 +37,9 @@
   "entity.thedungeon.cave_goblin" : "Cave Goblin",
   "entity.thedungeon.shadow_goblin" : "Shadow Goblin",
   "entity.thedungeon.hob_goblin" : "Hob Goblin",
-  "entity.thedungeon.hob_goblin.fighter" : "Fighter",
-  "entity.thedungeon.hob_goblin.forge_worker" : "Forge Worker",
+  "entity.thedungeon.hob_goblin.fighter" : "Hob Goblin Fighter",
+  "entity.thedungeon.hob_goblin.forge_worker" : "Hob Goblin Forge Worker",
+  "entity.thedungeon.hob_goblin.scavenger" : "Hob Goblin Scavenger",
 
   "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
 
@@ -56,6 +57,10 @@
   "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
   "item.thedungeon.tooltip.tool_type" : "Tool Type",
   "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
+  "item.thedungeon.tooltip.curio_type": "Curio Slot:",
+  "item.thedungeon.tooltip.curio_type.any": "Any",
+  "item.thedungeon.tooltip.curio_type.effigy": "Effigy",
+  "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
@@ -137,6 +142,7 @@
   "attribute.thedungeon.title.mainhand" : "When In Main Hand:",
   "attribute.thedungeon.title.offhand" : "When In Off Hand:",
   "attribute.thedungeon.title.anyhand" : "When In Any Hand:",
+  "attribute.thedungeon.title.curio" : "When In Curio Slot:",
   "attribute.thedungeon.title.armor" : "When Equipped:",
   "attribute.thedungeon.title.full_armor_set" : "Full Set Bonus:",
 

@@ -22,9 +22,7 @@ import net.minecraft.world.level.block.Rotation;
 
 import java.util.*;
 
-public class GridDungeonGenerator {
-
-
+public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     public enum GenerationTask {
         UN_STARTED,
         CALCULATING,
@@ -108,9 +106,8 @@ public class GridDungeonGenerator {
     }
 
 
-    /**
-     * called each tick to generate the dungeon
-     */
+
+    @Override
     public void step(ServerLevel serverLevel) {
         if (currentTask == GenerationTask.UN_STARTED) {
             currentTask = GenerationTask.CALCULATING;

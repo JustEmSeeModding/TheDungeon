@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 import java.util.LinkedHashMap;
@@ -33,7 +34,7 @@ public class KobaltArmorItem extends DungeonArmorItem {
     }
 
     @Override
-    public LinkedHashMap<SlotType, Component[]> getExtraComponents() {
+    public LinkedHashMap<SlotType, Component[]> getExtraComponents(ItemStack stack) {
         return Util.make(new LinkedHashMap<>(), map -> {
             map.put(SlotType.FULL_BODY, new Component[]{ Component.translatable("attribute.thedungeon.extra.hob_goblin_friendly").withStyle(POSITIVE_FORMATTING)});
         });
@@ -41,6 +42,6 @@ public class KobaltArmorItem extends DungeonArmorItem {
 
     @Override
     protected void onFullSetTick(LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 5, 1));
+        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 100, 1));
     }
 }

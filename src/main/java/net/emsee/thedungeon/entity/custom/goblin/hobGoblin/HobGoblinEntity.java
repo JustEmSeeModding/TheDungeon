@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.entity.custom.goblin;
+package net.emsee.thedungeon.entity.custom.goblin.hobGoblin;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -7,21 +7,18 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
-import net.emsee.thedungeon.entity.client.Goblin.hobGoblin.HobGoblinVariant;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
+import net.emsee.thedungeon.entity.custom.goblin.AbstractGoblinEntity;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.utils.WeightedMap;
-import net.emsee.thedungeon.villager.ModVillagerTrades;
 import net.minecraft.Util;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -29,12 +26,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -48,17 +43,16 @@ import net.minecraft.world.level.portal.DimensionTransition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(HobGoblinEntity.class, EntityDataSerializers.INT);
 
-    private static final WeightedMap.Int<HobGoblinVariant> variants = Util.make(new WeightedMap.Int<>(), map -> {
-        map.put(HobGoblinVariant.DEFAULT, 100);
-        map.put(HobGoblinVariant.FORGER, 50);
+    private static final WeightedMap.Int<Variant> variants = Util.make(new WeightedMap.Int<>(), map -> {
+        for (Variant variant : Variant.values()) {
+            map.put(variant, variant.weight);
+        }
     });
 
     private Player tradingPlayer;
@@ -81,9 +75,13 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     @Override
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack(12,8,.5f,.75f, 1, 3)
-                .withAttack(12,8,.5f,.75f, 1, null,Pair.of(List.of(),List.of(ModItems.GOBLINS_DAGGER.get())),2)
-                .withAttack(12,18, 1f,1, 1, null, Pair.of(List.of(ModItems.GOBLINS_DAGGER.get()),List.of(ModItems.GOBLINS_DAGGER.get())), 1 )
+                // default attacks
+                .withAttack(0, 12,8,1f,.75f, 1, null,Pair.of(List.of(ModItems.GOBLINS_DAGGER.get(), Items.AIR),List.of()),3)
+                .withAttack(1, 12,8,1f,.75f, 1, null,Pair.of(List.of(),List.of(ModItems.GOBLINS_DAGGER.get())),2)
+                .withAttack(2,12,18, 2f,1, 1, null, Pair.of(List.of(ModItems.GOBLINS_DAGGER.get()),List.of(ModItems.GOBLINS_DAGGER.get())), 1 )
+
+                // hammer attacks
+                .withAttack(0, 12,23,1f,1f, 1, null,Pair.of(List.of(ModItems.GOBLINS_FORGEHAMMER.get()),List.of()),3)
         );
     }
 
@@ -106,7 +104,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         double rDouble = random.nextDouble();
         switch (getVariant()) {
-            case DEFAULT -> {
+            case FIGHTER -> {
                 if (rDouble>.67) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
                     this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
@@ -121,6 +119,11 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
             }
             case FORGER -> {
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_FORGEHAMMER.get()));
+            }
+            case SCAVENGER -> {}
+            default -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
             }
         }
 
@@ -221,8 +224,8 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     }
 
     protected void updateTrades() {
-        VillagerTrades.ItemListing[] comonItemlisting =  ModVillagerTrades.getHobGoblinTrades(getVariant()).get(1);
-        VillagerTrades.ItemListing[] raraItemlisting = ModVillagerTrades.getHobGoblinTrades(getVariant()).get(2);
+        VillagerTrades.ItemListing[] comonItemlisting =  HobGoblinTrades.getHobGoblinTrades(getVariant()).get(1);
+        VillagerTrades.ItemListing[] raraItemlisting = HobGoblinTrades.getHobGoblinTrades(getVariant()).get(2);
         if (comonItemlisting != null && raraItemlisting != null) {
             MerchantOffers merchantoffers = this.getOffers();
             this.addOffersFromItemListings(merchantoffers, comonItemlisting, 5);
@@ -306,22 +309,50 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         return this.entityData.get(VARIANT);
     }
 
-    public HobGoblinVariant getVariant() {
-        return HobGoblinVariant.getById(this.getTypeVariant() & 255);
+    public Variant getVariant() {
+        return Variant.getById(this.getTypeVariant() & 255);
     }
 
-    private void setVariant(HobGoblinVariant variant) {
+    private void setVariant(Variant variant) {
         this.entityData.set(VARIANT, variant.getId() & 255);
     }
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
         //if (getVariant() == null) {
-            HobGoblinVariant variant = variants.getRandom(this.random);
+            Variant variant = variants.getRandom(this.random);
             this.setVariant(variant);
         //}
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
+    public enum Variant {
+        FIGHTER(0, 100, "fighter"),
+        FORGER(1,50, "forge_worker"),
+        SCAVENGER(2,10, "scavenger")
+        ;
+
+        private static final Variant[] BY_ID = Arrays.stream(values()).sorted(
+                Comparator.comparingInt(Variant::getId)).toArray(Variant[]::new);
+        private final int id;
+        private final int weight;
+        private final String resource;
+
+        Variant(int id, int weight, String resource) {
+            this.id=id;
+            this.weight=weight;
+            this.resource = resource;
+        }
+
+        public int getId() {return id;}
+
+        public static Variant getById(int id) {
+            return BY_ID[id % BY_ID.length];
+        }
+
+        public String getResource() {
+            return resource;
+        }
+    }
 
 }

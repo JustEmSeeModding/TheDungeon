@@ -29,19 +29,20 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity) {
-            if (livingEntity instanceof Player player) {
-                if (!level.isClientSide && playerHasFullSetOfArmor(player) && playerHasFullArmorOn(player)) {
-                    onFullSetTick(player);
-                }
+        if (entity instanceof LivingEntity livingEntity && livingEntity instanceof Player player) {
+            if (slotId == 38/*Chestplate*/ && !level.isClientSide && playerHasFullArmorOn(player)) {
+                onFullSetTick(player);
             }
         }
         super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 
-    private boolean playerHasFullArmorOn(Player player) {
+    private static boolean playerHasFullArmorOn(Player player) {
+        if (!playerHasFullSetOfArmor(player))
+            return false;
+
         for (ItemStack armorStack : player.getArmorSlots()) {
-            if (!(armorStack.getItem() instanceof ArmorItem)) {
+            if (!(armorStack.getItem() instanceof DungeonArmorItem)) {
                 return false;
             }
         }
@@ -54,7 +55,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         return boots.getMaterial() == helmet.getMaterial() && leggings.getMaterial() == helmet.getMaterial() && chestplate.getMaterial() == helmet.getMaterial();
     }
 
-    private boolean playerHadFullArmorOn(Player player, ItemStack removedStack, EquipmentSlot slot) {
+    private static boolean playerHadFullArmorOn(Player player, ItemStack removedStack, EquipmentSlot slot) {
         if (!(removedStack.getItem() instanceof ArmorItem)) {
             return false;
         }
@@ -74,7 +75,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         return false;
     }
 
-    private boolean playerHasFullSetOfArmor(Player player) {
+    private static boolean playerHasFullSetOfArmor(Player player) {
         return
                 !player.getInventory().getArmor(0).isEmpty() &&
                         !player.getInventory().getArmor(1).isEmpty() &&
@@ -82,7 +83,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
                         !player.getInventory().getArmor(3).isEmpty();
     }
 
-    public final void UnEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
+    public final void unEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
         if (slot.isArmor())
             onPieceUnEquip(entity, stack, slot);
         if (entity instanceof Player player) {
@@ -112,7 +113,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         }
     }
 
-    private void addFullSetAttributes(LivingEntity entity, ItemStack stack) {
+    private static void addFullSetAttributes(LivingEntity entity, ItemStack stack) {
         stack.getAttributeModifiers().modifiers().forEach(entry -> {
             if (entry.slot() == EquipmentSlotGroup.BODY) {
                 Objects.requireNonNull(entity.getAttribute(entry.attribute())).addOrUpdateTransientModifier(entry.modifier());
@@ -120,7 +121,7 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         });
     }
 
-    private void removeFullSetAttributes(LivingEntity entity, ItemStack stack) {
+    private static void removeFullSetAttributes(LivingEntity entity, ItemStack stack) {
         stack.getAttributeModifiers().modifiers().forEach(entry -> {
             if (entry.slot() == EquipmentSlotGroup.BODY) {
                 Objects.requireNonNull(entity.getAttribute(entry.attribute())).removeModifier(entry.modifier());
@@ -132,7 +133,14 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
         preWearerDamaged(event);
     }
 
+    public final void EntityPostDamaged(LivingDamageEvent.Post event) {
+        postWearerDamaged(event);
+    }
+
     protected void preWearerDamaged(LivingDamageEvent.Pre event) {
+    }
+
+    protected void postWearerDamaged(LivingDamageEvent.Post event) {
     }
 
     protected void onFullSetTick(LivingEntity entity) {

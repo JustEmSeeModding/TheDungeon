@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 
 import java.util.Random;
 
-public abstract class Dungeon {
+public abstract class Dungeon<T extends Dungeon<?>> {
     private static int lastID = -1;
     protected final String resourceName;
     private final int ID;
