@@ -1,10 +1,7 @@
 package net.emsee.thedungeon.dungeon.src;
 
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import net.minecraft.core.BlockPos;
 

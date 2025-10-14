@@ -15,6 +15,7 @@ public abstract class ConnectionRule {
      * loops through a list of ConnectionRules to see if 2 tags are valid or not
      */
     public static boolean isValid(String fromTag, String toTag, List<ConnectionRule> rules) {
+        if (fromTag == null || toTag == null) return false;
         boolean toReturn = fromTag.equals(toTag);
         for (ConnectionRule rule : rules) {
             if (rule.preventConnect(fromTag, toTag)) return false;

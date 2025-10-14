@@ -20,6 +20,7 @@ public class DebugLog {
         map.put(DebugType.GENERATING_STEPS, true);
         map.put(DebugType.GENERATING_TICKS, false);
         map.put(DebugType.GENERATING_TICKS_DETAILS, false);
+        map.put(DebugType.GENERATING_FAIL_VERIFICATION, false);
         map.put(DebugType.GENERATING_REQUIRED_PLACEMENTS, false);
         map.put(DebugType.FORCED_CHUNK_UPDATES, true);
         map.put(DebugType.FORCED_CHUNK_UPDATES_DETAILS, false);
@@ -36,6 +37,7 @@ public class DebugLog {
         GENERATING_TICKS,
         GENERATING_REQUIRED_PLACEMENTS,
         GENERATING_TICKS_DETAILS,
+        GENERATING_FAIL_VERIFICATION,
         FORCED_CHUNK_UPDATES,
         FORCED_CHUNK_UPDATES_DETAILS,
         GENERIC,

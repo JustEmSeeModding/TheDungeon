@@ -4,6 +4,7 @@ import net.minecraft.util.RandomSource;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class ListAndArrayUtils {
@@ -70,12 +71,12 @@ public final class ListAndArrayUtils {
     /**
      * a foreach method for maps that makes sure the value stays assigned even if the hash changes
      */
-    public static <K, V> Map<K, V> mapForEachSafe(Map<K, V> map, BiConsumer<K, V> consumer) {
-        List<Map.Entry<K, V>> entries = new ArrayList<>(map.entrySet());
+    public static <K,V> Map<K,V> mapForEachSafe(Map<K,V> map, Function<Map.Entry<K,V>,Map.Entry<K,V>> function) {
+        List<Map.Entry<K,V>> entries = new ArrayList<>(map.entrySet());
         map.clear();
 
-        for (Map.Entry<K, V> entry : entries) {
-            consumer.accept(entry.getKey(), entry.getValue());
+        for (Map.Entry<K,V> entry : entries) {
+            entry = function.apply(entry);
             map.put(entry.getKey(), entry.getValue());
         }
 

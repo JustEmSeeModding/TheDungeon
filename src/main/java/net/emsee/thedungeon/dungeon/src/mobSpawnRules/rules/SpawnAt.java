@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules;
 
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.MobSpawnRule;
-import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
+import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

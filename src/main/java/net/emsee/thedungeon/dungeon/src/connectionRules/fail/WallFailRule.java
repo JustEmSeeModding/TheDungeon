@@ -2,11 +2,10 @@ package net.emsee.thedungeon.dungeon.src.connectionRules.fail;
 
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.src.Connection;
-import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
+import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -97,7 +96,7 @@ public class WallFailRule extends FailRule {
 
     private BlockPos findWallCenter(GeneratedRoom room, Connection connection) {
         BlockPos roomCenter = room.getPlacedWorldPos();
-        Vec3i connectionArrayOffset = room.getPlacedArrayOffset(connection);
+        Vec3i connectionArrayOffset = room.getPlacementConnectionArrayOffset(connection);
         if (connection == Connection.UP) {
             return null;
         }

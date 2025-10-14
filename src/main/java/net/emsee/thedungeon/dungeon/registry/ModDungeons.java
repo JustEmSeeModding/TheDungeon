@@ -8,7 +8,7 @@ import net.emsee.thedungeon.dungeon.registry.roomCollections.LibraryGridRoomColl
 import net.emsee.thedungeon.dungeon.registry.roomCollections.TestGridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
-import net.emsee.thedungeon.dungeon.src.types.GridDungeon;
+import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 
 import java.util.HashMap;

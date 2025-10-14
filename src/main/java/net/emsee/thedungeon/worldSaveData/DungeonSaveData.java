@@ -4,6 +4,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -117,17 +118,17 @@ public final class DungeonSaveData extends SavedData {
         return dungeonData.getDungeonProgresQueue().isEmpty();
     }
 
-    public Dungeon peekProgressQueue() {
+    public DungeonInstance<?> peekProgressQueue() {
         return dungeonData.getDungeonProgresQueue().peek();
     }
 
-    public void addToProgressQueue(Dungeon dungeon) {
+    public void addToProgressQueue(DungeonInstance<?> dungeon) {
         dungeonData.getDungeonProgresQueue().add(dungeon);
         setDirty();
     }
 
-    public Dungeon removeFromProgressQueue() {
-        Dungeon toReturn = dungeonData.getDungeonProgresQueue().remove();
+    public DungeonInstance<?> removeFromProgressQueue() {
+        DungeonInstance<?> toReturn = dungeonData.getDungeonProgresQueue().remove();
         setDirty();
         return toReturn;
     }
@@ -137,29 +138,29 @@ public final class DungeonSaveData extends SavedData {
         return dungeonData.getDungeonPassiveQueue(rank).isEmpty();
     }
 
-    public Dungeon peekPassiveQueue(DungeonRank rank) {
+    public DungeonInstance<?> peekPassiveQueue(DungeonRank rank) {
         if (rank == null) return null;
         return dungeonData.getDungeonPassiveQueue(rank).peek();
     }
 
-    public void addToPassiveQueue(Dungeon dungeon) {
+    public void addToPassiveQueue(DungeonInstance<?> dungeon) {
         dungeonData.getDungeonPassiveQueue(dungeon.getRank()).add(dungeon);
         setDirty();
     }
 
-    public Dungeon removeFromPassiveQueue(DungeonRank rank) {
-        Dungeon toReturn = dungeonData.getDungeonPassiveQueue(rank).remove();
+    public DungeonInstance<?> removeFromPassiveQueue(DungeonRank rank) {
+        DungeonInstance<?> toReturn = dungeonData.getDungeonPassiveQueue(rank).remove();
         setDirty();
         return toReturn;
     }
 
-    public Dungeon pollFromProgressQueue() {
-        Dungeon toReturn = dungeonData.getDungeonProgresQueue().poll();
+    public DungeonInstance<?> pollFromProgressQueue() {
+        DungeonInstance<?> toReturn = dungeonData.getDungeonProgresQueue().poll();
         setDirty();
         return toReturn;
     }
 
-    public void addAllToProgressQueue(List<Dungeon> list) {
+    public void addAllToProgressQueue(List<DungeonInstance<?>> list) {
         dungeonData.getDungeonProgresQueue().addAll(list);
         setDirty();
     }

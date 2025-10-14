@@ -39,6 +39,13 @@ public class PriorityMap<T> extends LinkedHashMap<T,Integer> {
         return ListAndArrayUtils.getRandomFromList(tempList, random);
     }
 
+    @Override
+    public Integer get(Object key) {
+        Integer toReturn = super.get(key);
+        if (toReturn==null) return -1;
+        return toReturn;
+    }
+
     /**
      * gets a random value from only the highest priority in the list
      */

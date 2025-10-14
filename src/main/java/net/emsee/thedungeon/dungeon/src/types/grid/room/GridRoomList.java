@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.dungeon.src.room;
+package net.emsee.thedungeon.dungeon.src.types.grid.room;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,7 @@ public class GridRoomList extends ArrayList<AbstractGridRoom> {
 
     public GridRoomList getCopy() {
         GridRoomList toReturn = new GridRoomList();
-        for(AbstractGridRoom room : this)
-            toReturn.add(room.getCopy());
+        toReturn.addAll(this);
         return toReturn;
     }
 

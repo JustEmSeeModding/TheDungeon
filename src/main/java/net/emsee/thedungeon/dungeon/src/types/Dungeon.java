@@ -1,15 +1,10 @@
 package net.emsee.thedungeon.dungeon.src.types;
 
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.gameRule.GameruleRegistry;
-import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 
-import java.util.Random;
-
-public abstract class Dungeon<T extends Dungeon<?>> {
+public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<T>> {
     private static int lastID = -1;
     protected final String resourceName;
     private final int ID;
@@ -39,7 +34,7 @@ public abstract class Dungeon<T extends Dungeon<?>> {
 
     // constructionMethod
 
-    public Dungeon isUtilDungeon(boolean is) {
+    public Dungeon setUtilDungeon(boolean is) {
         utilDungeon = is;
         return this;
     }
@@ -58,28 +53,6 @@ public abstract class Dungeon<T extends Dungeon<?>> {
     }
 
     // methods
-
-    /**
-     * starts dungeon generation.
-     */
-    public final void generate(ServerLevel level) {
-        long selectedSeed = GameruleRegistry.getIntegerGamerule(level.getServer(), ModGamerules.DUNGEON_SEED_OVERRIDE);
-        if (selectedSeed == -1) {
-            generateSeeded(new Random().nextLong());
-        } else {
-            generateSeeded(selectedSeed);
-        }
-    }
-
-    /**
-     * generates the dungeon with a seed
-     */
-    public abstract void generateSeeded(long seed);
-
-    /**
-     * runs every tick while generating.
-     */
-    public abstract void generationTick(ServerLevel serverLevel);
 
     public final String getResourceName() {
         return resourceName;
@@ -107,24 +80,9 @@ public abstract class Dungeon<T extends Dungeon<?>> {
         return rank.getDefaultCenterPos();
     }
 
-    /**
-     * gets a copy of base dungeon
-     */
-    public final Dungeon getCopy() {
-        return getCopy(ID);
+    public boolean isUtilDungeon() {
+        return utilDungeon;
     }
-
-    protected abstract Dungeon getCopy(int ID);
-
-    /**
-     * returns true if the dungeon has successfully generated
-     */
-    public abstract boolean isDoneGenerating();
-
-    /**
-     * returns true if the dungeon has started but not yet finished generating
-     */
-    public abstract boolean isBusyGenerating();
 
     @Override
     public String toString() {
@@ -135,5 +93,5 @@ public abstract class Dungeon<T extends Dungeon<?>> {
         return lastID;
     }
 
-    public abstract boolean canManualStepNow();
+    public abstract I createInstance();
 }

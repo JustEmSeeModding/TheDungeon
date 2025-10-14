@@ -1,9 +1,9 @@
 package net.emsee.thedungeon.dungeon.registry;
 
 import net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup.CleanupLightGridRoomCollection;
-import net.emsee.thedungeon.dungeon.src.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
-import net.emsee.thedungeon.dungeon.src.types.GridDungeon;
+import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup.CleanupGridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 
@@ -31,7 +31,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
 
     public static final Dungeon CLEANUP_E = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_e",
@@ -45,7 +45,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
 
     public static final Dungeon CLEANUP_D = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_d",
@@ -59,7 +59,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
     public static final Dungeon CLEANUP_C = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_c",
             DungeonRank.C,
@@ -72,7 +72,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
     public static final Dungeon CLEANUP_B = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_b",
             DungeonRank.B,
@@ -85,7 +85,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
     public static final Dungeon CLEANUP_A = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_a",
             DungeonRank.A,
@@ -98,7 +98,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
     public static final Dungeon CLEANUP_S = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_s",
             DungeonRank.S,
@@ -111,7 +111,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
     public static final Dungeon CLEANUP_SS = register(new GridDungeon(
             "dungeon.the_dungeon.cleanup_ss",
             DungeonRank.SS,
@@ -124,5 +124,5 @@ public class ModCleanupDungeons extends ModDungeons {
             .setMaxFloorHeightOneWay(cleanupHeight)
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
-            .isUtilDungeon(true));
+            .setUtilDungeon(true));
 }
