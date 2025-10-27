@@ -40,10 +40,6 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         WeightedMap.Int<ResourceLocation> resourceLocations = new WeightedMap.Int<>();
     }
 
-    @Override
-    public AbstractGridRoom.Builder<?> edit() {
-        return new Builder(multiData, data);
-    }
 
     public static class Builder extends AbstractGridRoom.Builder<GridRoomMultiResource> {
         private final MultiData multiData;

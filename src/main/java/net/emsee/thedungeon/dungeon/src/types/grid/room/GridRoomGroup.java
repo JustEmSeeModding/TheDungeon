@@ -10,9 +10,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class GridRoomGroup extends AbstractGridRoom {
@@ -23,9 +21,23 @@ public final class GridRoomGroup extends AbstractGridRoom {
         this.groupData = groupData;
     }
 
-    private static class GroupData {
+    protected static class GroupDataBuilder {
+        private final WeightedMap.Int<AbstractGridRoom.Builder<?>> builders = new WeightedMap.Int<>();
+
+        public GroupData build() {
+            GroupData toReturn = new GroupData();
+            builders.forEach((builder,i) -> {
+                toReturn.gridRooms.put(builder.build(),i);
+            });
+            return toReturn;
+        }
+    }
+
+    protected static class GroupData {
         private final WeightedMap.Int<AbstractGridRoom> gridRooms = new WeightedMap.Int<>();
     }
+
+
 
     public static Builder builder(int gridWidth, int gridHeight) {
         return new Builder(gridWidth, gridHeight, 0);
@@ -35,27 +47,22 @@ public final class GridRoomGroup extends AbstractGridRoom {
         return new Builder(gridWidth, gridHeight, differentiationID);
     }
 
-    @Override
-    public Builder edit() {
-        return new Builder(groupData, data);
-    }
-
     public static class Builder extends AbstractGridRoom.Builder<GridRoomGroup> {
-        private final GroupData groupData;
+        private final GroupDataBuilder groupDataBuilder;
 
         protected Builder(int gridWidth, int gridHeight, int differentiationID) {
             super(gridWidth, gridHeight, differentiationID);
-            groupData = new GroupData();
+            groupDataBuilder = new GroupDataBuilder();
         }
 
-        protected Builder(GroupData groupData, Data data) {
+        protected Builder(GroupDataBuilder groupDataBuilder, Data data) {
             super(data);
-            this.groupData = groupData;
+            this.groupDataBuilder = groupDataBuilder;
         }
 
         @Override
         public GridRoomGroup build() {
-            return new GridRoomGroup(groupData, data);
+            return new GridRoomGroup(groupDataBuilder.build(), data);
         }
 
         /**
@@ -72,7 +79,7 @@ public final class GridRoomGroup extends AbstractGridRoom {
                             doAllowRotation(data.allowRotation, data.allowUpDownConnectedRotation).
                             setGenerationPriority(data.generationPriority).
                             setOverrideEndChance(data.overrideEndChance, data.doOverrideEndChance).
-                            setSpawnRules(data.spawnRules).build()
+                            setSpawnRules(data.spawnRules)
             );
 
             return this;
@@ -81,7 +88,7 @@ public final class GridRoomGroup extends AbstractGridRoom {
         /**
          * A roomGroup must always have the same connections
          */
-        public Builder addRoom(AbstractGridRoom gridRoom) {
+        public Builder addRoom(AbstractGridRoom.Builder<?> gridRoom) {
 
             if (!ListAndArrayUtils.mapEquals(data.connections, gridRoom.data.connections))
                 throw new IllegalStateException(this+":added room does not have the same connections as the group");
@@ -92,56 +99,61 @@ public final class GridRoomGroup extends AbstractGridRoom {
             if (data.heightScale != gridRoom.data.heightScale || data.northSizeScale != gridRoom.data.northSizeScale || data.eastSizeScale != gridRoom.data.eastSizeScale)
                 throw new IllegalStateException(this+":added room does not have the same scale as the group");
 
-            groupData.gridRooms.put(gridRoom, gridRoom.getWeight());
+            groupDataBuilder.builders.put(gridRoom, gridRoom.data.weight);
             return this;
         }
 
-        public Builder applyToAll(Function<AbstractGridRoom, AbstractGridRoom> function) {
-            ListAndArrayUtils.mapForEachSafe(groupData.gridRooms, (e)-> Map.entry(function.apply(e.getKey()), e.getValue()));
+        public Builder applyToAll(Function<AbstractGridRoom.Builder<?>, AbstractGridRoom.Builder<?>> function) {
+            ListAndArrayUtils.mapForEachSafe(groupDataBuilder.builders, (e)-> Map.entry(function.apply(e.getKey()), e.getValue()));
             return this;
         }
 
         @Override
         public Builder withStructureProcessor(StructureProcessor processor) {
-            return applyToAll(room -> room.edit().withStructureProcessor(processor).build());
+            return applyToAll(room -> room.withStructureProcessor(processor));
+        }
+
+        @Override
+        public Builder withStructurePostProcessor(StructureProcessor processor) {
+            return applyToAll(room -> room.withStructurePostProcessor(processor));
         }
 
         @Override
         public Builder clearStructureProcessors() {
-            return applyToAll(room -> room.edit().clearStructureProcessors().build());
+            return applyToAll(AbstractGridRoom.Builder::clearStructureProcessors);
         }
 
         @Override
         public Builder addMobSpawnRule(MobSpawnRule rule) {
-            return applyToAll(room -> room.edit().addMobSpawnRule(rule).build());
+            return applyToAll(room -> room.addMobSpawnRule(rule));
         }
 
         @Override
         public Builder setConnectionTag(Connection connection, String tag) {
             super.setConnectionTag(connection, tag);
-            return applyToAll(room->room.edit().setConnectionTag(connection, tag).build());
+            return applyToAll(room->room.setConnectionTag(connection, tag));
         }
 
         @Override
         public Builder setAllConnectionTags(String tag) {
             super.setAllConnectionTags(tag);
-            return applyToAll(room->room.edit().setAllConnectionTags(tag).build());
+            return applyToAll(room->room.setAllConnectionTags(tag));
         }
 
 
         @Override
         public Builder setGenerationPriority(int generationPriority) {
-            return applyToAll(room -> room.edit().setGenerationPriority(generationPriority).build());
+            return applyToAll(room -> room.setGenerationPriority(generationPriority));
         }
 
         @Override
         public Builder setOverrideEndChance(float value) {
-            return applyToAll(room -> room.edit().setOverrideEndChance(value).build());
+            return applyToAll(room -> room.setOverrideEndChance(value));
         }
 
         @Override
         public Builder skipCollectionProcessors() {
-            return applyToAll(room -> room.edit().skipCollectionProcessors().build());
+            return applyToAll(AbstractGridRoom.Builder::skipCollectionProcessors);
         }
 
     }
@@ -152,6 +164,12 @@ public final class GridRoomGroup extends AbstractGridRoom {
     @Deprecated
     public StructureProcessorList getStructureProcessors() {
         throw new IllegalStateException(this+ ":getStructureProcessors() should not be used for groups");
+    }
+
+    @Override
+    @Deprecated
+    public StructureProcessorList getStructurePostProcessors() {
+        throw new IllegalStateException(this+ ":getStructurePostProcessors() should not be used for groups");
     }
 
     @Deprecated

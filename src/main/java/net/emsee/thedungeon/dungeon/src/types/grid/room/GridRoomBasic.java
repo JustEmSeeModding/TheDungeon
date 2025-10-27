@@ -48,11 +48,6 @@ public final class GridRoomBasic extends AbstractGridRoom{
         return new Builder(resourceLocation, gridWidth, gridHeight, differentiationID);
     }
 
-    @Override
-    public Builder edit() {
-        return new Builder(basicData, data);
-    }
-
     public static class Builder extends AbstractGridRoom.Builder<GridRoomBasic> {
         final BasicData basicData;
 

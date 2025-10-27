@@ -3,6 +3,7 @@ package net.emsee.thedungeon.dungeon.src.types.roomCollection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
+import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomList;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.world.level.block.Rotation;
@@ -63,6 +64,16 @@ public abstract class GridRoomCollection {
             addRoom(room);
         }
         return this;
+    }
+
+    /**
+     * Adds multiple rooms to the collection, validating each for dimension compatibility.
+     *
+     * @param rooms the list of rooms to add
+     * @return this collection instance for method chaining
+     */
+    public GridRoomCollection addRooms(GridRoomList rooms) {
+        return addRooms(rooms.getList());
     }
 
     /**

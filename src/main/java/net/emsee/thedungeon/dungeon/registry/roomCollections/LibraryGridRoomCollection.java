@@ -70,6 +70,6 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
             .horizontalConnections();
 
     static AbstractGridRoom.Builder<?> smallRooms = ((GridRoomGroup.Builder)GridRoomGroup.builder(13, 9).addConnection(Connection.NORTH).doAllowRotation())
-            .addRoom(GridRoomBasic.builder("library/rooms/enchanting",13, 9).addConnection(Connection.NORTH).doAllowRotation().build())
-            .addRoom(GridRoomBasic.builder("library/rooms/smithing",13, 9).addConnection(Connection.NORTH).doAllowRotation().build());
+            .addRoom(GridRoomBasic.builder("library/rooms/enchanting",13, 9).addConnection(Connection.NORTH).doAllowRotation())
+            .addRoom(GridRoomBasic.builder("library/rooms/smithing",13, 9).addConnection(Connection.NORTH).doAllowRotation());
 }

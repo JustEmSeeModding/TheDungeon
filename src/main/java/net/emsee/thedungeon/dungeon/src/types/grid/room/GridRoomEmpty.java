@@ -26,11 +26,6 @@ public final class GridRoomEmpty extends AbstractGridRoom{
     public static Builder builder(int gridWidth, int gridHeight, int differentiationID) {
         return new Builder(gridWidth, gridHeight, differentiationID);
     }
-
-    @Override
-    public Builder edit() {
-        return new Builder(data);
-    }
     
     public static class Builder extends AbstractGridRoom.Builder<GridRoomEmpty> {
         protected Builder(int gridWidth, int gridHeight, int differentiationID) {
@@ -46,16 +41,19 @@ public final class GridRoomEmpty extends AbstractGridRoom{
             return new GridRoomEmpty(data);
         }
 
+        @Deprecated
         @Override
         public AbstractGridRoom.Builder<GridRoomEmpty> clearStructureProcessors() {
             throw new IllegalStateException("clearStructureProcessors should not be used on GridRoomEmpty");
         }
 
+        @Deprecated
         @Override
         public Builder skipCollectionProcessors() {
             throw new IllegalStateException("skipCollectionProcessors should not be used on GridRoomEmpty");
         }
 
+        @Deprecated
         @Override
         public Builder withStructureProcessor(StructureProcessor processor) {
             throw new IllegalStateException("withStructureProcessor should not be used on GridRoomEmpty");

@@ -32,8 +32,6 @@ public abstract class AbstractGridRoom {
         this.data = data;
     }
 
-    public abstract Builder<?> edit();
-
     protected static class Data {
         public Data(int gridWidth, int gridHeight, int differentiationID) {
             this.gridWidth = gridWidth;

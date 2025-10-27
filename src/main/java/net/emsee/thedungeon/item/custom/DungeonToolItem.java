@@ -29,64 +29,71 @@ import java.util.*;
 
 
 public class DungeonToolItem extends DungeonWeaponItem {
+    protected static final Map<Block, Block> DEFAULT_BREAKABLES = Util.make(Maps.newHashMap(), (map) -> {
+        map.put(Blocks.GILDED_BLACKSTONE, Blocks.BLACKSTONE);
+        map.put(Blocks.COAL_ORE, Blocks.STONE);
+        map.put(Blocks.IRON_ORE, Blocks.STONE);
+        map.put(Blocks.COPPER_ORE, Blocks.STONE);
+        map.put(Blocks.GOLD_ORE, Blocks.STONE);
+        map.put(Blocks.REDSTONE_ORE, Blocks.STONE);
+        map.put(Blocks.EMERALD_ORE, Blocks.STONE);
+        map.put(Blocks.LAPIS_ORE, Blocks.STONE);
+        map.put(Blocks.DIAMOND_ORE, Blocks.STONE);
+
+        map.put(Blocks.DEEPSLATE_COAL_ORE, Blocks.DEEPSLATE);
+        map.put(Blocks.DEEPSLATE_IRON_ORE, Blocks.DEEPSLATE);
+        map.put(Blocks.DEEPSLATE_COPPER_ORE, Blocks.DEEPSLATE);
+        map.put(Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE);
+        map.put(Blocks.DEEPSLATE_REDSTONE_ORE, Blocks.DEEPSLATE);
+        map.put(Blocks.DEEPSLATE_EMERALD_ORE, Blocks.DEEPSLATE);
+        map.put(Blocks.DEEPSLATE_LAPIS_ORE, Blocks.DEEPSLATE);
+        map.put(Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.DEEPSLATE);
+
+        map.put(Blocks.NETHER_GOLD_ORE, Blocks.NETHERRACK);
+        map.put(Blocks.NETHER_QUARTZ_ORE, Blocks.NETHERRACK);
+
+        map.put(Blocks.RAW_IRON_BLOCK, Blocks.WHITE_TERRACOTTA);
+        map.put(Blocks.RAW_GOLD_BLOCK, Blocks.YELLOW_TERRACOTTA);
+        map.put(Blocks.RAW_COPPER_BLOCK, Blocks.TERRACOTTA);
+        map.put(Blocks.ANCIENT_DEBRIS, Blocks.GRAY_TERRACOTTA);
+        //map.put(Blocks.AMETHYST_BLOCK, Blocks.PURPLE_CONCRETE);
+
+        map.put(ModBlocks.PYRITE_ORE.get(), Blocks.STONE);
+        map.put(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), Blocks.DEEPSLATE);
+
+        map.put(ModBlocks.INFUSED_STONE.get(), Blocks.STONE);
+        map.put(ModBlocks.INFUSED_DEEPSLATE.get(), Blocks.DEEPSLATE);
+
+        // can remove foliage and some other (mainly to access ores behind it but also maybe hidden entrances)
+        map.put(Blocks.VINE, Blocks.AIR);
+        map.put(Blocks.HANGING_ROOTS, Blocks.AIR);
+        map.put(Blocks.GLOW_LICHEN, Blocks.AIR);
+
+        map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
+        map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
+        map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
+
+        map.put(Blocks.SNOW, Blocks.AIR);
+        map.put(Blocks.MOSS_CARPET, Blocks.AIR);
+
+        map.put(Blocks.OAK_LEAVES, Blocks.AIR);
+        map.put(Blocks.SPRUCE_LEAVES, Blocks.AIR);
+        map.put(Blocks.BIRCH_LEAVES, Blocks.AIR);
+        map.put(Blocks.JUNGLE_LEAVES, Blocks.AIR);
+        map.put(Blocks.ACACIA_LEAVES, Blocks.AIR);
+        map.put(Blocks.DARK_OAK_LEAVES, Blocks.AIR);
+        map.put(Blocks.MANGROVE_LEAVES, Blocks.AIR);
+        map.put(Blocks.CHERRY_LEAVES, Blocks.AIR);
+        map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
+        map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
+        map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
+    });
+
     /**
-     * A list of blocks this tool can break and what they would be replaced with
+     * A map of blocks this tool can break and what they would be replaced with
      */
     protected static Map<Block, Block> getBreakableBlocks() {
-        return
-                Util.make(Maps.newHashMap(), (map) -> {
-                    map.put(Blocks.GILDED_BLACKSTONE, Blocks.BLACKSTONE);
-                    map.put(Blocks.COAL_ORE, Blocks.STONE);
-                    map.put(Blocks.IRON_ORE, Blocks.STONE);
-                    map.put(Blocks.COPPER_ORE, Blocks.STONE);
-                    map.put(Blocks.GOLD_ORE, Blocks.STONE);
-                    map.put(Blocks.REDSTONE_ORE, Blocks.STONE);
-                    map.put(Blocks.EMERALD_ORE, Blocks.STONE);
-                    map.put(Blocks.LAPIS_ORE, Blocks.STONE);
-                    map.put(Blocks.DIAMOND_ORE, Blocks.STONE);
-
-                    map.put(Blocks.DEEPSLATE_COAL_ORE, Blocks.DEEPSLATE);
-                    map.put(Blocks.DEEPSLATE_IRON_ORE, Blocks.DEEPSLATE);
-                    map.put(Blocks.DEEPSLATE_COPPER_ORE, Blocks.DEEPSLATE);
-                    map.put(Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE);
-                    map.put(Blocks.DEEPSLATE_REDSTONE_ORE, Blocks.DEEPSLATE);
-                    map.put(Blocks.DEEPSLATE_EMERALD_ORE, Blocks.DEEPSLATE);
-                    map.put(Blocks.DEEPSLATE_LAPIS_ORE, Blocks.DEEPSLATE);
-                    map.put(Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.DEEPSLATE);
-
-                    map.put(Blocks.NETHER_GOLD_ORE, Blocks.NETHERRACK);
-                    map.put(Blocks.NETHER_QUARTZ_ORE, Blocks.NETHERRACK);
-
-                    map.put(Blocks.RAW_IRON_BLOCK, Blocks.WHITE_TERRACOTTA);
-                    map.put(Blocks.RAW_GOLD_BLOCK, Blocks.YELLOW_TERRACOTTA);
-                    map.put(Blocks.RAW_COPPER_BLOCK, Blocks.TERRACOTTA);
-                    map.put(Blocks.ANCIENT_DEBRIS, Blocks.GRAY_TERRACOTTA);
-                    //map.put(Blocks.AMETHYST_BLOCK, Blocks.PURPLE_CONCRETE);
-
-                    map.put(ModBlocks.PYRITE_ORE.get(), Blocks.STONE);
-                    map.put(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), Blocks.DEEPSLATE);
-
-                    map.put(ModBlocks.INFUSED_STONE.get(), Blocks.STONE);
-                    map.put(ModBlocks.INFUSED_DEEPSLATE.get(), Blocks.DEEPSLATE);
-
-                    // can remove foliage (mainly to access ores behind it but also maybe hidden entrances)
-                    map.put(Blocks.VINE, Blocks.AIR);
-                    map.put(Blocks.GLOW_LICHEN, Blocks.AIR);
-                    map.put(Blocks.OAK_LEAVES, Blocks.AIR);
-                    map.put(Blocks.SPRUCE_LEAVES, Blocks.AIR);
-                    map.put(Blocks.BIRCH_LEAVES, Blocks.AIR);
-                    map.put(Blocks.JUNGLE_LEAVES, Blocks.AIR);
-                    map.put(Blocks.ACACIA_LEAVES, Blocks.AIR);
-                    map.put(Blocks.DARK_OAK_LEAVES, Blocks.AIR);
-                    map.put(Blocks.MANGROVE_LEAVES, Blocks.AIR);
-                    map.put(Blocks.CHERRY_LEAVES, Blocks.AIR);
-                    map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
-                    map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
-                    map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
-                    map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
-                    map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
-                    map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
-                });
+        return DEFAULT_BREAKABLES;
     }
 
     public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
