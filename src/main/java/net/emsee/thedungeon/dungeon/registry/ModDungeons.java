@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModDungeons {
-    public static final Map<String, Dungeon> DUNGEONS = new HashMap<>();
+    public static final Map<String, Dungeon<?,?>> DUNGEONS = new HashMap<>();
 
-    public static final Dungeon TEST = register(new GridDungeon(
+    public static final Dungeon<?,?> TEST = register(new GridDungeon(
             "dungeon.the_dungeon.test",
             DungeonRank.F,
             0,
@@ -29,7 +29,7 @@ public class ModDungeons {
     );
 
 
-    public static final Dungeon THE_LIBRARY = register(new GridDungeon(
+    public static final Dungeon<?,?> THE_LIBRARY = register(new GridDungeon(
             "dungeon.the_dungeon.library",
             DungeonRank.SS,
             0 /* disabled for now as this will not be in first release*/,
@@ -41,7 +41,7 @@ public class ModDungeons {
             .setMaxFloorHeight(3)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    public static final Dungeon CASTLE = register(new GridDungeon(
+    public static final Dungeon<?,?> CASTLE = register(new GridDungeon(
             "dungeon.the_dungeon.castle",
             DungeonRank.D,
             1,
@@ -53,7 +53,7 @@ public class ModDungeons {
             .setMaxFloorHeight(7)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    public static final Dungeon GOBLIN_CAVES = register(new GridDungeon(
+    public static final Dungeon<?,?> GOBLIN_CAVES = register(new GridDungeon(
             "dungeon.the_dungeon.goblin_caves",
             DungeonRank.F,
             1,
@@ -65,7 +65,7 @@ public class ModDungeons {
             .setMaxFloorHeight(11)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    protected static Dungeon register(Dungeon dungeon) {
+    protected static Dungeon<?,?> register(Dungeon<?,?> dungeon) {
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", dungeon);
         DUNGEONS.put(dungeon.getResourceName(), dungeon);
         if (dungeon.getWeight()>0)
@@ -73,8 +73,8 @@ public class ModDungeons {
         return dungeon;
     }
 
-    public static Dungeon getByID(int ID) {
-        for (Dungeon dungeon : DUNGEONS.values())
+    public static Dungeon<?,?> getByID(int ID) {
+        for (Dungeon<?,?> dungeon : DUNGEONS.values())
             if (dungeon.getID() == ID) return dungeon;
         return null;
     }
@@ -83,7 +83,7 @@ public class ModDungeons {
         return Dungeon.getMaxID();
     }
 
-    public static Dungeon GetByResourceName(String resourceName) {
+    public static Dungeon<?,?> getByResourceName(String resourceName) {
         return DUNGEONS.get(resourceName);
     }
 }

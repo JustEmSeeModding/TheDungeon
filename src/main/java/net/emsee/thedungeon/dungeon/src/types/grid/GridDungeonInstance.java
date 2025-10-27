@@ -5,6 +5,7 @@ import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollectionInstance;
+import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.server.level.ServerLevel;
 
 public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
@@ -22,7 +23,7 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
     }
 
     @Override
-    public void generateSeeded(long seed) {
+    protected void localGenerateSeeded(long seed) {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Starting Dungeon Generation...");
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Dungeon: {}", dungeon.getResourceName());
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Seed: {}", seed);
@@ -39,6 +40,7 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Finished Dungeon Generation");
                 generator = null;
                 generated = true;
+                DungeonSaveData.Get(serverLevel.getServer()).setDirty();
                 GlobalDungeonManager.openDungeon(serverLevel.getServer(), dungeon, dungeon.isUtilDungeon());
             }
         }
@@ -63,5 +65,24 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
 
     public GridRoomCollectionInstance getRoomCollection() {
         return collection;
+    }
+
+    @Override
+    public void loadSaveString(String[] saveArray) {
+        savedSeed= Long.parseLong(saveArray[1]);
+        generated = Integer.parseInt(saveArray[2])==1;
+    }
+
+    @Override
+    public String toSaveString() {
+        return
+                dungeon.getResourceName()+ ":" +
+                savedSeed + ":" +
+                (generated?1:0);
+    }
+
+    @Override
+    public String toString() {
+        return "InstanceOfDungeon:"+dungeon.getResourceName();
     }
 }

@@ -161,7 +161,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         if (!collection.requiredRoomsDone()) {
             // if not all rooms were generated, discard this generator and start a new one with seed+1
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Not All Required Rooms where generated, regenerating with Seed+1");
-            dungeon.generateSeeded(GetSeed() + 1);
+            dungeon.generateSeeded(server,GetSeed() + 1);
             return;
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"All Required Rooms where generated");

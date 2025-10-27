@@ -64,29 +64,26 @@ public final class DungeonNBTData {
         if (nextToCollapse!= null) toReturn.putString("nextToCollapse", nextToCollapse.getName());
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
-        //TODO re add dungeon queues to save files
-        /*
+        int i = 0;
         for (DungeonInstance<?> dungeon : dungeonProgressQueue) {
-            toReturn.putString("dungeonProgressQueue_" + i, dungeon.getResourceName());
+            toReturn.putString("dungeonProgressQueue_" + i, dungeon.toSaveString());
             i++;
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
-
-
+        int i2=0;
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
             for (DungeonInstance<?> dungeon : dungeonPassiveQueue.get(rank)) {
-                toReturn.putString("dungeonPassiveQueue_" + rank.getName() + "_" + i, dungeon.getResourceName());
+                toReturn.putString("dungeonPassiveQueue_" + rank.getName() + "_" + i2, dungeon.toSaveString());
                 i++;
             }
         }
+        int i3=0;
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
-        */
-        int i = 0;
         for (DungeonRank rank : portalPositions.keySet()) {
             for (BlockPos pos : portalPositions.get(rank)) {
-                toReturn.putInt("PortalPosX_" + rank.getName() + "_" + i, pos.getX());
-                toReturn.putInt("PortalPosY_" + rank.getName() + "_" + i, pos.getY());
-                toReturn.putInt("PortalPosZ_" + rank.getName() + "_" + i, pos.getZ());
+                toReturn.putInt("PortalPosX_" + rank.getName() + "_" + i3, pos.getX());
+                toReturn.putInt("PortalPosY_" + rank.getName() + "_" + i3, pos.getY());
+                toReturn.putInt("PortalPosZ_" + rank.getName() + "_" + i3, pos.getZ());
                 i++;
             }
         }
@@ -109,36 +106,35 @@ public final class DungeonNBTData {
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
         nextToCollapse = DungeonRank.getByName(tag.getString("nextToCollapse"));
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
-        //TODO re add dungeon queues to save files
-        /*
+        int i = 0;
         dungeonProgressQueue.clear();
         while (tag.contains("dungeonProgressQueue_" + i)) {
-            DungeonInstance<?> toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue_" + i));
-            dungeonProgressQueue.add(toAdd.getCopy());
+            DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonProgressQueue_" + i));
+            dungeonProgressQueue.add(toAdd);
             i++;
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
 
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
-            i = 0;
+            int i2 = 0;
             Queue<DungeonInstance<?>> passiveQueue = dungeonPassiveQueue.get(rank);
             while (tag.contains("dungeonPassiveQueue_" + rank.getName() + "_" + i)) {
-                DungeonInstance<?> toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i));
-                passiveQueue.add(toAdd.getCopy());
-                i++;
+                DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i));
+                passiveQueue.add(toAdd);
+                i2++;
             }
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
-        */
+
         for (DungeonRank rank : portalPositions.keySet()) {
-            int i = 0;
+            int i3= 0;
             portalPositions.get(rank).clear();
-            while (tag.contains("PortalPosX_" + rank.getName() + "_" + i)) {
+            while (tag.contains("PortalPosX_" + rank.getName() + "_" + i3)) {
                 portalPositions.get(rank).add(new BlockPos(
-                        tag.getInt("PortalPosX_" + rank.getName() + "_" + i),
-                        tag.getInt("PortalPosY_" + rank.getName() + "_" + i),
-                        tag.getInt("PortalPosZ_" + rank.getName() + "_" + i)));
-                i++;
+                        tag.getInt("PortalPosX_" + rank.getName() + "_" + i3),
+                        tag.getInt("PortalPosY_" + rank.getName() + "_" + i3),
+                        tag.getInt("PortalPosZ_" + rank.getName() + "_" + i3)));
+                i3++;
             }
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));

@@ -633,11 +633,9 @@ public final class GeneratedRoom {
         return placedGridPos.offset(offsets);
     }
 
-
     public boolean hasConnectionAt(Vec3i arrayPos, Connection has) {
         Vec3i thisArrayPos = getConnectedCellPosInset(has);
         if (arrayPos==null||thisArrayPos==null) return false;
         return thisArrayPos.equals(arrayPos);
     }
 }
-
