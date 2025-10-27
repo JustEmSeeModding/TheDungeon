@@ -5,6 +5,7 @@ import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.item.custom.*;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
+import net.emsee.thedungeon.item.custom.armor.KobaltArmorItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
@@ -33,6 +34,12 @@ public final class ModItems {
     public static final DeferredItem<DungeonItem> INFUSED_ALLOY_INGOT = ITEMS.register("infused_alloy_ingot",
             () -> new DungeonItem(new Item.Properties()));
 
+    public static final DeferredItem<DungeonItem> RAW_KOBALT = ITEMS.register("raw_kobalt",
+            () -> new DungeonItem(new Item.Properties()));
+
+    public static final DeferredItem<DungeonItem> KOBALT_INGOT = ITEMS.register("kobalt_ingot",
+            () -> new DungeonItem(new Item.Properties()));
+
     public static final DeferredItem<DungeonItem> PYRITE = ITEMS.register("pyrite",
             () -> new DungeonItem(new Item.Properties()));
 
@@ -42,14 +49,24 @@ public final class ModItems {
     public static final DeferredItem<DungeonPortalCompas> PYRITE_COMPASS = ITEMS.register("pyrite_compass",
             () -> new DungeonPortalCompas(new Item.Properties()));
 
-    public static final DeferredItem<TestBeltItem> TEST_BELT = ITEMS.register("test_belt",
-            () -> new TestBeltItem(new Item.Properties()));
+    public static final DeferredItem<DungeonCurio> TEST_BELT = ITEMS.register("test_belt",
+            () -> new DungeonCurio(new Item.Properties()));
 
     public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
-            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2F))));
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));
 
-    public static final DeferredItem<DungeonPickaxeItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
-            () ->new DungeonPickaxeItem(ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonPickaxeItem.createAttributes(ModTiers.INFUSED_ALLOY, 0, -2f))));
+    public static final DeferredItem<DungeonToolItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
+            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2f))));
+
+    public static final DeferredItem<DungeonWeaponItem> GOBLINS_DAGGER = ITEMS.register("goblins_dagger",
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, true,ModTiers.KOBALT, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.KOBALT, 3.5f, -2F))));
+
+    public static final DeferredItem<DungeonToolItem> GOBLINS_FORGEHAMMER = ITEMS.register("goblins_forgehammer",
+            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.KOBALT, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.KOBALT, 8f, -3.2f))));
+
+    public static final DeferredItem<DungeonShieldItem> KOBALT_SHIELD = ITEMS.register("kobalt_shield",
+            () ->new DungeonShieldItem(new Item.Properties().durability(400), 2, 0));
+
 
     public static final DeferredItem<TestDummyItem> TEST_DUMMY = ITEMS.register("test_dummy",
             () -> new TestDummyItem((new Item.Properties())));
@@ -76,11 +93,16 @@ public final class ModItems {
     public static final DeferredItem<DungeonScholarArmorItem> SCHOLAR_BOOTS = ITEMS.register("scholar_boots",
             () -> new DungeonScholarArmorItem(ModArmorMaterials.DUNGEON_SCHOLAR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
 
-    /****
-     * Registers all custom items and spawn eggs with the provided event bus.
-     *
-     * @param eventBus the event bus to register items and spawn eggs with
-     */
+
+    public static final DeferredItem<KobaltArmorItem> KOBALT_HELMET = ITEMS.register("kobalt_helmet",
+            () -> new KobaltArmorItem(ModArmorMaterials.KOBALT, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(15))));
+    public static final DeferredItem<KobaltArmorItem> KOBALT_CHESTPLATE = ITEMS.register("kobalt_chestplate",
+            () -> new KobaltArmorItem(ModArmorMaterials.KOBALT, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(15))));
+    public static final DeferredItem<KobaltArmorItem> KOBALT_LEGGINGS = ITEMS.register("kobalt_leggings",
+            () -> new KobaltArmorItem(ModArmorMaterials.KOBALT, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(15))));
+    public static final DeferredItem<KobaltArmorItem> KOBALT_BOOTS = ITEMS.register("kobalt_boots",
+            () -> new KobaltArmorItem(ModArmorMaterials.KOBALT, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(15))));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
         ModSpawnEggs.register(eventBus);

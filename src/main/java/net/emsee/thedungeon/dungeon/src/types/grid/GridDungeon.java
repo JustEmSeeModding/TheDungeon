@@ -1,17 +1,14 @@
-package net.emsee.thedungeon.dungeon.src.types;
+package net.emsee.thedungeon.dungeon.src.types.grid;
 
-import net.emsee.thedungeon.DebugLog;
-import net.emsee.thedungeon.dungeon.src.room.AbstractGridRoom;
+import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
-import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
-import net.emsee.thedungeon.dungeon.src.GridRoomCollection;
-import net.minecraft.server.level.ServerLevel;
+import net.emsee.thedungeon.dungeon.src.types.Dungeon;
+import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
 
 /**
  * custom generation in a grid based system
  */
-public class GridDungeon extends Dungeon {
+public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
     public enum RoomGenerationPickMethod {
         FIRST, LAST, RANDOM
     }
@@ -23,9 +20,6 @@ public class GridDungeon extends Dungeon {
     private float roomEndChance = .1f;
     private int maxFloorHeight = 999999;
     private boolean canGenerateDown = true;
-
-    private GridDungeonGenerator generator = null;
-    private boolean generated;
     private boolean fillWithFallbackWhenDone = false;
 
     private RoomGenerationPickMethod pickMethod = RoomGenerationPickMethod.FIRST;
@@ -120,40 +114,7 @@ public class GridDungeon extends Dungeon {
     }
 
     //// methods
-    @Override
-    public void generateSeeded(long seed) {
-        DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Starting Dungeon Generation...");
-        DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Dungeon: {}", this.getResourceName());
-        generator = new GridDungeonGenerator(this, seed);
-        DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Seed: {}", seed);
-    }
 
-
-    @Override
-    public void generationTick(ServerLevel serverLevel) {
-        if (generator != null) {
-            generator.step(serverLevel);
-            if (generator.isDone()) {
-                DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Finished Dungeon Generation");
-                generator = null;
-                generated = true;
-                GlobalDungeonManager.openDungeon(serverLevel.getServer(), this, utilDungeon);
-            }
-        }
-    }
-
-    @Override
-    public Dungeon getCopy(int ID) {
-        return new GridDungeon(resourceName, rank, weight, gridCellWidth, gridCellHeight, roomCollection.getCopy(), ID).
-                setDepth(dungeonDepth).
-                setRoomEndChance(roomEndChance).
-                setMaxFloorHeight(maxFloorHeight).
-                allowDownGeneration(canGenerateDown).
-                setRoomPickMethod(pickMethod).
-                setFillWithFallback(fillWithFallbackWhenDone).
-                isUtilDungeon(utilDungeon).
-                setOverrideCenter(overrideCenter);
-    }
 
     public RoomGenerationPickMethod getRoomPickMethod() {
         return pickMethod;
@@ -172,33 +133,18 @@ public class GridDungeon extends Dungeon {
     }
 
     public GridRoomCollection getRoomCollection() {
-        return roomCollection.getCopy();
+        return roomCollection;
     }
 
     public AbstractGridRoom getStaringRoom() {
-        AbstractGridRoom toReturn = roomCollection.getStartingRoom();
-        if (toReturn == null) return null;
-        return toReturn.getCopy();
+        return roomCollection.getStartingRoom();
     }
 
     public float getRoomEndChance() {
         return roomEndChance;
     }
 
-    @Override
-    public boolean isDoneGenerating() {
-        return (!isBusyGenerating()) && generated;
-    }
 
-    @Override
-    public boolean isBusyGenerating() {
-        return generator != null;
-    }
-
-    @Override
-    public boolean canManualStepNow() {
-        return generator.currentStep()==GridDungeonGenerator.GenerationTask.PLACING_ROOMS;
-    }
 
     public int getGridCellWidth() {
         return gridCellWidth;
@@ -214,5 +160,10 @@ public class GridDungeon extends Dungeon {
 
     public boolean shouldFillWithFallback() {
         return fillWithFallbackWhenDone;
+    }
+
+    @Override
+    public GridDungeonInstance createInstance() {
+        return new GridDungeonInstance(this);
     }
 }

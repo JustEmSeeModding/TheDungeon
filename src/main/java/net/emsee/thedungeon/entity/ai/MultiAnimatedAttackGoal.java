@@ -17,7 +17,6 @@ import java.util.function.BiConsumer;
 
 /** attack goal with multiple different animated attacks */
 public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnimatedEntity & IMultiAttackAnimatedEntity> extends MeleeAttackGoal {
-    private byte lastId = 0;
     private final T entity;
     private int ticksUntilNextAttack;
     private boolean attacked = false;
@@ -31,24 +30,24 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         entity = pMob;
     }
 
-    public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer) {
-        return withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer, 1);
+    public MultiAnimatedAttackGoal<T> withAttack(int animationID, int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer) {
+        return withAttack(animationID, attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer, 1);
     }
 
-    public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, int weight) {
-        return withAttack(new AttackHolder(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer),weight);
+    public MultiAnimatedAttackGoal<T> withAttack(int animationID, int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, int weight) {
+        return withAttack(new AttackHolder(animationID, attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer),weight);
     }
 
-    public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier) {
-        return withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, 1);
+    public MultiAnimatedAttackGoal<T> withAttack(int animationID, int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier) {
+        return withAttack(animationID, attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, 1);
     }
 
-    public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, int weight) {
-        return withAttack(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, weight);
+    public MultiAnimatedAttackGoal<T> withAttack(int animationID,int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, int weight) {
+        return withAttack(animationID, attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, null, weight);
     }
 
-    public MultiAnimatedAttackGoal<T> withAttack(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, Pair<List<Item>,List<Item>> requiredItems, int weight) {
-        return withAttack(new AttackHolder(attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer, requiredItems),weight);
+    public MultiAnimatedAttackGoal<T> withAttack(int animationID, int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, Pair<List<Item>,List<Item>> requiredItems, int weight) {
+        return withAttack(new AttackHolder(animationID, attackDelay, attackCooldown, damageMultiplier, knockbackMultiplier, reachMultiplier, consumer, requiredItems),weight);
     }
 
     private MultiAnimatedAttackGoal<T> withAttack(AttackHolder holder, int weight) {
@@ -75,7 +74,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         super.start();
         currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
         resetAttackCooldown();
-        AnimationVersion=0;
+        AnimationVersion=1;
         entity.attackAnimation((byte) -1, AnimationVersion++);
     }
 
@@ -86,7 +85,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             shouldCountTillNextAttack = true;
 
             if(isTimeToStartAttackAnimation()) {
-                entity.attackAnimation(currentAttackHolder.id, AnimationVersion);
+                entity.attackAnimation(currentAttackHolder.animationID, AnimationVersion);
                 entity.setAttacking(true);
             }
 
@@ -195,7 +194,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
     }
 
     public class AttackHolder {
-        protected final byte id;
+        protected final int animationID;
         protected final int attackDelay;
         protected final int attackCooldown;
         protected final float damageMultiplier;
@@ -205,8 +204,8 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         protected final AttackHand hand;
         protected final Pair<List<Item>, List<Item>> requiredItems;
 
-        public AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer) {
-            id=lastId++;
+        public AttackHolder(int animationID, int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer) {
+            this.animationID =animationID;
             this.attackDelay = attackDelay;
             this.attackCooldown = attackCooldown;
             this.damageMultiplier = damageMultiplier;
@@ -217,8 +216,8 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             this.hand = AttackHand.RIGHT;
         }
 
-        AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, AttackHand hand) {
-            id=lastId++;
+        AttackHolder(int animationID,int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, AttackHand hand) {
+            this.animationID = animationID;
             this.attackDelay = attackDelay;
             this.attackCooldown = attackCooldown;
             this.damageMultiplier = damageMultiplier;
@@ -229,8 +228,8 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             this.hand = hand;
         }
 
-        AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, Pair<List<Item>,List<Item>> requiredItems) {
-            id=lastId++;
+        AttackHolder(int animationID, int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, Pair<List<Item>,List<Item>> requiredItems) {
+            this.animationID =animationID;
             this.attackDelay = attackDelay;
             this.attackCooldown = attackCooldown;
             this.damageMultiplier = damageMultiplier;
@@ -241,8 +240,8 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
             this.hand = AttackHand.RIGHT;
         }
 
-        AttackHolder(int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, Pair<List<Item>,List<Item>> requiredItems, AttackHand hand) {
-            id=lastId++;
+        AttackHolder(int animationID, int attackDelay, int attackCooldown, float damageMultiplier, float knockbackMultiplier, float reachMultiplier, BiConsumer<T,LivingEntity> consumer, Pair<List<Item>,List<Item>> requiredItems, AttackHand hand) {
+            this.animationID =animationID;
             this.attackDelay = attackDelay;
             this.attackCooldown = attackCooldown;
             this.damageMultiplier = damageMultiplier;

@@ -11,7 +11,9 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public enum ModTiers implements Tier {
-    INFUSED_ALLOY(BlockTags.INCORRECT_FOR_IRON_TOOL, 300, 4.0F, 1.0F, 13, () -> Ingredient.of(ModItems.INFUSED_ALLOY_INGOT.get()));
+    INFUSED_ALLOY(BlockTags.INCORRECT_FOR_IRON_TOOL, 300, 4F, 0F, 13, () -> Ingredient.of(ModItems.INFUSED_ALLOY_INGOT.get())),
+    KOBALT(BlockTags.INCORRECT_FOR_IRON_TOOL, 400, 4.2F, 0F, 7, () -> Ingredient.of(ModItems.KOBALT_INGOT.get()));
+
 
     private final TagKey<Block> incorrectBlocksForDrops;
     private final int uses;

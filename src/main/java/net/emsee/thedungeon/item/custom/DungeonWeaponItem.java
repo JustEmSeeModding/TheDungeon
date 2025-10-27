@@ -4,12 +4,13 @@ import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
+import net.minecraft.Util;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -20,24 +21,38 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
+    private static final float TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER = -.30f;
+    private static final float TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER = -.35f;
+
+
     public static final ResourceLocation WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_damage");
     public static final ResourceLocation  WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_speed");
 
-    final WeaponType weaponType;
-    
+    private final WeaponType weaponType;
+    private final boolean isSweeping;
 
-    public DungeonWeaponItem(WeaponType weaponType, Tier tier, Properties properties) {
-        super(tier, properties.rarity(Rarity.RARE));
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
+        super(tier, properties.rarity(Rarity.RARE), createToolProperties());
         this.weaponType = weaponType;
+        this.isSweeping = isSweeping;
     }
 
-    public DungeonWeaponItem(WeaponType weaponType, Tier tier, Item.Properties properties, Tool toolComponentData) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Item.Properties properties, Tool toolComponentData) {
         super(tier, properties.rarity(Rarity.RARE), toolComponentData);
         this.weaponType = weaponType;
+        this.isSweeping = isSweeping;
+    }
+
+    public static Tool createToolProperties() {
+        return new Tool(List.of(Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 15.0F), Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, 1.5F)), 1.0F, 2);
     }
 
     @Override
@@ -91,10 +106,6 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
         thisStack.applyComponentsAndValidate(patch);
     }
 
-
-    private final float TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER = -.30f;
-    private final float TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER = -.35f;
-
     protected void handsChangedSingleHanded(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
                                           ItemAttributeModifiers.Builder attributeBuilder,
                                           double baseDamage, double baseSpeed) {
@@ -108,13 +119,10 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
         attributeBuilder.add(Attributes.ATTACK_SPEED, new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID, TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND);
 
     }
-//    protected void handsChangedDualWield(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
-//                                       ItemAttributeModifiers.Builder attributeBuilder,
-//                                       double baseDamage, double baseSpeed) {
-//
-//    }
 
-
+    private boolean allowSweep() {
+        return isSweeping;
+    }
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
@@ -139,13 +147,20 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
         thisStack.applyComponentsAndValidate(patch);
     }
 
-    // TODO make translatable
     @Override
-    public Component[] getPrefixComponents() {
-        Component[] toReturn = new Component[2];
-        toReturn[0] = Component.translatable("item.thedungeon.tooltip.weapon_type");
-        toReturn[1] = weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN);
-        return toReturn;
+    public LinkedHashMap<Component, Component[]> getPrefixComponents(ItemStack stack) {
+        return Util.make(new LinkedHashMap<>(), map -> {
+            map.put(Component.translatable("item.thedungeon.tooltip.weapon_type"),
+                    new Component[]{
+                            weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN)
+                    });
+        });
+    }
+
+    @Override
+    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
+        if (itemAbility == ItemAbilities.SWORD_SWEEP) return allowSweep();
+        return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
     }
 
     public boolean allowOffhandAttack() {
@@ -155,7 +170,6 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     public enum WeaponType{
         SINGLE_HANDED("single_hand"),
         TWO_HANDED("two_hand"),
-        //DUAL_WIELD("dual_wield"),
         ;
 
         final String resourceName;

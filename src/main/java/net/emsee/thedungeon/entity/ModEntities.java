@@ -4,7 +4,7 @@ package net.emsee.thedungeon.entity;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
-import net.emsee.thedungeon.entity.custom.goblin.HobGoblinEntity;
+import net.emsee.thedungeon.entity.custom.goblin.hobGoblin.HobGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.ShadowGoblinEntity;
 import net.emsee.thedungeon.entity.custom.knight.DeathKnightEntity;
 import net.emsee.thedungeon.entity.custom.knight.SkeletonKnightEntity;
@@ -26,7 +26,7 @@ public final class ModEntities {
 
     public static final Supplier<EntityType<DeathKnightEntity>> DEATH_KNIGHT =
             ENTITY_TYPES.register("death_knight", () -> EntityType.Builder.of(DeathKnightEntity::new, MobCategory.MONSTER)
-                    .sized(.9f, 2.34f).eyeHeight(2.16f).eyeHeight(1.8f).build("death_knight"));
+                    .sized(.9f, 2.34f).build("death_knight"));
 
     public static final Supplier<EntityType<SkeletonKnightEntity>> SKELETON_KNIGHT =
             ENTITY_TYPES.register("skeleton_knight", () -> EntityType.Builder.of(SkeletonKnightEntity::new, MobCategory.MONSTER)

@@ -6,6 +6,7 @@ import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
+import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,8 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasicAnimatedEntity, IMultiAttackAnimatedEntity {
     protected static final EntityDataAccessor<Boolean> RUNNING =
             SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_ID =
-            SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
+            SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_VERSION =
             SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.BYTE);
 
@@ -64,16 +65,16 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
 
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack(12,8,.5f,.75f, 1, 3)
-                .withAttack(12,8,.5f,.75f, 1, 2)
-                .withAttack(12,18, 1f,1, 1, 1)
+                .withAttack((byte)0,12,8,.5f,.75f, 1, 3)
+                .withAttack((byte)1,12,8,.5f,.75f, 1, 2)
+                .withAttack((byte)2,12,18, 1f,1, 1, 1)
         );
     }
 
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.STONE_SWORD));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
     }
 
     @Override
@@ -138,7 +139,7 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
         this.entityData.set(RUNNING, false);
     }
 
-    void setAnimationID(byte id, byte version) {
+    void setAnimationID(int id, byte version) {
         this.entityData.set(ATTACK_ANIMATION_ID, id);
         this.entityData.set(ATTACK_ANIMATION_VERSION, version);
     }
@@ -154,7 +155,7 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(RUNNING, false);
-        builder.define(ATTACK_ANIMATION_ID, (byte)-1);
+        builder.define(ATTACK_ANIMATION_ID, -1);
         builder.define(ATTACK_ANIMATION_VERSION, (byte)-1);
     }
 
@@ -164,7 +165,7 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
     }
 
     @Override
-    public void attackAnimation(byte id, byte version) {
+    public void attackAnimation(int id, byte version) {
         setAnimationID(id, version);
     }
 

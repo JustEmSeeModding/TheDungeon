@@ -1,11 +1,12 @@
 package net.emsee.thedungeon.dungeon.src.connectionRules;
 
-import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
+import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
+import net.emsee.thedungeon.dungeon.src.types.grid.array.GridCell;
+import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-
-import java.util.List;
 
 /**
  * a fail rule is triggered when a tag fails placing the next room through any means
@@ -83,6 +84,25 @@ public abstract class FailRule {
          */
         public boolean isFinished() {
             return failRule.isFinished();
+        }
+
+        public boolean verifyPlacement(GridDungeonGenerator generator) {
+            String to = null;
+            GridCell connectedCell = generator.getOccupationArray().getCellAt(generatedRoom.getConnectedCellPos(connection));
+            if (connectedCell != null && connectedCell.hasRoom()){
+                GeneratedRoom connectedRoom = connectedCell.getRoom();
+                if (connectedRoom.hasConnectionAt(generatedRoom.getConnectedCellPos(connection), connection.getOpposite())) {
+                    to = connectedRoom.getRoom().getConnectionTag(connection.getOpposite(), connectedRoom.getPlacedWorldRotation());
+                }
+                else {
+                    DebugLog.logInfo(DebugLog.DebugType.GENERATING_FAIL_VERIFICATION, "the other room has no connection this way");
+                }
+            } else {
+                DebugLog.logInfo(DebugLog.DebugType.GENERATING_FAIL_VERIFICATION, "No Connected Cell");
+            }
+            if (to == null) return true;
+            DebugLog.logInfo(DebugLog.DebugType.GENERATING_FAIL_VERIFICATION, "From:{},To:{}",failRule.tag,to);
+            return !ConnectionRule.isValid(failRule.tag, to, generator.getConnectionRules());
         }
     }
 }

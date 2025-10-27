@@ -27,7 +27,9 @@
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
+  "creativetab.thedungeon.dungeon_food" : "Dungeon Food",
   "creativetab.thedungeon.dungeon_blocks" : "Dungeon Blocks",
+  "creativetab.thedungeon.dungeon_spawn_eggs" : "Dungeon Spawn Egg",
 
   "entity.thedungeon.test_dummy" : "Test Dummy",
   "entity.thedungeon.death_knight" : "Death Knight",
@@ -35,6 +37,11 @@
   "entity.thedungeon.cave_goblin" : "Cave Goblin",
   "entity.thedungeon.shadow_goblin" : "Shadow Goblin",
   "entity.thedungeon.hob_goblin" : "Hob Goblin",
+  "entity.thedungeon.hob_goblin.fighter" : "Hob Goblin Fighter",
+  "entity.thedungeon.hob_goblin.forge_worker" : "Hob Goblin Forge Worker",
+  "entity.thedungeon.hob_goblin.scavenger" : "Hob Goblin Scavenger",
+
+  "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
 
   "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
   "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
@@ -48,27 +55,41 @@
   "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
   "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
   "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
+  "item.thedungeon.tooltip.tool_type" : "Tool Type",
+  "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
+  "item.thedungeon.tooltip.curio_type": "Curio Slot:",
+  "item.thedungeon.tooltip.curio_type.any": "Any",
+  "item.thedungeon.tooltip.curio_type.effigy": "Effigy",
+  "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
+  "item.thedungeon.goblins_dagger": "Goblin's Dagger",
+  "item.thedungeon.goblins_forgehammer": "Goblin's Forgehammer",
+  "item.thedungeon.kobalt_shield": "Kobalt Shield",
 
   "item.thedungeon.infused_alloy_helmet": "Infused Alloy Helmet",
   "item.thedungeon.infused_alloy_chestplate": "Infused Alloy Chestplate",
   "item.thedungeon.infused_alloy_leggings": "Infused Alloy Leggings",
   "item.thedungeon.infused_alloy_boots": "Infused Alloy Boots",
-  "item.thedungeon.infused_alloy_armor.set_bonus": "+%s Max Health",
 
   "item.thedungeon.scholar_helmet" : "Dungeon Scholar's Helmet",
   "item.thedungeon.scholar_chestplate" : "Dungeon Scholar's Chestplate",
   "item.thedungeon.scholar_leggings" : "Dungeon Scholar's Leggings",
   "item.thedungeon.scholar_boots" : "Dungeon Scholar's Boots",
-  "item.thedungeon.scholar_armor.set_bonus" : "+%s Speed",
+
+  "item.thedungeon.kobalt_helmet" : "Kobalt Helmet",
+  "item.thedungeon.kobalt_chestplate" : "Kobalt Chestplate",
+  "item.thedungeon.kobalt_leggings" : "Kobalt Leggings",
+  "item.thedungeon.kobalt_boots" : "Kobalt Boots",
 
   "item.thedungeon.shattered_portal_core": "Shattered Portal Core",
   "item.thedungeon.portal_core": "Portal Core",
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
+  "item.thedungeon.raw_kobalt": "Raw Kobalt",
+  "item.thedungeon.kobalt_ingot": "Kobalt Ingot",
   "item.thedungeon.goblin_meat": "Goblin Meat",
 
   "item.thedungeon.dungeon_clock": "Dungeon Clock",
@@ -117,12 +138,11 @@
   "death.attack.thedungeon.unstable_portal":"%1$s tried to use an unstable portal",
   "death.attack.thedungeon.dungeon_reset":"%1$s was consumed by the dungeon",
 
-  "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
-
-
   "attribute.thedungeon.title.hand" : "When Held:",
   "attribute.thedungeon.title.mainhand" : "When In Main Hand:",
   "attribute.thedungeon.title.offhand" : "When In Off Hand:",
+  "attribute.thedungeon.title.anyhand" : "When In Any Hand:",
+  "attribute.thedungeon.title.curio" : "When In Curio Slot:",
   "attribute.thedungeon.title.armor" : "When Equipped:",
   "attribute.thedungeon.title.full_armor_set" : "Full Set Bonus:",
 
@@ -131,6 +151,8 @@
   "attribute.thedungeon.name.generic.aggro_to_enemy" : "Aggro To Enemy",
   "attribute.thedungeon.name.generic.min_perception" : "Aggro for normal perception",
   "attribute.thedungeon.name.generic.max_perception" : "Aggro for increased perception",
+
+  "attribute.thedungeon.extra.hob_goblin_friendly" : "Hob Goblin's Friend",
 
   "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable"
 }

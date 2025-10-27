@@ -5,8 +5,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-
 
 /**
  * a class I originally made for a different mod

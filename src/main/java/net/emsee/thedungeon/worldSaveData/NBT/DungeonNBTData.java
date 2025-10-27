@@ -7,6 +7,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
+import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.network.ModNetworking;
@@ -25,8 +26,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import java.util.*;
 
 public final class DungeonNBTData {
-    private final Queue<Dungeon> dungeonProgressQueue = new LinkedList<>();
-    private final Map<DungeonRank, Queue<Dungeon>> dungeonPassiveQueue = Util.make(Maps.newHashMap(), (map) -> {
+    private final Queue<DungeonInstance<?>> dungeonProgressQueue = new LinkedList<>();
+    private final Map<DungeonRank, Queue<DungeonInstance<?>>> dungeonPassiveQueue = Util.make(Maps.newHashMap(), (map) -> {
         for (DungeonRank rank : DungeonRank.values())
             map.put(rank, new LinkedList<>());
     });
@@ -64,27 +65,25 @@ public final class DungeonNBTData {
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
 
         int i = 0;
-        for (Dungeon dungeon : dungeonProgressQueue) {
-            toReturn.putString("dungeonProgressQueue_" + i, dungeon.getResourceName());
+        for (DungeonInstance<?> dungeon : dungeonProgressQueue) {
+            toReturn.putString("dungeonProgressQueue_" + i, dungeon.toSaveString());
             i++;
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
-
-        i = 0;
+        int i2=0;
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
-            for (Dungeon dungeon : dungeonPassiveQueue.get(rank)) {
-                toReturn.putString("dungeonPassiveQueue_" + rank.getName() + "_" + i, dungeon.getResourceName());
+            for (DungeonInstance<?> dungeon : dungeonPassiveQueue.get(rank)) {
+                toReturn.putString("dungeonPassiveQueue_" + rank.getName() + "_" + i2, dungeon.toSaveString());
                 i++;
             }
         }
+        int i3=0;
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
-
-        i = 0;
         for (DungeonRank rank : portalPositions.keySet()) {
             for (BlockPos pos : portalPositions.get(rank)) {
-                toReturn.putInt("PortalPosX_" + rank.getName() + "_" + i, pos.getX());
-                toReturn.putInt("PortalPosY_" + rank.getName() + "_" + i, pos.getY());
-                toReturn.putInt("PortalPosZ_" + rank.getName() + "_" + i, pos.getZ());
+                toReturn.putInt("PortalPosX_" + rank.getName() + "_" + i3, pos.getX());
+                toReturn.putInt("PortalPosY_" + rank.getName() + "_" + i3, pos.getY());
+                toReturn.putInt("PortalPosZ_" + rank.getName() + "_" + i3, pos.getZ());
                 i++;
             }
         }
@@ -107,36 +106,35 @@ public final class DungeonNBTData {
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"isOpen: {}", ListAndArrayUtils.mapToString(isOpen));
         nextToCollapse = DungeonRank.getByName(tag.getString("nextToCollapse"));
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"nextToCollapse: {}", nextToCollapse);
-
         int i = 0;
         dungeonProgressQueue.clear();
         while (tag.contains("dungeonProgressQueue_" + i)) {
-            Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonProgressQueue_" + i));
-            dungeonProgressQueue.add(toAdd.getCopy());
+            DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonProgressQueue_" + i));
+            dungeonProgressQueue.add(toAdd);
             i++;
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonProgressQueue: {}", dungeonProgressQueue);
 
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
-            i = 0;
-            Queue<Dungeon> passiveQueue = dungeonPassiveQueue.get(rank);
+            int i2 = 0;
+            Queue<DungeonInstance<?>> passiveQueue = dungeonPassiveQueue.get(rank);
             while (tag.contains("dungeonPassiveQueue_" + rank.getName() + "_" + i)) {
-                Dungeon toAdd = ModDungeons.GetByResourceName(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i));
-                passiveQueue.add(toAdd.getCopy());
-                i++;
+                DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i));
+                passiveQueue.add(toAdd);
+                i2++;
             }
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"dungeonPassiveQueue: {}", ListAndArrayUtils.mapToString(dungeonPassiveQueue));
 
         for (DungeonRank rank : portalPositions.keySet()) {
-            i = 0;
+            int i3= 0;
             portalPositions.get(rank).clear();
-            while (tag.contains("PortalPosX_" + rank.getName() + "_" + i)) {
+            while (tag.contains("PortalPosX_" + rank.getName() + "_" + i3)) {
                 portalPositions.get(rank).add(new BlockPos(
-                        tag.getInt("PortalPosX_" + rank.getName() + "_" + i),
-                        tag.getInt("PortalPosY_" + rank.getName() + "_" + i),
-                        tag.getInt("PortalPosZ_" + rank.getName() + "_" + i)));
-                i++;
+                        tag.getInt("PortalPosX_" + rank.getName() + "_" + i3),
+                        tag.getInt("PortalPosY_" + rank.getName() + "_" + i3),
+                        tag.getInt("PortalPosZ_" + rank.getName() + "_" + i3)));
+                i3++;
             }
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
@@ -167,11 +165,11 @@ public final class DungeonNBTData {
         this.lastSecondAnnouncement = lastSecondAnnouncement;
     }
 
-    public Queue<Dungeon> getDungeonProgresQueue() {
+    public Queue<DungeonInstance<?>> getDungeonProgresQueue() {
         return dungeonProgressQueue;
     }
 
-    public Queue<Dungeon> getDungeonPassiveQueue(DungeonRank rank) {
+    public Queue<DungeonInstance<?>> getDungeonPassiveQueue(DungeonRank rank) {
         if (rank==null) return null;
         return dungeonPassiveQueue.get(rank);
     }

@@ -3,7 +3,7 @@ package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
-import net.emsee.thedungeon.item.custom.DungeonPickaxeItem;
+import net.emsee.thedungeon.item.custom.DungeonToolItem;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonItemSwapHandling;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
@@ -30,7 +30,7 @@ public final class ModEquipmentEvents {
     private static void armorSwapChanges(LivingEquipmentChangeEvent event) {
         if (!event.getSlot().isArmor()) return;
         if (event.getFrom().getItem() instanceof DungeonArmorItem dungeonArmorItem)
-            dungeonArmorItem.UnEquip(event.getEntity(), event.getFrom(), event.getSlot());
+            dungeonArmorItem.unEquip(event.getEntity(), event.getFrom(), event.getSlot());
         if (event.getTo().getItem() instanceof DungeonArmorItem dungeonArmorItem)
             dungeonArmorItem.equip(event.getEntity(), event.getTo(), event.getSlot());
         else if (!event.getTo().isEmpty() && event.getEntity().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
@@ -85,7 +85,7 @@ public final class ModEquipmentEvents {
     }
 
     @SubscribeEvent
-    public static void armorOnEntityDamaged(LivingDamageEvent.Pre event) {
+    public static void armorOnEntityDamagedPre(LivingDamageEvent.Pre event) {
         if (event.getEntity() instanceof Player player) {
             player.getArmorSlots().forEach(stack -> {
                 if (stack.getItem() instanceof DungeonArmorItem dungeonArmorItem)
@@ -95,8 +95,18 @@ public final class ModEquipmentEvents {
     }
 
     @SubscribeEvent
+    public static void armorOnEntityDamagedPost(LivingDamageEvent.Post event) {
+        if (event.getEntity() instanceof Player player) {
+            player.getArmorSlots().forEach(stack -> {
+                if (stack.getItem() instanceof DungeonArmorItem dungeonArmorItem)
+                    dungeonArmorItem.EntityPostDamaged(event);
+            });
+        }
+    }
+
+    @SubscribeEvent
     public static void onDiggerItemBlockBreak(BlockEvent.BreakEvent event) {
-        if (event.getPlayer().getMainHandItem().getItem() instanceof DungeonPickaxeItem diggerItem && event.getPlayer().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
+        if (event.getPlayer().getMainHandItem().getItem() instanceof DungeonToolItem diggerItem && event.getPlayer().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             diggerItem.breakEvent(event);
         }
     }

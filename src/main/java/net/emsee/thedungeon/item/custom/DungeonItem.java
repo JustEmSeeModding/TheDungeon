@@ -3,7 +3,6 @@ package net.emsee.thedungeon.item.custom;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 

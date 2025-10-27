@@ -2,7 +2,7 @@ package net.emsee.thedungeon.dungeon.src.connectionRules.fail;
 
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
-import net.emsee.thedungeon.dungeon.src.room.GeneratedRoom;
+import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
@@ -87,7 +87,7 @@ public class FloorFailRule extends FailRule {
 
     private BlockPos findFloorCenter(GeneratedRoom room, Connection connection) {
         BlockPos roomCenter = room.getPlacedWorldPos();
-        Vec3i connectionArrayOffset = room.getPlacedArrayOffset(connection);
+        Vec3i connectionArrayOffset = room.getPlacementConnectionArrayOffset(connection);
         if (connectionArrayOffset == null) return null;
         if (connection == Connection.UP) {
             return roomCenter.offset(
