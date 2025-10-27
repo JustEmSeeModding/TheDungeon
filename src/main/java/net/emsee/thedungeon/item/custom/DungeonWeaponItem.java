@@ -82,7 +82,7 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
             , EquipmentSlot thisSlot, EquipmentSlot otherSlot) {
         DataComponentMap components = thisStack.getComponents();
         ItemAttributeModifiers attributeModifiers = components.get(DataComponents.ATTRIBUTE_MODIFIERS);
-        assert attributeModifiers != null;
+        if (attributeModifiers==null) return;
         ItemAttributeModifiers.Builder attributeBuilder = ItemAttributeModifiers.builder();
 
         final Double[] baseDamageSpeed = new Double[2];
@@ -111,14 +111,21 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
                                           double baseDamage, double baseSpeed) {
 
     }
-    protected void handsChangedTwoHanded(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
-                                       ItemAttributeModifiers.Builder attributeBuilder,
-                                       double baseDamage, double baseSpeed) {
+   protected void handsChangedTwoHanded(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
+                                        ItemAttributeModifiers.Builder attributeBuilder,
+                                        double baseDamage, double baseSpeed) {
+       boolean mainhandWithOccupiedOffhand =
+               thisSlot == EquipmentSlot.MAINHAND && otherSlot == EquipmentSlot.OFFHAND && !otherStack.isEmpty();
 
-        attributeBuilder.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID, TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND);
-        attributeBuilder.add(Attributes.ATTACK_SPEED, new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID, TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND);
-
-    }
+       if (mainhandWithOccupiedOffhand) {
+           attributeBuilder.add(Attributes.ATTACK_DAMAGE,
+                   new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID, TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                   EquipmentSlotGroup.MAINHAND);
+           attributeBuilder.add(Attributes.ATTACK_SPEED,
+                   new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID, TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                   EquipmentSlotGroup.MAINHAND);
+       }
+   }
 
     private boolean allowSweep() {
         return isSweeping;

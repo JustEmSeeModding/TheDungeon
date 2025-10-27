@@ -27,7 +27,7 @@ public final class GridRoomEmpty extends AbstractGridRoom{
         return new Builder(gridWidth, gridHeight, differentiationID);
     }
     
-    public static class Builder extends AbstractGridRoom.Builder<GridRoomEmpty> {
+    public static class Builder extends AbstractGridRoom.Builder<GridRoomEmpty, Builder> {
         protected Builder(int gridWidth, int gridHeight, int differentiationID) {
             super(gridWidth, gridHeight, differentiationID);
         }
@@ -43,7 +43,7 @@ public final class GridRoomEmpty extends AbstractGridRoom{
 
         @Deprecated
         @Override
-        public AbstractGridRoom.Builder<GridRoomEmpty> clearStructureProcessors() {
+        public Builder clearStructureProcessors() {
             throw new IllegalStateException("clearStructureProcessors should not be used on GridRoomEmpty");
         }
 

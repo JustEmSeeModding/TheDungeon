@@ -48,7 +48,7 @@ public final class GridRoomBasic extends AbstractGridRoom{
         return new Builder(resourceLocation, gridWidth, gridHeight, differentiationID);
     }
 
-    public static class Builder extends AbstractGridRoom.Builder<GridRoomBasic> {
+    public static class Builder extends AbstractGridRoom.Builder<GridRoomBasic, Builder> {
         final BasicData basicData;
 
         protected Builder(String path, int gridWidth, int gridHeight, int differentiationID) {
@@ -111,9 +111,9 @@ public final class GridRoomBasic extends AbstractGridRoom{
         result = 31 * result + data.weight;
         result = 31 * result + (data.allowRotation ? 1 : 0);
         result = 31 * result + (data.allowUpDownConnectedRotation ? 1 : 0);
-        result = 31 * result + Double.hashCode(data.northSizeScale);
-        result = 31 * result + Double.hashCode(data.eastSizeScale);
-        result = 31 * result + Double.hashCode(data.heightScale);
+        result = 31 * result + Integer.hashCode(data.northSizeScale);
+        result = 31 * result + Integer.hashCode(data.eastSizeScale);
+        result = 31 * result + Integer.hashCode(data.heightScale);
         result = 31 * result + data.connectionOffsets.hashCode();
         result = 31 * result + data.connectionTags.hashCode();
         result = 31 * result + data.generationPriority;
@@ -144,7 +144,7 @@ public final class GridRoomBasic extends AbstractGridRoom{
             throw new IllegalStateException(this + ": Placement rotation was null");
 
 
-        BlockPos origin = centre.subtract(new Vec3i(Math.round((getGridCellWidth()) * getRotatedEastSizeScale(Rotation.NONE) / 2f) - 1, 0, Math.round((getGridCellWidth()) * getRotatedNorthSizeScale(Rotation.NONE) / 2f) - 1));
+        BlockPos origin = centre.subtract(new Vec3i(Math.round((getGridCellWidth()) * getEastSizeScale() / 2f) - 1, 0, Math.round((getGridCellWidth()) * getNorthSizeScale() / 2f) - 1));
         BlockPos minCorner = centre.subtract(new Vec3i(getGridCellWidth() * getMaxSizeScale(), 0, getGridCellWidth() * getMaxSizeScale()));
         BlockPos maxCorner = centre.offset(new Vec3i(getGridCellWidth() * getMaxSizeScale(), getGridCellHeight() * getHeightScale(), getGridCellWidth() * getMaxSizeScale()));
         RandomSource rand = RandomSource.create(serverLevel.dimension().location().hashCode() + Math.round(random.nextDouble() * 1000));
@@ -154,7 +154,7 @@ public final class GridRoomBasic extends AbstractGridRoom{
                 .setRandom(rand)
                 .addProcessor(JigsawReplacementProcessor.INSTANCE)
                 //.addProcessor()
-                .setRotationPivot(new BlockPos(getGridCellWidth() * getRotatedEastSizeScale(Rotation.NONE) / 2, 0, getGridCellWidth() * getRotatedNorthSizeScale(Rotation.NONE) / 2))
+                .setRotationPivot(new BlockPos(getGridCellWidth() * getEastSizeScale() / 2, 0, getGridCellWidth() * getNorthSizeScale() / 2))
                 .setRotation(roomRotation)
                 .setBoundingBox(mbb)
                 .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
@@ -172,6 +172,9 @@ public final class GridRoomBasic extends AbstractGridRoom{
 
     @Override
     public void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random) {
+        if (postProcessors == null || postProcessors.list().isEmpty()) return;
+        final BlockPos origin = getMinCorner(centre, roomRotation);
+        final StructurePlaceSettings settings = new StructurePlaceSettings();
         for (StructureProcessor processor : postProcessors.list()) {
             if (processor instanceof PostProcessor postProcessorData)
                 forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(),serverLevel, pos -> {
@@ -185,7 +188,7 @@ public final class GridRoomBasic extends AbstractGridRoom{
                             null
                     );
 
-                    blockInfo = processor.process(serverLevel, new BlockPos(0, 0, 0), pos, blockInfo, blockInfo, new StructurePlaceSettings(), null);
+                    blockInfo = processor.process(serverLevel, origin, pos, blockInfo, blockInfo, settings, null);
 
                     // Place processed block state (or fallback to initial state)
                     serverLevel.setBlockAndUpdate(pos, blockInfo != null ? blockInfo.state() : initialState);

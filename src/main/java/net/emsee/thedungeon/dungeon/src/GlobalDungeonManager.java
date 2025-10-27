@@ -44,11 +44,12 @@ public final class GlobalDungeonManager {
         cycleDungeons.get(dungeon.getRank()).put(dungeon, weight);
     }
 
+
     public static void tick(ServerTickEvent.Pre event) {
         MinecraftServer server = event.getServer();
-        if (getCurrentProgressDungeon(server) == null) return;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (!(GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING) && getCurrentProgressDungeon(server).canManualStepNow())) {
+        DungeonInstance<?> current = getCurrentProgressDungeon(server);
+        if (current != null && !(GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING) && current.canManualStepNow())) {
             generationTick(server, saveData);
         }
         generationTimerTick(server, saveData);

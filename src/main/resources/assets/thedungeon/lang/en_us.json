@@ -27,9 +27,9 @@
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
-  "creativetab.thedungeon.dungeon_food" : "Dungeon Food",
+  "creativetab.thedungeon.dungeon_food" : "Dungeon Foods",
   "creativetab.thedungeon.dungeon_blocks" : "Dungeon Blocks",
-  "creativetab.thedungeon.dungeon_spawn_eggs" : "Dungeon Spawn Egg",
+  "creativetab.thedungeon.dungeon_spawn_eggs" : "Dungeon Spawn Eggs",
 
   "entity.thedungeon.test_dummy" : "Test Dummy",
   "entity.thedungeon.death_knight" : "Death Knight",
@@ -55,7 +55,7 @@
   "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
   "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
   "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
-  "item.thedungeon.tooltip.tool_type" : "Tool Type",
+  "item.thedungeon.tooltip.tool_type" : "Tool Type:",
   "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
   "item.thedungeon.tooltip.curio_type": "Curio Slot:",
   "item.thedungeon.tooltip.curio_type.any": "Any",

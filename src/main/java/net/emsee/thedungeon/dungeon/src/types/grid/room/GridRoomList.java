@@ -21,7 +21,7 @@ public class GridRoomList {
     }
 
     public static class Builder {
-        private final ArrayList<AbstractGridRoom.Builder<?>> list = new ArrayList<>();
+        private final ArrayList<AbstractGridRoom.Builder<?,?>> list = new ArrayList<>();
 
         public GridRoomList build() {
             ArrayList<AbstractGridRoom> newList = new ArrayList<>();
@@ -31,17 +31,17 @@ public class GridRoomList {
             return new GridRoomList(newList);
         }
 
-        public Builder addRoom(AbstractGridRoom.Builder<?> room) {
+        public Builder addRoom(AbstractGridRoom.Builder<?,?> room) {
             list.add(room);
             return this;
         }
 
-        public Builder applyToAll(Consumer<AbstractGridRoom.Builder<?>> method) {
+        public Builder applyToAll(Consumer<AbstractGridRoom.Builder<?,?>> method) {
             list.forEach(method);
             return this;
         }
 
-        public Builder addRooms(List<AbstractGridRoom.Builder<?>> newRooms) {
+        public Builder addRooms(List<AbstractGridRoom.Builder<?,?>> newRooms) {
             list.addAll(newRooms);
             return this;
         }

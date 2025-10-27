@@ -32,12 +32,12 @@ public class StoneToIceCaveProcessor extends BlockPalletReplacementProcessor {
                 map.put(Blocks.DIORITE, defaultMap);
             });
 
-
+    @Override
     protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
         return replacements;
     }
 
-
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

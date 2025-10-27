@@ -15,14 +15,15 @@ import net.minecraft.world.level.block.DispenserBlock;
 import java.util.List;
 
 public class DungeonShieldItem extends DungeonItem implements IDungeonToolTips, Equipable {
-    protected static ResourceLocation BASE_ARMOR_ID = TheDungeon.defaultResourceLocation("shield_item_armor");
-    protected static ResourceLocation BASE_ARMOR_TOUGHNESS_ID = TheDungeon.defaultResourceLocation("shielditem_armor_toughness");
+    protected static final ResourceLocation BASE_ARMOR_ID = TheDungeon.defaultResourceLocation("shield_item_armor");
+    protected static final ResourceLocation BASE_ARMOR_TOUGHNESS_ID = TheDungeon.defaultResourceLocation("shield_item_armor_toughness");
 
     public DungeonShieldItem(Properties properties, float armor, float armorToughness) {
         super(properties.stacksTo(1).attributes(createAttributes(armor, armorToughness)));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return false;
     }

@@ -42,6 +42,7 @@ public class CrystalCaveProcessor extends BlockPalletReplacementProcessor {
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

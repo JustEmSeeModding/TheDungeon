@@ -50,6 +50,6 @@ public class KobaltArmorItem extends DungeonArmorItem {
 
     @Override
     protected void onFullSetTick(LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 100, 1));
+        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 100, 1, true, false));
     }
 }

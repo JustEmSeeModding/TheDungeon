@@ -57,6 +57,7 @@ public class CrystalCaveBuddingPostProcessor extends BlockPalletReplacementProce
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

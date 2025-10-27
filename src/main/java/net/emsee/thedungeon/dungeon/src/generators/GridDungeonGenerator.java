@@ -12,7 +12,7 @@ import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollectionInstance;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollectionInstance;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
@@ -73,7 +73,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         this.occupationArray = new GridArray(dungeon.getRaw().getDungeonDepth(), dungeon.getRaw().getMaxFloorHeight(), !dungeon.getRaw().isDownGenerationDisabled());
 
         // select the starting room
-        AbstractGridRoom startingRoom = dungeon.getRaw().getStaringRoom();
+        AbstractGridRoom startingRoom = dungeon.getRaw().getStartingRoom();
         if (startingRoom == null)
             startingRoom = dungeon.getRoomCollection().getRandomRoom(random);
         if (startingRoom == null)
@@ -188,12 +188,61 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Fallback Placing Tick Complete");
     }
 
+    private int lastFallbackFillX = 0;
+    private int lastFallbackFillY = 0;
+    private int lastFallbackFillZ = 0;
+
     /**
      * fills the dungeon with fallback
      * returns true if done
      */
-    //TODO remake
     private boolean FillUnoccupied() {
+        int depth = dungeon.getRaw().getDungeonDepth();
+        int maxFloorHeight = dungeon.getRaw().getMaxFloorHeight();
+        int gridCellWidth = collection.getRaw().getGridCellWidth();
+        int gridCellHeight = collection.getRaw().getGridCellHeight();
+        BlockPos centerPos = dungeon.getRaw().getCenterPos();
+
+        // Determine Y bounds based on whether down generation is disabled
+        int minY = dungeon.getRaw().isDownGenerationDisabled() ? 0 : -depth;
+        int maxY = Math.min(depth, maxFloorHeight);
+
+        // Resume from last position
+        for (int x = lastFallbackFillX - depth; x <= depth; x++) {
+            for (int y = (x == lastFallbackFillX - depth ? lastFallbackFillY : minY); y <= maxY; y++) {
+                for (int z = (x == lastFallbackFillX - depth && y == lastFallbackFillY ? lastFallbackFillZ : -depth); z <= depth; z++) {
+                    Vec3i arrayPos = new Vec3i(x, y, z);
+
+                    // Check if cell is inside grid bounds and empty
+                    if (occupationArray.isInsideGrid(arrayPos, true) &&
+                            occupationArray.isCellEmptyAt(arrayPos)) {
+
+                        // Calculate world position
+                        BlockPos worldPos = centerPos.offset(
+                                x * gridCellWidth,
+                                y * gridCellHeight,
+                                z * gridCellWidth
+                        );
+
+                        // Place fallback at this position
+                        PlaceFallbackAt(arrayPos, worldPos);
+
+                        // Save progress and return false to continue next tick
+                        lastFallbackFillX = x + depth;
+                        lastFallbackFillY = y;
+                        lastFallbackFillZ = z;
+                        return false;
+                    }
+                }
+                lastFallbackFillZ = -depth;
+            }
+            lastFallbackFillY = minY;
+        }
+
+        // Reset progress counters and return true when done
+        lastFallbackFillX = 0;
+        lastFallbackFillY = 0;
+        lastFallbackFillZ = 0;
         return true;
     }
 

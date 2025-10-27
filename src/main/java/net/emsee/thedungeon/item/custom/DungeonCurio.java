@@ -55,27 +55,20 @@ public class DungeonCurio extends DungeonItem implements IDungeonToolTips, ICuri
                 ResourceLocation tagId = tag.location();
                 if (tagId.getNamespace().equals("curios")) {
                     String path = tagId.getPath();
-                    // Check if it's a slot-specific tag (e.g., "curios:ring")
                     if (path.equals("curio")) {
-                        // Generic curio tag: compatible with any slot? Handle with caution.
-                        slotTypes.add("any"); // Placeholder for demonstration
-                        break;
+                        map.put(Component.translatable("item.thedungeon.tooltip.curio_type"),
+                                new Component[]{Component.translatable("item.thedungeon.tooltip.curio_type.any").withStyle(POSITIVE_FORMATTING)});
+                        return;
                     } else {
                         slotTypes.add(path);
                     }
                 }
             }
 
-            // Convert slot types to readable components
-            Component[] slotComponents;
-            if (slotTypes.contains("any")) {
-                // If generic curio tag is present, list all preset slots (example)
-                slotComponents = new Component[]{Component.translatable("item.thedungeon.tooltip.curio_type.any").withStyle(POSITIVE_FORMATTING)};
-            } else {
-                slotComponents = slotTypes.stream()
-                        .map(slot -> Component.translatable("item.thedungeon.tooltip.curio_type." + slot).withStyle(POSITIVE_FORMATTING))
-                        .toArray(Component[]::new);
-            }
+            Component[] slotComponents = slotTypes.stream()
+                    .map(slot -> Component.translatable("item.thedungeon.tooltip.curio_type." + slot).withStyle(POSITIVE_FORMATTING))
+                    .toArray(Component[]::new);
+
 
             map.put(Component.translatable("item.thedungeon.tooltip.curio_type"), slotComponents);
         });

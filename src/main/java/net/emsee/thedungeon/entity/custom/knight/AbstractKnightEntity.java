@@ -78,7 +78,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
-    protected void SetupAnimations() {
+    protected void setupAnimations() {
         if (this.idleAnimationTimeout<=0) {
             this.idleAnimationTimeout = 59;
             this.idleAnimationState.start(this.tickCount);
@@ -108,7 +108,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
-            this.SetupAnimations();
+            this.setupAnimations();
         }
     }
 
@@ -127,15 +127,15 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         this.entityData.set(RUNNING, false);
     }
 
-    void setAnimationID(int id, byte version) {
+    protected final void setAnimationID(int id, byte version) {
         this.entityData.set(ATTACK_ANIMATION_ID, id);
         this.entityData.set(ATTACK_ANIMATION_VERSION, version);
     }
 
-    int getAnimationID() {
+    protected final int getAnimationID() {
         return this.entityData.get(ATTACK_ANIMATION_ID);
     }
-    int getAnimationVersion() {
+    protected final int getAnimationVersion() {
         return this.entityData.get(ATTACK_ANIMATION_VERSION);
     }
 

@@ -4,7 +4,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollectionInstance;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollectionInstance;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.server.level.ServerLevel;
 

@@ -1,18 +1,14 @@
 package net.emsee.thedungeon.worldSaveData.NBT;
 
 import com.google.common.collect.Maps;
-import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.emsee.thedungeon.DebugLog;
-import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.network.ModNetworking;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
-import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -20,8 +16,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.*;
 
@@ -84,7 +78,7 @@ public final class DungeonNBTData {
                 toReturn.putInt("PortalPosX_" + rank.getName() + "_" + i3, pos.getX());
                 toReturn.putInt("PortalPosY_" + rank.getName() + "_" + i3, pos.getY());
                 toReturn.putInt("PortalPosZ_" + rank.getName() + "_" + i3, pos.getZ());
-                i++;
+                i3++;
             }
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED,"portalPositions: {}", ListAndArrayUtils.mapToString(portalPositions));
@@ -118,8 +112,8 @@ public final class DungeonNBTData {
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
             int i2 = 0;
             Queue<DungeonInstance<?>> passiveQueue = dungeonPassiveQueue.get(rank);
-            while (tag.contains("dungeonPassiveQueue_" + rank.getName() + "_" + i)) {
-                DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i));
+            while (tag.contains("dungeonPassiveQueue_" + rank.getName() + "_" + i2)) {
+                DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i2));
                 passiveQueue.add(toAdd);
                 i2++;
             }

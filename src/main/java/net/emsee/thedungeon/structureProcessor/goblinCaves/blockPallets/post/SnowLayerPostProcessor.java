@@ -3,8 +3,6 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.custom.portal.DungeonPortal;
-import net.emsee.thedungeon.block.custom.portal.DungeonPortalB;
-import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.BlockUtils;
@@ -33,11 +31,13 @@ public class SnowLayerPostProcessor extends BlockPalletReplacementProcessor impl
 
     protected final WeightedMap.Int<ReplaceInstance> smallLayerMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 1)).withPredicate(new SnowLayerPredicate()), 5);
-                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 2)).withPredicate(new SnowLayerPredicate()), 4);
-                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 3)).withPredicate(new SnowLayerPredicate()), 3);
-                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 4)).withPredicate(new SnowLayerPredicate()), 2);
-                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 5)).withPredicate(new SnowLayerPredicate()), 1);
+                SnowLayerPredicate snowLayerPredicate = new SnowLayerPredicate();
+
+                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 1)).withPredicate(snowLayerPredicate), 5);
+                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 2)).withPredicate(snowLayerPredicate), 4);
+                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 3)).withPredicate(snowLayerPredicate), 3);
+                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 4)).withPredicate(snowLayerPredicate), 2);
+                map.put(new ReplaceInstance(() -> Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 5)).withPredicate(snowLayerPredicate), 1);
 
                 map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState), 8);
             });
@@ -53,6 +53,7 @@ public class SnowLayerPostProcessor extends BlockPalletReplacementProcessor impl
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.dungeon.src.types.roomCollection;
+package net.emsee.thedungeon.dungeon.src.types.grid.roomCollection;
 
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
@@ -117,7 +117,7 @@ public abstract class GridRoomCollection {
      * Adds a group of rooms with shared placement constraints, where placing any one room counts toward the group's required and maximum placement totals.
      */
     public GridRoomCollection addRequiredRoomsOf(int requiredAmount, int maxAmount, List<AbstractGridRoom> rooms) {
-        requiredListPlacements.put(rooms, new RequiredRoomPlacements(requiredAmount, maxAmount));
+        requiredListPlacements.put(List.copyOf(rooms), new RequiredRoomPlacements(requiredAmount, maxAmount));
         for (AbstractGridRoom room : rooms)
             addRoom(room);
         return this;
@@ -128,7 +128,7 @@ public abstract class GridRoomCollection {
      * When any room in the list is placed, it counts toward fulfilling the group's requirement.
      */
     public GridRoomCollection addRequiredRoomsOf(int requiredAmount, List<AbstractGridRoom> rooms) {
-        return addRequiredRoomsOf(requiredAmount, -1, rooms);
+        return addRequiredRoomsOf(requiredAmount, -1, List.copyOf(rooms));
     }
 
     /**
@@ -220,7 +220,7 @@ public abstract class GridRoomCollection {
     }
 
     public Map<List<AbstractGridRoom>, RequiredRoomPlacements> getRequiredListPlacements() {
-        return new HashMap<>(requiredListPlacements);
+        return new LinkedHashMap<>(requiredListPlacements);
     }
 
     public GridRoomCollectionInstance createInstance() {

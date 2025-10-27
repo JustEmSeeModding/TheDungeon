@@ -58,8 +58,7 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
     @Override
     public boolean canUse() {
         //if (entity.isRunning()) return false;
-        if (attackHolders.isEmpty()) return false;
-        return super.canUse();
+        return !getPossibleAttacks(this.mob).isEmpty() && super.canUse();
     }
 
     @Override
@@ -72,15 +71,26 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
     @Override
     public void start() {
         super.start();
+        //currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
+        //resetAttackCooldown();
         currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
+        if (currentAttackHolder == null) {
+            // No valid attack with current equipment: disable until next tick
+            shouldCountTillNextAttack = false;
+            entity.setAttacking(false);
+            AnimationVersion = 0;
+            entity.attackAnimation((byte) -1, AnimationVersion);
+            return;
+        }
         resetAttackCooldown();
-        AnimationVersion=1;
+        AnimationVersion = 1;
         entity.attackAnimation((byte) -1, AnimationVersion++);
     }
 
 
     @Override
     protected void checkAndPerformAttack(@NotNull LivingEntity pEnemy) {
+        if (currentAttackHolder == null) return;
         if (canPerformAttack(pEnemy) || entity.isPlayingAttackAnimation()) {
             shouldCountTillNextAttack = true;
 
@@ -94,8 +104,14 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
                 this.mob.getLookControl().setLookAt(pEnemy.getX(), pEnemy.getEyeY(), pEnemy.getZ());
             }
 
-            if(animationFinished()){
+            if(animationFinished()) {
                 currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
+                //this.resetAttackCooldown();
+                if (currentAttackHolder == null) {
+                    shouldCountTillNextAttack = false;
+                    entity.setAttacking(false);
+                    return;
+                }
                 this.resetAttackCooldown();
                 AnimationVersion++;
                 if (AnimationVersion == 0)

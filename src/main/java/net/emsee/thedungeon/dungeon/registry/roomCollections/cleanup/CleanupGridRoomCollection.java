@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup;
 
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomBasic;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 
 public final class CleanupGridRoomCollection extends GridRoomCollection {
 

@@ -97,7 +97,7 @@ public class DungeonToolItem extends DungeonWeaponItem {
     }
 
     public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
-        super(weaponType, isSweeping, tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier, BlockTags.MINEABLE_WITH_PICKAXE)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
+        super(weaponType, isSweeping, tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
     }
 
     @Override
@@ -107,11 +107,12 @@ public class DungeonToolItem extends DungeonWeaponItem {
         else return super.canAttackBlock(state, level, pos, player);
     }
 
-    private static AdventureModePredicate createAdventureCheck(Tier tier, TagKey<Block> blocks) {
+    private static AdventureModePredicate createAdventureCheck(Tier tier/*, TagKey<Block> blocks*/) {
         List<BlockPredicate> predicates = new ArrayList<>();
         Collection<Block> breakables = new ArrayList<>(getBreakableBlocks().keySet());
         BlockPredicate predicate = BlockPredicate.Builder.block()
                 .of(breakables)
+                //.of(blocks)
                 .build();
         predicates.add(predicate);
 

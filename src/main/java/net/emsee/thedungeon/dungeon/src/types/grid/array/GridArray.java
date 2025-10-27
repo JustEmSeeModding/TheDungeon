@@ -18,7 +18,7 @@ public final class GridArray {
         this.maxFloorHeight = maxFloorHeight;
         this.doGenerateDown = doGenerateDown;
 
-        array = Util.make(new HashMap<>(), map -> {
+        array = Util.make(new HashMap<>((2*maxDepth+1)^3), map -> {
             for (int x = -maxDepth; x <= maxDepth; x++) {
                 for (int y = -maxDepth; y <= maxDepth; y++) {
                     for (int z = -maxDepth; z <= maxDepth; z++) {
@@ -78,7 +78,7 @@ public final class GridArray {
         return maxDepth;
     }
 
-    public void insertChildren(GridCell parent, Vec3i from, Vec3i to, Boolean allowReplace) {
+    public void insertChildren(GridCell parent, Vec3i from, Vec3i to) {
         for (int y = from.getY(); y < to.getY(); y++) {
             for (int x = from.getX(); x <= to.getX(); x++) {
                 for (int z = from.getZ(); z <= to.getZ(); z++) {

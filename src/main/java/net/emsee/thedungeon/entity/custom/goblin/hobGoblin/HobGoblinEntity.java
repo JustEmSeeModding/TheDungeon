@@ -220,7 +220,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
 
     @Override
     public boolean isClientSide() {
-        return false;
+        return level().isClientSide;
     }
 
     protected void updateTrades() {
@@ -266,8 +266,10 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
+        if (compound.contains("Variant")) {
+            this.entityData.set(VARIANT, compound.getInt("Variant"));
+        }
         if (compound.contains("Offers")) {
-            this.entityData.set(VARIANT,compound.getInt("Variant"));
             DataResult<MerchantOffers> dataResult = MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(NbtOps.INSTANCE), compound.get("Offers"));
             dataResult.resultOrPartial(Util.prefix("Failed to load offers: ", string -> DebugLog.logWarn(DebugLog.DebugType.WARNINGS, string))).ifPresent((p_323775_) -> {
                 this.offers = p_323775_;

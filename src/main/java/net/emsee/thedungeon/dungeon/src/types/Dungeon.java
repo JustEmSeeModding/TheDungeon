@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 
 public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<T>> {
+
     private static int lastID = -1;
     protected final String resourceName;
     private final int ID;
@@ -33,23 +34,25 @@ public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<
     }
 
     // constructionMethod
+    @SuppressWarnings("unchecked")
+    protected final T self() { return (T) this; }
 
-    public Dungeon setUtilDungeon(boolean is) {
+    public T setUtilDungeon(boolean is) {
         utilDungeon = is;
-        return this;
+        return self();
     }
 
-    public Dungeon setOverrideGenerationHeight(int height) {
+    public T setOverrideGenerationHeight(int height) {
         if (overrideCenter == null) {
             overrideCenter = rank.getDefaultCenterPos();
         }
         overrideCenter = overrideCenter.atY(height);
-        return this;
+        return self();
     }
 
-    protected Dungeon setOverrideCenter(BlockPos override) {
+    protected T setOverrideCenter(BlockPos override) {
         overrideCenter = override;
-        return this;
+        return self();
     }
 
     // methods
@@ -66,7 +69,7 @@ public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<
         return rank;
     }
 
-    public Integer getWeight() {
+    public int getWeight() {
         return weight;
     }
 

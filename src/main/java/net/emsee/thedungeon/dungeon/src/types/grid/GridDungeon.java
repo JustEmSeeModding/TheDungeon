@@ -3,7 +3,7 @@ package net.emsee.thedungeon.dungeon.src.types.grid;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 
 /**
  * custom generation in a grid based system
@@ -136,7 +136,7 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
         return roomCollection;
     }
 
-    public AbstractGridRoom getStaringRoom() {
+    public AbstractGridRoom getStartingRoom() {
         return roomCollection.getStartingRoom();
     }
 

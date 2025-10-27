@@ -1,6 +1,5 @@
 package net.emsee.thedungeon.dungeon.src.types.grid.room;
 
-import com.mojang.datafixers.kinds.IdF;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
@@ -41,7 +40,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
     }
 
 
-    public static class Builder extends AbstractGridRoom.Builder<GridRoomMultiResource> {
+    public static class Builder extends AbstractGridRoom.Builder<GridRoomMultiResource,Builder> {
         private final MultiData multiData;
 
         protected Builder(int gridWidth, int gridHeight, int differentiationID) {
@@ -61,7 +60,9 @@ public class GridRoomMultiResource extends AbstractGridRoom {
 
         public Builder withResourceLocation(ResourceLocation resourceLocation, int weight) {
             if (multiData.resourceLocations.containsKey(resourceLocation))
-                throw new IllegalStateException("MultiResourceGridRoom already contains this ResourceLocation (" + resourceLocation + ")");
+                throw new IllegalArgumentException("MultiResourceGridRoom already contains this ResourceLocation (" + resourceLocation + ")");
+            if (weight <= 0)
+                throw new IllegalArgumentException("weight must be > 0");
             multiData.resourceLocations.put(resourceLocation, weight);
             return this;
         }
@@ -116,9 +117,9 @@ public class GridRoomMultiResource extends AbstractGridRoom {
         result = 31 * result + data.weight;
         result = 31 * result + (data.allowRotation ? 1 : 0);
         result = 31 * result + (data.allowUpDownConnectedRotation ? 1 : 0);
-        result = 31 * result + Double.hashCode(data.northSizeScale);
-        result = 31 * result + Double.hashCode(data.eastSizeScale);
-        result = 31 * result + Double.hashCode(data.heightScale);
+        result = 31 * result + Integer.hashCode(data.northSizeScale);
+        result = 31 * result + Integer.hashCode(data.eastSizeScale);
+        result = 31 * result + Integer.hashCode(data.heightScale);
         result = 31 * result + data.connectionOffsets.hashCode();
         result = 31 * result + data.connectionTags.hashCode();
         result = 31 * result + data.generationPriority;
@@ -152,7 +153,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
             throw new IllegalStateException(this + ": Placement rotation was null");
         }
 
-        BlockPos origin = centre.subtract(new Vec3i(Math.round((getGridCellWidth()) * getRotatedEastSizeScale(Rotation.NONE) / 2f) - 1, 0, Math.round((getGridCellWidth()) * getRotatedNorthSizeScale(Rotation.NONE) / 2f) - 1));
+        BlockPos origin = centre.subtract(new Vec3i(Math.round((getGridCellWidth()) * getEastSizeScale() / 2f) - 1, 0, Math.round((getGridCellWidth()) * getNorthSizeScale() / 2f) - 1));
         BlockPos minCorner = centre.subtract(new Vec3i(getGridCellWidth() * getMaxSizeScale(), 0, getGridCellWidth() * getMaxSizeScale()));
         BlockPos maxCorner = centre.offset(new Vec3i(getGridCellWidth() * getMaxSizeScale(), getGridCellHeight() * getHeightScale(), getGridCellWidth() * getMaxSizeScale()));
         RandomSource rand = RandomSource.create(serverLevel.dimension().location().hashCode() + Math.round(random.nextDouble() * 1000));
@@ -162,7 +163,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
                 .setRandom(rand)
                 .addProcessor(JigsawReplacementProcessor.INSTANCE)
                 //.addProcessor()
-                .setRotationPivot(new BlockPos(getGridCellWidth() * getRotatedEastSizeScale(Rotation.NONE) / 2, 0, getGridCellWidth() * getRotatedNorthSizeScale(Rotation.NONE) / 2))
+                .setRotationPivot(new BlockPos(getGridCellWidth() * getEastSizeScale() / 2, 0, getGridCellWidth() * getNorthSizeScale() / 2))
                 .setRotation(roomRotation)
                 .setBoundingBox(mbb)
                 .setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
@@ -178,6 +179,9 @@ public class GridRoomMultiResource extends AbstractGridRoom {
 
     @Override
     public void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random) {
+        if (postProcessors == null || postProcessors.list().isEmpty()) return;
+        final BlockPos origin = getMinCorner(centre, roomRotation);
+        final StructurePlaceSettings settings = new StructurePlaceSettings();
         for (StructureProcessor processor : postProcessors.list()) {
             if (processor instanceof PostProcessor postProcessorData)
                 forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(),serverLevel, pos -> {
@@ -191,7 +195,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
                             null
                     );
 
-                    blockInfo = processor.process(serverLevel, new BlockPos(0, 0, 0), pos, blockInfo, blockInfo, new StructurePlaceSettings(), null);
+                    blockInfo = processor.process(serverLevel, origin, pos, blockInfo, blockInfo, settings, null);
 
                     // Place processed block state (or fallback to initial state)
                     serverLevel.setBlockAndUpdate(pos, blockInfo != null ? blockInfo.state() : initialState);

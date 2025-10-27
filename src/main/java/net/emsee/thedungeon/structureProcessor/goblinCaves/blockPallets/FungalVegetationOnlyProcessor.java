@@ -33,6 +33,7 @@ public class FungalVegetationOnlyProcessor extends FungalCaveProcessor {
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

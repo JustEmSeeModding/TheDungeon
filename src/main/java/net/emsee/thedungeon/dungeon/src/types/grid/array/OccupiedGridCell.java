@@ -1,11 +1,10 @@
 package net.emsee.thedungeon.dungeon.src.types.grid.array;
 
-import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 
 public class OccupiedGridCell extends GridCell{
     final GeneratedRoom placedRoom;
-    final Boolean allowReplace;
+    final boolean allowReplace;
 
     public OccupiedGridCell (GeneratedRoom room) {
         this(room, false);
@@ -13,6 +12,7 @@ public class OccupiedGridCell extends GridCell{
 
 
     public OccupiedGridCell (GeneratedRoom room, boolean allowReplace) {
+        if (room == null) throw new IllegalArgumentException("OccupiedGridCell requires non-null room");
         this.placedRoom = room;
         this.allowReplace=allowReplace;
     }

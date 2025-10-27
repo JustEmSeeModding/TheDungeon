@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.dungeon.src.types.grid.room;
 
-import com.ibm.icu.impl.Pair;
+
+import com.mojang.datafixers.util.Pair;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.DungeonUtils;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
@@ -69,7 +70,7 @@ public abstract class AbstractGridRoom {
         public final StructureProcessorList structurePostProcessors = new StructureProcessorList(new ArrayList<>());
     }
     
-    public static abstract class Builder<T extends AbstractGridRoom> {
+    public static abstract class Builder<T extends AbstractGridRoom, S extends Builder<T,?>> {
         final Data data;
         protected Builder(int gridWidth, int gridHeight, int differentiationID) {
             data=new Data(gridWidth,gridHeight,differentiationID);
@@ -81,214 +82,219 @@ public abstract class AbstractGridRoom {
 
         public abstract T build();
         
-        public Builder<T> setConnections(boolean north, boolean east, boolean south, boolean west, boolean up, boolean down) {
+        @SuppressWarnings("unchecked")
+        protected S self() {return (S) this;}
+        
+        public S setConnections(boolean north, boolean east, boolean south, boolean west, boolean up, boolean down) {
             return setConnections(north ? 1 : 0, east ? 1 : 0, south ? 1 : 0, west ? 1 : 0, up ? 1 : 0, down ? 1 : 0);
         }
 
-        public Builder<T> setConnections(int northPriority, int eastPriority, int southPriority, int westPriority, int upPriority, int downPriority) {
+        public S setConnections(int northPriority, int eastPriority, int southPriority, int westPriority, int upPriority, int downPriority) {
             horizontalConnections(northPriority, eastPriority, southPriority, westPriority);
             addConnection(Connection.UP, upPriority);
             addConnection(Connection.DOWN, downPriority);
-            return this;
+            return self();
         }
 
 
-        protected Builder<T> setConnections(PriorityMap<Connection> connectionMap) {
+        protected S setConnections(PriorityMap<Connection> connectionMap) {
             data.connections.putAll(connectionMap);
-            return this;
+            return self();
         }
 
-        public Builder<T> allConnections() {
+        public S allConnections() {
             return setConnections(1, 1, 1, 1, 1, 1);
         }
 
-        public Builder<T> horizontalConnections() {
+        public S horizontalConnections() {
             return horizontalConnections(1, 1, 1, 1);
         }
 
-        public Builder<T> horizontalConnections(int northPriority, int eastPriority, int southPriority, int westPriority) {
+        public S horizontalConnections(int northPriority, int eastPriority, int southPriority, int westPriority) {
             addConnection(Connection.NORTH, northPriority);
             addConnection(Connection.EAST, eastPriority);
             addConnection(Connection.SOUTH, southPriority);
             addConnection(Connection.WEST, westPriority);
-            return this;
+            return self();
         }
 
-        public Builder<T> addConnection(Connection connection) {
+        public S addConnection(Connection connection) {
             return addConnection(connection, 1);
         }
 
-        public Builder<T> addConnection(Connection connection, int priority) {
+        public S addConnection(Connection connection, int priority) {
             data.connections.put(connection, priority);
-            return this;
+            return self();
         }
 
-        public Builder<T> removeConnection(Connection connection) {
+        public S removeConnection(Connection connection) {
             data.connections.put(connection, 0);
-            return this;
+            return self();
         }
 
-        public Builder<T> withWeight(int weight) {
+        public S withWeight(int weight) {
             data.weight = weight;
-            return this;
+            return self();
         }
 
-        public Builder<T> doAllowRotation() {
+        public S doAllowRotation() {
             return doAllowRotation(true, true);
         }
 
-        public Builder<T> doAllowRotation(boolean allow, boolean upDown) {
+        public S doAllowRotation(boolean allow, boolean upDown) {
             data.allowRotation = allow;
             data.allowUpDownConnectedRotation = allow && upDown;
-            return this;
+            return self();
         }
 
-        public Builder<T> setSize(int north, int east) {
+        public S setSize(int north, int east) {
             if (north % 2 == 1 && east % 2 == 1) {
                 data.northSizeScale = north;
                 data.eastSizeScale = east;
-                return this;
+                return self();
             } else
                 throw new IllegalStateException("east or north size scale must be odd");
         }
 
-        public Builder<T> setHeight(int height) {
+        public S setHeight(int height) {
             data.heightScale = height;
-            return this;
+            return self();
         }
 
-        public Builder<T> setSizeHeight(int northSize, int eastSize, int height) {
-            return this.setSize(northSize, eastSize).setHeight(height);
+        public S setSizeHeight(int northSize, int eastSize, int height) {
+            setSize(northSize, eastSize);
+            setHeight(height);
+            return self();
         }
 
         /**
          * offsets a specific connection along its horizontal face
          * the offset is as viewed from the outside (-=left +=right)
          */
-        public Builder<T> setHorizontalConnectionOffset(Connection connection, int widthOffset, int heightOffset) {
+        public S setHorizontalConnectionOffset(Connection connection, int widthOffset, int heightOffset) {
             if (Mth.abs(widthOffset) > (data.northSizeScale - 1) / 2 || heightOffset > (data.heightScale - 1) || heightOffset < 0)
                 throw new IllegalStateException("offset is more than the room size");
-            if (connection == Connection.UP || connection == Connection.DOWN) return this;
+            if (connection == Connection.UP || connection == Connection.DOWN) return self();
             data.connectionOffsets.put(connection, Pair.of(widthOffset, heightOffset));
-            return this;
+            return self();
         }
 
         /**
          * offsets a specific connection along its vertical face
          */
-        public Builder<T> setVerticalConnectionOffset(Connection connection, int northOffset, int eastOffset) {
+        public S setVerticalConnectionOffset(Connection connection, int northOffset, int eastOffset) {
             if (Mth.abs(northOffset) > (data.northSizeScale - 1) / 2 || Mth.abs(eastOffset) > (data.eastSizeScale - 1) / 2)
                 throw new IllegalStateException("offset is more than the room size");
             if (connection == Connection.NORTH || connection == Connection.EAST || connection == Connection.SOUTH || connection == Connection.WEST)
-                return this;
+                return self();
             data.connectionOffsets.put(connection, Pair.of(northOffset, eastOffset));
-            return this;
+            return self();
         }
 
-        public Builder<T> setConnectionTag(Connection connection, String tag) {
+        public S setConnectionTag(Connection connection, String tag) {
             data.connectionTags.put(connection, tag);
-            return this;
+            return self();
         }
 
-        protected Builder<T> setOffsets(Map<Connection, Pair<Integer, Integer>> offsets) {
+        protected S setOffsets(Map<Connection, Pair<Integer, Integer>> offsets) {
             data.connectionOffsets.clear();
             data.connectionOffsets.putAll(offsets);
-            return this;
+            return self();
         }
 
-        protected Builder<T> setConnectionTags(Map<Connection, String> tags) {
+        protected S setConnectionTags(Map<Connection, String> tags) {
             data.connectionTags.clear();
             data.connectionTags.putAll(tags);
-            return this;
+            return self();
         }
 
-        public Builder<T> setAllConnectionTags(String tag) {
+        public S setAllConnectionTags(String tag) {
             data.connectionTags.replaceAll((c, v) -> tag);
-            return this;
+            return self();
         }
 
 
         /**
          * the priority for this room to generate the next connecting rooms over another
          */
-        public Builder<T> setGenerationPriority(int generationPriority) {
+        public S setGenerationPriority(int generationPriority) {
             data.generationPriority = generationPriority;
-            return this;
+            return self();
         }
 
         /**
          * overrides the dungeons room end chance for this room
          */
-        public Builder<T> setOverrideEndChance(float value) {
+        public S setOverrideEndChance(float value) {
             data.overrideEndChance = value;
             data.doOverrideEndChance = true;
-            return this;
+            return self();
         }
 
-        protected Builder<T> setOverrideEndChance(float value, boolean doOverride) {
+        protected S setOverrideEndChance(float value, boolean doOverride) {
             data.overrideEndChance = value;
             data.doOverrideEndChance = doOverride;
-            return this;
+            return self();
         }
 
 
-        public Builder<T> addMobSpawnRule(MobSpawnRule rule) {
+        public S addMobSpawnRule(MobSpawnRule rule) {
             data.spawnRules.add(rule);
-            return this;
+            return self();
         }
 
-        protected Builder<T> setSpawnRules(List<MobSpawnRule> list) {
+        protected S setSpawnRules(List<MobSpawnRule> list) {
             data.spawnRules.clear();
             data.spawnRules.addAll(list);
-            return this;
+            return self();
         }
 
-        public Builder<T> withStructureProcessor(StructureProcessor processor) {
+        public S withStructureProcessor(StructureProcessor processor) {
             if (processor instanceof PostProcessor)
                 throw new IllegalStateException("Adding post processor as normal processor");
             data.structureProcessors.list().add(processor);
-            return this;
+            return self();
         }
 
-        public Builder<T> withStructurePostProcessor(StructureProcessor processor) {
+        public S withStructurePostProcessor(StructureProcessor processor) {
             if (!(processor instanceof PostProcessor))
                 throw new IllegalStateException("Adding normal processor as post processor");
             data.structurePostProcessors.list().add(processor);
-            return this;
+            return self();
         }
 
-        public Builder<T> clearStructureProcessors() {
+        public S clearStructureProcessors() {
             data.structureProcessors.list().clear();
-            return this;
+            return self();
         }
 
-        public Builder<T> clearStructurePostProcessors() {
+        public S clearStructurePostProcessors() {
             data.structurePostProcessors.list().clear();
-            return this;
+            return self();
         }
 
-        protected Builder<T> setStructureProcessors(StructureProcessorList processors, StructureProcessorList postProcessors) {
+        protected S setStructureProcessors(StructureProcessorList processors, StructureProcessorList postProcessors) {
             data.structureProcessors.list().clear();
             data.structureProcessors.list().addAll(processors.list());
             data.structurePostProcessors.list().clear();
             data.structurePostProcessors.list().addAll(postProcessors.list());
-            return this;
+            return self();
         }
 
-        public Builder<T> skipCollectionProcessors() {
+        public S skipCollectionProcessors() {
             data.skipCollectionProcessors = true;
-            return this;
+            return self();
         }
 
-        public Builder<T> skipCollectionPostProcessors() {
+        public S skipCollectionPostProcessors() {
             data.skipCollectionPostProcessors = true;
-            return this;
+            return self();
         }
 
-        protected Builder<T> setSkipCollectionProcessors(boolean skip, boolean skipPost) {
+        protected S setSkipCollectionProcessors(boolean skip, boolean skipPost) {
             data.skipCollectionProcessors = skip;
             data.skipCollectionPostProcessors = skipPost;
-            return this;
+            return self();
         }
     }
     // methods
@@ -345,17 +351,15 @@ public abstract class AbstractGridRoom {
     }
 
     protected boolean hasConnection(Connection connection) {
-        return data.connections.get(connection) > 0;
+        return data.connections.getPriority(connection) > 0;
     }
 
     public boolean hasConnection(Connection connection, String withTag) {
-        if (data.connections.get(connection)==null) return false;
-        return data.connections.get(connection) > 0 && data.connectionTags.get(connection).equals(withTag);
+        return data.connections.getPriority(connection) > 0 && data.connectionTags.get(connection).equals(withTag);
     }
 
     public boolean hasConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules) {
-        if (data.connections.get(connection)==null) return false;
-        return data.connections.get(connection) > 0 && ConnectionRule.isValid(fromTag, data.connectionTags.get(connection), connectionRules);
+        return data.connections.getPriority(connection) > 0 && ConnectionRule.isValid(fromTag, data.connectionTags.get(connection), connectionRules);
     }
 
     /**
@@ -384,11 +388,19 @@ public abstract class AbstractGridRoom {
     }
 
     public int getRotatedNorthSizeScale(Rotation rotation) {
-        return getRotatedSizeScale(rotation).first;
+        return getRotatedSizeScale(rotation).getFirst();
     }
 
     public int getRotatedEastSizeScale(Rotation rotation) {
-        return getRotatedSizeScale(rotation).second;
+        return getRotatedSizeScale(rotation).getSecond();
+    }
+
+    protected int getNorthSizeScale() {
+        return getRotatedNorthSizeScale(Rotation.NONE);
+    }
+
+    protected int getEastSizeScale() {
+        return getRotatedEastSizeScale(Rotation.NONE);
     }
 
     protected int getRotatedNorthPlacementOffset(Rotation rotation) {
@@ -410,8 +422,8 @@ public abstract class AbstractGridRoom {
 
         if (data.connectionOffsets.containsKey(unrotatedConnection)) {
             Pair<Integer, Integer> offset = data.connectionOffsets.get(unrotatedConnection);
-            int first = offset.first;
-            int second = offset.second;
+            int first = offset.getFirst();
+            int second = offset.getSecond();
 
             yOffset -= second;
             switch (fromConnection) {

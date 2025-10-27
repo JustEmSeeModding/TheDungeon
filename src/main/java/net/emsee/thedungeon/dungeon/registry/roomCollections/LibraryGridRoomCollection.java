@@ -7,7 +7,7 @@ import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomBasic;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomMultiResource;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomGroup;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 import net.emsee.thedungeon.structureProcessor.library.DefaultLibraryProcessor;
 import net.minecraft.world.level.block.Blocks;
 
@@ -34,7 +34,7 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
                 .addTagRule(new FloorFailRule(ConnectionRule.DEFAULT_CONNECTION_TAG, 13, false, Blocks.OAK_PLANKS::defaultBlockState, 169));
     }
 
-    static AbstractGridRoom.Builder<?> straights = GridRoomMultiResource.builder(13, 9)
+    static AbstractGridRoom.Builder<?,?> straights = GridRoomMultiResource.builder(13, 9)
             .withResourceLocation("library/straights/default",10)
             .withResourceLocation("library/straights/benches",2)
             .withResourceLocation("library/straights/missing_shelf",5)
@@ -43,7 +43,7 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
             .addConnection(Connection.SOUTH)
             .doAllowRotation();
 
-    static AbstractGridRoom.Builder<?> corners = GridRoomMultiResource.builder(13, 9)
+    static AbstractGridRoom.Builder<?,?> corners = GridRoomMultiResource.builder(13, 9)
             .withResourceLocation("library/corners/default",10)
             .withResourceLocation("library/corners/no_books",5)
             .withResourceLocation("library/corners/benches",2)
@@ -52,7 +52,7 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
             .addConnection(Connection.EAST)
             .doAllowRotation();
 
-    static AbstractGridRoom.Builder<?> t = GridRoomMultiResource.builder(13, 9)
+    static AbstractGridRoom.Builder<?,?> t = GridRoomMultiResource.builder(13, 9)
             .withResourceLocation("library/t/default",10)
             .withResourceLocation("library/t/no_books",5)
             .withResourceLocation("library/t/wall_art",2)
@@ -61,7 +61,7 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
             .addConnection(Connection.SOUTH)
             .doAllowRotation();
 
-    static AbstractGridRoom.Builder<?> crosses = GridRoomMultiResource.builder(13, 9)
+    static AbstractGridRoom.Builder<?,?> crosses = GridRoomMultiResource.builder(13, 9)
             .withResourceLocation("library/crosses/default",10)
             .withResourceLocation("library/crosses/pillar",3)
             .withResourceLocation("library/crosses/no_books",5)
@@ -69,7 +69,7 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
             .withResourceLocation("library/crosses/aquarium",1)
             .horizontalConnections();
 
-    static AbstractGridRoom.Builder<?> smallRooms = ((GridRoomGroup.Builder)GridRoomGroup.builder(13, 9).addConnection(Connection.NORTH).doAllowRotation())
+    static AbstractGridRoom.Builder<?,?> smallRooms = GridRoomGroup.builder(13, 9).addConnection(Connection.NORTH).doAllowRotation()
             .addRoom(GridRoomBasic.builder("library/rooms/enchanting",13, 9).addConnection(Connection.NORTH).doAllowRotation())
             .addRoom(GridRoomBasic.builder("library/rooms/smithing",13, 9).addConnection(Connection.NORTH).doAllowRotation());
 }

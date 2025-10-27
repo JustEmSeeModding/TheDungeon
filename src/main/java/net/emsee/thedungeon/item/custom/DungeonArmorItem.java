@@ -29,8 +29,12 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity && livingEntity instanceof Player player) {
-            if (slotId == 38/*Chestplate*/ && !level.isClientSide && playerHasFullArmorOn(player)) {
+        if (entity instanceof Player player) {
+            // Only tick once from the equipped chestplate piece on the server
+            boolean isEquippedChest = this.getType() == Type.CHESTPLATE
+                    && !player.getInventory().getArmor(2).isEmpty()
+                    && player.getInventory().getArmor(2).getItem() == this;
+            if (isEquippedChest && !level.isClientSide && playerHasFullArmorOn(player)) {
                 onFullSetTick(player);
             }
         }

@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class DungeonInstance<T extends Dungeon<?,?>>{
     protected final T dungeon;
@@ -22,20 +23,16 @@ public abstract class DungeonInstance<T extends Dungeon<?,?>>{
      * starts dungeon generation.
      */
     public final void generate(ServerLevel level) {
+        MinecraftServer server = level.getServer();
+        // if a seed is still in memory, use that.
         if (savedSeed!=null) {
-            generateSeeded(level.getServer(),savedSeed);
+            generateSeeded(server,savedSeed);
+            return;
         }
-        long selectedSeed = GameruleRegistry.getIntegerGamerule(level.getServer(), ModGamerules.DUNGEON_SEED_OVERRIDE);
-        if (selectedSeed == -1) {
-            long newSeed = new Random().nextLong();
-            generateSeeded(level.getServer(),newSeed);
-            savedSeed=newSeed;
-            DungeonSaveData.Get(level.getServer()).setDirty();
-        } else {
-            generateSeeded(level.getServer(),selectedSeed);
-            savedSeed=selectedSeed;
-            DungeonSaveData.Get(level.getServer()).setDirty();
-        }
+        // if override == -1 pick random seed, else use the override
+        long override = GameruleRegistry.getIntegerGamerule(server, ModGamerules.DUNGEON_SEED_OVERRIDE);
+        long seed = (override == -1) ? ThreadLocalRandom.current().nextLong() : override;
+        generateSeeded(server, seed);
     }
 
     /**
@@ -76,14 +73,20 @@ public abstract class DungeonInstance<T extends Dungeon<?,?>>{
     }
 
     public static DungeonInstance<?> fromSaveString(String save) {
+        if (save == null || save.isEmpty()) {
+            throw new IllegalArgumentException("Empty save string");
+        }
         String[] saveArray = save.split(":");
-
+        if (saveArray.length == 0) {
+            throw new IllegalArgumentException("Malformed save: " + save);
+        }
         Dungeon<?, ?> dungeon = ModDungeons.getByResourceName(saveArray[0]);
-        DungeonInstance<?> toReturn = dungeon.createInstance();
-
-        toReturn.loadSaveString(saveArray);
-
-        return toReturn;
+        if (dungeon == null) {
+            throw new IllegalStateException("Unknown dungeon: " + saveArray[0]);
+        }
+        DungeonInstance<?> instance = dungeon.createInstance();
+        instance.loadSaveString(saveArray);
+        return instance;
 
     }
 

@@ -161,7 +161,7 @@ public final class GeneratedRoom {
 
         Vec3i min = new Vec3i(-(room.getRotatedEastPlacementOffset(placedRotation) - 1),0, -(room.getRotatedNorthPlacementOffset(placedRotation) - 1)).offset(placedGridPos);
         Vec3i max = new Vec3i((room.getRotatedEastPlacementOffset(placedRotation) - 1), room.getHeightScale(), (room.getRotatedNorthPlacementOffset(placedRotation) - 1)).offset(placedGridPos);
-        generator.getOccupationArray().insertChildren(parent, min, max, allowReplace);
+        generator.getOccupationArray().insertChildren(parent, min, max);
 
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: returning success", this);
         generated = true;
@@ -192,12 +192,13 @@ public final class GeneratedRoom {
         for (int y = 0; y < room.getHeightScale(); y++) {
             for (int x = -(room.getRotatedEastPlacementOffset(rotation) - 1); x <= (room.getRotatedEastPlacementOffset(rotation) - 1); x++) {
                 for (int z = -(room.getRotatedNorthPlacementOffset(rotation) - 1); z <= (room.getRotatedNorthPlacementOffset(rotation) - 1); z++) {
+                    // out of bounds
+                    if (!occupationArray.isInsideGrid(placedGridPos.offset(x,y,z), false))
+                        return false;
+                    // in occupied space
                     if (occupationArray.isCellOccupiedAt(placedGridPos.offset(x,y,z)))
                         return false;
-                    // out of bounds
-                    if (!occupationArray.isInsideGrid(placedGridPos.offset(x,y,z), false)) {
-                        return false;
-                    }
+
                     // don't allow generation at the edge of the dungeon to prevent open ends
                     if (!skipBorderCheck && occupationArray.isAtBorder(placedGridPos.offset(x,y,z), false)) {
                         return false;

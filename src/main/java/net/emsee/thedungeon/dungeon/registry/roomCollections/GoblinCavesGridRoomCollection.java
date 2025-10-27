@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.dungeon.registry.roomCollections;
 
 import net.emsee.thedungeon.dungeon.src.Connection;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.fail.WallFailRule;
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules.SpawnInRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;

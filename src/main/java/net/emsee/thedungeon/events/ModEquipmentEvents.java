@@ -66,9 +66,6 @@ public final class ModEquipmentEvents {
         }
     }
 
-    private static void test(ItemAttributeModifierEvent event) {
-    }
-
     private static void handleWeaponChanges(LivingEquipmentChangeEvent event) {
         if (!(event.getSlot() == EquipmentSlot.MAINHAND || event.getSlot() == EquipmentSlot.OFFHAND))
             return;

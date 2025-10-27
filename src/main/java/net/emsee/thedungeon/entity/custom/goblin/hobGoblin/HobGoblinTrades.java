@@ -33,35 +33,35 @@ public class HobGoblinTrades {
                     toIntMap(ImmutableMap.of(
                             // common trades
                             1, new VillagerTrades.ItemListing[]{
-                                    new ItemsForPyrite(ModItems.INFUSED_DAGGER.get(), 4, 1,2, 1),
-                                    new ItemsForPyrite(ModItems.INFUSED_CHISEL.get(), 4, 1,2, 1),
-                                    new ItemsForPyrite(ModItems.PYRITE_COMPASS.get(), 5, 1,2, 1)
+                                    new ItemsForPyrite(ModItems.INFUSED_DAGGER, 4, 1,2, 1),
+                                    new ItemsForPyrite(ModItems.INFUSED_CHISEL, 4, 1,2, 1),
+                                    new ItemsForPyrite(ModItems.PYRITE_COMPASS, 5, 1,2, 1)
                             },
 
                             // rare trades
                             2,new VillagerTrades.ItemListing[]{
-                                    new ItemsForPyrite(ModItems.PORTAL_CORE.get(), 14, 1, 1),
+                                    new ItemsForPyrite(ModItems.PORTAL_CORE, 14, 1, 1),
                             }));
             case FORGER ->
                     toIntMap(ImmutableMap.of(
                             // common trades
                             1, new VillagerTrades.ItemListing[]{
-                                    new ItemsForPyrite(ModItems.INFUSED_ALLOY_INGOT.get(), 3, 1,7, 1),
-                                    new ItemsForPyrite(ModItems.KOBALT_INGOT.get(), 2, 1,5, 1),
+                                    new ItemsForPyrite(ModItems.INFUSED_ALLOY_INGOT, 3, 1,7, 1),
+                                    new ItemsForPyrite(ModItems.KOBALT_INGOT, 2, 1,5, 1),
                                     new PyriteForItems(Items.COPPER_INGOT, 1,8,1,1),
                                     new PyriteForItems(Items.IRON_INGOT, 1,8,1,2),
                                     new PyriteForItems(ModItems.DUNGEON_ESSENCE_SHARD, 1,10,1,1),
-                                    new ItemsForPyrite(ModItems.GOBLINS_FORGEHAMMER.get(), 16, 1,1, 1),
+                                    new ItemsForPyrite(ModItems.GOBLINS_FORGEHAMMER, 16, 1,1, 1),
                             },
 
                             // rare trades
                             2,new VillagerTrades.ItemListing[]{
-                                    new ItemsForPyrite(ModItems.PORTAL_CORE.get(), 14, 1,1, 1),
+                                    new ItemsForPyrite(ModItems.PORTAL_CORE, 14, 1,1, 1),
                             }));
             case SCAVENGER -> toIntMap(ImmutableMap.of(
                     // common trades
                     1, new VillagerTrades.ItemListing[]{
-                            new ItemsForPyrite(ModItems.DUNGEON_ESSENCE_SHARD.get(), 2, 1,7, 1),
+                            new ItemsForPyrite(ModItems.DUNGEON_ESSENCE_SHARD, 2, 1,7, 1),
                     },
 
                     // rare trades
@@ -91,11 +91,11 @@ public class HobGoblinTrades {
             this(new ItemStack(block), pyriteCost, numberOfItems, maxUses, villagerXp);
         }
 
-        public ItemsForPyrite(Item item, int pyriteCost, int numberOfItems, int villagerXp) {
+        public ItemsForPyrite(ItemLike item, int pyriteCost, int numberOfItems, int villagerXp) {
             this(new ItemStack(item), pyriteCost, numberOfItems, 12, villagerXp);
         }
 
-        public ItemsForPyrite(Item item, int pyriteCost, int numberOfItems, int maxUses, int villagerXp) {
+        public ItemsForPyrite(ItemLike item, int pyriteCost, int numberOfItems, int maxUses, int villagerXp) {
             this(new ItemStack(item), pyriteCost, numberOfItems, maxUses, villagerXp);
         }
 
@@ -103,11 +103,11 @@ public class HobGoblinTrades {
             this(itemStack, pyriteCost, numberOfItems, maxUses, villagerXp, 0.05F);
         }
 
-        public ItemsForPyrite(Item item, int pyriteCost, int numberOfItems, int maxUses, int villagerXp, float priceMultiplier) {
+        public ItemsForPyrite(ItemLike item, int pyriteCost, int numberOfItems, int maxUses, int villagerXp, float priceMultiplier) {
             this(new ItemStack(item), pyriteCost, numberOfItems, maxUses, villagerXp, priceMultiplier);
         }
 
-        public ItemsForPyrite(Item item, int pyriteCost, int numberOfItems, int maxUses, int villagerXp, float priceMultiplier, ResourceKey<EnchantmentProvider> enchantmentProvider) {
+        public ItemsForPyrite(ItemLike item, int pyriteCost, int numberOfItems, int maxUses, int villagerXp, float priceMultiplier, ResourceKey<EnchantmentProvider> enchantmentProvider) {
             this(new ItemStack(item), pyriteCost, numberOfItems, maxUses, villagerXp, priceMultiplier, Optional.of(enchantmentProvider));
         }
 
