@@ -12,7 +12,7 @@ public final class ListAndArrayUtils {
      */
     public static <T> T getRandomFromList(List<T> list, Random random) {
         if (list.isEmpty()) return null;
-        return list.get((int) Math.round(random.nextDouble() * (list.size() - 1)));
+        return list.get(random.nextInt(list.size()));
     }
 
     /**
@@ -20,7 +20,7 @@ public final class ListAndArrayUtils {
      */
     public static <T> T getRandomFromList(List<T> list, RandomSource random) {
         if (list.isEmpty()) return null;
-        return list.get((int) Math.round(random.nextDouble() * (list.size() - 1)));
+        return list.get(random.nextInt(list.size()));
     }
 
     public static <T, M> boolean mapEquals(Map<T, M> mapOne, Map<T, M> mapTwo) {

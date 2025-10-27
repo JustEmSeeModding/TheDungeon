@@ -78,7 +78,7 @@ public final class GridRoomBasic extends AbstractGridRoom{
     @Override
     public boolean equals(Object other) {
         return other instanceof GridRoomBasic otherRoom &&
-                basicData.resourceLocation == otherRoom.basicData.resourceLocation &&
+                java.util.Objects.equals(basicData.resourceLocation,otherRoom.basicData.resourceLocation) &&
                 data.gridWidth == otherRoom.data.gridWidth &&
                 data.gridHeight == otherRoom.data.gridHeight &&
                 ListAndArrayUtils.mapEquals(data.connections, otherRoom.data.connections) &&

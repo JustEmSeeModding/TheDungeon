@@ -95,7 +95,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .pattern(" # ")
                 .define('*', Items.COMPASS)
                 .define('#', ModItems.PYRITE.get())
-                .unlockedBy("has_pyrite", has(ModItems.PYRITE_COMPASS)).save(recipeOutput);
+                .unlockedBy("has_pyrite", has(ModItems.PYRITE)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.DUNGEON_PORTAL_F.get(), 1)
                 .pattern("###")

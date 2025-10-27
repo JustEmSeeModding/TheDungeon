@@ -30,7 +30,15 @@ public class KobaltArmorItem extends DungeonArmorItem {
     @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers() {
         return super.getDefaultAttributeModifiers()
-                .withModifierAdded(ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY, new AttributeModifier(TheDungeon.defaultResourceLocation("infused_alloy.aggro." + type.getName()), aggroBoost, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(type.getSlot()));
+                .withModifierAdded(
+                        ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY,
+                        new AttributeModifier(
+                                TheDungeon.defaultResourceLocation("kobalt.aggro." + this.getType().getName()),
+                                aggroBoost,
+                                AttributeModifier.Operation.ADD_VALUE
+                        ),
+                        EquipmentSlotGroup.bySlot(this.getType().getSlot())
+                );
     }
 
     @Override

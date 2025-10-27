@@ -88,6 +88,7 @@ public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
     }
 
     protected static boolean isValidSpawnPosition(BlockPos pos, Level level, Entity entity) {
+        if (entity==null) return false;
         for (int i = 0; i < entity.getBbHeight(); i++) {
             BlockState posState = level.getBlockState(pos.above(i));
             if (!posState.isAir()) {

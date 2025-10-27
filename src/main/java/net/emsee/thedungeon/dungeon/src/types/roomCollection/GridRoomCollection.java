@@ -200,11 +200,11 @@ public abstract class GridRoomCollection {
     }
 
     public StructureProcessorList getStructureProcessors() {
-        return new StructureProcessorList(structureProcessors.list()) ;
+        return new StructureProcessorList(new ArrayList<>(structureProcessors.list())) ;
     }
 
     public StructureProcessorList getStructurePostProcessors() {
-        return new StructureProcessorList(structurePostProcessors.list());
+        return new StructureProcessorList(new ArrayList<>(structurePostProcessors.list()));
     }
 
     public boolean hasPostProcessing() {

@@ -62,12 +62,15 @@ public enum DungeonRank {
     public static final PrimitiveCodec<DungeonRank> CODEC = new PrimitiveCodec<>() {
         @Override
         public <T> DataResult<DungeonRank> read(DynamicOps<T> ops, T input) {
-            return ops.getStringValue(input).map(DungeonRank::getByName);
+            return ops.getStringValue(input).flatMap(name -> {
+                DungeonRank rank = DungeonRank.getByName(name);
+                return rank != null ? DataResult.success(rank) : DataResult.error(() -> "Unknown DungeonRank: " + name);
+            });
         }
 
         @Override
         public <T> T write(DynamicOps<T> ops, DungeonRank value) {
-            return ops.createString(value.toString());
+            return ops.createString(value.getName());
         }
     };
 }
