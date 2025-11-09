@@ -1,10 +1,22 @@
 {
+  "thedungeon.configuration.dungeon_auto_cycling": "Dungeon Auto Cycle",
+  "thedungeon.configuration.calculator_steps_per_tick": "Steps Per Tick Calculator",
+  "thedungeon.configuration.placer_steps_per_tick": "Steps Per Tick Placer",
+  "thedungeon.configuration.post_process_steps_per_tick": "Steps Per Tick Post Processor",
+  "thedungeon.configuration.spawner_steps_per_tick": "Steps Per Tick Spawner",
+  "thedungeon.configuration.dungeon_do_seed_override": "Override Dungeon Seed",
+  "thedungeon.configuration.dungeon_seed_override": "Seed",
+  "thedungeon.configuration.dungeon_kill_on_regenerate": "Kill On Regenerate",
+  "thedungeon.configuration.dungeon_cleanup_on_regenerate": "Cleanup On Regenerate",
+  "thedungeon.configuration.dungeon_ticks_between_collapse": "Ticks Per Collapse",
+
+
   "announcement.thedungeon.open_dungeon" : "A new dungeon has been opened",
   "announcement.thedungeon.seconds_left" : "%s-rank has %s seconds left until collapse",
   "announcement.thedungeon.minutes_left" : "%s-rank has %s minutes left until collapse",
   "announcement.thedungeon.low_time_teleport": "This dungeon only has %s seconds left until collapse, Crouch-Click to confirm teleport",
 
-  "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the gamerules",
+  "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the config",
   "message.thedungeon.view_time_seconds" : "%s is next: %s seconds left until dungeon collapse",
   "message.thedungeon.view_time_minutes" : "%s is next: %s minutes and %s seconds left until dungeon collapse",
 

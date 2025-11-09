@@ -28,10 +28,10 @@ public class PriorityMap<T> extends LinkedHashMap<T,Integer> {
         int highest = minimumPriority;
         List<T> tempList = new ArrayList<>();
         for (T t: keySet()) {
-            if (get(t)==highest)
+            if (getPriority(t)==highest)
                 tempList.add(t);
-            else if (get(t)>highest) {
-                highest=get(t);
+            else if (getPriority(t)>highest) {
+                highest=getPriority(t);
                 tempList = new ArrayList<>();
                 tempList.add(t);
             }
@@ -64,10 +64,10 @@ public class PriorityMap<T> extends LinkedHashMap<T,Integer> {
         int highest = minimumPriority;
         List<T> tempList = new ArrayList<>();
         for (T t: keySet()) {
-            if (get(t)==highest)
+            if (getPriority(t)==highest)
                 tempList.add(t);
-            else if (get(t)>highest) {
-                highest=get(t);
+            else if (getPriority(t)>highest) {
+                highest=getPriority(t);
                 tempList = new ArrayList<>();
                 tempList.add(t);
             }

@@ -49,7 +49,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
 
     protected float getClusterDensity() {
         return 1.0f;
-    } // Default density
+    }
 
     // Calculate grid size for cluster centers
     protected int getGridSize() {
@@ -132,12 +132,12 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos(), newBlockState, relativeBlockInfo.nbt());
     }
 
-    private boolean shouldReplace(BlockPos worldPos, BlockPos center, float radius, ClusterContext context) {
+    protected boolean shouldReplace(BlockPos worldPos, BlockPos center, float radius, ClusterContext context) {
         double distance = distortedDistance(worldPos, center, context);
         return distance < radius * (1 + context.smoothness * context.random.nextFloat());
     }
 
-    private Tuple<BlockPos, Float> getClusterCenter(int gridX, int gridY, int gridZ, ClusterContext context) {
+    protected Tuple<BlockPos, Float> getClusterCenter(int gridX, int gridY, int gridZ, ClusterContext context) {
         int gridSize = getGridSize();
         int centerX = gridX * gridSize + gridSize / 2;
         int centerZ = gridZ * gridSize + gridSize / 2;
@@ -154,7 +154,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         return new Tuple<>(new BlockPos(centerX, centerY, centerZ), radius);
     }
 
-    private double distortedDistance(BlockPos pos, BlockPos center, ClusterContext context) {
+    protected double distortedDistance(BlockPos pos, BlockPos center, ClusterContext context) {
         double dx = pos.getX() - center.getX();
         double dy = (pos.getY() - center.getY()) * 1.4; // Vertical stretch
         double dz = pos.getZ() - center.getZ();
@@ -223,7 +223,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         return calculateCenterSeed(baseSeed, gridX, gridY, gridZ) + (getIsSeparateSeedPerReplacementBlock()? block.hashCode():0);
     }
 
-    private static class ClusterContext {
+    protected static class ClusterContext {
         final RandomSource random;
         final int baseRadius;
         float variation;

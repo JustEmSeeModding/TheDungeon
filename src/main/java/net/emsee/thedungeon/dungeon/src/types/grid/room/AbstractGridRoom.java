@@ -2,6 +2,7 @@ package net.emsee.thedungeon.dungeon.src.types.grid.room;
 
 
 import com.mojang.datafixers.util.Pair;
+import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.DungeonUtils;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
@@ -33,6 +34,10 @@ public abstract class AbstractGridRoom {
         this.data = data;
     }
 
+    public DungeonBiome getBiome() {
+        return data.biome;
+    }
+
     protected static class Data {
         public Data(int gridWidth, int gridHeight, int differentiationID) {
             this.gridWidth = gridWidth;
@@ -57,6 +62,8 @@ public abstract class AbstractGridRoom {
         public boolean allowUpDownConnectedRotation = false;
         public boolean skipCollectionProcessors = false;
         public boolean skipCollectionPostProcessors = false;
+
+        public DungeonBiome biome = DungeonBiome.none;
 
         public final PriorityMap<Connection> connections = new PriorityMap<>();
         public final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>(); /* Offset map */
@@ -251,14 +258,14 @@ public abstract class AbstractGridRoom {
 
         public S withStructureProcessor(StructureProcessor processor) {
             if (processor instanceof PostProcessor)
-                throw new IllegalStateException("Adding post processor as normal processor");
+                throw new IllegalArgumentException("Adding post processor as normal processor");
             data.structureProcessors.list().add(processor);
             return self();
         }
 
         public S withStructurePostProcessor(StructureProcessor processor) {
             if (!(processor instanceof PostProcessor))
-                throw new IllegalStateException("Adding normal processor as post processor");
+                throw new IllegalArgumentException("Adding normal processor as post processor");
             data.structurePostProcessors.list().add(processor);
             return self();
         }
@@ -270,6 +277,11 @@ public abstract class AbstractGridRoom {
 
         public S clearStructurePostProcessors() {
             data.structurePostProcessors.list().clear();
+            return self();
+        }
+
+        public S setBiome(DungeonBiome biome) {
+            data.biome = biome;
             return self();
         }
 
@@ -318,16 +330,16 @@ public abstract class AbstractGridRoom {
             return toReturn;
         }
 
-        if (data.connections.get(connection) > 0 &&
+        if (data.connections.getPriority(connection) > 0 &&
                 isValidConnection(connection, Rotation.NONE, fromTag, connectionRules))
             toReturn.add(Rotation.NONE);
-        if (getRotatedConnectionMap(data.connections, Rotation.COUNTERCLOCKWISE_90).get(connection) > 0 &&
+        if (getRotatedConnectionMap(data.connections, Rotation.COUNTERCLOCKWISE_90).getPriority(connection) > 0 &&
                 isValidConnection(connection, Rotation.COUNTERCLOCKWISE_90, fromTag, connectionRules))
             toReturn.add(Rotation.COUNTERCLOCKWISE_90);
-        if (getRotatedConnectionMap(data.connections, Rotation.CLOCKWISE_90).get(connection) > 0 &&
+        if (getRotatedConnectionMap(data.connections, Rotation.CLOCKWISE_90).getPriority(connection) > 0 &&
                 isValidConnection(connection, Rotation.CLOCKWISE_90, fromTag, connectionRules))
             toReturn.add(Rotation.CLOCKWISE_90);
-        if (getRotatedConnectionMap(data.connections, Rotation.CLOCKWISE_180).get(connection) > 0 &&
+        if (getRotatedConnectionMap(data.connections, Rotation.CLOCKWISE_180).getPriority(connection) > 0 &&
                 isValidConnection(connection, Rotation.CLOCKWISE_180, fromTag, connectionRules))
             toReturn.add(Rotation.CLOCKWISE_180);
         return toReturn;

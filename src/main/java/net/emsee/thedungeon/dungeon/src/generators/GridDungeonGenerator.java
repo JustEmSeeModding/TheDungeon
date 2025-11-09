@@ -1,6 +1,9 @@
 package net.emsee.thedungeon.dungeon.src.generators;
 
+import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
+import net.emsee.thedungeon.dungeon.src.Biome.GridDungeonBiomeRegistry;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.connectionRules.FailRule;
 import net.emsee.thedungeon.dungeon.src.Connection;
@@ -16,6 +19,7 @@ import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollec
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
+import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.MinecraftServer;
@@ -35,6 +39,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         PLACING_FAIL_RULES,
         POST_PROCESSING_ROOMS,
         FILLING_WITH_MOBS,
+        SAVING_ADDITIONAL,
         DONE
     }
 
@@ -44,6 +49,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     private final Random random;
     private final GridArray occupationArray;
     private final GridDungeonInstance dungeon;
+    private final GridDungeonBiomeRegistry biomeRegistry;
     private final GridRoomCollectionInstance collection;
     private final Queue<GeneratedRoom> todoRooms = new LinkedList<>();
     private final Queue<GeneratedRoom> toPlaceRooms = new LinkedList<>();
@@ -71,6 +77,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         this.dungeon = dungeon;
         this.collection = dungeon.getRoomCollection();
         this.occupationArray = new GridArray(dungeon.getRaw().getDungeonDepth(), dungeon.getRaw().getMaxFloorHeight(), !dungeon.getRaw().isDownGenerationDisabled());
+        this.biomeRegistry = new GridDungeonBiomeRegistry(collection.getRaw().getGridCellWidth(),collection.getRaw().getGridCellHeight(), dungeon.getRaw().getCenterPos());
 
         // select the starting room
         AbstractGridRoom startingRoom = dungeon.getRaw().getStartingRoom();
@@ -102,10 +109,11 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         else if (currentTask == GenerationTask.PLACING_FAIL_RULES) placeFailRuleStep(serverLevel);
         else if (currentTask == GenerationTask.POST_PROCESSING_ROOMS) postProcessRoomsStep(serverLevel);
         else if (currentTask == GenerationTask.FILLING_WITH_MOBS) fillWithMobsStep(serverLevel);
+        else if (currentTask == GenerationTask.SAVING_ADDITIONAL) saveAdditional(serverLevel);
     }
 
     private void calculationStep(MinecraftServer server) {
-        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(server, ModGamerules.CALCULATOR_STEPS_PER_TICK); i++) {
+        for (int i = 0; i < Config.CALCULATOR_STEPS_PER_TICK.getAsInt(); i++) {
             if (todoRooms.isEmpty()) {
                 // if done start next task
                 currentTask = GenerationTask.CHECK_REQUIREMENTS;
@@ -178,7 +186,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Fallback Fill Disabled, Starting Fail Rule Verification");
             return;
         }
-        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(server, ModGamerules.CALCULATOR_STEPS_PER_TICK); i++) {
+        for (int i = 0; i < Config.CALCULATOR_STEPS_PER_TICK.getAsInt(); i++) {
             if (FillUnoccupied()) {
                 // if all placements have been calculated, start the next step
                 currentTask = GenerationTask.VERIFY_FAIL_RULES;
@@ -264,7 +272,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     }
 
     private void placeRoomStep(ServerLevel serverLevel) {
-        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.PLACER_STEPS_PER_TICK); i++) {
+        for (int i = 0; i < Config.PLACER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toPlaceRooms.isEmpty()) {
                 // if done start next task
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "All Rooms Placed, Fail Rule Placement");
@@ -286,7 +294,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     }
 
     private void placeFailRuleStep(ServerLevel serverLevel) {
-        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.PLACER_STEPS_PER_TICK); i++) {
+        for (int i = 0; i < Config.PLACER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toPlaceFailRules.isEmpty()) {
                 // if done start next task
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "All Fail Rules Placed, Starting Post Processing");
@@ -302,7 +310,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     }
 
     private void postProcessRoomsStep(ServerLevel serverLevel) {
-        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.POST_PROCESSOR_STEPS_PER_TICK); i++) {
+        for (int i = 0; i < Config.POST_PROCESSOR_STEPS_PER_TICK.getAsInt(); i++) {
             if (toPostProcessRooms.isEmpty()) {
                 // if done start next task
                 GlobalDungeonManager.killAllInDungeon(serverLevel.getServer(), dungeon.getRank());
@@ -318,10 +326,10 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     }
 
     private void fillWithMobsStep(ServerLevel serverLevel) {
-        for (int i = 0; i < GameruleRegistry.getIntegerGamerule(serverLevel.getServer(), ModGamerules.SPAWNER_STEPS_PER_TICK); i++) {
+        for (int i = 0; i < Config.SPAWNER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toSpawnMobsRooms.isEmpty()) {
                 // if all mobs spawned, start the next task
-                currentTask = GenerationTask.DONE;
+                currentTask = GenerationTask.SAVING_ADDITIONAL;
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Mob Spawning Complete");
                 return;
             }
@@ -331,6 +339,17 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
             toSpawnMobs.spawnMobs(serverLevel);
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Mob spawn tick complete");
+    }
+
+    private void saveAdditional(ServerLevel serverLevel) {
+        DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Saving Additional Data");
+
+        DungeonSaveData saveData = DungeonSaveData.Get(serverLevel.getServer());
+
+        saveData.setBiomeRegistry(dungeon.getRank(), biomeRegistry);
+
+        DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Saving Complete");
+        currentTask = GenerationTask.DONE;
     }
 
 
@@ -365,6 +384,20 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         if (fallback.hasPostProcessing() || collection.getRaw().hasPostProcessing())
             toPostProcessRooms.add(fallback);
         //return fallback;
+    }
+
+    public void setBiomeAt(Vec3i cellPos, DungeonBiome biome) {
+        biomeRegistry.setBiomeAt(cellPos, biome);
+    }
+
+    public void setBiomeAt(Vec3i from, Vec3i to, DungeonBiome biome) {
+        for (int y = from.getY(); y < to.getY(); y++) {
+            for (int x = from.getX(); x <= to.getX(); x++) {
+                for (int z = from.getZ(); z <= to.getZ(); z++) {
+                    setBiomeAt(new Vec3i(x,y,z), biome);
+                }
+            }
+        }
     }
 
     public GridArray getOccupationArray() {

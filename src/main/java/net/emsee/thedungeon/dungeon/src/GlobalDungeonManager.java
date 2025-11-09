@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.dungeon.src;
 
+import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
@@ -101,12 +102,12 @@ public final class GlobalDungeonManager {
     public static void generationTimerTick(MinecraftServer server, DungeonSaveData saveData) {
         long worldTime = server.overworld().getGameTime();
 
-        if (!GameruleRegistry.getBooleanGamerule(server, ModGamerules.AUTO_DUNGEON_CYCLING)) {
+        if (!Config.AUTO_DUNGEON_CYCLING.getAsBoolean()) {
             saveData.SetLastExecutionTime(worldTime);
             return;
         }
 
-        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - GameruleRegistry.getIntegerGamerule(server,ModGamerules.TICKS_BETWEEN_COLLAPSES));
+        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - Config.TICKS_BETWEEN_COLLAPSES.getAsLong());
 
         long lastExecutionTime = saveData.GetLastExecutionTime();
 
@@ -160,7 +161,7 @@ public final class GlobalDungeonManager {
         progressQueueNULLCheck(server);
         passiveQueueNULLCheck(server, rank);
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
+        if (Config.DUNGEON_CLEAN_ON_REGEN.getAsBoolean())
             cleanup(server, rank);
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Selecting new dungeon");
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Checking passive queue");
@@ -186,7 +187,7 @@ public final class GlobalDungeonManager {
     }
 
     public static void killAllInDungeon(MinecraftServer server, DungeonRank rank) {
-        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_KILL_ON_REGEN)) {
+        if (Config.DUNGEON_KILL_ON_REGEN.getAsBoolean()) {
             ServerLevel dimension = server.getLevel(dungeonResourceKey);
 
             assert dimension != null;
@@ -310,7 +311,7 @@ public final class GlobalDungeonManager {
         Dungeon<?,?> newDungeon = getDungeonByID(selectedDungeonID);
 
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
+        if (Config.DUNGEON_CLEAN_ON_REGEN.getAsBoolean())
             cleanup(server, newDungeon.getRank());
         saveData.addToProgressQueue(newDungeon.createInstance());
     }

@@ -33,8 +33,8 @@ public class DungeonPortalCompas extends DungeonItem {
     // Optimization parameters
     private static final boolean ONLY_UPDATE_IN_HAND = false;
 
-    private static final int MAX_RANGE = 250;
-    private static final int NODE_LIMIT = 300;
+    private static final int MAX_RANGE = 350;
+    private static final int NODE_LIMIT = 500;
     private static final int SERVER_UPDATE_INTERVAL = 30; // ticks
     private static final int CLIENT_UPDATE_INTERVAL = 20;  // ticks
     private static final double MOVE_THRESHOLD_UPDATE = 2;

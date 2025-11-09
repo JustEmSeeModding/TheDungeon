@@ -79,7 +79,7 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
 
     }
 
-    private static AbstractGridRoom.Builder<?> hallsStraight() {
+    private static AbstractGridRoom.Builder<?,?> hallsStraight() {
         return GridRoomMultiResource.builder(9, 9)
                 .withResourceLocation("castle/halls/straight/default", 10)
                 .addConnection(Connection.NORTH)
@@ -87,7 +87,7 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> hallsCorners() {
+    private static AbstractGridRoom.Builder<?,?> hallsCorners() {
         return GridRoomMultiResource.builder(9, 9)
                 .withResourceLocation("castle/halls/corner/default", 10)
                 .addConnection(Connection.NORTH)
@@ -96,7 +96,7 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
                 .setAllConnectionTags("corner");
     }
 
-    private static AbstractGridRoom.Builder<?> mainHallSegments() {
+    private static AbstractGridRoom.Builder<?,?> mainHallSegments() {
         return GridRoomMultiResource.builder(9, 9)
                 .withResourceLocation("castle/mainhall/default", 10)
                 .withResourceLocation("castle/mainhall/loose_flag", 2)

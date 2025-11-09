@@ -2,6 +2,8 @@ package net.emsee.thedungeon.worldSaveData;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
+import net.emsee.thedungeon.dungeon.src.Biome.DungeonBiomeRegistry;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
@@ -234,6 +236,20 @@ public final class DungeonSaveData extends SavedData {
     public void serverUpdateTimeLeft(MinecraftServer server) {
         dungeonData.serverUpdateTimeLeft(server);
         PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
+    }
+
+    public void setBiomeRegistry(DungeonRank rank, DungeonBiomeRegistry registry) {
+        dungeonData.setBiomeRegistry(rank,registry);
+        setDirty();
+    }
+
+    public DungeonBiome getBiomeAt(BlockPos pos) {
+        return dungeonData.getBiomeAt(pos);
+    }
+
+    @Deprecated
+    public DungeonBiomeRegistry getBiomeRegUSNAFE(DungeonRank rank) {
+        return dungeonData.getBiomeRegUSNAFE(rank);
     }
 
     public static class PayloadHandler implements IPayloadHandler<DungeonNBTData.DataPacket> {

@@ -162,6 +162,7 @@ public final class GeneratedRoom {
         Vec3i min = new Vec3i(-(room.getRotatedEastPlacementOffset(placedRotation) - 1),0, -(room.getRotatedNorthPlacementOffset(placedRotation) - 1)).offset(placedGridPos);
         Vec3i max = new Vec3i((room.getRotatedEastPlacementOffset(placedRotation) - 1), room.getHeightScale(), (room.getRotatedNorthPlacementOffset(placedRotation) - 1)).offset(placedGridPos);
         generator.getOccupationArray().insertChildren(parent, min, max);
+        generator.setBiomeAt(min, max, room.getBiome());
 
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: returning success", this);
         generated = true;

@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.dungeon.src.types;
 
+import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
@@ -29,9 +30,8 @@ public abstract class DungeonInstance<T extends Dungeon<?,?>>{
             generateSeeded(server,savedSeed);
             return;
         }
-        // if override == -1 pick random seed, else use the override
-        long override = GameruleRegistry.getIntegerGamerule(server, ModGamerules.DUNGEON_SEED_OVERRIDE);
-        long seed = (override == -1) ? ThreadLocalRandom.current().nextLong() : override;
+
+        long seed = Config.OVERRIDE_DUNGEON_SEED.getAsBoolean() ? Config.DUNGEON_SEED_OVERRIDE.getAsLong() : ThreadLocalRandom.current().nextLong();
         generateSeeded(server, seed);
     }
 

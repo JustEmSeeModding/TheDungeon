@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.dungeon.registry.roomCollections;
 
+import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.fail.WallFailRule;
@@ -15,6 +16,7 @@ import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post.Ove
 import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post.SnowLayerPostProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.CrystalCaveClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.DirtClusterProcessor;
+import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.MagmaHollowClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.StoneCaveDioriteAndGraniteProcessor;
 import net.minecraft.world.level.block.Blocks;
 
@@ -26,6 +28,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
     private final static String OVERGROWN_TAG = "overgrown_caves";
     private final static String FUNGAL_TAG = "fungal_caves";
     private final static String CRYSTAL_TAG = "crystal_caves";
+    private final static String MAGMA_TAG = "magma_caves";
 
 
     public GoblinCavesGridRoomCollection() {
@@ -113,6 +116,17 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
+                .addRequiredRoom(1, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
+                        .withWeight(3)
+                        .horizontalConnections(1, 0, 1, 0)
+                        .setConnectionTag(Connection.NORTH, GILDED_TAG)
+                        .setConnectionTag(Connection.SOUTH, MAGMA_TAG)
+                        .doAllowRotation()
+                        .withStructureProcessor(MagmaHollowClusterProcessor.INSTANCE)
+                        .withStructureProcessor(GildedCaveOreProcessor.INSTANCE)
+                        .withStructureProcessor(StoneToGildedCaveProcessor.INSTANCE)
+                        .setOverrideEndChance(0)
+                        .setGenerationPriority(1).build())
 
                 .addRooms(stone_biome().build())
                 .addRooms(gilded_biome().build())
@@ -121,6 +135,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .addRooms(overgrown_biome().build())
                 .addRooms(fungal_biome().build())
                 .addRooms(crystal_biome().build())
+                .addRooms(magma_biome().build())
+
                 .addTagRule(new WallFailRule(STONE_TAG, 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
@@ -142,6 +158,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(CrystalCaveClusterProcessor.INSTANCE)
                         .withStructureProcessor(CrystalCaveProcessor.INSTANCE)
                         .withStructureProcessor(CrystalCaveBuddingPostProcessor.INSTANCE))
+                .addTagRule(new WallFailRule(MAGMA_TAG, 11, 11, 0, false, Blocks.BLACKSTONE::defaultBlockState, 11 * 11)
+                        .withStructureProcessor(MagmaHollowClusterProcessor.INSTANCE)
+                        .withStructureProcessor(MagmaCaveProcessor.INSTANCE))
         ;
     }
 
@@ -294,8 +313,17 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .applyToAll(room -> room.setAllConnectionTags(CRYSTAL_TAG)));
     }
 
+    private static GridRoomList.Builder magma_biome() {
+        return GridRoomList.builder()
+                .addRooms(unassigned_generic_path_caves()
+                        .applyToAll(room -> room.withStructureProcessor(MagmaHollowClusterProcessor.INSTANCE))
+                        .applyToAll(room -> room.withStructureProcessor(StoneToMagmaCaveProcessor.INSTANCE))
+                        .applyToAll(room -> room.setBiome(DungeonBiome.magma_cave))
+                        .applyToAll(room -> room.setAllConnectionTags(MAGMA_TAG)));
+    }
 
-    private static AbstractGridRoom.Builder<?> i_overgrown() {
+
+    private static AbstractGridRoom.Builder<?,?> i_overgrown() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/overgrown/i/one", 10)
                 .withResourceLocation("goblin_caves/overgrown/i/two", 10)
@@ -303,7 +331,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> l_overgrown() {
+    private static AbstractGridRoom.Builder<?,?> l_overgrown() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/overgrown/l/one", 10)
                 .withResourceLocation("goblin_caves/overgrown/l/two", 10)
@@ -311,7 +339,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> t_overgrown() {
+    private static AbstractGridRoom.Builder<?,?> t_overgrown() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/overgrown/t/one", 10)
                 .withResourceLocation("goblin_caves/overgrown/t/two", 10)
@@ -319,7 +347,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> i_fungal() {
+    private static AbstractGridRoom.Builder<?,?> i_fungal() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/fungal/i/one", 10)
                 .withResourceLocation("goblin_caves/fungal/i/two", 10)
@@ -327,7 +355,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> l_fungal() {
+    private static AbstractGridRoom.Builder<?,?> l_fungal() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/fungal/l/one", 10)
                 .withResourceLocation("goblin_caves/fungal/l/two", 10)
@@ -380,7 +408,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                                 .doAllowRotation());
     }
 
-    private static AbstractGridRoom.Builder<?> i_stone() {
+    private static AbstractGridRoom.Builder<?,?> i_stone() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/stone/i/one", 10)
                 .withResourceLocation("goblin_caves/stone/i/two", 11)
@@ -391,7 +419,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> l_stone() {
+    private static AbstractGridRoom.Builder<?,?> l_stone() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/stone/l/one", 10)
                 .withResourceLocation("goblin_caves/stone/l/two", 10)
@@ -400,7 +428,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> l_stone_vein() {
+    private static AbstractGridRoom.Builder<?,?> l_stone_vein() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/stone/l/iron_vein", 8)
                 .withResourceLocation("goblin_caves/stone/l/copper_vein", 10)
@@ -408,7 +436,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .doAllowRotation();
     }
 
-    private static AbstractGridRoom.Builder<?> l_blackstone_vein() {
+    private static AbstractGridRoom.Builder<?,?> l_blackstone_vein() {
         return GridRoomMultiResource.builder(11, 11)
                 .withResourceLocation("goblin_caves/blackstone/l/gold_vein", 10)
                 .horizontalConnections(1, 1, 0, 0)

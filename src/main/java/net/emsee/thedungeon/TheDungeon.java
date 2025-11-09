@@ -25,8 +25,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
@@ -42,9 +45,6 @@ public final class TheDungeon
         NeoForge.EVENT_BUS.register(this);
 
         ModCriteriaTriggerTypes.register(modEventBus);
-
-        loadClass(ModDungeons.class);
-        loadClass(ModCleanupDungeons.class);
 
         ModCreativeModeTabs.register(modEventBus);
 
@@ -66,6 +66,11 @@ public final class TheDungeon
 
         ModGamerules.registerRules();
 
+        loadClass(ModDungeons.class);
+        loadClass(ModCleanupDungeons.class);
+
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Mod instance constructed successfully.");
     }
 
@@ -80,19 +85,6 @@ public final class TheDungeon
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-    }
-
-
-    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Client Setup...");
-            ModEntityRegisterEvents.ClientEntityRendererSetup(event);
-            ModItemProperties.addCustomItemProperties();
-        }
     }
 
     /**

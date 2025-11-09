@@ -36,8 +36,8 @@ public class StoneToDeepCaveProcessor extends BlockPalletReplacementProcessor {
                 map.put(new ReplaceInstance(Blocks.DEEPSLATE_COAL_ORE::defaultBlockState), 5);
                 map.put(new ReplaceInstance(Blocks.DEEPSLATE_IRON_ORE::defaultBlockState), 3);
                 map.put(new ReplaceInstance(Blocks.DEEPSLATE_DIAMOND_ORE::defaultBlockState), 2);
-                map.put(new ReplaceInstance(ModBlocks.DEEPSLATE_PYRITE_ORE.get()::defaultBlockState), 4);
-                map.put(new ReplaceInstance(ModBlocks.INFUSED_DEEPSLATE.get()::defaultBlockState), 1);
+                map.put(new ReplaceInstance(() -> ModBlocks.DEEPSLATE_PYRITE_ORE.get().defaultBlockState()), 4);
+                map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_DEEPSLATE.get().defaultBlockState()), 1);
             });
 
     protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
