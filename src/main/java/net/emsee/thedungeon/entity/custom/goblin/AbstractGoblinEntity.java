@@ -64,9 +64,9 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
 
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack((byte)0,12,8,.5f,.75f, 1, 3)
-                .withAttack((byte)1,12,8,.5f,.75f, 1, 2)
-                .withAttack((byte)2,12,18, 1f,1, 1, 1)
+                .withAttack(0,12,8, h -> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.75f), 3)
+                .withAttack(1,12,8, h -> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.75f), 3)
+                .withAttack(2,12,18, h -> h, 1)
         );
     }
 

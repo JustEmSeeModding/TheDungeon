@@ -37,19 +37,27 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
     @Override
     public boolean isWithinMeleeAttackRange(LivingEntity pEnemy) {
         if (this.getAttribute(ModAttributes.DUNGEON_MOB_REACH) != null) {
-            double range = this.getAttributeValue(ModAttributes.DUNGEON_MOB_REACH);
+            double maxReach = this.getAttributeValue(ModAttributes.DUNGEON_MOB_REACH);
             float distance = pEnemy.distanceTo(this);
-            return super.isWithinMeleeAttackRange(pEnemy) || (distance <= range);
+            return super.isWithinMeleeAttackRange(pEnemy) || (distance <= maxReach);
         } else
             return super.isWithinMeleeAttackRange(pEnemy);
         //return super.isWithinMeleeAttackRange(entity);
     }
 
-    public boolean isWithinMeleeAttackRange(LivingEntity pEnemy, float reachMultiplier) {
+    public boolean isWithinMeleeAttackRange(LivingEntity pEnemy, double maxReach) {
         if (this.getAttribute(ModAttributes.DUNGEON_MOB_REACH) != null) {
-            double range = this.getAttributeValue(ModAttributes.DUNGEON_MOB_REACH) * reachMultiplier;
             float distance = pEnemy.distanceTo(this);
-            return super.isWithinMeleeAttackRange(pEnemy) || (distance <= range);
+            return super.isWithinMeleeAttackRange(pEnemy) || (distance <= maxReach);
+        } else
+            return super.isWithinMeleeAttackRange(pEnemy);
+        //return super.isWithinMeleeAttackRange(entity);
+    }
+
+    public boolean isWithinMeleeAttackRange(LivingEntity pEnemy, double minReach, double maxReach) {
+        if (this.getAttribute(ModAttributes.DUNGEON_MOB_REACH) != null) {
+            float distance = pEnemy.distanceTo(this);
+            return super.isWithinMeleeAttackRange(pEnemy) || (distance <= maxReach && distance >= minReach);
         } else
             return super.isWithinMeleeAttackRange(pEnemy);
         //return super.isWithinMeleeAttackRange(entity);

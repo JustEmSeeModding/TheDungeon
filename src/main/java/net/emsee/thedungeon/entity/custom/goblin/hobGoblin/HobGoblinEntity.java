@@ -76,12 +76,12 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
                 // default attacks
-                .withAttack(0, 12,8,1f,.75f, 1, null,Pair.of(List.of(ModItems.GOBLINS_DAGGER.get(), Items.AIR),List.of()),3)
-                .withAttack(1, 12,8,1f,.75f, 1, null,Pair.of(List.of(),List.of(ModItems.GOBLINS_DAGGER.get())),2)
-                .withAttack(2,12,18, 2f,1, 1, null, Pair.of(List.of(ModItems.GOBLINS_DAGGER.get()),List.of(ModItems.GOBLINS_DAGGER.get())), 1 )
+                .withAttack(0, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.GOBLINS_DAGGER.get(), Items.AIR),List.of()),3)
+                .withAttack(1, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(),List.of(ModItems.GOBLINS_DAGGER.get())),2)
+                .withAttack(2,12,18, h -> h.withDamageMultiplier(2f).withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.GOBLINS_DAGGER.get()),List.of(ModItems.GOBLINS_DAGGER.get())), 1 )
 
                 // hammer attacks
-                .withAttack(0, 12,23,1f,1f, 1, null,Pair.of(List.of(ModItems.GOBLINS_FORGEHAMMER.get()),List.of()),3)
+                .withAttack(0, 12,23,h -> h.withRequiredItems(List.of(ModItems.GOBLINS_FORGEHAMMER.get()),List.of()),3)
         );
     }
 

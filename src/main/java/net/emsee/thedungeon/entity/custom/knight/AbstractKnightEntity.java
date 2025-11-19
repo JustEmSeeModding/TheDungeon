@@ -62,8 +62,8 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
 
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack(0,15,5,1,1, 1)
-                .withAttack(1,7,3,.5f,.25f, .9f)
+                .withAttack(0,15,5,h -> h, 1)
+                .withAttack(1,7,3,h-> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.25f).withReachMultiplier(.9f),1)
         );
     }
 
@@ -85,7 +85,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         } else {
             --this.idleAnimationTimeout;
         }
-        if(this.isAttacking() && getAnimationID()>-1 && this.attackAnimationTimeout <=0 && animationNetworkVersion!= getAnimationVersion()){
+        if(this.isAttacking() && getAnimationID()>-1 /*&& this.attackAnimationTimeout <=0*/ && animationNetworkVersion!= getAnimationVersion()){
             switch (getAnimationID()) {
                 case 0: {
                     this.attackAnimationTimeout = 19;
