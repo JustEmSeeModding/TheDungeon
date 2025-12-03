@@ -3,6 +3,9 @@ package net.emsee.thedungeon.item.custom;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
@@ -21,10 +24,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class DungeonCurio extends DungeonItem implements IDungeonToolTips, ICurioItem
+public class DungeonCurio extends DungeonItem implements IDungeonToolTips, ICurioItem, IClassedItem
 {
-     public DungeonCurio(Properties properties) {
+    private final DungeonItemRank rank;
+    private final DungeonClass[] classes;
+
+    public DungeonCurio(Properties properties, DungeonItemRank rank, DungeonClass[] classes) {
         super(properties.stacksTo(1));
+        this.rank = rank;
+        this.classes = classes;
     }
 
     @Override
@@ -72,5 +80,15 @@ public class DungeonCurio extends DungeonItem implements IDungeonToolTips, ICuri
 
             map.put(Component.translatable("item.thedungeon.tooltip.curio_type"), slotComponents);
         });
+    }
+
+    @Override
+    public DungeonClass[] getLinkedClasses() {
+        return classes;
+    }
+
+    @Override
+    public DungeonItemRank getItemRank() {
+        return rank;
     }
 }

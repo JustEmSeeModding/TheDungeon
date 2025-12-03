@@ -1,6 +1,9 @@
 package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -14,13 +17,18 @@ import net.minecraft.world.level.block.DispenserBlock;
 
 import java.util.List;
 
-public class DungeonShieldItem extends DungeonItem implements IDungeonToolTips, Equipable {
+public class DungeonShieldItem extends DungeonItem implements IDungeonToolTips, Equipable, IClassedItem {
     protected static final ResourceLocation BASE_ARMOR_ID = TheDungeon.defaultResourceLocation("shield_item_armor");
     protected static final ResourceLocation BASE_ARMOR_TOUGHNESS_ID = TheDungeon.defaultResourceLocation("shield_item_armor_toughness");
 
-    public DungeonShieldItem(Properties properties, float armor, float armorToughness) {
+    private final DungeonItemRank rank;
+    private final DungeonClass[] classes;
+
+    public DungeonShieldItem(Properties properties, float armor, float armorToughness, DungeonItemRank rank, DungeonClass[] classes) {
         super(properties.stacksTo(1).attributes(createAttributes(armor, armorToughness)));
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
+        this.rank=rank;
+        this.classes=classes;
     }
 
     @Override
@@ -42,5 +50,15 @@ public class DungeonShieldItem extends DungeonItem implements IDungeonToolTips, 
         return ItemAttributeModifiers.builder()
                 .add(Attributes.ARMOR, new AttributeModifier(BASE_ARMOR_ID, armor, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.OFFHAND)
                 .add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(BASE_ARMOR_TOUGHNESS_ID, armorToughness, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.OFFHAND).build();
+    }
+
+    @Override
+    public DungeonClass[] getLinkedClasses() {
+        return classes;
+    }
+
+    @Override
+    public DungeonItemRank getItemRank() {
+        return rank;
     }
 }

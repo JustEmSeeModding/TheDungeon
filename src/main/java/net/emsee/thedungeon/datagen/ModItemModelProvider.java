@@ -25,6 +25,12 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");
         basicItemOtherTexturePath(ModItems.DUNGEON_DEBUG_TOOL, "minecraft", "item/stick");
 
+        basicSingleTextureBlockItem(ModBlocks.ROSE_QUARTZ_CLUSTER);
+        basicSingleTextureBlockItem(ModBlocks.LARGE_ROSE_QUARTZ_BUD);
+        basicSingleTextureBlockItem(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD);
+        basicSingleTextureBlockItem(ModBlocks.SMALL_ROSE_QUARTZ_BUD);
+
+
         basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
         basicItem(ModItems.PYRITE.asItem());
         basicItem(ModItems.RAW_KOBALT.asItem());

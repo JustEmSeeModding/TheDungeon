@@ -2,6 +2,8 @@ package net.emsee.thedungeon.item;
 
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.TankClass;
 import net.emsee.thedungeon.item.custom.*;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
@@ -50,22 +52,22 @@ public final class ModItems {
             () -> new DungeonPortalCompas(new Item.Properties()));
 
     public static final DeferredItem<DungeonCurio> TEST_BELT = ITEMS.register("test_belt",
-            () -> new DungeonCurio(new Item.Properties()));
+            () -> new DungeonCurio(new Item.Properties(), DungeonItemRank.F, new DungeonClass[]{}));
 
     public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
-            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, DungeonItemRank.F, new DungeonClass[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));
 
     public static final DeferredItem<DungeonToolItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
-            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2f))));
+            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.INFUSED_ALLOY, DungeonItemRank.F, new DungeonClass[]{}, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2f))));
 
     public static final DeferredItem<DungeonWeaponItem> GOBLINS_DAGGER = ITEMS.register("goblins_dagger",
-            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, true,ModTiers.KOBALT, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.KOBALT, 3.5f, -2F))));
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, true,ModTiers.KOBALT, DungeonItemRank.F, new DungeonClass[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.KOBALT, 3.5f, -2F))));
 
     public static final DeferredItem<DungeonToolItem> GOBLINS_FORGEHAMMER = ITEMS.register("goblins_forgehammer",
-            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.KOBALT, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.KOBALT, 8f, -3.2f))));
+            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.KOBALT, DungeonItemRank.F, new DungeonClass[]{}, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.KOBALT, 8f, -3.2f))));
 
     public static final DeferredItem<DungeonShieldItem> KOBALT_SHIELD = ITEMS.register("kobalt_shield",
-            () ->new DungeonShieldItem(new Item.Properties().durability(400), 2, 0));
+            () ->new DungeonShieldItem(new Item.Properties().durability(400), 2, 0, DungeonItemRank.F, new DungeonClass[]{}));
 
 
     public static final DeferredItem<TestDummyItem> TEST_DUMMY = ITEMS.register("test_dummy",

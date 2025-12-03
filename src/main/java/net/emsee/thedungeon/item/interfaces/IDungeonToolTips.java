@@ -1,7 +1,10 @@
 package net.emsee.thedungeon.item.interfaces;
 
 import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonCurio;
+import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -21,10 +24,14 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.util.*;
 
 public interface IDungeonToolTips {
+    boolean addLineSpacings = false;
+    
     ChatFormatting TITLE_FORMATTING = ChatFormatting.AQUA;
     ChatFormatting MAIN_STAT_FORMATTING = ChatFormatting.GOLD;
     ChatFormatting POSITIVE_FORMATTING = ChatFormatting.GREEN;
     ChatFormatting NEGATIVE_FORMATTING = ChatFormatting.RED;
+    ChatFormatting CLASS_FORMATTING = ChatFormatting.LIGHT_PURPLE;
+    ChatFormatting RANK_FORMATTING = ChatFormatting.LIGHT_PURPLE;
 
     /**
      * Component[0] = title, leave NULL for no title
@@ -57,6 +64,28 @@ public interface IDungeonToolTips {
             curioItem.getAttributeModifiers(stack).forEach((holder, modifier) -> {
                 entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY));
             });
+        }
+
+        if (stack.getItem() instanceof IClassedItem classedItem) {
+            DungeonItemRank rank = classedItem.getItemRank();
+            DungeonClass[] classes = classedItem.getLinkedClasses();
+
+            addFixedComponents(
+                    Util.make(new LinkedHashMap<>(), map -> {
+                        if (classes.length>0) {
+                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), Util.make(new Component[classes.length], array -> {
+                                int i = 0;
+                                for (DungeonClass dClass : classes) {
+                                    array[i] = dClass.getTranslatable().withStyle(CLASS_FORMATTING);
+                                }
+                            }));
+                        } else {
+                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), new Component[]{Component.translatable("item.thedungeon.tooltip.classes.anyclass").withStyle(CLASS_FORMATTING)});
+                        }
+
+                        map.put(Component.translatable("item.thedungeon.tooltip.rank"), new Component[]{rank.getTranslatable().withStyle(RANK_FORMATTING)});
+                    }), event
+            );
         }
 
         // add prefix component
@@ -96,7 +125,7 @@ public interface IDungeonToolTips {
 
         // add empty line spacing (vanilla has it and it looks cleaner)
         // then add the title
-        event.addTooltipLines(Component.empty());
+        if(addLineSpacings) event.addTooltipLines(Component.empty());
         if (title != null) event.addTooltipLines(title);
 
         // for hand weapons count all damage
@@ -227,7 +256,7 @@ public interface IDungeonToolTips {
 
         components.forEach((title, lines) -> {
             // add empty line spacing (vanilla has it, and it looks cleaner)
-            event.addTooltipLines(Component.empty());
+            if(addLineSpacings) event.addTooltipLines(Component.empty());
             // then add the title
             event.addTooltipLines(title.copy().withStyle(TITLE_FORMATTING));
 

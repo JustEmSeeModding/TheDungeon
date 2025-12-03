@@ -4,23 +4,22 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 
 public enum DungeonRank {
-    F(new BlockPos(0, 150, 0), "F"),
-    E(new BlockPos(3000, 150, 3000), "E"),
-    D(new BlockPos(-3000, 150, 3000), "D"),
-    C(new BlockPos(3000, 150, -3000), "C"),
-    B(new BlockPos(-3000, 150, -3000), "B"),
-    A(new BlockPos(6000, 150, 6000), "A"),
-    S(new BlockPos(-3000, 150, 6000), "S"),
-    SS(new BlockPos(6000, 150, -6000), "SS");
+    F(new BlockPos(0, 150, 0)),
+    E(new BlockPos(3000, 150, 3000)),
+    D(new BlockPos(-3000, 150, 3000)),
+    C(new BlockPos(3000, 150, -3000)),
+    B(new BlockPos(-3000, 150, -3000)),
+    A(new BlockPos(6000, 150, 6000)),
+    S(new BlockPos(-3000, 150, 6000)),
+    SS(new BlockPos(6000, 150, -6000));
 
     private final BlockPos centerPos;
-    private final String name;
 
-    DungeonRank(BlockPos centerPos, String name) {
+    DungeonRank(BlockPos centerPos) {
         this.centerPos = centerPos;
-        this.name = name;
     }
 
     public BlockPos getDefaultCenterPos() {
@@ -28,13 +27,18 @@ public enum DungeonRank {
     }
 
     public String getName() {
-        return name;
+        return name();
     }
 
     public static DungeonRank getByName(String name) {
-        for (DungeonRank rank : DungeonRank.values())
+        return valueOf(name);
+        /*for (DungeonRank rank : DungeonRank.values())
             if (name.equals(rank.getName())) return rank;
-        return null;
+        return null;*/
+    }
+
+    public Component getTranslatable() {
+        return Component.translatable("thedungeon.rank."+getName().toLowerCase());
     }
 
     public static DungeonRank getNext(DungeonRank rank) {

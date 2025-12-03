@@ -98,6 +98,12 @@ public final class ModCreativeModeTabs {
                         output.accept(ModBlocks.INFUSED_END_STONE);
                         output.accept(ModBlocks.INFUSED_END_STONE_BRICKS);
                         output.accept(ModBlocks.INFUSED_GLASS);
+                        output.accept(ModBlocks.ROSE_QUARTZ_BLOCK);
+                        output.accept(ModBlocks.BUDDING_ROSE_QUARTZ);
+                        output.accept(ModBlocks.SMALL_ROSE_QUARTZ_BUD);
+                        output.accept(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD);
+                        output.accept(ModBlocks.LARGE_ROSE_QUARTZ_BUD);
+                        output.accept(ModBlocks.ROSE_QUARTZ_CLUSTER);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_SPAWN_EGGS_TAB = CREATIVE_MODE_TAB.register("dungeon_spawn_eggs_tab",

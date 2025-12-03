@@ -1,6 +1,8 @@
 package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,7 +20,7 @@ public class DungeonScholarArmorItem extends DungeonArmorItem {
 
 
     public DungeonScholarArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
-        super(material, type, properties);
+        super(material, type, properties, DungeonItemRank.F, new DungeonClass[]{});
     }
 
     @Override

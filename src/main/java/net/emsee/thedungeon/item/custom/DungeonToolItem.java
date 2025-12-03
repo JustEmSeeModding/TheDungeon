@@ -2,6 +2,8 @@ package net.emsee.thedungeon.item.custom;
 
 import com.google.common.collect.Maps;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -72,6 +74,9 @@ public class DungeonToolItem extends DungeonWeaponItem {
         map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
         map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
         map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
+        map.put(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get(), Blocks.AIR);
 
         map.put(Blocks.SNOW, Blocks.AIR);
         map.put(Blocks.MOSS_CARPET, Blocks.AIR);
@@ -87,6 +92,7 @@ public class DungeonToolItem extends DungeonWeaponItem {
         map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
         map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
         map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
+        map.put(ModBlocks.ROSE_QUARTZ_CLUSTER.get(), Blocks.AIR);
     });
 
     /**
@@ -96,8 +102,8 @@ public class DungeonToolItem extends DungeonWeaponItem {
         return DEFAULT_BREAKABLES;
     }
 
-    public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
-        super(weaponType, isSweeping, tier, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
+    public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DungeonClass[] classes, Properties properties) {
+        super(weaponType, isSweeping, tier, rank, classes, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
     }
 
     @Override

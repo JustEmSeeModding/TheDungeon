@@ -59,6 +59,12 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
         simpleItemDropWithSilk(ModBlocks.INFUSED_GLASS.get(), ModItems.DUNGEON_ESSENCE_SHARD);
         dropSelf(ModBlocks.INFUSED_THREAD.get());
+        dropSelf(ModBlocks.ROSE_QUARTZ_BLOCK.get());
+        dropSelf(ModBlocks.BUDDING_ROSE_QUARTZ.get());
+        dropSelf(ModBlocks.ROSE_QUARTZ_CLUSTER.get());
+        simpleItemDropSelfWithSilk(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get());
         //dropOther(ModBlocks.INFUSED_COBWEB.get(), ModItems.INFUSED_THREAD);
     }
 
@@ -69,6 +75,10 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     private void simpleItemDropWithSilk(Block block, ItemLike item) {
         add(block, createSingleItemTableWithSilkTouch(block, item));
+    }
+
+    private void simpleItemDropSelfWithSilk(Block block) {
+        simpleItemDropWithSilk(block, block);
     }
 
     private void oreDrops(Block block, ItemLike item, float min, float max) {

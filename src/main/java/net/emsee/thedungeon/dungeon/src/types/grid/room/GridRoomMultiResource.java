@@ -186,7 +186,7 @@ public class GridRoomMultiResource extends AbstractGridRoom {
             if (processor instanceof PostProcessor postProcessorData)
                 forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(),serverLevel, pos -> {
                     BlockState initialState = serverLevel.getBlockState(pos);
-                    if (!postProcessorData.skipBlockForProcessing(serverLevel, pos, initialState))
+                    if (postProcessorData.skipBlockForProcessing(serverLevel, pos, initialState))
                         return;
                     // Create a StructureBlockInfo for the block
                     StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(

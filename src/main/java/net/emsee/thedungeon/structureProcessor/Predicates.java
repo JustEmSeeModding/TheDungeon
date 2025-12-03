@@ -3,24 +3,32 @@ package net.emsee.thedungeon.structureProcessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class Predicates extends AbstractReplacementProcessor {
     public static class BaseBlockPredicate implements Predicate<PredicateInfo> {
         private final Direction direction;
-        private final Block baseBlock;
+        private final Supplier<Block> baseBlock;
 
         public BaseBlockPredicate(Direction direction, Block baseBlock) {
             this.direction=direction;
-            this.baseBlock = baseBlock;
+            this.baseBlock = () -> baseBlock;
+        }
+
+        public BaseBlockPredicate(Direction direction, DeferredBlock<?> baseBlock) {
+            this.direction=direction;
+            this.baseBlock = baseBlock::get;
         }
 
         @Override
         public boolean test(PredicateInfo predicateInfo) {
             BlockState worldBaseBlock = predicateInfo.level.getBlockState(predicateInfo.pos.relative(direction));
-            return worldBaseBlock.is(baseBlock);
+            return worldBaseBlock.is(baseBlock.get());
         }
     }
 

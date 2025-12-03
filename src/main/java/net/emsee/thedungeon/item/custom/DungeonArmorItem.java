@@ -1,5 +1,8 @@
 package net.emsee.thedungeon.item.custom;
 
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.minecraft.core.Holder;
@@ -17,9 +20,14 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips {
-    public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
+public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips, IClassedItem {
+    private final DungeonItemRank rank;
+    private final DungeonClass[] classes;
+
+    public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, DungeonItemRank rank, DungeonClass[] classes) {
         super(material, type, properties.rarity(Rarity.RARE));
+        this.rank=rank;
+        this.classes=classes;
     }
 
     @Override
@@ -166,5 +174,15 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     }
 
     protected void onFullSetHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
+    }
+
+    @Override
+    public DungeonClass[] getLinkedClasses() {
+        return classes;
+    }
+
+    @Override
+    public DungeonItemRank getItemRank() {
+        return rank;
     }
 }

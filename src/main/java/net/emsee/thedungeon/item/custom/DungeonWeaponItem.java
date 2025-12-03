@@ -1,5 +1,8 @@
 package net.emsee.thedungeon.item.custom;
 
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
@@ -28,7 +31,7 @@ import net.neoforged.neoforge.common.ItemAbility;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
+public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon, IClassedItem {
     private static final float TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER = -.30f;
     private static final float TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER = -.35f;
 
@@ -38,17 +41,23 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
 
     private final WeaponType weaponType;
     private final boolean isSweeping;
+    private final DungeonItemRank rank;
+    private final DungeonClass[] classes;
 
-    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DungeonClass[] classes, Properties properties) {
         super(tier, properties.rarity(Rarity.RARE), createToolProperties());
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
+        this.rank = rank;
+        this.classes=classes;
     }
 
-    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Item.Properties properties, Tool toolComponentData) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DungeonClass[] classes, Item.Properties properties, Tool toolComponentData) {
         super(tier, properties.rarity(Rarity.RARE), toolComponentData);
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
+        this.rank = rank;
+        this.classes=classes;
     }
 
     public static Tool createToolProperties() {
@@ -172,6 +181,16 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
 
     public boolean allowOffhandAttack() {
         return true;
+    }
+
+    @Override
+    public DungeonClass[] getLinkedClasses() {
+        return classes;
+    }
+
+    @Override
+    public DungeonItemRank getItemRank() {
+        return rank;
     }
 
     public enum WeaponType{
