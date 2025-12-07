@@ -8,6 +8,7 @@ import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.events.ModEntityRegisterEvents;
 import net.emsee.thedungeon.gameRule.ModGamerules;
@@ -37,6 +38,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 public final class TheDungeon
 {
     public static final String MOD_ID = "thedungeon";
+    public static boolean doUpdateForcedChunks = false; //TODO set to true once in production
 
     public TheDungeon(IEventBus modEventBus, ModContainer modContainer)
     {
@@ -68,6 +70,7 @@ public final class TheDungeon
 
         loadClass(ModDungeons.class);
         loadClass(ModCleanupDungeons.class);
+        DungeonClass.createNamedInstances();
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 

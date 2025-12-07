@@ -2,6 +2,7 @@ package net.emsee.thedungeon.entity.custom.abstracts;
 
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
+import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -12,6 +13,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -66,24 +68,19 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
         if (
+            // allowed sources
                 source.is(ModDamageTypes.DUNGEON_RESET) ||
+                        source.is(ModDamageTypes.UNSTABLE_PORTAL) ||
                         source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
-                        source.is(DamageTypes.GENERIC_KILL)
+                        source.is(DamageTypes.GENERIC_KILL) ||
+                        source.is(ModDamageTypes.DUNGEON_WEAPON_TEST)
         ) return false;
-        if (
-                source.is(DamageTypes.ARROW) ||
-                source.is(DamageTypes.TRIDENT) ||
-                source.is(DamageTypes.FIREWORKS) ||
-                source.is(DamageTypes.MOB_PROJECTILE) ||
-                source.is(DamageTypes.PLAYER_EXPLOSION) ||
-                source.is(DamageTypes.THROWN) ||
-                source.is(DamageTypes.MAGIC)
-        ) return true;
-        if (source.getEntity() instanceof LivingEntity livingEntity) {
-            ItemStack mainHandStack = livingEntity.getItemBySlot(EquipmentSlot.MAINHAND);
-            if (mainHandStack.isEmpty()) return false;
-            if (mainHandStack.getItem() instanceof IDungeonWeapon) return false;
+
+        if (source.is(DamageTypes.PLAYER_ATTACK) && source.getEntity() instanceof Player player) {
+            ItemStack handItem = player.getMainHandItem();
+            return handItem.getCount()==0 || !(handItem.getItem() instanceof DungeonWeaponItem);
         }
+
         return true;
     }
 

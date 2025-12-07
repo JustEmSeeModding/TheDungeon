@@ -93,4 +93,8 @@ public abstract class DungeonInstance<T extends Dungeon<?,?>>{
     public abstract void loadSaveString(String[] saveArray);
 
     public abstract String toSaveString();
+
+    public long getSavedSeed() {
+        return savedSeed;
+    }
 }

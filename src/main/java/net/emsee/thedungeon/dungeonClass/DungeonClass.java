@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.dungeonClass;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
-import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
@@ -26,8 +26,12 @@ public abstract class DungeonClass {
     }
 
     public static DungeonClass getClassForPlayer(Player player) {
-        DungeonClass toReturn = getByResourceName(player.getData(ModAttachmentTypes.PLAYER_CLASS));
-        if (toReturn == null) return Classless.INSTANCE;
+        String className = player.getData(ModAttachmentTypes.PLAYER_CLASS);
+        DungeonClass toReturn = getByResourceName(className);
+        if (toReturn == null) {
+            DebugLog.logWarn(DebugLog.DebugType.WARNINGS, "Player:{}, dungeonClass returned null, saved string:{}, class does not exist or is not correctly linked", player, className);
+            //return Classless.INSTANCE;
+        }
         return toReturn;
     }
 }

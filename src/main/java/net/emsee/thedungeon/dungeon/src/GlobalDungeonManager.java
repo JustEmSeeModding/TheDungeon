@@ -2,6 +2,7 @@ package net.emsee.thedungeon.dungeon.src;
 
 import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
@@ -372,6 +373,7 @@ public final class GlobalDungeonManager {
     }
 
     public static void updateForcedChunks(MinecraftServer server) {
+        if (!TheDungeon.doUpdateForcedChunks) return;
         ServerLevel level = server.getLevel(dungeonResourceKey);
         if (level == null) {
             return;

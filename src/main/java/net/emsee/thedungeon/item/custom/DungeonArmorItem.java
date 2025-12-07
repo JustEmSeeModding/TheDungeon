@@ -19,7 +19,6 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import java.util.List;
 import java.util.Objects;
 
-
 public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips, IClassedItem {
     private final DungeonItemRank rank;
     private final DungeonClass[] classes;
@@ -174,6 +173,16 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     }
 
     protected void onFullSetHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
     }
 
     @Override
