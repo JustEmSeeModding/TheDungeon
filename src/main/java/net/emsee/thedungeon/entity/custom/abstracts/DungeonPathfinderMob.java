@@ -4,11 +4,14 @@ import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -17,15 +20,28 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.Nullable;
 
 //TODO make extend LivingEntity
 public abstract class DungeonPathfinderMob extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(DungeonPathfinderMob.class, EntityDataSerializers.BOOLEAN);
 
+    protected boolean finalizedSpawn = false;
+
 
     protected DungeonPathfinderMob(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
+    }
+
+    public void resetEquipmentItems() {
+        clearItems();
+        populateDefaultEquipmentSlots(random, level().getCurrentDifficultyAt(blockPosition()));
+    }
+
+    public void clearItems() {
+        getAllSlots().forEach(stack -> stack.setCount(0));
     }
 
 
@@ -142,5 +158,11 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
         }
 
         return flag;
+    }
+
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+        finalizedSpawn=true;
+        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 }

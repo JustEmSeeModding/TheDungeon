@@ -74,7 +74,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        this.populateDefaultEquipmentSlots(level.getRandom(), difficulty);
+        this.populateDefaultEquipmentSlots(random, difficulty);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 

@@ -9,6 +9,7 @@ import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonItemSwapHandling;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -52,7 +53,7 @@ public final class ModEquipmentEvents {
     private static void equippedNonDungeonInDungeon(LivingEquipmentChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (player.isCreative()) return;
-            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_non_dungeon_armor"), false);
+            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_non_dungeon_armor").withStyle(ChatFormatting.RED), true);
             player.getInventory().placeItemBackInInventory(player.getItemBySlot(event.getSlot()).copyAndClear());
         }
     }
@@ -60,7 +61,7 @@ public final class ModEquipmentEvents {
     private static void equippedWrongClassArmor(LivingEquipmentChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (player.isCreative()) return;
-            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_wrong_class_armor"), false);
+            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_wrong_class_armor").withStyle(ChatFormatting.RED), true);
             player.getInventory().placeItemBackInInventory(player.getItemBySlot(event.getSlot()).copyAndClear());
         }
     }
@@ -93,7 +94,7 @@ public final class ModEquipmentEvents {
     private static void equippedWrongHandItem(LivingEquipmentChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (player.isCreative()) return;
-            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_wrong_class_hand"), false);
+            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_wrong_class_hand").withStyle(ChatFormatting.RED), true);
             player.drop(player.getItemBySlot(event.getSlot()).copyAndClear(),true);
         }
     }

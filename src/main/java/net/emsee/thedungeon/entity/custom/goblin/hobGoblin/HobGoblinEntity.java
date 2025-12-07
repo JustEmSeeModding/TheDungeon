@@ -315,16 +315,24 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         return Variant.getById(this.getTypeVariant() & 255);
     }
 
-    private void setVariant(Variant variant) {
+    public void setVariant(Variant variant) {
         this.entityData.set(VARIANT, variant.getId() & 255);
+        if (finalizedSpawn) {
+            resetEquipmentItems();
+        }
+    }
+
+    public void setRandomVariant() {
+        Variant variant = variants.getRandom(this.random);
+        this.setVariant(variant);
+        if (finalizedSpawn) {
+            resetEquipmentItems();
+        }
     }
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        //if (getVariant() == null) {
-            Variant variant = variants.getRandom(this.random);
-            this.setVariant(variant);
-        //}
+        this.setRandomVariant();
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
