@@ -1,10 +1,9 @@
 package net.emsee.thedungeon.item.interfaces;
 
-import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonCurio;
-import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -17,9 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.neoforge.client.event.AddAttributeTooltipsEvent;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurio;
-import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.*;
 
@@ -68,15 +65,19 @@ public interface IDungeonToolTips {
 
         if (stack.getItem() instanceof IClassedItem classedItem) {
             DungeonItemRank rank = classedItem.getItemRank();
-            DungeonClass[] classes = classedItem.getLinkedClasses();
+            DeferredHolder<DungeonClass,?>[] classes = classedItem.getLinkedClasses();
+            DeferredHolder<DungeonSubClass<?>,?>[] subClasses = classedItem.getLinkedSubClasses();
 
             addFixedComponents(
                     Util.make(new LinkedHashMap<>(), map -> {
-                        if (classes.length>0) {
+                        if (classes.length>0 || subClasses.length>0) {
                             map.put(Component.translatable("item.thedungeon.tooltip.classes"), Util.make(new Component[classes.length], array -> {
                                 int i = 0;
-                                for (DungeonClass dClass : classes) {
-                                    array[i] = dClass.getTranslatable().withStyle(CLASS_FORMATTING);
+                                for (DeferredHolder<DungeonClass,?> dClass : classes) {
+                                    array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
+                                }
+                                for (DeferredHolder<DungeonSubClass<?>,?> dClass : subClasses) {
+                                    array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
                                 }
                             }));
                         } else {

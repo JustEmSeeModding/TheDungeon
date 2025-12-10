@@ -3,6 +3,7 @@ package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.emsee.thedungeon.item.custom.DungeonToolItem;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
@@ -21,6 +22,7 @@ import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.NoteBlockEvent;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public final class ModEquipmentEvents {
@@ -37,7 +39,7 @@ public final class ModEquipmentEvents {
             // handle the unEquipped item
             dungeonArmorItem.unEquip(event.getEntity(), event.getFrom(), event.getSlot());
         if (event.getTo().getItem() instanceof IClassedItem classedItem && event.getEntity() instanceof Player player &&
-                (!DungeonClass.getClassForPlayer(player).isItemForClass(classedItem))) {
+                (!hasPlayerClassForItem(player,classedItem))) {
             // equipped an item that does not belong to the class
             equippedWrongClassArmor(event);
         }
@@ -74,7 +76,7 @@ public final class ModEquipmentEvents {
         }
 
         if (event.getTo().getItem() instanceof IClassedItem classedItem && event.getEntity() instanceof Player player &&
-                (!DungeonClass.getClassForPlayer(player).isItemForClass(classedItem))) {
+                (!hasPlayerClassForItem(player,classedItem))) {
             // equipped an item that does not belong to the class
             equippedWrongHandItem(event);
         } else if (event.getTo().getItem() instanceof IDungeonItemSwapHandling swapHandling) {
@@ -139,5 +141,9 @@ public final class ModEquipmentEvents {
         if (event.getPlayer().getMainHandItem().getItem() instanceof DungeonToolItem diggerItem && event.getPlayer().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             diggerItem.breakEvent(event);
         }
+    }
+
+    private static boolean hasPlayerClassForItem(Player player, IClassedItem classedItem) {
+        return DungeonClass.getClassForPlayer(player).isItemForClass(classedItem) || DungeonSubClass.getClassForPlayer(player).isItemForClass(classedItem);
     }
 }

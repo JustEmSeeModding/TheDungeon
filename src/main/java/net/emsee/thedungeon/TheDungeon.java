@@ -8,29 +8,23 @@ import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
-import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.ModClasses;
+import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.emsee.thedungeon.entity.ModEntities;
-import net.emsee.thedungeon.events.ModEntityRegisterEvents;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.emsee.thedungeon.item.ModCreativeModeTabs;
-import net.emsee.thedungeon.item.ModItemProperties;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.recipe.ModRecipes;
 import net.emsee.thedungeon.villager.ModVillagers;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
@@ -66,11 +60,13 @@ public final class TheDungeon
         ModRecipes.register(modEventBus);
         ModVillagers.register(modEventBus);
 
+        ModClasses.register(modEventBus);
+        ModSubClasses.register(modEventBus);
+
         ModGamerules.registerRules();
 
         loadClass(ModDungeons.class);
         loadClass(ModCleanupDungeons.class);
-        DungeonClass.createNamedInstances();
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 

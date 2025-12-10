@@ -3,6 +3,7 @@ package net.emsee.thedungeon.item.custom;
 import com.google.common.collect.Maps;
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.*;
 
@@ -102,8 +104,8 @@ public class DungeonToolItem extends DungeonWeaponItem {
         return DEFAULT_BREAKABLES;
     }
 
-    public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DungeonClass[] classes, Properties properties) {
-        super(weaponType, isSweeping, tier, rank, classes, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
+    public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Properties properties) {
+        super(weaponType, isSweeping, tier, rank, classes, subClasses, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
     }
 
     @Override

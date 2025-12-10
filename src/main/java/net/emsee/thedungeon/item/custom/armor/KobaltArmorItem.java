@@ -3,6 +3,7 @@ package net.emsee.thedungeon.item.custom.armor;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.LinkedHashMap;
 
@@ -26,7 +28,7 @@ public class KobaltArmorItem extends DungeonArmorItem {
 
 
     public KobaltArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
-        super(material, type, properties, DungeonItemRank.F, new DungeonClass[]{});
+        super(material, type, properties, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{});
     }
 
     @Override

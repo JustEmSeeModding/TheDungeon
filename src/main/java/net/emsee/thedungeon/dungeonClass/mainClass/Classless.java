@@ -1,5 +1,6 @@
-package net.emsee.thedungeon.dungeonClass;
+package net.emsee.thedungeon.dungeonClass.mainClass;
 
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.minecraft.network.chat.Component;
@@ -7,19 +8,12 @@ import net.minecraft.network.chat.MutableComponent;
 
 import java.util.Arrays;
 
-public class Classless extends DungeonClass{
-    public static Classless INSTANCE = new Classless();
-
+public class Classless extends DungeonClass {
     @Override
     public boolean isItemForClass(IClassedItem item) {
         return item.getLinkedClasses().length==0 ||
-                Arrays.stream(item.getLinkedClasses()).anyMatch(r -> r instanceof Classless) ||
+                Arrays.stream(item.getLinkedClasses()).anyMatch(r -> r.get() instanceof Classless) ||
                 item.getItemRank() == DungeonItemRank.F;
-    }
-
-    @Override
-    public MutableComponent getTranslatable() {
-        return Component.translatable(getResourceName());
     }
 
     @Override

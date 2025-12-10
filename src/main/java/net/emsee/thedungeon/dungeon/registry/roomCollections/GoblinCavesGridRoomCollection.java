@@ -25,11 +25,13 @@ import java.util.function.Consumer;
 
 public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
     private final static String STONE_TAG = "stone_caves";
-    private final static String GILDED_TAG = "gilded_caves";
-    private final static String DEEP_TAG = "deep_caves";
-    private final static String ICE_TAG = "ice_caves";
     private final static String OVERGROWN_TAG = "overgrown_caves";
+    private final static String ICE_TAG = "ice_caves";
+
+    private final static String DEEP_TAG = "deep_caves";
+    private final static String GILDED_TAG = "gilded_caves";
     private final static String FUNGAL_TAG = "fungal_caves";
+
     private final static String CRYSTAL_TAG = "crystal_caves";
     private final static String MAGMA_TAG = "magma_caves";
 

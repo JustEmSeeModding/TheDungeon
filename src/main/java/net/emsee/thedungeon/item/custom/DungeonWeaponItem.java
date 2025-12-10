@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.item.custom;
 
-import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
@@ -9,15 +9,12 @@ import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -27,11 +24,11 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,22 +44,25 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     private final WeaponType weaponType;
     private final boolean isSweeping;
     private final DungeonItemRank rank;
-    private final DungeonClass[] classes;
+    private final DeferredHolder<DungeonClass,?>[] classes;
+    private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
-    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DungeonClass[] classes, Properties properties) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Properties properties) {
         super(tier, properties.rarity(Rarity.RARE), createToolProperties());
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
         this.rank = rank;
         this.classes=classes;
+        this.subClasses=subClasses;
     }
 
-    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DungeonClass[] classes, Item.Properties properties, Tool toolComponentData) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Item.Properties properties, Tool toolComponentData) {
         super(tier, properties.rarity(Rarity.RARE), toolComponentData);
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
         this.rank = rank;
         this.classes=classes;
+        this.subClasses=subClasses;
     }
 
     public static Tool createToolProperties() {
@@ -195,8 +195,13 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     }
 
     @Override
-    public DungeonClass[] getLinkedClasses() {
+    public DeferredHolder<DungeonClass, ?>[] getLinkedClasses() {
         return classes;
+    }
+
+    @Override
+    public DeferredHolder<DungeonSubClass<?>, ?>[] getLinkedSubClasses() {
+        return subClasses;
     }
 
     @Override

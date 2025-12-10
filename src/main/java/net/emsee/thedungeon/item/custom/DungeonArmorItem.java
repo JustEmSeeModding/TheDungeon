@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
@@ -15,18 +16,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.List;
 import java.util.Objects;
 
 public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips, IClassedItem {
     private final DungeonItemRank rank;
-    private final DungeonClass[] classes;
+    private final DeferredHolder<DungeonClass,?>[] classes;
+    private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
-    public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, DungeonItemRank rank, DungeonClass[] classes) {
+    public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes,DeferredHolder<DungeonSubClass<?>,?>[] subClasses) {
         super(material, type, properties.rarity(Rarity.RARE));
         this.rank=rank;
         this.classes=classes;
+        this.subClasses=subClasses;
     }
 
     @Override
@@ -186,8 +190,13 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     }
 
     @Override
-    public DungeonClass[] getLinkedClasses() {
+    public DeferredHolder<DungeonClass, ?>[] getLinkedClasses() {
         return classes;
+    }
+
+    @Override
+    public DeferredHolder<DungeonSubClass<?>, ?>[] getLinkedSubClasses(){
+        return subClasses;
     }
 
     @Override
