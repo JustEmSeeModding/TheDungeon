@@ -15,14 +15,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.event.level.NoteBlockEvent;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public final class ModEquipmentEvents {
@@ -39,7 +36,7 @@ public final class ModEquipmentEvents {
             // handle the unEquipped item
             dungeonArmorItem.unEquip(event.getEntity(), event.getFrom(), event.getSlot());
         if (event.getTo().getItem() instanceof IClassedItem classedItem && event.getEntity() instanceof Player player &&
-                (!hasPlayerClassForItem(player,classedItem))) {
+                (playerLacksClassForItem(player, classedItem))) {
             // equipped an item that does not belong to the class
             equippedWrongClassArmor(event);
         }
@@ -76,7 +73,7 @@ public final class ModEquipmentEvents {
         }
 
         if (event.getTo().getItem() instanceof IClassedItem classedItem && event.getEntity() instanceof Player player &&
-                (!hasPlayerClassForItem(player,classedItem))) {
+                (playerLacksClassForItem(player, classedItem))) {
             // equipped an item that does not belong to the class
             equippedWrongHandItem(event);
         } else if (event.getTo().getItem() instanceof IDungeonItemSwapHandling swapHandling) {
@@ -143,7 +140,7 @@ public final class ModEquipmentEvents {
         }
     }
 
-    private static boolean hasPlayerClassForItem(Player player, IClassedItem classedItem) {
-        return DungeonClass.getClassForPlayer(player).isItemForClass(classedItem) || DungeonSubClass.getClassForPlayer(player).isItemForClass(classedItem);
+    private static boolean playerLacksClassForItem(Player player, IClassedItem classedItem) {
+        return !DungeonClass.getClassForPlayer(player).isItemForClass(classedItem) && !DungeonSubClass.getClassForPlayer(player).isItemForClass(classedItem);
     }
 }

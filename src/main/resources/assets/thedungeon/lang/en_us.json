@@ -47,6 +47,9 @@
   "thedungeon.class.classless": "Classless",
   "thedungeon.class.tank": "Tank",
 
+  "thedungeon.subclass.classless": "SubClassless",
+  "thedungeon.subclass.tank.vanguard": "Vanguard",
+
   "entity.thedungeon.test_dummy" : "Test Dummy",
   "entity.thedungeon.death_knight" : "Death Knight",
   "entity.thedungeon.skeleton_knight" : "Skeleton Knight",
