@@ -10,16 +10,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
-public class StoneToDeepCaveProcessor extends BlockPalletReplacementProcessor {
-    public static final StoneToDeepCaveProcessor INSTANCE = new StoneToDeepCaveProcessor();
+public class DeepCaveProcessor extends BlockPalletReplacementProcessor {
+    public static final DeepCaveProcessor INSTANCE = new DeepCaveProcessor();
 
-    public static final MapCodec<StoneToDeepCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
+    public static final MapCodec<DeepCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
     protected final WeightedMap.Int<ReplaceInstance> defaultMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
@@ -42,9 +40,7 @@ public class StoneToDeepCaveProcessor extends BlockPalletReplacementProcessor {
 
     protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
             Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.STONE, defaultMap);
-                map.put(Blocks.GRANITE, defaultMap);
-                map.put(Blocks.DIORITE, defaultMap);
+                map.put(Blocks.DEEPSLATE, defaultMap);
             });
 
     @Override

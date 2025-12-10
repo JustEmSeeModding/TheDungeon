@@ -2,7 +2,6 @@ package net.emsee.thedungeon.dungeon.registry.roomCollections;
 
 import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.src.Connection;
-import net.emsee.thedungeon.dungeon.src.mobSpawnRules.MobSpawnRule;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.*;
 import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.fail.WallFailRule;
@@ -17,8 +16,6 @@ import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.CrystalCaveC
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.DirtClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.MagmaHollowClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.StoneCaveDioriteAndGraniteProcessor;
-import net.emsee.thedungeon.worldgen.biome.ModBiomes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.function.Consumer;
@@ -41,9 +38,10 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
         super(11, 11);
         this
 
-                .addRequiredRoomsOf(25, 50, spawn_rooms().build().getList())
+                .addRequiredRoomsOf(20, 50, spawn_rooms().build().getList())
                 .addRequiredRoomsOf(5, dens().build().getList())
 
+                // the magma forge
                 .addRequiredRoom(1,1, GridRoomBasic.builder("goblin_caves/magma/forge",11,11)
                         .setSizeHeight(5,5,3)
                         .withWeight(5)
@@ -57,11 +55,12 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(MagmaHollowClusterProcessor.INSTANCE)
                         .withStructureProcessor(StoneToMagmaCaveProcessor.INSTANCE)
                         .setBiome(DungeonBiome.magma_cave)
-                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, e->{e.setVariant(HobGoblinEntity.Variant.FORGER);}, 2, 5, 1))
+                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, e-> e.setVariant(HobGoblinEntity.Variant.FORGER), 2, 5, 1))
                         .addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, 3, 6))
                         .build()
                 )
 
+                // stone to gilded
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
@@ -73,39 +72,67 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
-                .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
+
+                //deep to crystal
+                .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_deep", 11, 11)
+                        .setHeight(2)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
-                        .setConnectionTag(Connection.NORTH, DEEP_TAG)
-                        .setConnectionTag(Connection.SOUTH, STONE_TAG)
+                        .setConnectionTag(Connection.NORTH, CRYSTAL_TAG)
+                        .setConnectionTag(Connection.SOUTH, DEEP_TAG)
+                        .setHorizontalConnectionOffset(Connection.NORTH, 0,1)
                         .doAllowRotation()
-                        .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE)
-                        .withStructureProcessor(BlackstoneToPlainStoneProcessor.INSTANCE)
-                        .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
-                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
+                        .withStructureProcessor(DeepCaveProcessor.INSTANCE)
+                        .withStructureProcessor(StoneToCrystalBaseProcessor.INSTANCE)
+                        .withStructureProcessor(CrystalCaveClusterProcessor.INSTANCE)
+                        .withStructureProcessor(CrystalCaveProcessor.INSTANCE)
+                        .withStructurePostProcessor(CrystalCaveBuddingPostProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
+
+                //stone to deep
+                .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_deep", 11, 11)
+                        .setHeight(2)
+                        .withWeight(3)
+                        .horizontalConnections(1, 0, 1, 0)
+                        .setConnectionTag(Connection.NORTH, STONE_TAG)
+                        .setConnectionTag(Connection.SOUTH, DEEP_TAG)
+                        .setHorizontalConnectionOffset(Connection.NORTH, 0,1)
+                        .doAllowRotation()
+                        .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
+                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
+                        .withStructureProcessor(DeepCaveProcessor.INSTANCE)
+                        .setOverrideEndChance(0)
+                        .setGenerationPriority(1).build())
+
+                //deep to gilded
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, DEEP_TAG)
                         .setConnectionTag(Connection.SOUTH, GILDED_TAG)
                         .doAllowRotation()
-                        .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE)
+                        .withStructureProcessor(StoneToDeepslateBaseProcessor.INSTANCE)
+                        .withStructureProcessor(DeepCaveProcessor.INSTANCE)
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
+
+                //ice to deep
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, DEEP_TAG)
                         .setConnectionTag(Connection.SOUTH, ICE_TAG)
                         .doAllowRotation()
-                        .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE)
+                        .withStructureProcessor(BlackstoneToDeepslateProcessor.INSTANCE)
+                        .withStructureProcessor(DeepCaveProcessor.INSTANCE)
                         .withStructureProcessor(BlackstoneToPlainStoneProcessor.INSTANCE)
                         .withStructureProcessor(StoneToIceCaveProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
+
+                //stone to overgrown
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_overgrown", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
@@ -116,6 +143,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(OvergrownCaveProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
+
+                //overgrown to fungal
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/fungal_overgrown", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
@@ -127,19 +156,23 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(FungalVegetationOnlyProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
+
+                //deep to crystal
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, CRYSTAL_TAG)
-                        .setConnectionTag(Connection.SOUTH, STONE_TAG)
+                        .setConnectionTag(Connection.SOUTH, DEEP_TAG)
                         .doAllowRotation()
                         .withStructureProcessor(StoneToCrystalBaseProcessor.INSTANCE)
                         .withStructureProcessor(CrystalCaveProcessor.INSTANCE)
                         .withStructurePostProcessor(CrystalCaveBuddingPostProcessor.INSTANCE)
-                        .withStructureProcessor(BlackstoneToPlainStoneProcessor.INSTANCE)
-                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
+                        .withStructureProcessor(BlackstoneToDeepslateProcessor.INSTANCE)
+                        .withStructureProcessor(DeepCaveProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
+
+                //gilded to magma
                 .addRequiredRoom(1, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
@@ -166,8 +199,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
                 .addTagRule(new WallFailRule(GILDED_TAG, 11, 11, 0, false, Blocks.BLACKSTONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE))
-                .addTagRule(new WallFailRule(DEEP_TAG, 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
-                        .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE))
+                .addTagRule(new WallFailRule(DEEP_TAG, 11, 11, 0, false, Blocks.DEEPSLATE::defaultBlockState, 11 * 11)
+                        .withStructureProcessor(DeepCaveProcessor.INSTANCE))
                 .addTagRule(new WallFailRule(ICE_TAG, 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(StoneToIceCaveProcessor.INSTANCE))
                 .addTagRule(new WallFailRule(OVERGROWN_TAG, 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
@@ -197,18 +230,6 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
                 .addRoom(GridRoomBasic.builder("goblin_caves/stone/spawn", 11, 11)
-                        .withWeight(3)
-                        .addConnection(Connection.NORTH)
-                        .setAllConnectionTags(GILDED_TAG)
-                        .doAllowRotation()
-                        .withStructureProcessor(StoneToGildedCaveProcessor.INSTANCE))
-                .addRoom(GridRoomBasic.builder("goblin_caves/stone/spawn", 11, 11)
-                        .withWeight(3)
-                        .addConnection(Connection.NORTH)
-                        .setAllConnectionTags(DEEP_TAG)
-                        .doAllowRotation()
-                        .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE))
-                .addRoom(GridRoomBasic.builder("goblin_caves/stone/spawn", 11, 11)
                         .withWeight(1)
                         .addConnection(Connection.NORTH)
                         .setAllConnectionTags(ICE_TAG)
@@ -223,24 +244,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .doAllowRotation()
                         .withStructureProcessor(DirtClusterProcessor.INSTANCE)
                         .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
-                        .withStructureProcessor(OvergrownCaveProcessor.INSTANCE))
-                .addRoom(GridRoomBasic.builder("goblin_caves/fungal/spawn", 11, 11)
-                        .withWeight(2)
-                        .addConnection(Connection.NORTH)
-                        .setAllConnectionTags(FUNGAL_TAG)
-                        .doAllowRotation()
-                        .withStructureProcessor(DirtClusterProcessor.INSTANCE)
-                        .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
-                        .withStructureProcessor(FungalCaveProcessor.INSTANCE))
-                .addRoom(GridRoomBasic.builder("goblin_caves/stone/spawn", 11, 11)
-                        .withWeight(2)
-                        .addConnection(Connection.NORTH)
-                        .setAllConnectionTags(CRYSTAL_TAG)
-                        .doAllowRotation()
-                        .withStructureProcessor(StoneToCrystalBaseProcessor.INSTANCE)
-                        .withStructureProcessor(CrystalCaveClusterProcessor.INSTANCE)
-                        .withStructureProcessor(CrystalCaveProcessor.INSTANCE)
-                        .withStructurePostProcessor(CrystalCaveBuddingPostProcessor.INSTANCE));
+                        .withStructureProcessor(OvergrownCaveProcessor.INSTANCE));
     }
 
     private static GridRoomList.Builder dens() {
@@ -271,7 +275,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setHorizontalConnectionOffset(Connection.SOUTH, 2, 1)
                         .setAllConnectionTags(DEEP_TAG)
                         .doAllowRotation()
-                        .withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE)
+                        .withStructureProcessor(StoneToDeepslateBaseProcessor.INSTANCE)
+                        .withStructureProcessor(DeepCaveProcessor.INSTANCE)
                         .addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 2, 5, 1)));
     }
 
@@ -299,7 +304,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
     private static GridRoomList.Builder deep_biome() {
         return GridRoomList.builder()
                 .addRooms(unassigned_generic_path_caves()
-                        .applyToAll(room -> room.withStructureProcessor(StoneToDeepCaveProcessor.INSTANCE))
+                        .applyToAll(room -> room.withStructureProcessor(StoneToDeepslateBaseProcessor.INSTANCE))
+                        .applyToAll(room -> room.withStructureProcessor(DeepCaveProcessor.INSTANCE))
                         .applyToAll(room -> room.setAllConnectionTags(DEEP_TAG)))
 
                 .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 1, 2, .15f)));
@@ -417,7 +423,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                                 .horizontalConnections().setHorizontalConnectionOffset(Connection.EAST, 0, 1)
                                 .setHorizontalConnectionOffset(Connection.SOUTH, 0, 1)
                                 .doAllowRotation())
-                .addRoom(// TODO has an issue with some misplaced blocks
+                .addRoom(
                         GridRoomBasic.builder("goblin_caves/stone/x_large/elevated_two", 11, 11)
                                 .withWeight(3).setSizeHeight(3, 3, 2)
                                 .horizontalConnections().setHorizontalConnectionOffset(Connection.EAST, 0, 1)
@@ -430,7 +436,14 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                                 .setSizeHeight(3, 3, 2)
                                 .horizontalConnections().setHorizontalConnectionOffset(Connection.EAST, 0, 1)
                                 .setHorizontalConnectionOffset(Connection.WEST, 0, 1)
-                                .doAllowRotation());
+                                .doAllowRotation())
+                .addRoom(GridRoomBasic.builder("goblin_caves/convert/stone_deep", 11, 11)
+                        .setHeight(2)
+                        .withWeight(8)
+                        .horizontalConnections(1, 0, 1, 0)
+                        .setHorizontalConnectionOffset(Connection.NORTH, 0,1)
+                        .doAllowRotation()
+                        .withStructureProcessor(DeepslateToStoneBaseProcessor.INSTANCE));
     }
 
     private static AbstractGridRoom.Builder<?,?> i_stone() {

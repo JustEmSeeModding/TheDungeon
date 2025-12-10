@@ -3,6 +3,8 @@ package net.emsee.thedungeon.events;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.dungeonClass.ModClasses;
+import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.GrassColor;
@@ -10,6 +12,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public class IModEventBusEvents {
@@ -26,5 +29,11 @@ public class IModEventBusEvents {
     @SubscribeEvent
     public static void itemColorLoad(RegisterColorHandlersEvent.Item event) {
         event.getItemColors().register((stack, index) -> GrassColor.get(0.5D, 1.0D), ModBlocks.INFUSED_GRASS_BLOCK.get());
+    }
+
+    @SubscribeEvent // on the mod event bus
+    public static void registerRegistries(NewRegistryEvent event) {
+        event.register(ModClasses.CLASS_REGISTRY);
+        event.register(ModSubClasses.SUBCLASS_REGISTRY);
     }
 }

@@ -20,7 +20,6 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.BasicItemListing;
 
 import javax.annotation.Nullable;
 import java.util.Map;

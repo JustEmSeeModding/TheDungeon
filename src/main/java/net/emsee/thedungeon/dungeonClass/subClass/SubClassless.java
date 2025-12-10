@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class SubClassless extends DungeonSubClass<DungeonClass> {
     @Override
     public boolean isItemForClass(IClassedItem item) {
-        return item.getLinkedSubClasses().length==0||
+        return item.hasNoLinkedClasses() ||
                 Arrays.stream(item.getLinkedSubClasses()).anyMatch(r -> r.get() instanceof SubClassless);
     }
 

@@ -10,4 +10,8 @@ public interface IClassedItem {
     DeferredHolder<DungeonSubClass<?>, ?>[] getLinkedSubClasses();
     DungeonItemRank getItemRank();
 
+    default boolean hasNoLinkedClasses() {
+        return false;//getLinkedClasses().length == 0
+                //&& getLinkedSubClasses().length == 0;
+    }
 }

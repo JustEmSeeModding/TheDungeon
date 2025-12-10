@@ -76,9 +76,9 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
     @Override
     public String toSaveString() {
         return
-                dungeon.getResourceName()+ ":" +
-                savedSeed + ":" +
-                (generated?1:0);
+                dungeon.getResourceName() + ":" +
+                        savedSeed + ":" +
+                        (generated ? 1 : 0);
     }
 
     @Override

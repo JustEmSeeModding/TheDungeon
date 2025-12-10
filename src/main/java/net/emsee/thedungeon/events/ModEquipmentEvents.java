@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.events;
 
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
@@ -141,6 +142,8 @@ public final class ModEquipmentEvents {
     }
 
     private static boolean playerLacksClassForItem(Player player, IClassedItem classedItem) {
-        return !DungeonClass.getClassForPlayer(player).isItemForClass(classedItem) && !DungeonSubClass.getClassForPlayer(player).isItemForClass(classedItem);
+        boolean hasClass = DungeonClass.getClassForPlayer(player).isItemForClass(classedItem);
+        boolean hasSubClass = DungeonSubClass.getClassForPlayer(player).isItemForClass(classedItem);
+        return !hasClass && !hasSubClass;
     }
 }

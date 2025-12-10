@@ -3,15 +3,12 @@ package net.emsee.thedungeon.entity.custom.abstracts;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
-import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -23,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-//TODO make extend LivingEntity
 public abstract class DungeonPathfinderMob extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(DungeonPathfinderMob.class, EntityDataSerializers.BOOLEAN);
@@ -94,7 +90,7 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
 
         if (source.is(DamageTypes.PLAYER_ATTACK) && source.getEntity() instanceof Player player) {
             ItemStack handItem = player.getMainHandItem();
-            return handItem.getCount()==0 || !(handItem.getItem() instanceof DungeonWeaponItem);
+            return !handItem.isEmpty() && !(handItem.getItem() instanceof DungeonWeaponItem);
         }
 
         return true;
@@ -141,16 +137,13 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
         boolean flag = entity.hurt(damagesource, damage * damageMultiplier);
         if (flag) {
             float knockback = this.getKnockback(entity, damagesource)*knockbackMultiplier;
-            if (knockback > 0.0F && entity instanceof LivingEntity) {
-                LivingEntity livingentity = (LivingEntity)entity;
-                livingentity.knockback((double)(knockback * 0.5F), (double) Mth.sin(this.getYRot() * 0.017453292F), (double)(-Mth.cos(this.getYRot() * 0.017453292F)));
+            if (knockback > 0.0F) {
+                entity.knockback(knockback * 0.5F, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
             }
 
-            Level var7 = this.level();
-            if (var7 instanceof ServerLevel) {
-                ServerLevel serverlevel1 = (ServerLevel)var7;
-                EnchantmentHelper.doPostAttackEffects(serverlevel1, entity, damagesource);
+            if (level instanceof ServerLevel serverlevel) {
+                EnchantmentHelper.doPostAttackEffects(serverlevel, entity, damagesource);
             }
 
             this.setLastHurtMob(entity);

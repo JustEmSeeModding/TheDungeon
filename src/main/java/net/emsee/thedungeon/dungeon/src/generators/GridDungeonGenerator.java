@@ -43,26 +43,26 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         DONE
     }
 
-    private GenerationTask currentTask = GenerationTask.UN_STARTED;
+    protected GenerationTask currentTask = GenerationTask.UN_STARTED;
 
-    private final long seed;
-    private final Random random;
-    private final GridArray occupationArray;
-    private final GridDungeonInstance dungeon;
-    private final GridDungeonBiomeRegistry biomeRegistry;
-    private final GridRoomCollectionInstance collection;
-    private final Queue<GeneratedRoom> todoRooms = new LinkedList<>();
-    private final Queue<GeneratedRoom> toPlaceRooms = new LinkedList<>();
-    private final Queue<FailRule.Instance> toPlaceFailRules = new LinkedList<>();
-    private final Queue<GeneratedRoom> toPostProcessRooms = new LinkedList<>();
-    private final Queue<GeneratedRoom> toSpawnMobsRooms = new LinkedList<>();
+    protected final long seed;
+    protected final Random random;
+    protected final GridArray occupationArray;
+    protected final GridDungeonInstance dungeon;
+    protected final GridDungeonBiomeRegistry biomeRegistry;
+    protected final GridRoomCollectionInstance collection;
+    protected final Queue<GeneratedRoom> todoRooms = new LinkedList<>();
+    protected final Queue<GeneratedRoom> toPlaceRooms = new LinkedList<>();
+    protected final Queue<FailRule.Instance> toPlaceFailRules = new LinkedList<>();
+    protected final Queue<GeneratedRoom> toPostProcessRooms = new LinkedList<>();
+    protected final Queue<GeneratedRoom> toSpawnMobsRooms = new LinkedList<>();
 
 
     public List<ConnectionRule> getConnectionRules() {
         return new ArrayList<>(dungeon.getRoomCollection().getRaw().getConnectionRules());
     }
 
-    private void addRoomToLists(GeneratedRoom room) {
+    protected void addRoomToLists(GeneratedRoom room) {
         todoRooms.add(room);
         toPlaceRooms.add(room);
         if (room.hasMobSpawns())
@@ -112,7 +112,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         else if (currentTask == GenerationTask.SAVING_ADDITIONAL) saveAdditional(serverLevel);
     }
 
-    private void calculationStep(MinecraftServer server) {
+    protected void calculationStep(MinecraftServer server) {
         for (int i = 0; i < Config.CALCULATOR_STEPS_PER_TICK.getAsInt(); i++) {
             if (todoRooms.isEmpty()) {
                 // if done start next task
@@ -150,7 +150,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     /**
      * gets all rooms that are allowed to generate its connections based on priority
      */
-    private List<GeneratedRoom> getPossibleRoomSelection() {
+    protected List<GeneratedRoom> getPossibleRoomSelection() {
         List<GeneratedRoom> toReturn = new ArrayList<>();
         int maxPriority = 0;
         for (GeneratedRoom generatedRoom : todoRooms) {
@@ -165,7 +165,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         return toReturn;
     }
 
-    private void checkRequirementStep(MinecraftServer server) {
+    protected void checkRequirementStep(MinecraftServer server) {
         if (!collection.requiredRoomsDone()) {
             // if not all rooms were generated, discard this generator and start a new one with seed+1
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Not All Required Rooms where generated, regenerating with Seed+1");
@@ -179,7 +179,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         currentTask = GenerationTask.FILLING_UNOCCUPIED;
     }
 
-    private void fillUnoccupiedStep(MinecraftServer server) {
+    protected void fillUnoccupiedStep(MinecraftServer server) {
         if (!dungeon.getRaw().shouldFillWithFallback()) {
             // if the dungeon has this setting disabled, start the next task
             currentTask = GenerationTask.VERIFY_FAIL_RULES;
@@ -196,15 +196,15 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Fallback Placing Tick Complete");
     }
 
-    private int lastFallbackFillX = 0;
-    private int lastFallbackFillY = 0;
-    private int lastFallbackFillZ = 0;
+    protected int lastFallbackFillX = 0;
+    protected int lastFallbackFillY = 0;
+    protected int lastFallbackFillZ = 0;
 
     /**
      * fills the dungeon with fallback
      * returns true if done
      */
-    private boolean FillUnoccupied() {
+    protected boolean FillUnoccupied() {
         int depth = dungeon.getRaw().getDungeonDepth();
         int maxFloorHeight = dungeon.getRaw().getMaxFloorHeight();
         int gridCellWidth = collection.getRaw().getGridCellWidth();
@@ -254,7 +254,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         return true;
     }
 
-    private void verifyFailRulesStep() {
+    protected void verifyFailRulesStep() {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Verifying Fail Rules");
         Queue<FailRule.Instance> newFailRules = new LinkedList<>();
         toPlaceFailRules.forEach(instance -> {
@@ -271,7 +271,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Fail Rules Verified, Starting Room Placement");
     }
 
-    private void placeRoomStep(ServerLevel serverLevel) {
+    protected void placeRoomStep(ServerLevel serverLevel) {
         for (int i = 0; i < Config.PLACER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toPlaceRooms.isEmpty()) {
                 // if done start next task
@@ -293,7 +293,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Room place tick complete");
     }
 
-    private void placeFailRuleStep(ServerLevel serverLevel) {
+    protected void placeFailRuleStep(ServerLevel serverLevel) {
         for (int i = 0; i < Config.PLACER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toPlaceFailRules.isEmpty()) {
                 // if done start next task
@@ -309,7 +309,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         }
     }
 
-    private void postProcessRoomsStep(ServerLevel serverLevel) {
+    protected void postProcessRoomsStep(ServerLevel serverLevel) {
         for (int i = 0; i < Config.POST_PROCESSOR_STEPS_PER_TICK.getAsInt(); i++) {
             if (toPostProcessRooms.isEmpty()) {
                 // if done start next task
@@ -325,7 +325,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         }
     }
 
-    private void fillWithMobsStep(ServerLevel serverLevel) {
+    protected void fillWithMobsStep(ServerLevel serverLevel) {
         for (int i = 0; i < Config.SPAWNER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toSpawnMobsRooms.isEmpty()) {
                 // if all mobs spawned, start the next task
@@ -341,7 +341,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Mob spawn tick complete");
     }
 
-    private void saveAdditional(ServerLevel serverLevel) {
+    protected void saveAdditional(ServerLevel serverLevel) {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Saving Additional Data");
 
         DungeonSaveData saveData = DungeonSaveData.Get(serverLevel.getServer());

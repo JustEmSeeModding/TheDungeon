@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class TankClass extends DungeonClass {
     @Override
     public boolean isItemForClass(IClassedItem item) {
-        return item.getLinkedClasses().length==0||
+        return item.hasNoLinkedClasses()||
                 Arrays.stream(item.getLinkedClasses()).anyMatch(r -> r.get() instanceof TankClass);
     }
 

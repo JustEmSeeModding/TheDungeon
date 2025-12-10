@@ -1,18 +1,26 @@
 package net.emsee.thedungeon.dungeonClass;
 
-import io.netty.util.Attribute;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeonClass.mainClass.Classless;
 import net.emsee.thedungeon.dungeonClass.mainClass.TankClass;
-import net.emsee.thedungeon.item.ModSpawnEggs;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 
 public class ModClasses {
+    public static ResourceKey<Registry<DungeonClass>> CLASS_REGISTRY_KEY = ResourceKey.createRegistryKey(TheDungeon.defaultResourceLocation("dungeon_classes"));
+
+    public static final Registry<DungeonClass> CLASS_REGISTRY =
+            new RegistryBuilder<>(CLASS_REGISTRY_KEY)
+            .sync(true)
+                    .defaultKey(TheDungeon.defaultResourceLocation("empty"))
+                    .create();
+
     public static final DeferredRegister<DungeonClass> CLASSES =
-            DeferredRegister.create(ResourceKey.createRegistryKey(TheDungeon.defaultResourceLocation("dungeon_classes")),TheDungeon.MOD_ID);
+            DeferredRegister.create(CLASS_REGISTRY,TheDungeon.MOD_ID);
 
 
     public static final DeferredHolder<DungeonClass, DungeonClass> CLASSLESS = CLASSES.register("classless",

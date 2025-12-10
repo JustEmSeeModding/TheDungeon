@@ -71,7 +71,7 @@ public interface IDungeonToolTips {
             addFixedComponents(
                     Util.make(new LinkedHashMap<>(), map -> {
                         if (classes.length>0 || subClasses.length>0) {
-                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), Util.make(new Component[classes.length], array -> {
+                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), Util.make(new Component[classes.length + subClasses.length], array -> {
                                 int i = 0;
                                 for (DeferredHolder<DungeonClass,?> dClass : classes) {
                                     array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
