@@ -39,19 +39,6 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
         roomCollection = collection;
     }
 
-    protected GridDungeon(String resourceName, DungeonRank rank, int weight, int gridCellWidth, int gridCellHeight, GridRoomCollection collection, int ID) {
-        super(resourceName, rank, weight, ID);
-        this.gridCellWidth = gridCellWidth;
-        this.gridCellHeight = gridCellHeight;
-        if (gridCellWidth % 2 != 1) {
-            throw new IllegalStateException("Dungeon has an even width ({})! This should be odd, width:" + gridCellWidth);
-        }
-        if (collection.getGridCellWidth() != gridCellWidth || collection.getGridCellHeight() != gridCellHeight) {
-            throw new IllegalStateException("RoomCollection " + collection + " is not the same size as the Dungeon " + this);
-        }
-        roomCollection = collection;
-    }
-
     //// construction methods
 
 

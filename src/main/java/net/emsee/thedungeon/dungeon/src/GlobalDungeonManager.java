@@ -18,6 +18,7 @@ import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -309,7 +310,9 @@ public final class GlobalDungeonManager {
      */
     public static void generateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
 
-        Dungeon<?,?> newDungeon = getDungeonByID(selectedDungeonID);
+        Dungeon<?,?> newDungeon = getDungeonByNumberID(selectedDungeonID);
+
+        if (newDungeon==null) return;
 
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         if (Config.DUNGEON_CLEAN_ON_REGEN.getAsBoolean())
@@ -398,12 +401,21 @@ public final class GlobalDungeonManager {
         saveData.setFinishedForcedChunks();
     }
 
-    public static Dungeon<?,?> getDungeonByID(int ID) {
-        return ModDungeons.getByID(ID);
+    public static Dungeon<?,?> getDungeonByNumberID(int ID) {
+        Optional<Holder.Reference<Dungeon<?,?>>> holder = ModDungeons.DUNGEON_REGISTRY.getHolder(ID);
+        if(holder.isEmpty()) {
+            DebugLog.logError(DebugLog.DebugType.WARNINGS, "No dungeon found at ID: {}", ID);
+            return null;
+        }
+        return holder.get().value();
+    }
+
+    public static Dungeon<?,?> getDungeonByName(String name) {
+        return ModDungeons.getByName(name);
     }
 
     public static int getDungeonCount() {
-        return ModDungeons.getMaxID();
+        return ModDungeons.DUNGEON_REGISTRY.size();
     }
 
     /**
@@ -421,14 +433,14 @@ public final class GlobalDungeonManager {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         Dungeon<?,?> cleanup = null;
         switch (rank) {
-            case F -> cleanup= ModCleanupDungeons.CLEANUP_F;
-            case E -> cleanup=ModCleanupDungeons.CLEANUP_E;
-            case D -> cleanup=ModCleanupDungeons.CLEANUP_D;
-            case C -> cleanup=ModCleanupDungeons.CLEANUP_C;
-            case B -> cleanup=ModCleanupDungeons.CLEANUP_B;
-            case A -> cleanup=ModCleanupDungeons.CLEANUP_A;
-            case S -> cleanup=ModCleanupDungeons.CLEANUP_S;
-            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS;
+            case F -> cleanup= ModCleanupDungeons.CLEANUP_F.get();
+            case E -> cleanup=ModCleanupDungeons.CLEANUP_E.get();
+            case D -> cleanup=ModCleanupDungeons.CLEANUP_D.get();
+            case C -> cleanup=ModCleanupDungeons.CLEANUP_C.get();
+            case B -> cleanup=ModCleanupDungeons.CLEANUP_B.get();
+            case A -> cleanup=ModCleanupDungeons.CLEANUP_A.get();
+            case S -> cleanup=ModCleanupDungeons.CLEANUP_S.get();
+            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS.get();
         }
         saveData.addToProgressQueue(cleanup.createInstance());
         GlobalDungeonManager.killAllInDungeon(server, rank);
@@ -440,14 +452,14 @@ public final class GlobalDungeonManager {
     public static void priorityCleanup(MinecraftServer server, DungeonRank rank) {
         Dungeon<?,?> cleanup = null;
         switch (rank) {
-            case F -> cleanup=ModCleanupDungeons.CLEANUP_F;
-            case E -> cleanup=ModCleanupDungeons.CLEANUP_E;
-            case D -> cleanup=ModCleanupDungeons.CLEANUP_D;
-            case C -> cleanup=ModCleanupDungeons.CLEANUP_C;
-            case B -> cleanup=ModCleanupDungeons.CLEANUP_B;
-            case A -> cleanup=ModCleanupDungeons.CLEANUP_A;
-            case S -> cleanup=ModCleanupDungeons.CLEANUP_S;
-            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS;
+            case F -> cleanup=ModCleanupDungeons.CLEANUP_F.get();
+            case E -> cleanup=ModCleanupDungeons.CLEANUP_E.get();
+            case D -> cleanup=ModCleanupDungeons.CLEANUP_D.get();
+            case C -> cleanup=ModCleanupDungeons.CLEANUP_C.get();
+            case B -> cleanup=ModCleanupDungeons.CLEANUP_B.get();
+            case A -> cleanup=ModCleanupDungeons.CLEANUP_A.get();
+            case S -> cleanup=ModCleanupDungeons.CLEANUP_S.get();
+            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS.get();
         }
 
         if (cleanup==null)

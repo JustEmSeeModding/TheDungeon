@@ -2,22 +2,39 @@ package net.emsee.thedungeon.dungeon.registry;
 
 
 import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.registry.roomCollections.CastleGridRoomCollection;
 import net.emsee.thedungeon.dungeon.registry.roomCollections.GoblinCavesGridRoomCollection;
 import net.emsee.thedungeon.dungeon.registry.roomCollections.LibraryGridRoomCollection;
 import net.emsee.thedungeon.dungeon.registry.roomCollections.TestGridRoomCollection;
-import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Supplier;
 
 public class ModDungeons {
-    public static final Map<String, Dungeon<?,?>> DUNGEONS = new HashMap<>();
+    //public static final Map<String, Dungeon<?,?>> DUNGEONS = new HashMap<>();
 
-    public static final Dungeon<?,?> TEST = register(new GridDungeon(
+    public static ResourceKey<Registry<Dungeon<?,?>>> DUNGEON_REGISTRY_KEY = ResourceKey.createRegistryKey(TheDungeon.defaultResourceLocation("dungeons"));
+
+    public static final Registry<Dungeon<?,?>> DUNGEON_REGISTRY =
+            new RegistryBuilder<>(DUNGEON_REGISTRY_KEY)
+                    .sync(true)
+                    .defaultKey(TheDungeon.defaultResourceLocation("empty"))
+                    .create();
+
+    public static final DeferredRegister<Dungeon<?,?>> DUNGEONS =
+            DeferredRegister.create(DUNGEON_REGISTRY,TheDungeon.MOD_ID);
+
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> TEST = register("test", ()-> new GridDungeon(
             "dungeon.the_dungeon.test",
             DungeonRank.F,
             0,
@@ -29,7 +46,7 @@ public class ModDungeons {
     );
 
 
-    public static final Dungeon<?,?> THE_LIBRARY = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> THE_LIBRARY = register("library", ()->new GridDungeon(
             "dungeon.the_dungeon.library",
             DungeonRank.SS,
             0 /* disabled for now as this will not be in first release*/,
@@ -41,7 +58,7 @@ public class ModDungeons {
             .setMaxFloorHeight(3)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    public static final Dungeon<?,?> CASTLE = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CASTLE = register("castle", ()->new GridDungeon(
             "dungeon.the_dungeon.castle",
             DungeonRank.D,
             1,
@@ -53,7 +70,7 @@ public class ModDungeons {
             .setMaxFloorHeight(7)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    public static final Dungeon<?,?> GOBLIN_CAVES = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> GOBLIN_CAVES = register("goblin_caves", ()->new GridDungeon(
             "dungeon.the_dungeon.goblin_caves",
             DungeonRank.F,
             1,
@@ -65,25 +82,17 @@ public class ModDungeons {
             .setMaxFloorHeight(11)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    protected static Dungeon<?,?> register(Dungeon<?,?> dungeon) {
+    protected static <T extends Dungeon<?,?>> DeferredHolder<Dungeon<?,?>, T> register(String name, Supplier<T> dungeon) {
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", dungeon);
-        DUNGEONS.put(dungeon.getResourceName(), dungeon);
-        if (dungeon.getWeight()>0)
-            GlobalDungeonManager.registerToAutoGenerator(dungeon, dungeon.getWeight());
-        return dungeon;
+        return DUNGEONS.register(name, dungeon);
     }
 
-    public static Dungeon<?,?> getByID(int ID) {
-        for (Dungeon<?,?> dungeon : DUNGEONS.values())
-            if (dungeon.getID() == ID) return dungeon;
-        return null;
+    public static void register(IEventBus eventBus) {
+        DUNGEONS.register(eventBus);
+        ModCleanupDungeons.register(eventBus);
     }
 
-    public static int getMaxID() {
-        return Dungeon.getMaxID();
-    }
-
-    public static Dungeon<?,?> getByResourceName(String resourceName) {
-        return DUNGEONS.get(resourceName);
+    public static Dungeon<?,?> getByName(String name) {
+        return DUNGEON_REGISTRY.get(TheDungeon.defaultResourceLocation(name));
     }
 }

@@ -1,6 +1,8 @@
 package net.emsee.thedungeon.dungeonClass;
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
 import net.emsee.thedungeon.dungeonClass.mainClass.Classless;
 import net.emsee.thedungeon.dungeonClass.mainClass.TankClass;
 import net.emsee.thedungeon.dungeonClass.subClass.SubClassless;
@@ -8,6 +10,7 @@ import net.emsee.thedungeon.dungeonClass.subClass.VanguardTankSubClass;
 import net.emsee.thedungeon.item.ModSpawnEggs;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -37,5 +40,17 @@ public class ModSubClasses {
         SUBCLASSES.register(eventBus);
     }
 
+    public static DungeonSubClass<?> getByPath(String name) {
+        return ModSubClasses.SUBCLASS_REGISTRY.get(TheDungeon.defaultResourceLocation(name));
+    }
 
+    public static DungeonSubClass<?> getClassForPlayer(Player player) {
+        String className = player.getData(ModAttachmentTypes.PLAYER_SUBCLASS);
+        DungeonSubClass<?> toReturn = getByPath(className);
+        if (toReturn == null) {
+            DebugLog.logWarn(DebugLog.DebugType.WARNINGS, "Player:{}, dungeonSubClass returned null, saved string:{}, class does not exist or is not correctly linked", player, className);
+            //return Classless.INSTANCE;
+        }
+        return toReturn;
+    }
 }

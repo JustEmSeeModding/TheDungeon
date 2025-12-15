@@ -3,6 +3,7 @@ package net.emsee.thedungeon.events;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.minecraft.client.renderer.BiomeColors;
@@ -33,6 +34,7 @@ public class IModEventBusEvents {
 
     @SubscribeEvent // on the mod event bus
     public static void registerRegistries(NewRegistryEvent event) {
+        event.register(ModDungeons.DUNGEON_REGISTRY);
         event.register(ModClasses.CLASS_REGISTRY);
         event.register(ModSubClasses.SUBCLASS_REGISTRY);
     }

@@ -1,12 +1,17 @@
 package net.emsee.thedungeon.dungeon.src.types.grid;
 
 import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
+import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollectionInstance;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+
+import java.util.Optional;
 
 public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
     GridRoomCollectionInstance collection;
@@ -75,8 +80,16 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
 
     @Override
     public String toSaveString() {
+        String dungeonName = null;
+        Optional<ResourceKey<Dungeon<?,?>>> resourceKey = ModDungeons.DUNGEON_REGISTRY.getResourceKey(dungeon);
+        if (resourceKey.isEmpty()) {
+            DebugLog.logError(DebugLog.DebugType.WARNINGS, "Can't find resource key for dungeon: {}", dungeon);
+            return null;
+        }
+        dungeonName = resourceKey.get().location().getPath();
         return
-                dungeon.getResourceName() + ":" +
+
+                dungeonName + ":" +
                         savedSeed + ":" +
                         (generated ? 1 : 0);
     }

@@ -80,7 +80,7 @@ public abstract class DungeonInstance<T extends Dungeon<?,?>>{
         if (saveArray.length == 0) {
             throw new IllegalArgumentException("Malformed save: " + save);
         }
-        Dungeon<?, ?> dungeon = ModDungeons.getByResourceName(saveArray[0]);
+        Dungeon<?, ?> dungeon = ModDungeons.getByName(saveArray[0]);
         if (dungeon == null) {
             throw new IllegalStateException("Unknown dungeon: " + saveArray[0]);
         }

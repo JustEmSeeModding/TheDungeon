@@ -66,8 +66,7 @@ public final class TheDungeon
 
         ModGamerules.registerRules();
 
-        loadClass(ModDungeons.class);
-        loadClass(ModCleanupDungeons.class);
+        ModDungeons.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 

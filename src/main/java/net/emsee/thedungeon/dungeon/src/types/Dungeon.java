@@ -6,9 +6,7 @@ import net.minecraft.network.chat.Component;
 
 public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<T>> {
 
-    private static int lastID = -1;
     protected final String resourceName;
-    private final int ID;
     protected boolean utilDungeon = false;
     protected final DungeonRank rank;
     protected final int weight;
@@ -18,16 +16,6 @@ public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<
     public Dungeon(String resourceName, DungeonRank rank, int weight) {
         if (resourceName.isEmpty()) throw new IllegalStateException(this + ":Dungeon cant have empty resource name");
         if (weight < 0) throw new IllegalStateException(this + ":Dungeon weight cant be negative");
-        ID = ++lastID;
-        this.resourceName = resourceName;
-        this.rank = rank;
-        this.weight = weight;
-    }
-
-    protected Dungeon(String resourceName, DungeonRank rank, int weight, int ID) {
-        if (resourceName.isEmpty()) throw new IllegalStateException(this + ":Dungeon cant have empty resource name");
-        if (weight < 0) throw new IllegalStateException(this + ":Dungeon weight cant be negative");
-        this.ID = ID;
         this.resourceName = resourceName;
         this.rank = rank;
         this.weight = weight;
@@ -73,10 +61,6 @@ public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<
         return weight;
     }
 
-    public int getID() {
-        return ID;
-    }
-
     public BlockPos getCenterPos() {
         if (overrideCenter != null)
             return overrideCenter;
@@ -90,10 +74,6 @@ public abstract class Dungeon<T extends Dungeon<?,?>, I extends DungeonInstance<
     @Override
     public String toString() {
         return (getResourceName() + "-weight:" + getWeight());
-    }
-
-    public static int getMaxID() {
-        return lastID;
     }
 
     public abstract I createInstance();
