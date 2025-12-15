@@ -8,6 +8,7 @@ import net.emsee.thedungeon.dungeon.src.connectionRules.fail.WallFailRule;
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules.SpawnInRoom;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.entity.custom.goblin.hobGoblin.HobGoblinEntity;
+import net.emsee.thedungeon.structureProcessor.WaterloggingProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.*;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post.CrystalCaveBuddingPostProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post.OvergrownPostProcessor;
@@ -17,6 +18,7 @@ import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.DirtClusterP
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.MagmaHollowClusterProcessor;
 import net.emsee.thedungeon.structureProcessor.goblinCaves.clusters.StoneCaveDioriteAndGraniteProcessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 import java.util.function.Consumer;
 
@@ -28,6 +30,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
     private final static String DEEP_TAG = "deep_caves";
     private final static String GILDED_TAG = "gilded_caves";
     private final static String FUNGAL_TAG = "fungal_caves";
+    private final static String WATERLOGGED = "waterlogged";
 
     private final static String CRYSTAL_TAG = "crystal_caves";
     private final static String MAGMA_TAG = "magma_caves";
@@ -102,6 +105,20 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                         .withStructureProcessor(DeepCaveProcessor.INSTANCE)
+                        .setOverrideEndChance(0)
+                        .setGenerationPriority(1).build())
+
+                //stone to waterlogged
+                .addRequiredRoom(1, 2, GridRoomBasic.builder("goblin_caves/convert/stone_waterlogged", 11, 11)
+                        .setHeight(2)
+                        .withWeight(3)
+                        .horizontalConnections(1, 0, 1, 0)
+                        .setConnectionTag(Connection.NORTH, STONE_TAG)
+                        .setConnectionTag(Connection.SOUTH, WATERLOGGED)
+                        .setHorizontalConnectionOffset(Connection.NORTH, 0,1)
+                        .doAllowRotation()
+                        .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
+                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
@@ -188,6 +205,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .addRooms(stone_biome().build())
                 .addRooms(gilded_biome().build())
                 .addRooms(deep_biome().build())
+                .addRequiredRoomsOf(5, 30, waterlogged_biome().build())
                 .addRooms(ice_biome().build())
                 .addRooms(overgrown_biome().build())
                 .addRooms(fungal_biome().build())
@@ -201,6 +219,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE))
                 .addTagRule(new WallFailRule(DEEP_TAG, 11, 11, 0, false, Blocks.DEEPSLATE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(DeepCaveProcessor.INSTANCE))
+                .addTagRule(new WallFailRule(WATERLOGGED, 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
+                        .withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE)
+                        .withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
                 .addTagRule(new WallFailRule(ICE_TAG, 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
                         .withStructureProcessor(StoneToIceCaveProcessor.INSTANCE))
                 .addTagRule(new WallFailRule(OVERGROWN_TAG, 11, 11, 0, false, Blocks.STONE::defaultBlockState, 11 * 11)
@@ -325,6 +346,15 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 .addRoom(i_overgrown().withWeight(60).withStructureProcessor(DirtClusterProcessor.INSTANCE).withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE).withStructureProcessor(OvergrownCaveProcessor.INSTANCE).withStructurePostProcessor(OvergrownPostProcessor.INSTANCE).setAllConnectionTags(OVERGROWN_TAG))
                 .addRoom(l_overgrown().withWeight(50).withStructureProcessor(DirtClusterProcessor.INSTANCE).withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE).withStructureProcessor(OvergrownCaveProcessor.INSTANCE).withStructurePostProcessor(OvergrownPostProcessor.INSTANCE).setAllConnectionTags(OVERGROWN_TAG))
                 .addRoom(t_overgrown().withWeight(30).withStructureProcessor(DirtClusterProcessor.INSTANCE).withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE).withStructureProcessor(OvergrownCaveProcessor.INSTANCE).withStructurePostProcessor(OvergrownPostProcessor.INSTANCE).setAllConnectionTags(OVERGROWN_TAG));
+    }
+
+    private static GridRoomList.Builder waterlogged_biome() {
+        return GridRoomList.builder()
+                .addRooms(unassigned_generic_path_caves()
+                        .applyToAll(room -> room.withStructureProcessor(WaterloggingProcessor.INSTANCE))
+                        .applyToAll(room -> room.withStructureProcessor(StoneCaveDioriteAndGraniteProcessor.INSTANCE))
+                        .applyToAll(room -> room.withStructureProcessor(StoneCaveOreProcessor.INSTANCE))
+                        .applyToAll(room -> room.setAllConnectionTags(WATERLOGGED)));
     }
 
     private static GridRoomList.Builder fungal_biome() {

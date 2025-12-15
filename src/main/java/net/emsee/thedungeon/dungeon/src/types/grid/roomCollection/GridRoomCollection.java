@@ -127,6 +127,21 @@ public abstract class GridRoomCollection {
      * Adds a group of rooms with a shared minimum required placement count.
      * When any room in the list is placed, it counts toward fulfilling the group's requirement.
      */
+    public GridRoomCollection addRequiredRoomsOf(int requiredAmount, GridRoomList rooms) {
+        return addRequiredRoomsOf(requiredAmount, rooms.getList());
+    }
+
+    /**
+     * Adds a group of rooms with shared placement constraints, where placing any one room counts toward the group's required and maximum placement totals.
+     */
+    public GridRoomCollection addRequiredRoomsOf(int requiredAmount, int maxAmount, GridRoomList rooms) {
+        return addRequiredRoomsOf(requiredAmount, maxAmount, rooms.getList());
+    }
+
+    /**
+     * Adds a group of rooms with a shared minimum required placement count.
+     * When any room in the list is placed, it counts toward fulfilling the group's requirement.
+     */
     public GridRoomCollection addRequiredRoomsOf(int requiredAmount, List<AbstractGridRoom> rooms) {
         return addRequiredRoomsOf(requiredAmount, -1, List.copyOf(rooms));
     }

@@ -30,6 +30,7 @@ public abstract class AbstractReplacementProcessor extends StructureProcessor {
         to = copyProperty(from, to, SlabBlock.TYPE);
         to = copyProperty(from, to, RotatedPillarBlock.AXIS);
         to = copyProperty(from, to, HorizontalDirectionalBlock.FACING);
+        to = copyProperty(from, to, WaterloggedTransparentBlock.WATERLOGGED);
         return to;
     }
 
