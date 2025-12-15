@@ -18,9 +18,6 @@ public class ModCleanupDungeons {
     // on true, wipes the complete dungeon. on false only removes illegal blocks
     private static final boolean fullCleanup = false;
 
-    public static final DeferredRegister<Dungeon<?,?>> DUNGEONS =
-            DeferredRegister.create(ModDungeons.DUNGEON_REGISTRY, TheDungeon.MOD_ID);
-
     private static final GridRoomCollection collection = fullCleanup?new CleanupGridRoomCollection(): new CleanupLightGridRoomCollection();
 
     static final int cleanupDepth = 8;
@@ -28,6 +25,10 @@ public class ModCleanupDungeons {
 
     static final int cleanupCellWidth = fullCleanup?47:51;
     static final int cleanupCellHeight = fullCleanup?47:51;
+
+    public static final DeferredRegister<Dungeon<?,?>> DUNGEONS =
+            DeferredRegister.create(ModDungeons.DUNGEON_REGISTRY, TheDungeon.MOD_ID);
+
 
     public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_F = register("cleanup_f", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_f",

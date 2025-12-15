@@ -18,10 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.PathNavigationRegion;
-import net.minecraft.world.level.pathfinder.Node;
-import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathFinder;
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -114,7 +111,7 @@ public class DungeonPortalCompas extends DungeonItem {
                 currentTime - lastUpdate >= SERVER_UPDATE_INTERVAL ||
                 (lastPos != null && currentPos.distSqr(lastPos) > MOVE_THRESHOLD_UPDATE*MOVE_THRESHOLD_UPDATE);
 
-        if (!shouldUpdate || !player.onGround()) return;
+        if (!shouldUpdate) return;
 
         BlockPos targetPos = findClosestPathablePortal(
                 level,
@@ -139,7 +136,7 @@ public class DungeonPortalCompas extends DungeonItem {
 
         // Get cached mob or create one
         if (cachedPathfindingMob == null || !cachedPathfindingMob.isAlive()) {
-            cachedPathfindingMob = EntityType.ZOMBIE.create(level);
+            cachedPathfindingMob = EntityType.BAT.create(level);
             if (cachedPathfindingMob == null) return null;
         }
         cachedPathfindingMob.setPos(player.position());
@@ -161,7 +158,9 @@ public class DungeonPortalCompas extends DungeonItem {
                 player.blockPosition().offset(MAX_RANGE, MAX_RANGE, MAX_RANGE)
         );
 
-        WalkNodeEvaluator nodeEvaluator = new WalkNodeEvaluator();
+        FlyNodeEvaluator nodeEvaluator = new FlyNodeEvaluator();
+        nodeEvaluator.setCanOpenDoors(true);
+        nodeEvaluator.setCanPassDoors(true);
         nodeEvaluator.prepare(region, cachedPathfindingMob);
         PathFinder pathFinder = new PathFinder(nodeEvaluator, NODE_LIMIT);
 
@@ -210,7 +209,7 @@ public class DungeonPortalCompas extends DungeonItem {
 
         // Get cached mob or create one
         if (cachedPathfindingMob == null || !cachedPathfindingMob.isAlive()) {
-            cachedPathfindingMob = EntityType.ZOMBIE.create(level);
+            cachedPathfindingMob = EntityType.BAT.create(level);
             if (cachedPathfindingMob == null) return pathPoints;
         }
         cachedPathfindingMob.setPos(player.position());
@@ -221,7 +220,9 @@ public class DungeonPortalCompas extends DungeonItem {
                 player.blockPosition().offset(MAX_RANGE, MAX_RANGE, MAX_RANGE)
         );
 
-        WalkNodeEvaluator nodeEvaluator = new WalkNodeEvaluator();
+        FlyNodeEvaluator nodeEvaluator = new FlyNodeEvaluator();
+        nodeEvaluator.setCanOpenDoors(true);
+        nodeEvaluator.setCanPassDoors(true);
         nodeEvaluator.prepare(region, cachedPathfindingMob);
         PathFinder pathFinder = new PathFinder(nodeEvaluator, NODE_LIMIT);
 

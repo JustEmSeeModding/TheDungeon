@@ -21,8 +21,6 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 import java.util.function.Supplier;
 
 public class ModDungeons {
-    //public static final Map<String, Dungeon<?,?>> DUNGEONS = new HashMap<>();
-
     public static ResourceKey<Registry<Dungeon<?,?>>> DUNGEON_REGISTRY_KEY = ResourceKey.createRegistryKey(TheDungeon.defaultResourceLocation("dungeons"));
 
     public static final Registry<Dungeon<?,?>> DUNGEON_REGISTRY =
