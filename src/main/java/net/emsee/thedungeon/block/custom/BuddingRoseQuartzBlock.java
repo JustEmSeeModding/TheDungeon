@@ -25,7 +25,7 @@ public class BuddingRoseQuartzBlock extends AmethystBlock {
     }
 
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(5) == 0) {
+        if (random.nextInt(GROWTH_CHANCE) == 0) {
             Direction direction = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
             BlockPos blockpos = pos.relative(direction);
             BlockState blockstate = level.getBlockState(blockpos);

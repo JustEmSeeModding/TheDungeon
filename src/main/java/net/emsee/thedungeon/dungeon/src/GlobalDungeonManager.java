@@ -16,7 +16,6 @@ import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
@@ -32,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -39,13 +39,9 @@ public final class GlobalDungeonManager {
 
     private static final int forceLoadedChunkRadius = 35;
     private static final int killRadius = 500;
-
-    private final static Map<DungeonRank,WeightedMap.Int<Dungeon<?,?>>> cycleDungeons = Util.make(new HashMap<>(), map -> {for (DungeonRank rank : DungeonRank.values()) map.put(rank, new WeightedMap.Int<>());});
+    private static boolean hasSetupDungeonCycleList = false;
+    private final static Map<DungeonRank,WeightedMap.Int<ResourceKey<Dungeon<?,?>>>> cycleDungeons = new HashMap<>();
     private final static ResourceKey<Level> dungeonResourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
-
-    public static void registerToAutoGenerator(Dungeon<?,?> dungeon, Integer weight) {
-        cycleDungeons.get(dungeon.getRank()).put(dungeon, weight);
-    }
 
 
     public static void tick(ServerTickEvent.Pre event) {
@@ -56,6 +52,29 @@ public final class GlobalDungeonManager {
             generationTick(server, saveData);
         }
         generationTimerTick(server, saveData);
+    }
+
+    private static void setupDungeonCycleList() {
+        for (DungeonRank rank : DungeonRank.values()) {
+            cycleDungeons.put(rank, new WeightedMap.Int<>());
+        }
+
+        ModDungeons.DUNGEON_REGISTRY.registryKeySet().forEach(key -> {
+            Dungeon<?,?> dungeon = ModDungeons.DUNGEON_REGISTRY.get(key);
+            if (dungeon == null) throw new RuntimeException("Error on retrieving dungeon from key : "+ key);
+            int weight = dungeon.getWeight();
+            if (weight>0) {
+                cycleDungeons.get(dungeon.getRank()).put(key, weight);
+            }
+        });
+
+        /*ModDungeons.DUNGEON_REGISTRY.forEach(dungeon -> {
+            int weight = dungeon.getWeight();
+            if (weight>0) {
+                cycleDungeons.get(dungeon.getRank()).put(ModDungeons.DUNGEON_REGISTRY.getKey(), weight);
+            }
+        });*/
+        hasSetupDungeonCycleList=true;
     }
 
     /**
@@ -172,7 +191,10 @@ public final class GlobalDungeonManager {
             saveData.addToProgressQueue(saveData.removeFromPassiveQueue(rank));
         }
         else {
-            WeightedMap.Int<Dungeon<?,?>> possibleDungeons = cycleDungeons.get(rank);
+            if (!hasSetupDungeonCycleList) {
+                setupDungeonCycleList();
+            }
+            WeightedMap.Int<ResourceKey<Dungeon<?,?>>> possibleDungeons = cycleDungeons.get(rank);
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"No dungeon in passive queue, selecting random");
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Possible Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
             if (possibleDungeons.isEmpty() || possibleDungeons.totalWeight() <= 0) {
@@ -180,9 +202,10 @@ public final class GlobalDungeonManager {
                 return;
             }
             ServerLevel overworld = server.getLevel(Level.OVERWORLD);
-            if (overworld == null) throw new IllegalStateException("overworld not found");
-            Dungeon<?,?> newDungeon = possibleDungeons.getRandom(overworld.getRandom());
-            if (newDungeon== null) throw new IllegalStateException("error with selecting dungeon");
+            if (overworld == null) throw new RuntimeException("overworld not found");
+            ResourceKey<Dungeon<?,?>> newDungeonKey = possibleDungeons.getRandom(overworld.getRandom());
+            Dungeon<?,?> newDungeon = ModDungeons.DUNGEON_REGISTRY.get(newDungeonKey);
+            if (newDungeon== null) throw new RuntimeException("error with selecting dungeon");
             saveData.addToProgressQueue(newDungeon.createInstance());
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "added {} to queue", newDungeon);
         }
@@ -193,17 +216,7 @@ public final class GlobalDungeonManager {
             ServerLevel dimension = server.getLevel(dungeonResourceKey);
 
             assert dimension != null;
-            BlockPos blockPos = rank.getDefaultCenterPos();
-
-            double centerX = blockPos.getX() + 0.5;
-            double centerY = blockPos.getY() + 0.5;
-            double centerZ = blockPos.getZ() + 0.5;
-
-
-            AABB area = new AABB(
-                    centerX - killRadius, dimension.getMinBuildHeight(), centerZ - killRadius, // Min corner
-                    centerX + killRadius, dimension.getMaxBuildHeight(), centerZ + killRadius  // Max corner
-            );
+            AABB area = getKillAABB(rank, dimension);
 
             List<Entity> entities = dimension.getEntitiesOfClass(Entity.class, area, e -> true);
 
@@ -221,6 +234,19 @@ public final class GlobalDungeonManager {
                 }
             }
         }
+    }
+
+    private static @NotNull AABB getKillAABB(DungeonRank rank, ServerLevel dimension) {
+        BlockPos blockPos = rank.getDefaultCenterPos();
+
+        double centerX = blockPos.getX() + 0.5;
+        double centerY = blockPos.getY() + 0.5;
+        double centerZ = blockPos.getZ() + 0.5;
+
+        return new AABB(
+                centerX - killRadius, dimension.getMinBuildHeight(), centerZ - killRadius, // Min corner
+                centerX + killRadius, dimension.getMaxBuildHeight(), centerZ + killRadius  // Max corner
+        );
     }
 
     public static void closeDungeon(MinecraftServer server, DungeonRank rank) {

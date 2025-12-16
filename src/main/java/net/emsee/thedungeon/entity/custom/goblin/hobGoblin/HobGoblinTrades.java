@@ -69,7 +69,7 @@ public class HobGoblinTrades {
 
                     // rare trades
                     2,new VillagerTrades.ItemListing[]{
-                            new ItemsForCash(ModItems.TEST_BELT.get(), 14, 1,1, 1),
+                            new ItemsForCash(ModItems.TEST_BELT, 14, 1,1, 1),
                     }));
         };
 

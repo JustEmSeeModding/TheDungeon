@@ -4,10 +4,11 @@ import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.NotNull;
 
 public interface IClassedItem {
-    DeferredHolder<DungeonClass, ?>[] getLinkedClasses();
-    DeferredHolder<DungeonSubClass<?>, ?>[] getLinkedSubClasses();
+    @NotNull DeferredHolder<DungeonClass, ?>[] getLinkedClasses();
+    @NotNull DeferredHolder<DungeonSubClass<?>, ?>[] getLinkedSubClasses();
     DungeonItemRank getItemRank();
 
     default boolean hasNoLinkedClasses() {
