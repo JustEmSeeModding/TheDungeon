@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.dungeon.src.types.roomCollection;
+package net.emsee.thedungeon.dungeon.src.types.grid.roomCollection;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.Connection;
@@ -124,6 +124,7 @@ public class GridRoomCollectionInstance {
                     DebugLog.logInfo(DebugLog.DebugType.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}-{}",requiredListPlacements.get(rooms).placed,requiredListPlacements.get(rooms).min,requiredListPlacements.get(rooms).max);
                 else
                     DebugLog.logInfo(DebugLog.DebugType.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}",requiredListPlacements.get(rooms).placed,requiredListPlacements.get(rooms).min);
+                return;
             }
         }
     }

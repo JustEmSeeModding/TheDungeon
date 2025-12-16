@@ -1,7 +1,12 @@
 package net.emsee.thedungeon.structureProcessor;
 
+import net.emsee.thedungeon.dungeon.src.types.Dungeon;
+import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.utils.WeightedMap;
+import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.LevelReader;
@@ -16,6 +21,13 @@ import java.util.function.Supplier;
 
 public abstract class OrganicClusterProcessor extends AbstractReplacementProcessor {
     protected abstract long getBaseSeed();
+
+    protected final long getSeed(MinecraftServer server) {
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        DungeonInstance<?> queuedDungeon = saveData.peekProgressQueue();
+        if (queuedDungeon == null) throw new RuntimeException("DungeonSaveData progress queue is unexpectedly empty during cluster seed generation");
+        return queuedDungeon.getSavedSeed() + getBaseSeed();
+    }
 
     /**
      * when true has a different seed per original block
@@ -49,7 +61,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
 
     protected float getClusterDensity() {
         return 1.0f;
-    } // Default density
+    }
 
     // Calculate grid size for cluster centers
     protected int getGridSize() {
@@ -61,40 +73,42 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
                                                         StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo,
                                                         StructurePlaceSettings settings, @Nullable StructureTemplate template) {
 
-        BlockPos worldPos = relativeBlockInfo.pos();
-        Block currentBlock = relativeBlockInfo.state().getBlock();
-        Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = getReplacements();
+        if (level instanceof ServerLevel serverLevel) {
 
-        if (!replacements.containsKey(currentBlock)) {
-            return relativeBlockInfo;
+            BlockPos worldPos = relativeBlockInfo.pos();
+            Block currentBlock = relativeBlockInfo.state().getBlock();
+            Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = getReplacements();
+
+            if (!replacements.containsKey(currentBlock)) {
+                return relativeBlockInfo;
+            }
+
+            int gridSize = getGridSize();
+            // Calculate cluster grid coordinates (world-based, not chunk-based)
+            int gridX = Math.floorDiv(worldPos.getX(), gridSize);
+            int gridZ = Math.floorDiv(worldPos.getZ(), gridSize);
+            int gridY = Math.floorDiv(worldPos.getY(), gridSize); // Use same grid for Y
+
+            // Unique seed for cluster center (shared across all blocks in this grid cell)
+            long centerSeed = calculateCenterSeed(getSeed(serverLevel.getServer()), gridX, gridY, gridZ);
+            ClusterContext context = new ClusterContext(centerSeed, getBaseClusterRadius());
+            context.variation = getClusterSizeVariation();
+            context.smoothness = getClusterEdgeSmoothness();
+            context.noiseScale = getNoiseScale();
+            context.octaves = getNoiseOctaves();
+
+            // Get cluster center and radius
+            Tuple<BlockPos, Float> cluster = getClusterCenter(gridX, gridY, gridZ, context);
+            BlockPos center = cluster.getA();
+            float radius = cluster.getB();
+
+            // Check if this position should be replaced
+            if (shouldReplace(worldPos, center, radius, context)) {
+                // Unique seed per cluster AND block type
+                long replacementSeed = calculateReplacementSeed(getSeed(serverLevel.getServer()), gridX, gridY, gridZ, currentBlock);
+                return getReplacement(level, offset, pos, blockInfo, relativeBlockInfo, settings, template, replacements, replacementSeed);
+            }
         }
-
-        int gridSize = getGridSize();
-        // Calculate cluster grid coordinates (world-based, not chunk-based)
-        int gridX = Math.floorDiv(worldPos.getX(), gridSize);
-        int gridZ = Math.floorDiv(worldPos.getZ(), gridSize);
-        int gridY = Math.floorDiv(worldPos.getY(), gridSize); // Use same grid for Y
-
-        // Unique seed for cluster center (shared across all blocks in this grid cell)
-        long centerSeed = calculateCenterSeed(getBaseSeed(), gridX, gridY, gridZ);
-        ClusterContext context = new ClusterContext(centerSeed, getBaseClusterRadius());
-        context.variation = getClusterSizeVariation();
-        context.smoothness = getClusterEdgeSmoothness();
-        context.noiseScale = getNoiseScale();
-        context.octaves = getNoiseOctaves();
-
-        // Get cluster center and radius
-        Tuple<BlockPos, Float> cluster = getClusterCenter(gridX, gridY, gridZ, context);
-        BlockPos center = cluster.getA();
-        float radius = cluster.getB();
-
-        // Check if this position should be replaced
-        if (shouldReplace(worldPos, center, radius, context)) {
-            // Unique seed per cluster AND block type
-            long replacementSeed = calculateReplacementSeed(getBaseSeed(), gridX, gridY, gridZ, currentBlock);
-            return getReplacement(level, offset, pos, blockInfo ,relativeBlockInfo, settings, template, replacements, replacementSeed);
-        }
-
         return relativeBlockInfo;
     }
 
@@ -132,12 +146,12 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos(), newBlockState, relativeBlockInfo.nbt());
     }
 
-    private boolean shouldReplace(BlockPos worldPos, BlockPos center, float radius, ClusterContext context) {
+    protected boolean shouldReplace(BlockPos worldPos, BlockPos center, float radius, ClusterContext context) {
         double distance = distortedDistance(worldPos, center, context);
         return distance < radius * (1 + context.smoothness * context.random.nextFloat());
     }
 
-    private Tuple<BlockPos, Float> getClusterCenter(int gridX, int gridY, int gridZ, ClusterContext context) {
+    protected Tuple<BlockPos, Float> getClusterCenter(int gridX, int gridY, int gridZ, ClusterContext context) {
         int gridSize = getGridSize();
         int centerX = gridX * gridSize + gridSize / 2;
         int centerZ = gridZ * gridSize + gridSize / 2;
@@ -154,7 +168,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         return new Tuple<>(new BlockPos(centerX, centerY, centerZ), radius);
     }
 
-    private double distortedDistance(BlockPos pos, BlockPos center, ClusterContext context) {
+    protected double distortedDistance(BlockPos pos, BlockPos center, ClusterContext context) {
         double dx = pos.getX() - center.getX();
         double dy = (pos.getY() - center.getY()) * 1.4; // Vertical stretch
         double dz = pos.getZ() - center.getZ();
@@ -203,7 +217,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         double y0 = y - (j - t);
         double z0 = z - (k - t);
 
-        long seed = random.nextLong() ^ (i * 131L) ^ (j * 7919L) ^ (k * 3413L);
+        long seed = (i * 131L) ^ (j * 7919L) ^ (k * 3413L);
         RandomSource gradRandom = RandomSource.create(seed);
         double grad = gradRandom.nextDouble() * 2 - 1;
 
@@ -223,7 +237,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         return calculateCenterSeed(baseSeed, gridX, gridY, gridZ) + (getIsSeparateSeedPerReplacementBlock()? block.hashCode():0);
     }
 
-    private static class ClusterContext {
+    protected static class ClusterContext {
         final RandomSource random;
         final int baseRadius;
         float variation;
@@ -232,7 +246,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         int octaves;
 
         ClusterContext(long seed, int baseRadius) {
-            this.random = RandomSource.create(seed);
+            this.random = net.minecraft.util.RandomSource.create(seed);
             this.baseRadius = baseRadius;
         }
     }

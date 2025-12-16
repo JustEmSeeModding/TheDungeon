@@ -28,7 +28,7 @@ public class BlackstoneToPlainStoneProcessor extends BlockPalletReplacementProce
         return replacements;
     }
 
-
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

@@ -42,7 +42,7 @@ public class SpawnAt<T extends Entity> extends MobSpawnRule {
             int tempCount = count;
             while (tempCount > 0) {
                 Entity spawned = entity.get().spawn(level, room.getPlacedWorldPos().offset(pos.rotate(room.getPlacedWorldRotation())), MobSpawnType.STRUCTURE);
-                assert spawned != null;
+                if (spawned==null) return;
                 spawned.setYRot(spawnRotation+spawned.rotate(room.getPlacedWorldRotation()));
                 tempCount--;
             }

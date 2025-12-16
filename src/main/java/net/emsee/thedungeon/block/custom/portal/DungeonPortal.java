@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.block.custom.portal;
 
+import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.portal.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
@@ -106,7 +107,7 @@ public abstract class DungeonPortal extends BaseEntityBlock implements IDungeonC
         if (player.level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) return true;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         long worldTime = server.overworld().getGameTime();
-        long timeLeft = GameruleRegistry.getIntegerGamerule(server, ModGamerules.TICKS_BETWEEN_COLLAPSES) - (worldTime - saveData.GetLastExecutionTime());
+        long timeLeft = Config.TICKS_BETWEEN_COLLAPSES.getAsLong() - (worldTime - saveData.GetLastExecutionTime());
         if (getExitRank() == saveData.getNextToCollapse() && timeLeft <= LOW_TIME_LOCK) {
             long secondsLeft = (long) Math.ceil(timeLeft / (20f));
             player.displayClientMessage(Component.translatable("announcement.thedungeon.low_time_teleport", secondsLeft).withStyle(ChatFormatting.RED).withStyle(ChatFormatting.UNDERLINE), true);

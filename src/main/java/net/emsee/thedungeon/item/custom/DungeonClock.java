@@ -1,28 +1,25 @@
 package net.emsee.thedungeon.item.custom;
 
-import net.emsee.thedungeon.component.ModDataComponentTypes;
+import net.emsee.thedungeon.Config;
+import net.emsee.thedungeon.dungeon.src.Biome.DungeonBiomeRegistry;
+import net.emsee.thedungeon.dungeon.src.Biome.GridDungeonBiomeRegistry;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
-import net.emsee.thedungeon.worldSaveData.NBT.DungeonNBTData;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -42,7 +39,7 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
     }
 
     public static void viewTime(Player player, MinecraftServer server) {
-        if(!GameruleRegistry.getBooleanGamerule(server, ModGamerules.AUTO_DUNGEON_CYCLING)){
+        if(!Config.AUTO_DUNGEON_CYCLING.getAsBoolean()){
             player.displayClientMessage(Component.translatable("message.thedungeon.cycling_disabled"),true);
             return;
         }

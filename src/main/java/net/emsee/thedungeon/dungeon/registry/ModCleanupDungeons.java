@@ -1,16 +1,23 @@
 package net.emsee.thedungeon.dungeon.registry;
 
+import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup.CleanupLightGridRoomCollection;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup.CleanupGridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class ModCleanupDungeons extends ModDungeons {
+import java.util.function.Supplier;
+
+public class ModCleanupDungeons {
     // on true, wipes the complete dungeon. on false only removes illegal blocks
     private static final boolean fullCleanup = false;
-    
+
     private static final GridRoomCollection collection = fullCleanup?new CleanupGridRoomCollection(): new CleanupLightGridRoomCollection();
 
     static final int cleanupDepth = 8;
@@ -19,7 +26,11 @@ public class ModCleanupDungeons extends ModDungeons {
     static final int cleanupCellWidth = fullCleanup?47:51;
     static final int cleanupCellHeight = fullCleanup?47:51;
 
-    public static final Dungeon CLEANUP_F = register(new GridDungeon(
+    public static final DeferredRegister<Dungeon<?,?>> DUNGEONS =
+            DeferredRegister.create(ModDungeons.DUNGEON_REGISTRY, TheDungeon.MOD_ID);
+
+
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_F = register("cleanup_f", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_f",
             DungeonRank.F,
             0,
@@ -33,7 +44,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
 
-    public static final Dungeon CLEANUP_E = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_E = register("cleanup_e", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_e",
             DungeonRank.E,
             0,
@@ -47,7 +58,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
 
-    public static final Dungeon CLEANUP_D = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_D = register("cleanup_d", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_d",
             DungeonRank.D,
             0,
@@ -60,7 +71,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
-    public static final Dungeon CLEANUP_C = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_C = register("cleanup_c", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_c",
             DungeonRank.C,
             0,
@@ -73,7 +84,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
-    public static final Dungeon CLEANUP_B = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_B = register("cleanup_b", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_b",
             DungeonRank.B,
             0,
@@ -86,7 +97,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
-    public static final Dungeon CLEANUP_A = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_A = register("cleanup_a", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_a",
             DungeonRank.A,
             0,
@@ -99,7 +110,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
-    public static final Dungeon CLEANUP_S = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_S = register("cleanup_s", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_s",
             DungeonRank.S,
             0,
@@ -112,7 +123,7 @@ public class ModCleanupDungeons extends ModDungeons {
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
-    public static final Dungeon CLEANUP_SS = register(new GridDungeon(
+    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CLEANUP_SS = register("cleanup_ss", ()->new GridDungeon(
             "dungeon.the_dungeon.cleanup_ss",
             DungeonRank.SS,
             0,
@@ -125,4 +136,16 @@ public class ModCleanupDungeons extends ModDungeons {
             .setRoomEndChance(0)
             .setOverrideGenerationHeight(-96)
             .setUtilDungeon(true));
+
+
+    protected static <T extends Dungeon<?,?>> DeferredHolder<Dungeon<?,?>, T> register(String name, Supplier<T> dungeon) {
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", name);
+        return DUNGEONS.register(name, dungeon);
+    }
+
+    public static void register(IEventBus eventBus) {
+        DUNGEONS.register(eventBus);
+    }
+
+
 }

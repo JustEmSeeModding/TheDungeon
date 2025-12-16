@@ -37,8 +37,8 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
                         selectedDungeonID = 0;
                     }
 
-                    DebugLog.logInfo(DebugLog.DebugType.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, Objects.requireNonNull(GlobalDungeonManager.getDungeonByID(selectedDungeonID)).getResourceName());
-                    player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", Objects.requireNonNull(GlobalDungeonManager.getDungeonByID(selectedDungeonID)).getResourceName()));
+                    DebugLog.logInfo(DebugLog.DebugType.GENERIC,"Selected Dungeon Using Tool : ({})={}", selectedDungeonID, Objects.requireNonNull(GlobalDungeonManager.getDungeonByNumberID(selectedDungeonID)).getResourceName());
+                    player.sendSystemMessage(Component.translatable("item.thedungeon.dungeon_debug_tool.select", Objects.requireNonNull(GlobalDungeonManager.getDungeonByNumberID(selectedDungeonID)).getResourceName()));
 
                 } else {
                     if (!GlobalDungeonManager.isGenerating(level.getServer())) {

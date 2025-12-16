@@ -2,6 +2,7 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.clusters;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.structureProcessor.OrganicClusterProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
@@ -40,7 +41,7 @@ public class CrystalCaveClusterProcessor extends OrganicClusterProcessor {
 
     @Override
     protected float getClusterDensity() {
-        return 1.3f;
+        return 1.5f;
     }
 
     @Override
@@ -53,9 +54,10 @@ public class CrystalCaveClusterProcessor extends OrganicClusterProcessor {
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(new ReplaceInstance(Blocks.CALCITE::defaultBlockState), 4);
                 map.put(new ReplaceInstance(Blocks.STONE::defaultBlockState), 1);
-                map.put(new ReplaceInstance(Blocks.PRISMARINE::defaultBlockState), 4);
+                map.put(new ReplaceInstance(Blocks.PRISMARINE::defaultBlockState), 2);
 
                 map.put(new ReplaceInstance(Blocks.AMETHYST_BLOCK::defaultBlockState), 5);
+                map.put(new ReplaceInstance(() -> ModBlocks.ROSE_QUARTZ_BLOCK.get().defaultBlockState()), 5);
             });
 /*
     //IMPORTANT MAKE SURE WEIGHTS MATCH WITH THE ABOVE MAP

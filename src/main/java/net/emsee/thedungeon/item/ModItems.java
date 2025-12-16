@@ -2,6 +2,10 @@ package net.emsee.thedungeon.item;
 
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
+import net.emsee.thedungeon.dungeonClass.ModClasses;
+import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.emsee.thedungeon.item.custom.*;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
@@ -9,6 +13,7 @@ import net.emsee.thedungeon.item.custom.armor.KobaltArmorItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -50,22 +55,22 @@ public final class ModItems {
             () -> new DungeonPortalCompas(new Item.Properties()));
 
     public static final DeferredItem<DungeonCurio> TEST_BELT = ITEMS.register("test_belt",
-            () -> new DungeonCurio(new Item.Properties()));
+            () -> new DungeonCurio(new Item.Properties(), DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
 
     public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
-            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));
 
     public static final DeferredItem<DungeonToolItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
-            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.INFUSED_ALLOY, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2f))));
+            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.INFUSED_ALLOY, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2f))));
 
     public static final DeferredItem<DungeonWeaponItem> GOBLINS_DAGGER = ITEMS.register("goblins_dagger",
-            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, true,ModTiers.KOBALT, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.KOBALT, 3.5f, -2F))));
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, true,ModTiers.KOBALT, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.KOBALT, 3.5f, -2F))));
 
     public static final DeferredItem<DungeonToolItem> GOBLINS_FORGEHAMMER = ITEMS.register("goblins_forgehammer",
-            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.KOBALT, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.KOBALT, 8f, -3.2f))));
+            () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.KOBALT, DungeonItemRank.D, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.KOBALT, 8f, -3.2f))));
 
     public static final DeferredItem<DungeonShieldItem> KOBALT_SHIELD = ITEMS.register("kobalt_shield",
-            () ->new DungeonShieldItem(new Item.Properties().durability(400), 2, 0));
+            () ->new DungeonShieldItem(new Item.Properties().durability(400), 2, 0, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
 
 
     public static final DeferredItem<TestDummyItem> TEST_DUMMY = ITEMS.register("test_dummy",

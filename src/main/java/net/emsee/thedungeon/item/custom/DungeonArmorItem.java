@@ -1,5 +1,9 @@
 package net.emsee.thedungeon.item.custom;
 
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.minecraft.core.Holder;
@@ -12,14 +16,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.List;
 import java.util.Objects;
 
+public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips, IClassedItem {
+    private final DungeonItemRank rank;
+    private final DeferredHolder<DungeonClass,?>[] classes;
+    private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
-public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips {
-    public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
+    public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes,DeferredHolder<DungeonSubClass<?>,?>[] subClasses) {
         super(material, type, properties.rarity(Rarity.RARE));
+        this.rank=rank;
+        this.classes=classes;
+        this.subClasses=subClasses;
     }
 
     @Override
@@ -29,8 +40,12 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity && livingEntity instanceof Player player) {
-            if (slotId == 38/*Chestplate*/ && !level.isClientSide && playerHasFullArmorOn(player)) {
+        if (entity instanceof Player player) {
+            // Only tick once from the equipped chestplate piece on the server
+            boolean isEquippedChest = this.getType() == Type.CHESTPLATE
+                    && !player.getInventory().getArmor(2).isEmpty()
+                    && player.getInventory().getArmor(2).getItem() == this;
+            if (isEquippedChest && !level.isClientSide && playerHasFullArmorOn(player)) {
                 onFullSetTick(player);
             }
         }
@@ -162,5 +177,30 @@ public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, ID
     }
 
     protected void onFullSetHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
+    }
+
+    @Override
+    public DeferredHolder<DungeonClass, ?>[] getLinkedClasses() {
+        return classes;
+    }
+
+    @Override
+    public DeferredHolder<DungeonSubClass<?>, ?>[] getLinkedSubClasses(){
+        return subClasses;
+    }
+
+    @Override
+    public DungeonItemRank getItemRank() {
+        return rank;
     }
 }

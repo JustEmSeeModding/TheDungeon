@@ -4,7 +4,6 @@ import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
 import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
-import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,12 +18,11 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasicAnimatedEntity, IMultiAttackAnimatedEntity {
+public class AbstractGoblinEntity extends DungeonPathfinderMob implements IMultiAttackAnimatedEntity {
     protected static final EntityDataAccessor<Boolean> RUNNING =
             SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
@@ -65,9 +63,9 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
 
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack((byte)0,12,8,.5f,.75f, 1, 3)
-                .withAttack((byte)1,12,8,.5f,.75f, 1, 2)
-                .withAttack((byte)2,12,18, 1f,1, 1, 1)
+                .withAttack(0,12,8, h -> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.75f), 3)
+                .withAttack(1,12,8, h -> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.75f), 3)
+                .withAttack(2,12,18, h -> h, 1)
         );
     }
 
@@ -79,7 +77,7 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IBasic
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        this.populateDefaultEquipmentSlots(level.getRandom(), difficulty);
+        this.populateDefaultEquipmentSlots(random, difficulty);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 

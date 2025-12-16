@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
@@ -20,17 +21,27 @@ public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
     final float chance;
     final int min;
     final int max;
+    final Consumer<T> postSpawnFunction;
 
 
     public SpawnInRoom(Supplier<EntityType<T>> entity) {
-        this(entity, 1, 1, 1);
+        this(entity, 1, 1);
+    }
+
+    public SpawnInRoom(Supplier<EntityType<T>> entity, int min, int max) {
+        this(entity, null, min, max, 1);
     }
 
     public SpawnInRoom(Supplier<EntityType<T>> entity, int min, int max, float chance) {
+        this(entity, null, min, max, chance);
+    }
+
+    public SpawnInRoom(Supplier<EntityType<T>> entity, Consumer<T> postSpawnFunction, int min, int max, float chance) {
         this.entity = entity;
         this.chance = chance;
         this.min = min;
         this.max = max;
+        this.postSpawnFunction = postSpawnFunction;
     }
 
 
@@ -48,10 +59,16 @@ public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
             Iterable<BlockPos> positions = BlockPos.randomBetweenClosed(random, count, cornerOne.getX(), cornerOne.getY(), cornerOne.getZ(), cornerTwo.getX(), cornerTwo.getY(), cornerTwo.getZ());
 
             for (BlockPos pos : positions) {
-                Entity spawned = entity.get().spawn(level, roomCenter, MobSpawnType.STRUCTURE);
+                T spawned = entity.get().spawn(level, roomCenter, MobSpawnType.STRUCTURE);
                 BlockPos finalPos = findClosestValidSpawn(pos, level, spawned, cornerOne, cornerTwo);
-                if (finalPos!= null && spawned!=null)
-                    spawned.setPos(finalPos.getBottomCenter());
+                if (spawned!=null) {
+                    if (finalPos != null)
+                        spawned.setPos(finalPos.getBottomCenter());
+                    if (postSpawnFunction != null) {
+                        postSpawnFunction.accept(spawned);
+                    }
+                }
+
             }
         }
     }
@@ -88,6 +105,7 @@ public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
     }
 
     protected static boolean isValidSpawnPosition(BlockPos pos, Level level, Entity entity) {
+        if (entity==null) return false;
         for (int i = 0; i < entity.getBbHeight(); i++) {
             BlockState posState = level.getBlockState(pos.above(i));
             if (!posState.isAir()) {

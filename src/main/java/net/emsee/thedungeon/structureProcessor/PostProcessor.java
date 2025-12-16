@@ -23,6 +23,6 @@ public interface PostProcessor {
      * skipping blocks hopefully adds some performance
      */
     default boolean skipBlockForProcessing(LevelReader level, BlockPos pos, BlockState state) {
-        return level.getMaxBuildHeight() > pos.getY() || level.getMinBuildHeight() < pos.getY();
+        return level.getMaxBuildHeight() < pos.getY() || level.getMinBuildHeight() > pos.getY();
     }
 }

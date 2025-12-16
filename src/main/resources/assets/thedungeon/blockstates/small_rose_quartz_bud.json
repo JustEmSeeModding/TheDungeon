@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "thedungeon:block/small_rose_quartz_bud",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "thedungeon:block/small_rose_quartz_bud",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "thedungeon:block/small_rose_quartz_bud",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "thedungeon:block/small_rose_quartz_bud",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "thedungeon:block/small_rose_quartz_bud"
+    },
+    "facing=west": {
+      "model": "thedungeon:block/small_rose_quartz_bud",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

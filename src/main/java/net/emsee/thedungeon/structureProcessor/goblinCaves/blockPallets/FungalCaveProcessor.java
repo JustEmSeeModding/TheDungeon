@@ -52,6 +52,7 @@ public class FungalCaveProcessor extends StoneCaveOreProcessor {
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

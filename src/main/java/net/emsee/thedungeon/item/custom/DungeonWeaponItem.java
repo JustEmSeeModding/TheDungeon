@@ -1,5 +1,9 @@
 package net.emsee.thedungeon.item.custom;
 
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
@@ -24,11 +28,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon {
+public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon, IClassedItem {
     private static final float TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER = -.30f;
     private static final float TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER = -.35f;
 
@@ -38,17 +43,26 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
 
     private final WeaponType weaponType;
     private final boolean isSweeping;
+    private final DungeonItemRank rank;
+    private final DeferredHolder<DungeonClass,?>[] classes;
+    private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
-    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Properties properties) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Properties properties) {
         super(tier, properties.rarity(Rarity.RARE), createToolProperties());
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
+        this.rank = rank;
+        this.classes=classes;
+        this.subClasses=subClasses;
     }
 
-    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, Item.Properties properties, Tool toolComponentData) {
+    public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Item.Properties properties, Tool toolComponentData) {
         super(tier, properties.rarity(Rarity.RARE), toolComponentData);
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
+        this.rank = rank;
+        this.classes=classes;
+        this.subClasses=subClasses;
     }
 
     public static Tool createToolProperties() {
@@ -82,7 +96,7 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
             , EquipmentSlot thisSlot, EquipmentSlot otherSlot) {
         DataComponentMap components = thisStack.getComponents();
         ItemAttributeModifiers attributeModifiers = components.get(DataComponents.ATTRIBUTE_MODIFIERS);
-        assert attributeModifiers != null;
+        if (attributeModifiers==null) return;
         ItemAttributeModifiers.Builder attributeBuilder = ItemAttributeModifiers.builder();
 
         final Double[] baseDamageSpeed = new Double[2];
@@ -111,14 +125,21 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
                                           double baseDamage, double baseSpeed) {
 
     }
-    protected void handsChangedTwoHanded(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
-                                       ItemAttributeModifiers.Builder attributeBuilder,
-                                       double baseDamage, double baseSpeed) {
+   protected void handsChangedTwoHanded(ItemStack thisStack, ItemStack otherStack, EquipmentSlot thisSlot, EquipmentSlot otherSlot,
+                                        ItemAttributeModifiers.Builder attributeBuilder,
+                                        double baseDamage, double baseSpeed) {
+       boolean mainhandWithOccupiedOffhand =
+               thisSlot == EquipmentSlot.MAINHAND && otherSlot == EquipmentSlot.OFFHAND && !otherStack.isEmpty();
 
-        attributeBuilder.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID, TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND);
-        attributeBuilder.add(Attributes.ATTACK_SPEED, new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID, TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND);
-
-    }
+       if (mainhandWithOccupiedOffhand) {
+           attributeBuilder.add(Attributes.ATTACK_DAMAGE,
+                   new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID, TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                   EquipmentSlotGroup.MAINHAND);
+           attributeBuilder.add(Attributes.ATTACK_SPEED,
+                   new AttributeModifier(WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID, TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                   EquipmentSlotGroup.MAINHAND);
+       }
+   }
 
     private boolean allowSweep() {
         return isSweeping;
@@ -163,8 +184,29 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
         return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
     }
 
-    public boolean allowOffhandAttack() {
-        return true;
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
+    }
+
+    @Override
+    public DeferredHolder<DungeonClass, ?>[] getLinkedClasses() {
+        return classes;
+    }
+
+    @Override
+    public DeferredHolder<DungeonSubClass<?>, ?>[] getLinkedSubClasses() {
+        return subClasses;
+    }
+
+    @Override
+    public DungeonItemRank getItemRank() {
+        return rank;
     }
 
     public enum WeaponType{

@@ -115,6 +115,8 @@ public final class ModVillagerTrades {
         List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
         List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
 
+        //genericTrades.add()
+
         rareTrades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemCost(Items.EMERALD, 25),
                 new ItemStack(ModItems.PORTAL_CORE.get(), 1),

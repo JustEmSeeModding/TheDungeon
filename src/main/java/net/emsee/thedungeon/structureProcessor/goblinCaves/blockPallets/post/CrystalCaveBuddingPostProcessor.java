@@ -2,6 +2,7 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.structureProcessor.Predicates;
@@ -37,11 +38,21 @@ public class CrystalCaveBuddingPostProcessor extends BlockPalletReplacementProce
                     map.put(new ReplaceInstance(() -> Blocks.AMETHYST_CLUSTER.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.AMETHYST_BLOCK)), 1);
                     map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState,0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.AMETHYST_BLOCK)), 2);
 
+                    map.put(new ReplaceInstance(() -> ModBlocks.SMALL_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 4);
+                    map.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 3);
+                    map.put(new ReplaceInstance(() -> ModBlocks.LARGE_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 2);
+                    map.put(new ReplaceInstance(() -> ModBlocks.ROSE_QUARTZ_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 1);
+                    map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState,0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 2);
+
                     //on calcite
                     map.put(new ReplaceInstance(() -> Blocks.SMALL_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4);
                     map.put(new ReplaceInstance(() -> Blocks.MEDIUM_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 3);
                     map.put(new ReplaceInstance(() -> Blocks.LARGE_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 2);
                     map.put(new ReplaceInstance(() -> Blocks.AMETHYST_CLUSTER.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 1);
+                    map.put(new ReplaceInstance(() -> ModBlocks.SMALL_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4);
+                    map.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 3);
+                    map.put(new ReplaceInstance(() -> ModBlocks.LARGE_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 2);
+                    map.put(new ReplaceInstance(() -> ModBlocks.ROSE_QUARTZ_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 1);
                     map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState,1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 200);
                 }
                 map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState,2), 1);
@@ -57,6 +68,7 @@ public class CrystalCaveBuddingPostProcessor extends BlockPalletReplacementProce
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

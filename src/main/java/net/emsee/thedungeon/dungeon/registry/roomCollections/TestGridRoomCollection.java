@@ -2,7 +2,7 @@ package net.emsee.thedungeon.dungeon.registry.roomCollections;
 
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomBasic;
 import net.emsee.thedungeon.dungeon.src.Connection;
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 
 public final class TestGridRoomCollection extends GridRoomCollection {
         public TestGridRoomCollection() {

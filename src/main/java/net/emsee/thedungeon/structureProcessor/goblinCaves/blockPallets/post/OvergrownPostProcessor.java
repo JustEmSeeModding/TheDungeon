@@ -4,14 +4,12 @@ import com.google.common.collect.Maps;
 import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.structureProcessor.Predicates;
-import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.OvergrownCaveProcessor;
 import net.emsee.thedungeon.utils.BlockUtils;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.Map;

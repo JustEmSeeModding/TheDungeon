@@ -1,6 +1,6 @@
 package net.emsee.thedungeon.dungeon.registry.roomCollections.cleanup;
 
-import net.emsee.thedungeon.dungeon.src.types.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomEmpty;
 import net.emsee.thedungeon.structureProcessor.cleanup.CleanIllegalBlocksProcessor;
 

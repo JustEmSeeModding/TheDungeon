@@ -74,6 +74,7 @@ public class StoneCaveOreProcessor extends BlockPalletReplacementProcessor {
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

@@ -7,6 +7,7 @@ import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -95,7 +96,7 @@ public final class ModDungeonTeleportHandling {
         }
 
         if (hasInvalidItem) {
-            player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items"), true);
+            player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.non_dungeon_items").withStyle(ChatFormatting.RED), true);
             if (player instanceof ServerPlayer serverPlayer)
                 ModCriteriaTriggerTypes.FAILED_DUNGEON_TRAVEL.get().trigger(serverPlayer);
         }

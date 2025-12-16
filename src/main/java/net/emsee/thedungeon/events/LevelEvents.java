@@ -10,7 +10,6 @@ import java.util.Objects;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public class LevelEvents {
-
     //TODO there is a lot of issues with this that need to be fixed or replace with something else
 
     @SubscribeEvent

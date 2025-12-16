@@ -3,6 +3,7 @@ package net.emsee.thedungeon.block;
 
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.block.custom.BuddingRoseQuartzBlock;
 import net.emsee.thedungeon.block.custom.portal.*;
 import net.emsee.thedungeon.block.custom.DungeonThreadBlock;
 import net.emsee.thedungeon.block.custom.InfusedGlassBlock;
@@ -116,6 +117,23 @@ public final class ModBlocks {
     public static final DeferredBlock<DungeonThreadBlock> INFUSED_THREAD = registerBlock("infused_thread",
             () -> new DungeonThreadBlock(Blocks.TRIPWIRE_HOOK, BlockBehaviour.Properties.ofFullCopy(Blocks.TRIPWIRE)));
 
+    public static final DeferredBlock<AmethystBlock> ROSE_QUARTZ_BLOCK = registerBlock("rose_quartz_block",
+            () -> new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
+
+    public static final DeferredBlock<BuddingRoseQuartzBlock> BUDDING_ROSE_QUARTZ = registerBlock("budding_rose_quartz",
+            () -> new BuddingRoseQuartzBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BUDDING_AMETHYST)));
+
+    public static final DeferredBlock<AmethystClusterBlock> ROSE_QUARTZ_CLUSTER = registerBlock("rose_quartz_cluster",
+            () -> new AmethystClusterBlock(7.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER)));
+
+    public static final DeferredBlock<AmethystClusterBlock> LARGE_ROSE_QUARTZ_BUD = registerBlock("large_rose_quartz_bud",
+            () -> new AmethystClusterBlock(5.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.LARGE_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> MEDIUM_ROSE_QUARTZ_BUD = registerBlock("medium_rose_quartz_bud",
+            () -> new AmethystClusterBlock(4.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.MEDIUM_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> SMALL_ROSE_QUARTZ_BUD = registerBlock("small_rose_quartz_bud",
+            () -> new AmethystClusterBlock(3.0F, 4.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_AMETHYST_BUD)));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

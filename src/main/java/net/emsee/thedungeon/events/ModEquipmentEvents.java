@@ -1,19 +1,25 @@
 package net.emsee.thedungeon.events;
 
 
+import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
+import net.emsee.thedungeon.dungeonClass.ModClasses;
+import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.emsee.thedungeon.item.custom.DungeonToolItem;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
+import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonItemSwapHandling;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -30,10 +36,18 @@ public final class ModEquipmentEvents {
     private static void armorSwapChanges(LivingEquipmentChangeEvent event) {
         if (!event.getSlot().isArmor()) return;
         if (event.getFrom().getItem() instanceof DungeonArmorItem dungeonArmorItem)
+            // handle the unEquipped item
             dungeonArmorItem.unEquip(event.getEntity(), event.getFrom(), event.getSlot());
-        if (event.getTo().getItem() instanceof DungeonArmorItem dungeonArmorItem)
+        if (event.getTo().getItem() instanceof IClassedItem classedItem && event.getEntity() instanceof Player player &&
+                (playerLacksClassForItem(player, classedItem))) {
+            // equipped an item that does not belong to the class
+            equippedWrongClassArmor(event);
+        }
+        else if (event.getTo().getItem() instanceof DungeonArmorItem dungeonArmorItem)
+            // handle the new equipped item
             dungeonArmorItem.equip(event.getEntity(), event.getTo(), event.getSlot());
         else if (!event.getTo().isEmpty() && event.getEntity().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
+            // equipped a non dungeon item inside the dungeon
             equippedNonDungeonInDungeon(event);
         }
     }
@@ -41,19 +55,32 @@ public final class ModEquipmentEvents {
     private static void equippedNonDungeonInDungeon(LivingEquipmentChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (player.isCreative()) return;
-            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_wrong_armor"), false);
+            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_non_dungeon_armor").withStyle(ChatFormatting.RED), true);
+            player.getInventory().placeItemBackInInventory(player.getItemBySlot(event.getSlot()).copyAndClear());
+        }
+    }
+
+    private static void equippedWrongClassArmor(LivingEquipmentChangeEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            if (player.isCreative()) return;
+            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_wrong_class_armor").withStyle(ChatFormatting.RED), true);
             player.getInventory().placeItemBackInInventory(player.getItemBySlot(event.getSlot()).copyAndClear());
         }
     }
 
     private static void handleSwapChanges(LivingEquipmentChangeEvent event) {
         if (!(event.getSlot() == EquipmentSlot.MAINHAND || event.getSlot() == EquipmentSlot.OFFHAND)) return;
-        // handle hand change for old item
         if (event.getFrom().getItem() instanceof IDungeonItemSwapHandling swapHandling) {
+            // handle hand change for old item
             swapHandling.swapOutOfHand(event.getEntity(), event.getFrom(), event.getTo(), event.getSlot());
         }
-        // handle hand change for new item
-        if (event.getTo().getItem() instanceof IDungeonItemSwapHandling swapHandling) {
+
+        if (event.getTo().getItem() instanceof IClassedItem classedItem && event.getEntity() instanceof Player player &&
+                (playerLacksClassForItem(player, classedItem))) {
+            // equipped an item that does not belong to the class
+            equippedWrongHandItem(event);
+        } else if (event.getTo().getItem() instanceof IDungeonItemSwapHandling swapHandling) {
+            // handle hand change for new item
             swapHandling.swapIntoHand(event.getEntity(), event.getTo(), event.getFrom(), event.getSlot());
         }
 
@@ -66,7 +93,12 @@ public final class ModEquipmentEvents {
         }
     }
 
-    private static void test(ItemAttributeModifierEvent event) {
+    private static void equippedWrongHandItem(LivingEquipmentChangeEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            if (player.isCreative()) return;
+            player.displayClientMessage(Component.translatable("message.thedungeon.equipped_wrong_class_hand").withStyle(ChatFormatting.RED), true);
+            player.drop(player.getItemBySlot(event.getSlot()).copyAndClear(),true);
+        }
     }
 
     private static void handleWeaponChanges(LivingEquipmentChangeEvent event) {
@@ -109,5 +141,11 @@ public final class ModEquipmentEvents {
         if (event.getPlayer().getMainHandItem().getItem() instanceof DungeonToolItem diggerItem && event.getPlayer().level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             diggerItem.breakEvent(event);
         }
+    }
+
+    private static boolean playerLacksClassForItem(Player player, IClassedItem classedItem) {
+        boolean hasClass = ModClasses.getClassForPlayer(player).isItemForClass(classedItem);
+        boolean hasSubClass = ModSubClasses.getClassForPlayer(player).isItemForClass(classedItem);
+        return !hasClass && !hasSubClass;
     }
 }

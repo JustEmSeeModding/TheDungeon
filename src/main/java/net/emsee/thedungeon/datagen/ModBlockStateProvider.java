@@ -51,10 +51,13 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
         semiTransparentBlockWithItem(ModBlocks.INFUSED_GLASS);
 
-    }
+        blockWithItem(ModBlocks.ROSE_QUARTZ_BLOCK);
+        blockWithItem(ModBlocks.BUDDING_ROSE_QUARTZ);
+        //crossBlock(ModBlocks.ROSE_QUARTZ_CLUSTER, "rose_quartz_cluster", "rose_quartz_cluster");
+        //crossBlock(ModBlocks.LARGE_ROSE_QUARTZ_BUD, "large_rose_quartz_bud", "large_rose_quartz_bud");
+        //crossBlock(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD, "medium_rose_quartz_bud", "medium_rose_quartz_bud");
+        //crossBlock(ModBlocks.SMALL_ROSE_QUARTZ_BUD, "small_rose_quartz_bud", "small_rose_quartz_bud");
 
-    private void crossBlockTest(DeferredBlock<?> deferredBlock, String modelName, String textureName) {
-        simpleBlockWithItem(deferredBlock.get(), models().cross(modelName, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "block/" + textureName)).renderType("cutout"));
     }
 
     private void crossBlock(DeferredBlock<?> deferredBlock, String modelName, String textureName) {

@@ -22,7 +22,7 @@ public final class GridRoomGroup extends AbstractGridRoom {
     }
 
     protected static class GroupDataBuilder {
-        private final WeightedMap.Int<AbstractGridRoom.Builder<?>> builders = new WeightedMap.Int<>();
+        private final WeightedMap.Int<AbstractGridRoom.Builder<?,?>> builders = new WeightedMap.Int<>();
 
         public GroupData build() {
             GroupData toReturn = new GroupData();
@@ -47,7 +47,7 @@ public final class GridRoomGroup extends AbstractGridRoom {
         return new Builder(gridWidth, gridHeight, differentiationID);
     }
 
-    public static class Builder extends AbstractGridRoom.Builder<GridRoomGroup> {
+    public static class Builder extends AbstractGridRoom.Builder<GridRoomGroup, Builder> {
         private final GroupDataBuilder groupDataBuilder;
 
         protected Builder(int gridWidth, int gridHeight, int differentiationID) {
@@ -88,7 +88,7 @@ public final class GridRoomGroup extends AbstractGridRoom {
         /**
          * A roomGroup must always have the same connections
          */
-        public Builder addRoom(AbstractGridRoom.Builder<?> gridRoom) {
+        public Builder addRoom(AbstractGridRoom.Builder<?,?> gridRoom) {
 
             if (!ListAndArrayUtils.mapEquals(data.connections, gridRoom.data.connections))
                 throw new IllegalStateException(this+":added room does not have the same connections as the group");
@@ -103,7 +103,7 @@ public final class GridRoomGroup extends AbstractGridRoom {
             return this;
         }
 
-        public Builder applyToAll(Function<AbstractGridRoom.Builder<?>, AbstractGridRoom.Builder<?>> function) {
+        public Builder applyToAll(Function<AbstractGridRoom.Builder<?,?>, AbstractGridRoom.Builder<?,?>> function) {
             ListAndArrayUtils.mapForEachSafe(groupDataBuilder.builders, (e)-> Map.entry(function.apply(e.getKey()), e.getValue()));
             return this;
         }
@@ -201,9 +201,6 @@ public final class GridRoomGroup extends AbstractGridRoom {
                 data.connectionTags.equals(otherGroup.data.connectionTags) &&
                 data.generationPriority == otherGroup.data.generationPriority &&
                 data.overrideEndChance == otherGroup.data.overrideEndChance &&
-                data.doOverrideEndChance == otherGroup.data.doOverrideEndChance &&
-                ListAndArrayUtils.listEquals(data.spawnRules, otherGroup.data.spawnRules) &&
-                ListAndArrayUtils.listEquals(data.structureProcessors.list(), otherGroup.data.structureProcessors.list()) &&
                 data.differentiationID == otherGroup.data.differentiationID &&
                 data.skipCollectionProcessors == otherGroup.data.skipCollectionProcessors;
     }
@@ -226,7 +223,6 @@ public final class GridRoomGroup extends AbstractGridRoom {
         result = 31 * result + data.generationPriority;
         result = 31 * result + Double.hashCode(data.overrideEndChance);
         result = 31 * result + (data.doOverrideEndChance ? 1 : 0);
-        result = 31 * result + data.spawnRules.hashCode();
         result = 31 * result + data.structureProcessors.list().hashCode();
         result = 31 * result + data.differentiationID;
         result = 31 * result + (data.skipCollectionProcessors ? 1 : 0);

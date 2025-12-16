@@ -27,7 +27,7 @@ public final class GridRoomEmpty extends AbstractGridRoom{
         return new Builder(gridWidth, gridHeight, differentiationID);
     }
     
-    public static class Builder extends AbstractGridRoom.Builder<GridRoomEmpty> {
+    public static class Builder extends AbstractGridRoom.Builder<GridRoomEmpty, Builder> {
         protected Builder(int gridWidth, int gridHeight, int differentiationID) {
             super(gridWidth, gridHeight, differentiationID);
         }
@@ -43,7 +43,7 @@ public final class GridRoomEmpty extends AbstractGridRoom{
 
         @Deprecated
         @Override
-        public AbstractGridRoom.Builder<GridRoomEmpty> clearStructureProcessors() {
+        public Builder clearStructureProcessors() {
             throw new IllegalStateException("clearStructureProcessors should not be used on GridRoomEmpty");
         }
 
@@ -92,16 +92,15 @@ public final class GridRoomEmpty extends AbstractGridRoom{
         result = 31 * result + data.weight;
         result = 31 * result + (data.allowRotation ? 1 : 0);
         result = 31 * result + (data.allowUpDownConnectedRotation ? 1 : 0);
-        result = 31 * result + Double.hashCode(data.northSizeScale);
-        result = 31 * result + Double.hashCode(data.eastSizeScale);
-        result = 31 * result + Double.hashCode(data.heightScale);
+        result = 31 * result + Integer.hashCode(data.northSizeScale);
+        result = 31 * result + Integer.hashCode(data.eastSizeScale);
+        result = 31 * result + Integer.hashCode(data.heightScale);
         result = 31 * result + data.connectionOffsets.hashCode();
         result = 31 * result + data.connectionTags.hashCode();
         result = 31 * result + data.generationPriority;
-        result = 31 * result + Double.hashCode(data.overrideEndChance);
+        result = 31 * result + Float.hashCode(data.overrideEndChance);
         result = 31 * result + (data.doOverrideEndChance ? 1 : 0);
         result = 31 * result + data.spawnRules.hashCode();
-        result = 31 * result + data.structureProcessors.list().hashCode();
         result = 31 * result + data.structurePostProcessors.list().hashCode();
         result = 31 * result + data.differentiationID;
         result = 31 * result + (data.skipCollectionPostProcessors ? 1 : 0);
@@ -118,10 +117,15 @@ public final class GridRoomEmpty extends AbstractGridRoom{
 
     @Override
     public void postProcess(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList postProcessors, Random random) {
+        if (postProcessors == null || postProcessors.list().isEmpty()) return;
+        final BlockPos origin = getMinCorner(centre, roomRotation);
+        final StructurePlaceSettings settings = new StructurePlaceSettings();
         for (StructureProcessor processor : postProcessors.list()) {
             if (processor instanceof PostProcessor postProcessorData)
                 forEachBlockPosInBounds(centre, roomRotation, postProcessorData.getMethod(),serverLevel, pos -> {
                     BlockState initialState = serverLevel.getBlockState(pos);
+                    if (postProcessorData.skipBlockForProcessing(serverLevel, pos, initialState))
+                        return;
                     // Create a StructureBlockInfo for the block
                     StructureTemplate.StructureBlockInfo blockInfo = new StructureTemplate.StructureBlockInfo(
                             pos,
@@ -129,7 +133,7 @@ public final class GridRoomEmpty extends AbstractGridRoom{
                             null
                     );
 
-                    blockInfo = processor.process(serverLevel, new BlockPos(0, 0, 0), pos, blockInfo, blockInfo, new StructurePlaceSettings(), null);
+                    blockInfo = processor.process(serverLevel, origin, pos, blockInfo, blockInfo, settings, null);
 
                     // Place processed block state (or fallback to initial state)
                     serverLevel.setBlockAndUpdate(pos, blockInfo != null ? blockInfo.state() : initialState);

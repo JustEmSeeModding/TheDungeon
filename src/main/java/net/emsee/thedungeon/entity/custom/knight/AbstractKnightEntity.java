@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractKnightEntity extends DungeonPathfinderMob implements IBasicAnimatedEntity, IMultiAttackAnimatedEntity {
+public abstract class AbstractKnightEntity extends DungeonPathfinderMob implements IMultiAttackAnimatedEntity {
     protected static final EntityDataAccessor<Boolean> RUNNING =
             SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
@@ -62,8 +62,8 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
 
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack(0,15,5,1,1, 1)
-                .withAttack(1,7,3,.5f,.25f, .9f)
+                .withAttack(0,15,5,h -> h, 1)
+                .withAttack(1,7,3,h-> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.25f).withReachMultiplier(.9f),1)
         );
     }
 
@@ -74,11 +74,11 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        this.populateDefaultEquipmentSlots(level.getRandom(), difficulty);
+        this.populateDefaultEquipmentSlots(random, difficulty);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
-    protected void SetupAnimations() {
+    protected void setupAnimations() {
         if (this.idleAnimationTimeout<=0) {
             this.idleAnimationTimeout = 59;
             this.idleAnimationState.start(this.tickCount);
@@ -108,7 +108,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
-            this.SetupAnimations();
+            this.setupAnimations();
         }
     }
 
@@ -127,15 +127,15 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         this.entityData.set(RUNNING, false);
     }
 
-    void setAnimationID(int id, byte version) {
+    protected final void setAnimationID(int id, byte version) {
         this.entityData.set(ATTACK_ANIMATION_ID, id);
         this.entityData.set(ATTACK_ANIMATION_VERSION, version);
     }
 
-    int getAnimationID() {
+    protected final int getAnimationID() {
         return this.entityData.get(ATTACK_ANIMATION_ID);
     }
-    int getAnimationVersion() {
+    protected final int getAnimationVersion() {
         return this.entityData.get(ATTACK_ANIMATION_VERSION);
     }
 

@@ -1,6 +1,8 @@
 package net.emsee.thedungeon.dungeon.src;
 
+import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.DebugLog;
+import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
@@ -14,8 +16,8 @@ import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -29,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -36,22 +39,39 @@ public final class GlobalDungeonManager {
 
     private static final int forceLoadedChunkRadius = 35;
     private static final int killRadius = 500;
-
-    private final static Map<DungeonRank,WeightedMap.Int<Dungeon<?,?>>> cycleDungeons = Util.make(new HashMap<>(), map -> {for (DungeonRank rank : DungeonRank.values()) map.put(rank, new WeightedMap.Int<>());});
+    private static volatile boolean hasSetupDungeonCycleList = false;
+    private final static Map<DungeonRank,WeightedMap.Int<ResourceKey<Dungeon<?,?>>>> cycleDungeons = new HashMap<>();
     private final static ResourceKey<Level> dungeonResourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
 
-    public static void registerToAutoGenerator(Dungeon<?,?> dungeon, Integer weight) {
-        cycleDungeons.get(dungeon.getRank()).put(dungeon, weight);
-    }
 
     public static void tick(ServerTickEvent.Pre event) {
         MinecraftServer server = event.getServer();
-        if (getCurrentProgressDungeon(server) == null) return;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (!(GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING) && getCurrentProgressDungeon(server).canManualStepNow())) {
+        DungeonInstance<?> current = getCurrentProgressDungeon(server);
+        if (current != null && !(GameruleRegistry.getBooleanGamerule(server, ModGamerules.MANUAL_STEPPING) && current.canManualStepNow())) {
             generationTick(server, saveData);
         }
         generationTimerTick(server, saveData);
+    }
+
+    private static void setupDungeonCycleList() {
+        if (hasSetupDungeonCycleList) return;
+        synchronized (GlobalDungeonManager.class) {
+            if (hasSetupDungeonCycleList) return;
+            for (DungeonRank rank : DungeonRank.values()) {
+                cycleDungeons.put(rank, new WeightedMap.Int<>());
+            }
+
+            ModDungeons.DUNGEON_REGISTRY.registryKeySet().forEach(key -> {
+                Dungeon<?,?> dungeon = ModDungeons.DUNGEON_REGISTRY.get(key);
+                if (dungeon == null) throw new RuntimeException("Error on retrieving dungeon from key : "+ key);
+                int weight = dungeon.getWeight();
+                if (weight>0) {
+                    cycleDungeons.get(dungeon.getRank()).put(key, weight);
+                }
+            });
+            hasSetupDungeonCycleList=true;
+        }
     }
 
     /**
@@ -100,12 +120,12 @@ public final class GlobalDungeonManager {
     public static void generationTimerTick(MinecraftServer server, DungeonSaveData saveData) {
         long worldTime = server.overworld().getGameTime();
 
-        if (!GameruleRegistry.getBooleanGamerule(server, ModGamerules.AUTO_DUNGEON_CYCLING)) {
+        if (!Config.AUTO_DUNGEON_CYCLING.getAsBoolean()) {
             saveData.SetLastExecutionTime(worldTime);
             return;
         }
 
-        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - GameruleRegistry.getIntegerGamerule(server,ModGamerules.TICKS_BETWEEN_COLLAPSES));
+        long timeLeft = -((worldTime - saveData.GetLastExecutionTime()) - Config.TICKS_BETWEEN_COLLAPSES.getAsLong());
 
         long lastExecutionTime = saveData.GetLastExecutionTime();
 
@@ -159,7 +179,7 @@ public final class GlobalDungeonManager {
         progressQueueNULLCheck(server);
         passiveQueueNULLCheck(server, rank);
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
+        if (Config.DUNGEON_CLEAN_ON_REGEN.getAsBoolean())
             cleanup(server, rank);
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Selecting new dungeon");
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Checking passive queue");
@@ -168,7 +188,10 @@ public final class GlobalDungeonManager {
             saveData.addToProgressQueue(saveData.removeFromPassiveQueue(rank));
         }
         else {
-            WeightedMap.Int<Dungeon<?,?>> possibleDungeons = cycleDungeons.get(rank);
+            if (!hasSetupDungeonCycleList) {
+                setupDungeonCycleList();
+            }
+            WeightedMap.Int<ResourceKey<Dungeon<?,?>>> possibleDungeons = cycleDungeons.get(rank);
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"No dungeon in passive queue, selecting random");
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Possible Dungeons: {}", ListAndArrayUtils.mapToString(possibleDungeons));
             if (possibleDungeons.isEmpty() || possibleDungeons.totalWeight() <= 0) {
@@ -176,30 +199,21 @@ public final class GlobalDungeonManager {
                 return;
             }
             ServerLevel overworld = server.getLevel(Level.OVERWORLD);
-            if (overworld == null) throw new IllegalStateException("overworld not found");
-            Dungeon<?,?> newDungeon = possibleDungeons.getRandom(overworld.getRandom());
-            if (newDungeon== null) throw new IllegalStateException("error with selecting dungeon");
+            if (overworld == null) throw new RuntimeException("overworld not found");
+            ResourceKey<Dungeon<?,?>> newDungeonKey = possibleDungeons.getRandom(overworld.getRandom());
+            Dungeon<?,?> newDungeon = ModDungeons.DUNGEON_REGISTRY.get(newDungeonKey);
+            if (newDungeon== null) throw new RuntimeException("error with selecting dungeon");
             saveData.addToProgressQueue(newDungeon.createInstance());
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "added {} to queue", newDungeon);
         }
     }
 
     public static void killAllInDungeon(MinecraftServer server, DungeonRank rank) {
-        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_KILL_ON_REGEN)) {
+        if (Config.DUNGEON_KILL_ON_REGEN.getAsBoolean()) {
             ServerLevel dimension = server.getLevel(dungeonResourceKey);
 
             assert dimension != null;
-            BlockPos blockPos = rank.getDefaultCenterPos();
-
-            double centerX = blockPos.getX() + 0.5;
-            double centerY = blockPos.getY() + 0.5;
-            double centerZ = blockPos.getZ() + 0.5;
-
-
-            AABB area = new AABB(
-                    centerX - killRadius, dimension.getMinBuildHeight(), centerZ - killRadius, // Min corner
-                    centerX + killRadius, dimension.getMaxBuildHeight(), centerZ + killRadius  // Max corner
-            );
+            AABB area = getKillAABB(rank, dimension);
 
             List<Entity> entities = dimension.getEntitiesOfClass(Entity.class, area, e -> true);
 
@@ -217,6 +231,19 @@ public final class GlobalDungeonManager {
                 }
             }
         }
+    }
+
+    private static @NotNull AABB getKillAABB(DungeonRank rank, ServerLevel dimension) {
+        BlockPos blockPos = rank.getDefaultCenterPos();
+
+        double centerX = blockPos.getX() + 0.5;
+        double centerY = blockPos.getY() + 0.5;
+        double centerZ = blockPos.getZ() + 0.5;
+
+        return new AABB(
+                centerX - killRadius, dimension.getMinBuildHeight(), centerZ - killRadius, // Min corner
+                centerX + killRadius, dimension.getMaxBuildHeight(), centerZ + killRadius  // Max corner
+        );
     }
 
     public static void closeDungeon(MinecraftServer server, DungeonRank rank) {
@@ -306,10 +333,12 @@ public final class GlobalDungeonManager {
      */
     public static void generateDungeonFromTool(MinecraftServer server, int selectedDungeonID) {
 
-        Dungeon<?,?> newDungeon = getDungeonByID(selectedDungeonID);
+        Dungeon<?,?> newDungeon = getDungeonByNumberID(selectedDungeonID);
+
+        if (newDungeon==null) return;
 
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (GameruleRegistry.getBooleanGamerule(server, ModGamerules.DUNGEON_CLEAN_ON_REGEN))
+        if (Config.DUNGEON_CLEAN_ON_REGEN.getAsBoolean())
             cleanup(server, newDungeon.getRank());
         saveData.addToProgressQueue(newDungeon.createInstance());
     }
@@ -370,6 +399,7 @@ public final class GlobalDungeonManager {
     }
 
     public static void updateForcedChunks(MinecraftServer server) {
+        if (!TheDungeon.doUpdateForcedChunks) return;
         ServerLevel level = server.getLevel(dungeonResourceKey);
         if (level == null) {
             return;
@@ -394,12 +424,21 @@ public final class GlobalDungeonManager {
         saveData.setFinishedForcedChunks();
     }
 
-    public static Dungeon<?,?> getDungeonByID(int ID) {
-        return ModDungeons.getByID(ID);
+    public static Dungeon<?,?> getDungeonByNumberID(int ID) {
+        Optional<Holder.Reference<Dungeon<?,?>>> holder = ModDungeons.DUNGEON_REGISTRY.getHolder(ID);
+        if(holder.isEmpty()) {
+            DebugLog.logError(DebugLog.DebugType.WARNINGS, "No dungeon found at ID: {}", ID);
+            return null;
+        }
+        return holder.get().value();
+    }
+
+    public static Dungeon<?,?> getDungeonByName(String name) {
+        return ModDungeons.getByName(name);
     }
 
     public static int getDungeonCount() {
-        return ModDungeons.getMaxID();
+        return ModDungeons.DUNGEON_REGISTRY.size();
     }
 
     /**
@@ -417,14 +456,14 @@ public final class GlobalDungeonManager {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         Dungeon<?,?> cleanup = null;
         switch (rank) {
-            case F -> cleanup= ModCleanupDungeons.CLEANUP_F;
-            case E -> cleanup=ModCleanupDungeons.CLEANUP_E;
-            case D -> cleanup=ModCleanupDungeons.CLEANUP_D;
-            case C -> cleanup=ModCleanupDungeons.CLEANUP_C;
-            case B -> cleanup=ModCleanupDungeons.CLEANUP_B;
-            case A -> cleanup=ModCleanupDungeons.CLEANUP_A;
-            case S -> cleanup=ModCleanupDungeons.CLEANUP_S;
-            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS;
+            case F -> cleanup= ModCleanupDungeons.CLEANUP_F.get();
+            case E -> cleanup=ModCleanupDungeons.CLEANUP_E.get();
+            case D -> cleanup=ModCleanupDungeons.CLEANUP_D.get();
+            case C -> cleanup=ModCleanupDungeons.CLEANUP_C.get();
+            case B -> cleanup=ModCleanupDungeons.CLEANUP_B.get();
+            case A -> cleanup=ModCleanupDungeons.CLEANUP_A.get();
+            case S -> cleanup=ModCleanupDungeons.CLEANUP_S.get();
+            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS.get();
         }
         saveData.addToProgressQueue(cleanup.createInstance());
         GlobalDungeonManager.killAllInDungeon(server, rank);
@@ -436,14 +475,14 @@ public final class GlobalDungeonManager {
     public static void priorityCleanup(MinecraftServer server, DungeonRank rank) {
         Dungeon<?,?> cleanup = null;
         switch (rank) {
-            case F -> cleanup=ModCleanupDungeons.CLEANUP_F;
-            case E -> cleanup=ModCleanupDungeons.CLEANUP_E;
-            case D -> cleanup=ModCleanupDungeons.CLEANUP_D;
-            case C -> cleanup=ModCleanupDungeons.CLEANUP_C;
-            case B -> cleanup=ModCleanupDungeons.CLEANUP_B;
-            case A -> cleanup=ModCleanupDungeons.CLEANUP_A;
-            case S -> cleanup=ModCleanupDungeons.CLEANUP_S;
-            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS;
+            case F -> cleanup=ModCleanupDungeons.CLEANUP_F.get();
+            case E -> cleanup=ModCleanupDungeons.CLEANUP_E.get();
+            case D -> cleanup=ModCleanupDungeons.CLEANUP_D.get();
+            case C -> cleanup=ModCleanupDungeons.CLEANUP_C.get();
+            case B -> cleanup=ModCleanupDungeons.CLEANUP_B.get();
+            case A -> cleanup=ModCleanupDungeons.CLEANUP_A.get();
+            case S -> cleanup=ModCleanupDungeons.CLEANUP_S.get();
+            case SS -> cleanup=ModCleanupDungeons.CLEANUP_SS.get();
         }
 
         if (cleanup==null)

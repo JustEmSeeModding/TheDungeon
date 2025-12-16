@@ -12,7 +12,7 @@ public final class ListAndArrayUtils {
      */
     public static <T> T getRandomFromList(List<T> list, Random random) {
         if (list.isEmpty()) return null;
-        return list.get((int) Math.round(random.nextDouble() * (list.size() - 1)));
+        return list.get(random.nextInt(list.size()));
     }
 
     /**
@@ -20,7 +20,7 @@ public final class ListAndArrayUtils {
      */
     public static <T> T getRandomFromList(List<T> list, RandomSource random) {
         if (list.isEmpty()) return null;
-        return list.get((int) Math.round(random.nextDouble() * (list.size() - 1)));
+        return list.get(random.nextInt(list.size()));
     }
 
     public static <T, M> boolean mapEquals(Map<T, M> mapOne, Map<T, M> mapTwo) {
@@ -67,7 +67,8 @@ public final class ListAndArrayUtils {
     }
 
     /**
-     * a foreach method for maps that makes sure the value stays assigned even if the hash changes
+     * Applies a transformation function to each map entry, ensuring the value stays assigned even if the hash changes.
+     * The function receives each entry and must return a (possibly new) entry to be re-inserted into the map.
      */
     public static <K,V> Map<K,V> mapForEachSafe(Map<K,V> map, Function<Map.Entry<K,V>,Map.Entry<K,V>> function) {
         List<Map.Entry<K,V>> entries = new ArrayList<>(map.entrySet());
@@ -75,6 +76,7 @@ public final class ListAndArrayUtils {
 
         for (Map.Entry<K,V> entry : entries) {
             entry = function.apply(entry);
+            if (entry == null) throw new IllegalArgumentException("mapForEach Received Null");
             map.put(entry.getKey(), entry.getValue());
         }
 

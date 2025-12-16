@@ -2,6 +2,11 @@ package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
+import net.emsee.thedungeon.dungeonClass.DungeonClass;
+import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
+import net.emsee.thedungeon.dungeonClass.ModClasses;
+import net.emsee.thedungeon.dungeonClass.mainClass.TankClass;
+import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -10,7 +15,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class InfusedAlloyArmorItem extends DungeonArmorItem {
     private final double speedPenalty = -.006d;
@@ -19,7 +24,7 @@ public class InfusedAlloyArmorItem extends DungeonArmorItem {
 
 
     public InfusedAlloyArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
-        super(material, type, properties);
+        super(material, type, properties, DungeonItemRank.F, new DeferredHolder[]{ModClasses.TANK}, new DeferredHolder[]{});
     }
 
     @Override

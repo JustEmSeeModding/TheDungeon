@@ -1,14 +1,27 @@
 {
+  "thedungeon.configuration.dungeon_auto_cycling": "Dungeon Auto Cycle",
+  "thedungeon.configuration.calculator_steps_per_tick": "Steps Per Tick Calculator",
+  "thedungeon.configuration.placer_steps_per_tick": "Steps Per Tick Placer",
+  "thedungeon.configuration.post_process_steps_per_tick": "Steps Per Tick Post Processor",
+  "thedungeon.configuration.spawner_steps_per_tick": "Steps Per Tick Spawner",
+  "thedungeon.configuration.dungeon_do_seed_override": "Override Dungeon Seed",
+  "thedungeon.configuration.dungeon_seed_override": "Seed",
+  "thedungeon.configuration.dungeon_kill_on_regenerate": "Kill On Regenerate",
+  "thedungeon.configuration.dungeon_cleanup_on_regenerate": "Cleanup On Regenerate",
+  "thedungeon.configuration.dungeon_ticks_between_collapse": "Ticks Per Collapse",
+
   "announcement.thedungeon.open_dungeon" : "A new dungeon has been opened",
   "announcement.thedungeon.seconds_left" : "%s-rank has %s seconds left until collapse",
   "announcement.thedungeon.minutes_left" : "%s-rank has %s minutes left until collapse",
   "announcement.thedungeon.low_time_teleport": "This dungeon only has %s seconds left until collapse, Crouch-Click to confirm teleport",
 
-  "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the gamerules",
+  "message.thedungeon.cycling_disabled" : "Dungeon cycling is disabled in the config",
   "message.thedungeon.view_time_seconds" : "%s is next: %s seconds left until dungeon collapse",
   "message.thedungeon.view_time_minutes" : "%s is next: %s minutes and %s seconds left until dungeon collapse",
 
-  "message.thedungeon.equipped_wrong_armor" : "You feel the armor hurt your skin as you rush to take it off",
+  "message.thedungeon.equipped_non_dungeon_armor" : "You feel the armor hurt your skin as you rush to take it off",
+  "message.thedungeon.equipped_wrong_class_armor" : "You feel the armor hurt your skin as you rush to take it off",
+  "message.thedungeon.equipped_wrong_class_hand" : "You feel the item hurt your skin as you throw it on the ground",
 
   "message.thedungeon.dungeon_portal.non_dungeon_items": "You are carrying items that don't belong in the dungeon",
   "message.thedungeon.dungeon_portal.dungeon_closed": "The dungeon is closed",
@@ -27,9 +40,15 @@
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
-  "creativetab.thedungeon.dungeon_food" : "Dungeon Food",
+  "creativetab.thedungeon.dungeon_food" : "Dungeon Foods",
   "creativetab.thedungeon.dungeon_blocks" : "Dungeon Blocks",
-  "creativetab.thedungeon.dungeon_spawn_eggs" : "Dungeon Spawn Egg",
+  "creativetab.thedungeon.dungeon_spawn_eggs" : "Dungeon Spawn Eggs",
+
+  "thedungeon.class.classless": "Classless",
+  "thedungeon.class.tank": "Tank",
+
+  "thedungeon.subclass.classless": "SubClassless",
+  "thedungeon.subclass.tank.vanguard": "Vanguard",
 
   "entity.thedungeon.test_dummy" : "Test Dummy",
   "entity.thedungeon.death_knight" : "Death Knight",
@@ -55,12 +74,25 @@
   "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
   "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
   "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
-  "item.thedungeon.tooltip.tool_type" : "Tool Type",
+  "item.thedungeon.tooltip.tool_type" : "Tool Type:",
   "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
   "item.thedungeon.tooltip.curio_type": "Curio Slot:",
   "item.thedungeon.tooltip.curio_type.any": "Any",
   "item.thedungeon.tooltip.curio_type.effigy": "Effigy",
   "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
+
+  "item.thedungeon.tooltip.classes": "Viable Classes",
+  "item.thedungeon.tooltip.rank": "Rank",
+  "item.thedungeon.tooltip.classes.anyclass": "Any Class",
+
+  "thedungeon.itemrank.f" : "F",
+  "thedungeon.itemrank.e" : "E",
+  "thedungeon.itemrank.d" : "D",
+  "thedungeon.itemrank.c" : "C",
+  "thedungeon.itemrank.b" : "B",
+  "thedungeon.itemrank.a" : "A",
+  "thedungeon.itemrank.s" : "S",
+  "thedungeon.itemrank.ss" : "SS",
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
@@ -134,6 +166,13 @@
 
   "block.thedungeon.infused_glass" : "Infused Glass",
   "block.thedungeon.infused_thread": "Infused Thread",
+
+  "block.thedungeon.rose_quartz_block": "Block of Rose Quartz",
+  "block.thedungeon.budding_rose_quartz": "Budding Rose Quartz",
+  "block.thedungeon.rose_quartz_cluster": "Rose Quartz Cluster",
+  "block.thedungeon.large_rose_quartz_bud": "Large Rose Quartz Bud",
+  "block.thedungeon.medium_rose_quartz_bud": "Medium Rose Quartz Bud",
+  "block.thedungeon.small_rose_quartz_bud": "Small Rose Quartz Bud",
 
   "death.attack.thedungeon.unstable_portal":"%1$s tried to use an unstable portal",
   "death.attack.thedungeon.dungeon_reset":"%1$s was consumed by the dungeon",

@@ -18,8 +18,6 @@ import java.util.function.Supplier;
 public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
     public static final OvergrownCaveProcessor INSTANCE = new OvergrownCaveProcessor();
 
-    public static final MapCodec<OvergrownCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
-
     protected final WeightedMap.Int<ReplaceInstance> overgrownStoneMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(new ReplaceInstance(Blocks.STONE::defaultBlockState), 325);
@@ -31,8 +29,6 @@ public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
                 map.put(new ReplaceInstance(Blocks.GOLD_ORE::defaultBlockState), 10);
                 map.put(new ReplaceInstance(Blocks.COAL_ORE::defaultBlockState), 7);
                 map.put(new ReplaceInstance(Blocks.COPPER_ORE::defaultBlockState), 2);
-                //map.put(new ReplaceInstance(Blocks.IRON_ORE::defaultBlockState), 4);
-                //map.put(new ReplaceInstance(Blocks.DIAMOND_ORE::defaultBlockState), 1);
                 map.put(new ReplaceInstance(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState()), 4);
                 map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_STONE.get().defaultBlockState()), 2);
                 map.put(new ReplaceInstance(() -> ModBlocks.INFUSED_CLAY.get().defaultBlockState()), 1);
@@ -105,6 +101,7 @@ public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
         return replacements;
     }
 
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

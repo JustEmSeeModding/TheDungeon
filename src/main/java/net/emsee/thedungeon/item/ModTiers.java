@@ -63,7 +63,7 @@ public enum ModTiers implements Tier {
     public static TagKey<Block> getTag(ModTiers tier) {
         TagKey<Block> key;
         switch (tier) {
-            case INFUSED_ALLOY -> key = BlockTags.NEEDS_IRON_TOOL;
+            case INFUSED_ALLOY, KOBALT -> key = BlockTags.NEEDS_IRON_TOOL;
             //add more here
             default -> throw new MatchException(null, null);
         }
