@@ -78,7 +78,6 @@ public class GridDungeonBiomeRegistry extends DungeonBiomeRegistry{
                 gridCellWidth/2,
                 0,
                 gridCellWidth/2));
-        DebugLog.logInfo(DebugLog.DebugType.IMPORTANT, dif + "");
 
         return new Vec3i(
                 Math.floorDiv(dif.getX(), gridCellWidth),

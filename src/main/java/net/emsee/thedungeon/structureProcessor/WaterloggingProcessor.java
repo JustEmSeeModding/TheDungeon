@@ -36,7 +36,7 @@ public class WaterloggingProcessor  extends StructureProcessor {
         if (oldState.hasProperty(BlockStateProperties.WATERLOGGED)) {
             newBlockstate = newBlockstate.setValue(BlockStateProperties.WATERLOGGED, true);
         }
-        else if(block.defaultBlockState().isAir()) {
+        else if(oldState.isAir()) {
             newBlockstate = Blocks.WATER.defaultBlockState();
         }
 

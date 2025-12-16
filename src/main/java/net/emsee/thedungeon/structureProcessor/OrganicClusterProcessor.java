@@ -25,7 +25,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
     protected final long getSeed(MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         DungeonInstance<?> queuedDungeon = saveData.peekProgressQueue();
-        if (queuedDungeon == null) throw new RuntimeException("queue empty, how?");
+        if (queuedDungeon == null) throw new RuntimeException("DungeonSaveData progress queue is unexpectedly empty during cluster seed generation");
         return queuedDungeon.getSavedSeed() + getBaseSeed();
     }
 

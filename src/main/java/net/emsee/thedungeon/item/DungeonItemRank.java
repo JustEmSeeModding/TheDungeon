@@ -22,7 +22,11 @@ public enum DungeonItemRank {
     }
 
     public static DungeonItemRank getByName(String name) {
-        return valueOf(name);
+        try {
+            return valueOf(name);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public MutableComponent getTranslatable() {

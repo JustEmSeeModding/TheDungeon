@@ -39,7 +39,7 @@ public final class GlobalDungeonManager {
 
     private static final int forceLoadedChunkRadius = 35;
     private static final int killRadius = 500;
-    private static boolean hasSetupDungeonCycleList = false;
+    private static volatile boolean hasSetupDungeonCycleList = false;
     private final static Map<DungeonRank,WeightedMap.Int<ResourceKey<Dungeon<?,?>>>> cycleDungeons = new HashMap<>();
     private final static ResourceKey<Level> dungeonResourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
 
@@ -55,19 +55,23 @@ public final class GlobalDungeonManager {
     }
 
     private static void setupDungeonCycleList() {
-        for (DungeonRank rank : DungeonRank.values()) {
-            cycleDungeons.put(rank, new WeightedMap.Int<>());
-        }
-
-        ModDungeons.DUNGEON_REGISTRY.registryKeySet().forEach(key -> {
-            Dungeon<?,?> dungeon = ModDungeons.DUNGEON_REGISTRY.get(key);
-            if (dungeon == null) throw new RuntimeException("Error on retrieving dungeon from key : "+ key);
-            int weight = dungeon.getWeight();
-            if (weight>0) {
-                cycleDungeons.get(dungeon.getRank()).put(key, weight);
+        if (hasSetupDungeonCycleList) return;
+        synchronized (GlobalDungeonManager.class) {
+            if (hasSetupDungeonCycleList) return;
+            for (DungeonRank rank : DungeonRank.values()) {
+                cycleDungeons.put(rank, new WeightedMap.Int<>());
             }
-        });
-        hasSetupDungeonCycleList=true;
+
+            ModDungeons.DUNGEON_REGISTRY.registryKeySet().forEach(key -> {
+                Dungeon<?,?> dungeon = ModDungeons.DUNGEON_REGISTRY.get(key);
+                if (dungeon == null) throw new RuntimeException("Error on retrieving dungeon from key : "+ key);
+                int weight = dungeon.getWeight();
+                if (weight>0) {
+                    cycleDungeons.get(dungeon.getRank()).put(key, weight);
+                }
+            });
+            hasSetupDungeonCycleList=true;
+        }
     }
 
     /**
