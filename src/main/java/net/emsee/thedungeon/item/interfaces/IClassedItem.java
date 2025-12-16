@@ -12,7 +12,7 @@ public interface IClassedItem {
     DungeonItemRank getItemRank();
 
     default boolean hasNoLinkedClasses() {
-        return false;//getLinkedClasses().length == 0
-                //&& getLinkedSubClasses().length == 0;
+        return getLinkedClasses().length == 0
+                && getLinkedSubClasses().length == 0;
     }
 }

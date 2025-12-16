@@ -67,13 +67,6 @@ public final class GlobalDungeonManager {
                 cycleDungeons.get(dungeon.getRank()).put(key, weight);
             }
         });
-
-        /*ModDungeons.DUNGEON_REGISTRY.forEach(dungeon -> {
-            int weight = dungeon.getWeight();
-            if (weight>0) {
-                cycleDungeons.get(dungeon.getRank()).put(ModDungeons.DUNGEON_REGISTRY.getKey(), weight);
-            }
-        });*/
         hasSetupDungeonCycleList=true;
     }
 
