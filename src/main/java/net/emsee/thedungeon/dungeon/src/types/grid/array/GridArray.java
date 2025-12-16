@@ -18,7 +18,9 @@ public final class GridArray {
         this.maxFloorHeight = maxFloorHeight;
         this.doGenerateDown = doGenerateDown;
 
-        array = Util.make(new HashMap<>((2*maxDepth+1)^3), map -> {
+        int size = 2 * maxDepth + 1;
+        size=size*size*size;
+        array = Util.make(new HashMap<>(size), map -> {
             for (int x = -maxDepth; x <= maxDepth; x++) {
                 for (int y = -maxDepth; y <= maxDepth; y++) {
                     for (int z = -maxDepth; z <= maxDepth; z++) {

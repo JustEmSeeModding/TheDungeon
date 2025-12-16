@@ -256,26 +256,26 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
         public AttackHolder withDamageMultiplier(float multiplier) {
             if (multiplier<0) throw new IllegalArgumentException("Damage Multiplier Can't Be Negative");
             damageMultiplier = multiplier;
-            reachMode = ReachMode.MULTIPLIER;
             return this;
         }
 
         public AttackHolder withKnockbackMultiplier(float multiplier) {
             if (multiplier<0) throw new IllegalArgumentException("Knockback Multiplier Can't Be Negative");
             knockbackMultiplier = multiplier;
-            reachMode = ReachMode.OVERRIDE;
             return this;
         }
 
         public AttackHolder withReachMultiplier(float multiplier) {
             if (multiplier<0) throw new IllegalArgumentException("Reach multiplier Can't Be Negative");
             reach = multiplier;
+            reachMode = ReachMode.MULTIPLIER;
             return this;
         }
 
         public AttackHolder withReachOverride(float override) {
             if (override<0) throw new IllegalArgumentException("Reach Can't Be Negative");
             reach = override;
+            reachMode = ReachMode.OVERRIDE;
             return this;
         }
 

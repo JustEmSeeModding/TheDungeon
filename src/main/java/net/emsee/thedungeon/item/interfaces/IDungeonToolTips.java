@@ -75,9 +75,11 @@ public interface IDungeonToolTips {
                                 int i = 0;
                                 for (DeferredHolder<DungeonClass,?> dClass : classes) {
                                     array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
+                                    i++;
                                 }
                                 for (DeferredHolder<DungeonSubClass<?>,?> dClass : subClasses) {
                                     array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
+                                    i++;
                                 }
                             }));
                         } else {

@@ -29,7 +29,7 @@ import java.util.Optional;
 public class HobGoblinTrades {
     // the item used for trading
     private static final ItemLike cashItem = ModItems.PYRITE;
-    
+
     public static Int2ObjectMap<VillagerTrades.ItemListing[]> getHobGoblinTrades(HobGoblinEntity.Variant variant) {
         return switch (variant) {
             case FIGHTER ->

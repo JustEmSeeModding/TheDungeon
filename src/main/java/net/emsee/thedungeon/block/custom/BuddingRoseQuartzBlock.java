@@ -6,20 +6,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.AmethystBlock;
-import net.minecraft.world.level.block.AmethystClusterBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 
 public class BuddingRoseQuartzBlock extends AmethystBlock {
-    public static final MapCodec<net.minecraft.world.level.block.BuddingAmethystBlock> CODEC = simpleCodec(net.minecraft.world.level.block.BuddingAmethystBlock::new);
+    public static final MapCodec<BuddingAmethystBlock> CODEC = simpleCodec(BuddingAmethystBlock::new);
     public static final int GROWTH_CHANCE = 5;
     private static final Direction[] DIRECTIONS = Direction.values();
 
-    public MapCodec<net.minecraft.world.level.block.BuddingAmethystBlock> codec() {
+    public MapCodec<BuddingAmethystBlock> codec() {
         return CODEC;
     }
 
