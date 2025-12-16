@@ -21,6 +21,6 @@ public class VanguardTankSubClass extends DungeonSubClass<TankClass> {
 
     @Override
     public boolean isSubclassOf(DungeonClass dungeonClass) {
-        return false;
+        return dungeonClass instanceof TankClass;
     }
 }

@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.structureProcessor;
 
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
+import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,9 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
 
     protected final long getSeed(MinecraftServer server) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        return saveData.peekProgressQueue().getSavedSeed() + getBaseSeed();
+        DungeonInstance<?> queuedDungeon = saveData.peekProgressQueue();
+        if (queuedDungeon == null) throw new RuntimeException("queue empty, how?");
+        return queuedDungeon.getSavedSeed() + getBaseSeed();
     }
 
     /**
@@ -214,7 +217,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         double y0 = y - (j - t);
         double z0 = z - (k - t);
 
-        long seed = random.nextLong() ^ (i * 131L) ^ (j * 7919L) ^ (k * 3413L);
+        long seed = (i * 131L) ^ (j * 7919L) ^ (k * 3413L);
         RandomSource gradRandom = RandomSource.create(seed);
         double grad = gradRandom.nextDouble() * 2 - 1;
 

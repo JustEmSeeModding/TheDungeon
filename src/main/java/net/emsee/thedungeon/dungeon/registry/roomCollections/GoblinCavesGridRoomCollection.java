@@ -59,7 +59,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(StoneToMagmaCaveProcessor.INSTANCE)
                         .setBiome(DungeonBiome.magma_cave)
                         .addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, e-> e.setVariant(HobGoblinEntity.Variant.FORGER), 2, 5, 1))
-                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, 3, 6))
+                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, noForgeWorker,0, 6,1))
                         .build()
                 )
 

@@ -391,7 +391,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     }
 
     public void setBiomeAt(Vec3i from, Vec3i to, DungeonBiome biome) {
-        for (int y = from.getY(); y < to.getY(); y++) {
+        for (int y = from.getY(); y <= to.getY(); y++) {
             for (int x = from.getX(); x <= to.getX(); x++) {
                 for (int z = from.getZ(); z <= to.getZ(); z++) {
                     setBiomeAt(new Vec3i(x,y,z), biome);

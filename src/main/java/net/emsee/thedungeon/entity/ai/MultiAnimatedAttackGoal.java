@@ -61,19 +61,12 @@ public class MultiAnimatedAttackGoal<T extends DungeonPathfinderMob & IBasicAnim
 
     @Override
     public void start() {
+        if (!canUse()) return;
         super.start();
         //currentAttackHolder = getPossibleAttacks(entity).getRandom(entity.level().getRandom());
         //resetAttackCooldown();
         currentAttackHolder = getPossibleAttacks(entity.getTarget()).getRandom(entity.level().getRandom());
         if (currentAttackHolder == null) throw new IllegalStateException("no valid holder found");
-//        {
-//            // No valid attack with current equipment: disable until next tick
-//            shouldCountTillNextAttack = false;
-//            entity.setAttacking(false);
-//            AnimationVersion = 0;
-//            entity.attackAnimation((byte) -1, AnimationVersion);
-//            return;
-//        }
         resetAttackCooldown();
         AnimationVersion = 1;
         entity.attackAnimation((byte) -1, AnimationVersion++);

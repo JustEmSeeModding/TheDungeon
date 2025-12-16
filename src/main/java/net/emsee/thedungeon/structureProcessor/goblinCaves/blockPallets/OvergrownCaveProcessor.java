@@ -18,8 +18,6 @@ import java.util.function.Supplier;
 public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
     public static final OvergrownCaveProcessor INSTANCE = new OvergrownCaveProcessor();
 
-    public static final MapCodec<OvergrownCaveProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
-
     protected final WeightedMap.Int<ReplaceInstance> overgrownStoneMap =
             Util.make(new WeightedMap.Int<>(), (map) -> {
                 map.put(new ReplaceInstance(Blocks.STONE::defaultBlockState), 325);

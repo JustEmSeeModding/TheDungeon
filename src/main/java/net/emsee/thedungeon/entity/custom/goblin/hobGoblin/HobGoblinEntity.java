@@ -325,9 +325,6 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     public void setRandomVariant() {
         Variant variant = variants.getRandom(this.random);
         this.setVariant(variant);
-        if (finalizedSpawn) {
-            resetEquipmentItems();
-        }
     }
 
     @Override

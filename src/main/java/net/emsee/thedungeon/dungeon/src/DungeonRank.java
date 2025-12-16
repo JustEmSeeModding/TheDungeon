@@ -31,10 +31,11 @@ public enum DungeonRank {
     }
 
     public static DungeonRank getByName(String name) {
-        return valueOf(name);
-        /*for (DungeonRank rank : DungeonRank.values())
-            if (name.equals(rank.getName())) return rank;
-        return null;*/
+        try {
+            return valueOf(name);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public Component getTranslatable() {

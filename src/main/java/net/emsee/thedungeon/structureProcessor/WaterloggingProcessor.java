@@ -1,12 +1,10 @@
 package net.emsee.thedungeon.structureProcessor;
 
 import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.BlackstoneToDeepslateProcessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -35,10 +33,6 @@ public class WaterloggingProcessor  extends StructureProcessor {
         final Block block = oldState.getBlock();
         BlockState newBlockstate = relativeBlockInfo.state();
 
-        /*if (block instanceof SimpleWaterloggedBlock) {
-            newBlockstate = newBlockstate.setValue(BlockStateProperties.WATERLOGGED, true);
-        }
-        else*/
         if (oldState.hasProperty(BlockStateProperties.WATERLOGGED)) {
             newBlockstate = newBlockstate.setValue(BlockStateProperties.WATERLOGGED, true);
         }

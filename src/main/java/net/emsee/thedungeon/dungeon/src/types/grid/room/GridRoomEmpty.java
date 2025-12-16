@@ -100,8 +100,8 @@ public final class GridRoomEmpty extends AbstractGridRoom{
         result = 31 * result + data.generationPriority;
         result = 31 * result + Float.hashCode(data.overrideEndChance);
         result = 31 * result + (data.doOverrideEndChance ? 1 : 0);
-        result = 31 * result + new java.util.HashSet<>(data.spawnRules).hashCode();
-        result = 31 * result + new java.util.HashSet<>(data.structurePostProcessors.list()).hashCode();
+        result = 31 * result + data.spawnRules.hashCode();
+        result = 31 * result + data.structurePostProcessors.list().hashCode();
         result = 31 * result + data.differentiationID;
         result = 31 * result + (data.skipCollectionPostProcessors ? 1 : 0);
         return result;

@@ -15,7 +15,6 @@ public final class ModDamageTypes {
 
     public static final ResourceKey<DamageType> UNSTABLE_PORTAL = register("unstable_portal", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, .1f, DamageEffects.HURT, DeathMessageType.DEFAULT);
     public static final ResourceKey<DamageType> DUNGEON_RESET = register("dungeon_reset", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, .1f, DamageEffects.HURT, DeathMessageType.DEFAULT);
-    public static final ResourceKey<DamageType> DUNGEON_WEAPON_TEST = register("dungeon_weapon_melee", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, .1f, DamageEffects.HURT, DeathMessageType.DEFAULT);
 
     public static void bootstrap(BootstrapContext<DamageType> context) {
         for (ResourceKey<DamageType> key : DAMAGE_TYPES.keySet()) {

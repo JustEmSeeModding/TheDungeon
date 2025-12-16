@@ -139,7 +139,7 @@ public class ModCleanupDungeons {
 
 
     protected static <T extends Dungeon<?,?>> DeferredHolder<Dungeon<?,?>, T> register(String name, Supplier<T> dungeon) {
-        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", dungeon);
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", name);
         return DUNGEONS.register(name, dungeon);
     }
 

@@ -42,7 +42,7 @@ public class CrystalCaveBuddingPostProcessor extends BlockPalletReplacementProce
                     map.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 3);
                     map.put(new ReplaceInstance(() -> ModBlocks.LARGE_ROSE_QUARTZ_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 2);
                     map.put(new ReplaceInstance(() -> ModBlocks.ROSE_QUARTZ_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 1);
-                    map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState,0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.AMETHYST_BLOCK)), 2);
+                    map.put(new ReplaceInstance(Blocks.AIR::defaultBlockState,0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.ROSE_QUARTZ_BLOCK)), 2);
 
                     //on calcite
                     map.put(new ReplaceInstance(() -> Blocks.SMALL_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction),1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4);

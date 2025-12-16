@@ -45,7 +45,7 @@ public class ModClasses {
         DungeonClass toReturn = getByPath(className);
         if (toReturn == null) {
             DebugLog.logWarn(DebugLog.DebugType.WARNINGS, "Player:{}, dungeonClass returned null, saved string:{}, class does not exist or is not correctly linked", player, className);
-            //return Classless.INSTANCE;
+            return ModClasses.CLASSLESS.get();
         }
         return toReturn;
     }

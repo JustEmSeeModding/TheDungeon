@@ -50,9 +50,14 @@ public class GridDungeonBiomeRegistry extends DungeonBiomeRegistry{
                 tag.getInt("centerY"),
                 tag.getInt("centerZ"));
         int i = 0;
-        while (tag.contains("biome_"+i)) {
+        while (tag.contains("biome_" + i)) {
             Vec3i vec = new Vec3i(tag.getInt("pos_" + i + "_x"), tag.getInt("pos_" + i + "_y"), tag.getInt("pos_" + i + "_z"));
-            this.registeredBiomes.put(vec, DungeonBiome.valueOf(tag.getString("biome_" + i)));
+            String biomeName = tag.getString("biome_" + i);
+            try {
+                this.registeredBiomes.put(vec, DungeonBiome.valueOf(biomeName));
+            } catch (IllegalArgumentException e) {
+                DebugLog.logWarn(DebugLog.DebugType.SAVE_DATA, "Unknown biome name during load: " + biomeName);
+            }
             i++;
         }
     }

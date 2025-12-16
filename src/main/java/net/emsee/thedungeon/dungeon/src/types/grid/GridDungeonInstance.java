@@ -80,13 +80,13 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
 
     @Override
     public String toSaveString() {
-        String dungeonName = null;
+
         Optional<ResourceKey<Dungeon<?,?>>> resourceKey = ModDungeons.DUNGEON_REGISTRY.getResourceKey(dungeon);
         if (resourceKey.isEmpty()) {
             DebugLog.logError(DebugLog.DebugType.WARNINGS, "Can't find resource key for dungeon: {}", dungeon);
-            return null;
+            throw new IllegalStateException("Dungeon not registered: " + dungeon);
         }
-        dungeonName = resourceKey.get().location().getPath();
+        String dungeonName = resourceKey.get().location().getPath();
         return
 
                 dungeonName + ":" +

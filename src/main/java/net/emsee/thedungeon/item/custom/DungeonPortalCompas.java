@@ -186,6 +186,7 @@ public class DungeonPortalCompas extends DungeonItem {
             }
         }
 
+        nodeEvaluator.done();
         return closestPortal;
     }
 
@@ -248,6 +249,7 @@ public class DungeonPortalCompas extends DungeonItem {
             }
         }
 
+        nodeEvaluator.done();
         return pathPoints;
     }
 

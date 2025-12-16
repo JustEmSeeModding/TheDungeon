@@ -85,7 +85,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         } else {
             --this.idleAnimationTimeout;
         }
-        if(this.isAttacking() && getAnimationID()>-1 /*&& this.attackAnimationTimeout <=0*/ && animationNetworkVersion!= getAnimationVersion()){
+        if(this.isAttacking() && getAnimationID()>-1 && this.attackAnimationTimeout <=0 && animationNetworkVersion!= getAnimationVersion()){
             switch (getAnimationID()) {
                 case 0: {
                     this.attackAnimationTimeout = 19;

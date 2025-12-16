@@ -21,7 +21,7 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 import java.util.function.Supplier;
 
 public class ModDungeons {
-    public static ResourceKey<Registry<Dungeon<?,?>>> DUNGEON_REGISTRY_KEY = ResourceKey.createRegistryKey(TheDungeon.defaultResourceLocation("dungeons"));
+    public static final ResourceKey<Registry<Dungeon<?,?>>> DUNGEON_REGISTRY_KEY = ResourceKey.createRegistryKey(TheDungeon.defaultResourceLocation("dungeons"));
 
     public static final Registry<Dungeon<?,?>> DUNGEON_REGISTRY =
             new RegistryBuilder<>(DUNGEON_REGISTRY_KEY)
@@ -81,7 +81,7 @@ public class ModDungeons {
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
     protected static <T extends Dungeon<?,?>> DeferredHolder<Dungeon<?,?>, T> register(String name, Supplier<T> dungeon) {
-        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", dungeon);
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", name);
         return DUNGEONS.register(name, dungeon);
     }
 

@@ -4,7 +4,6 @@ import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
 import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
-import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.network.syncher.EntityDataAccessor;
