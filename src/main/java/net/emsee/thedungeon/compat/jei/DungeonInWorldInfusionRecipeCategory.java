@@ -28,7 +28,7 @@ public final class DungeonInWorldInfusionRecipeCategory implements IRecipeCatego
 
     public DungeonInWorldInfusionRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 0, 0, 179, 34);
-        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.DUNGEON_PORTAL_UNSTABLE));
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.DUNGEON_PORTAL));
     }
 
     @Override

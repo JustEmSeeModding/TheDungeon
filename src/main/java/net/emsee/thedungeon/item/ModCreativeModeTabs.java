@@ -45,12 +45,12 @@ public final class ModCreativeModeTabs {
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_INGREDIENTS_TAB = CREATIVE_MODE_TAB.register("dungeon_ingredients_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.PORTAL_CORE.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.CATALIST_CORE.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_tools_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_ingredients"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModItems.PORTAL_CORE);
-                        output.accept(ModItems.SHATTERED_PORTAL_CORE);
+                        output.accept(ModItems.CATALIST_CORE);
+                        output.accept(ModItems.SHATTERED_CATALIST_CORE);
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
@@ -68,20 +68,21 @@ public final class ModCreativeModeTabs {
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_BLOCKS_TAB = CREATIVE_MODE_TAB.register("dungeon_blocks_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.DUNGEON_PORTAL_F.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.DUNGEON_PORTAL.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_food_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModBlocks.DUNGEON_PORTAL_F);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_E);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_D);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_C);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_B);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_A);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_S);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_SS);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
-                        output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
+                        output.accept(ModBlocks.DUNGEON_PORTAL);
+                        output.accept(ModBlocks.CATALIST_F);
+                        output.accept(ModBlocks.CATALIST_E);
+                        //output.accept(ModBlocks.CATALIST_D);
+                        //output.accept(ModBlocks.CATALIST_C);
+                        //output.accept(ModBlocks.CATALIST_B);
+                        //output.accept(ModBlocks.CATALIST_A);
+                        //output.accept(ModBlocks.CATALIST_S);
+                        //output.accept(ModBlocks.CATALIST_SS);
+                        //output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
+                        //output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
                         output.accept(ModBlocks.PYRITE_ORE);
                         output.accept(ModBlocks.DEEPSLATE_PYRITE_ORE);
                         output.accept(ModBlocks.INFUSED_GRASS_BLOCK);

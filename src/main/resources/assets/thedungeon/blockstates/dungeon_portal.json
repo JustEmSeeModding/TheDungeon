@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "stable=false": {
+      "model": "thedungeon:block/unstable_portal"
+    },
+    "stable=true": {
+      "model": "thedungeon:block/stable_portal"
+    }
+  }
+}

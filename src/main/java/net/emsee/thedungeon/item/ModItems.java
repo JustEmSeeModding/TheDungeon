@@ -2,10 +2,6 @@ package net.emsee.thedungeon.item;
 
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeonClass.DungeonClass;
-import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
-import net.emsee.thedungeon.dungeonClass.ModClasses;
-import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.emsee.thedungeon.item.custom.*;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
@@ -27,10 +23,10 @@ public final class ModItems {
     public static final DeferredItem<DungeonDebugTool> DUNGEON_DEBUG_TOOL = ITEMS.register("dungeon_debug_tool",
             () -> new DungeonDebugTool(new Item.Properties()));
 
-    public static final DeferredItem<DungeonItem> SHATTERED_PORTAL_CORE = ITEMS.register("shattered_portal_core",
+    public static final DeferredItem<DungeonItem> SHATTERED_CATALIST_CORE = ITEMS.register("shattered_catalist_core",
             () -> new DungeonItem(new Item.Properties().stacksTo(1)));
 
-    public static final DeferredItem<DungeonItem> PORTAL_CORE = ITEMS.register("portal_core",
+    public static final DeferredItem<DungeonItem> CATALIST_CORE = ITEMS.register("catalist_core",
             () -> new DungeonItem(new Item.Properties().stacksTo(1)));
 
     public static final DeferredItem<DungeonItem> DUNGEON_ESSENCE_SHARD = ITEMS.register("dungeon_essence_shard",

@@ -48,7 +48,7 @@ public final class JEITheDungeonPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(ModBlocks.DUNGEON_PORTAL_UNSTABLE, DungeonInWorldInfusionRecipeCategory.IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE);
+        registration.addRecipeCatalyst(ModBlocks.DUNGEON_PORTAL, DungeonInWorldInfusionRecipeCategory.IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE);
         registration.addRecipeCatalyst(Blocks.DIRT, DungeonInfusionRecipeCategory.DUNGEON_INFUSION_RECIPE_RECIPE_TYPE);
     }
 }

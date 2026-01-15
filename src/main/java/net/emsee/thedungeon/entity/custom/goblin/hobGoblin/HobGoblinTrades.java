@@ -7,10 +7,7 @@ import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -21,8 +18,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
-import javax.annotation.Nullable;
-import java.util.Map;
 import java.util.Optional;
 
 /// uses the same logic as wandering trader trades
@@ -43,7 +38,7 @@ public class HobGoblinTrades {
 
                             // rare trades
                             2,new VillagerTrades.ItemListing[]{
-                                    new ItemsForCash(ModItems.PORTAL_CORE, 14, 1, 1),
+                                    new ItemsForCash(ModItems.CATALIST_CORE, 14, 1, 1),
                             }));
             case FORGER ->
                     toIntMap(ImmutableMap.of(
@@ -59,7 +54,7 @@ public class HobGoblinTrades {
 
                             // rare trades
                             2,new VillagerTrades.ItemListing[]{
-                                    new ItemsForCash(ModItems.PORTAL_CORE, 14, 1,1, 1),
+                                    new ItemsForCash(ModItems.CATALIST_CORE, 14, 1,1, 1),
                             }));
             case SCAVENGER -> toIntMap(ImmutableMap.of(
                     // common trades

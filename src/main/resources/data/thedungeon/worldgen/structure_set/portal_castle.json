@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "thedungeon:portal_castle",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 173829143,
+    "spacing": 28,
+    "separation": 9
+  }
+
+}

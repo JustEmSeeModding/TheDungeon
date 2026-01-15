@@ -84,8 +84,8 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
                 source.is(ModDamageTypes.DUNGEON_RESET) ||
                         source.is(ModDamageTypes.UNSTABLE_PORTAL) ||
                         source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
-                        source.is(DamageTypes.GENERIC_KILL) ||
-                        source.is(ModDamageTypes.DUNGEON_WEAPON_TEST)
+                        source.is(DamageTypes.GENERIC_KILL) //||
+                        //source.is(ModDamageTypes.DUNGEON_WEAPON_TEST)
         ) return false;
 
         if (source.is(DamageTypes.PLAYER_ATTACK) && source.getEntity() instanceof Player player) {

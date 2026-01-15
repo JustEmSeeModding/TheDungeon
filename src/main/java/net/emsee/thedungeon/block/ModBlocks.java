@@ -1,13 +1,8 @@
 package net.emsee.thedungeon.block;
 
-
-
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.block.custom.BuddingRoseQuartzBlock;
-import net.emsee.thedungeon.block.custom.portal.*;
-import net.emsee.thedungeon.block.custom.DungeonThreadBlock;
-import net.emsee.thedungeon.block.custom.InfusedGlassBlock;
-import net.emsee.thedungeon.block.custom.UnstableDungeonPortal;
+import net.emsee.thedungeon.block.custom.*;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.utils.BlockUtils;
 import net.minecraft.util.ColorRGBA;
@@ -25,46 +20,45 @@ public final class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
             DeferredRegister.createBlocks(TheDungeon.MOD_ID);
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_F = registerBlock("dungeon_portal_f",
-            () -> new DungeonPortalF(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL = registerBlock("dungeon_portal",
+            () -> new DungeonPortal(BlockBehaviour.Properties.ofFullCopy(Blocks.BEDROCK)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn).lightLevel((light) -> 14)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_E = registerBlock("dungeon_portal_e",
-            () -> new DungeonPortalE(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_F = registerBlock("catalist_f",
+            () -> new DungeonCatalistBlock(DungeonRank.F,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_D = registerBlock("dungeon_portal_d",
-            () -> new DungeonPortalD(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_E = registerBlock("catalist_e",
+            () -> new DungeonCatalistBlock(DungeonRank.E,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_C = registerBlock("dungeon_portal_c",
-            () -> new DungeonPortalC(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_D = registerBlock("catalist_d",
+            () -> new DungeonCatalistBlock(DungeonRank.D,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_B = registerBlock("dungeon_portal_b",
-            () -> new DungeonPortalB(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_C = registerBlock("catalist_c",
+            () -> new DungeonCatalistBlock(DungeonRank.C,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_A = registerBlock("dungeon_portal_a",
-            () -> new DungeonPortalA(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_B = registerBlock("catalist_b",
+            () -> new DungeonCatalistBlock(DungeonRank.B,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_S = registerBlock("dungeon_portal_s",
-            () -> new DungeonPortalS(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_A = registerBlock("catalist_a",
+            () -> new DungeonCatalistBlock(DungeonRank.A,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_SS = registerBlock("dungeon_portal_ss",
-            () -> new DungeonPortalSS(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_S = registerBlock("catalist_s",
+            () -> new DungeonCatalistBlock(DungeonRank.S,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-    public static final DeferredBlock<DungeonPortal> DUNGEON_PORTAL_EXIT = registerBlock("dungeon_portal_exit",
-            () -> new DungeonPortalExit(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonCatalistBlock> CATALIST_SS = registerBlock("catalist_ss",
+            () -> new DungeonCatalistBlock(DungeonRank.SS,BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
-
-    public static final DeferredBlock<UnstableDungeonPortal> DUNGEON_PORTAL_UNSTABLE = registerBlock("dungeon_portal_unstable",
-            () -> new UnstableDungeonPortal(BlockBehaviour.Properties.of()
-                    .isValidSpawn(BlockUtils::NeverValidSpawn).destroyTime(40).explosionResistance(100).requiresCorrectToolForDrops().lightLevel((light) -> 14)));
+    public static final DeferredBlock<DungeonBlock> CATALIST_BROKEN = registerBlock("catalist_broken",
+            () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .isValidSpawn(BlockUtils::NeverValidSpawn)));
 
     public static final DeferredBlock<Block> PYRITE_ORE = registerBlock("pyrite_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE)));

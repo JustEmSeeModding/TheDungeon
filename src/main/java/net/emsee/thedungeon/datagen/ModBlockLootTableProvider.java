@@ -26,16 +26,15 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        dropSelf(ModBlocks.DUNGEON_PORTAL_F.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_E.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_D.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_C.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_B.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_A.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_S.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_SS.get());
-        dropSelf(ModBlocks.DUNGEON_PORTAL_EXIT.get());
-        dropOther(ModBlocks.DUNGEON_PORTAL_UNSTABLE.get(), ModItems.SHATTERED_PORTAL_CORE);
+        dropSelf(ModBlocks.CATALIST_F.get());
+        dropSelf(ModBlocks.CATALIST_E.get());
+        dropSelf(ModBlocks.CATALIST_D.get());
+        dropSelf(ModBlocks.CATALIST_C.get());
+        dropSelf(ModBlocks.CATALIST_B.get());
+        dropSelf(ModBlocks.CATALIST_A.get());
+        dropSelf(ModBlocks.CATALIST_S.get());
+        dropSelf(ModBlocks.CATALIST_SS.get());
+        dropOther(ModBlocks.CATALIST_BROKEN.get(), ModItems.SHATTERED_CATALIST_CORE);
 
         oreDrops(ModBlocks.PYRITE_ORE.get(), ModItems.PYRITE, 2f, 3f);
         oreDrops(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), ModItems.PYRITE, 2f, 3f);
@@ -65,12 +64,14 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         simpleItemDropSelfWithSilk(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get());
         simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get());
         simpleItemDropSelfWithSilk(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get());
-        //dropOther(ModBlocks.INFUSED_COBWEB.get(), ModItems.INFUSED_THREAD);
     }
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return ModBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
+        return ModBlocks.BLOCKS.getEntries().stream()
+                .map(Holder::value)
+                .filter(block -> block != net.minecraft.world.level.block.Blocks.AIR)
+                ::iterator;
     }
 
     private void simpleItemDropWithSilk(Block block, ItemLike item) {

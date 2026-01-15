@@ -18,8 +18,8 @@ public final class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        basicItem(ModItems.PORTAL_CORE.asItem());
-        basicItem(ModItems.SHATTERED_PORTAL_CORE.asItem());
+        basicItem(ModItems.CATALIST_CORE.asItem());
+        basicItem(ModItems.SHATTERED_CATALIST_CORE.asItem());
         basicItem(ModItems.DUNGEON_ESSENCE_SHARD.asItem());
         basicItem(ModItems.GOBLIN_MEAT.asItem());
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");

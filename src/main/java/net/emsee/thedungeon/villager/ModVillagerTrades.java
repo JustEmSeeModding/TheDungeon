@@ -95,13 +95,13 @@ public final class ModVillagerTrades {
             ));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(Items.EMERALD, 17),
-                    new ItemStack(ModItems.SHATTERED_PORTAL_CORE.get(), 1),
+                    new ItemStack(ModItems.SHATTERED_CATALIST_CORE.get(), 1),
                     1,
                     30,
                     VANILLA_LOW_MULTIPLIER
             ));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemCost(ModItems.PORTAL_CORE.get(), 1),
+                    new ItemCost(ModItems.CATALIST_CORE.get(), 1),
                     new ItemStack(Items.EMERALD, 19),
                     2,
                     30,
@@ -119,7 +119,7 @@ public final class ModVillagerTrades {
 
         rareTrades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemCost(Items.EMERALD, 25),
-                new ItemStack(ModItems.PORTAL_CORE.get(), 1),
+                new ItemStack(ModItems.CATALIST_CORE.get(), 1),
                 1,
                 30,
                 VANILLA_LOW_MULTIPLIER

@@ -18,18 +18,6 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_F, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_E, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_D, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_C, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_B, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_A, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_S, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_SS, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_EXIT, TheDungeon.defaultResourceLocation("block/dungeon_portal"));
-        blockWithItem(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
-
-
         blockWithItem(ModBlocks.PYRITE_ORE);
         blockWithItem(ModBlocks.DEEPSLATE_PYRITE_ORE);
 
@@ -53,11 +41,6 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
         blockWithItem(ModBlocks.ROSE_QUARTZ_BLOCK);
         blockWithItem(ModBlocks.BUDDING_ROSE_QUARTZ);
-        //crossBlock(ModBlocks.ROSE_QUARTZ_CLUSTER, "rose_quartz_cluster", "rose_quartz_cluster");
-        //crossBlock(ModBlocks.LARGE_ROSE_QUARTZ_BUD, "large_rose_quartz_bud", "large_rose_quartz_bud");
-        //crossBlock(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD, "medium_rose_quartz_bud", "medium_rose_quartz_bud");
-        //crossBlock(ModBlocks.SMALL_ROSE_QUARTZ_BUD, "small_rose_quartz_bud", "small_rose_quartz_bud");
-
     }
 
     private void crossBlock(DeferredBlock<?> deferredBlock, String modelName, String textureName) {

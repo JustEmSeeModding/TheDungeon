@@ -50,7 +50,7 @@ public final class TheDungeon
         ModItems.register(modEventBus);
         ModArmorMaterials.register(modEventBus);
         ModBlocks.register(modEventBus);
-        ModBlockEntities.register(modEventBus);
+        //ModBlockEntities.register(modEventBus);
         ModMobEffects.register(modEventBus);
 
         ModDataComponentTypes.register(modEventBus);

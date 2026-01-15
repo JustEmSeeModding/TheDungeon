@@ -2,7 +2,7 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets.post;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.block.custom.portal.DungeonPortal;
+import net.emsee.thedungeon.block.custom.DungeonPortal;
 import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.BlockUtils;

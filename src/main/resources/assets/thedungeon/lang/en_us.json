@@ -115,8 +115,8 @@
   "item.thedungeon.kobalt_leggings" : "Kobalt Leggings",
   "item.thedungeon.kobalt_boots" : "Kobalt Boots",
 
-  "item.thedungeon.shattered_portal_core": "Shattered Portal Core",
-  "item.thedungeon.portal_core": "Portal Core",
+  "item.thedungeon.shattered_catalist_core": "Shattered Catalist Core",
+  "item.thedungeon.catalist_core": "Catalist Core",
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
@@ -133,16 +133,7 @@
   "item.thedungeon.dungeon_debug_tool.use_busy": "Dungeon generator is busy",
   "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
 
-  "block.thedungeon.dungeon_portal_f" : "F Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_e" : "E Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_d" : "D Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_c" : "C Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_b" : "B Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_a" : "A Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_s" : "S Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_ss" : "SS Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_exit" : "Dungeon Exit Portal",
-  "block.thedungeon.dungeon_portal_unstable" : "Unstable Dungeon Portal",
+  "block.thedungeon.dungeon_portal" : "Dungeon Portal",
 
   "block.thedungeon.pyrite_ore" : "Pyrite Ore",
   "block.thedungeon.deepslate_pyrite_ore" : "Deepslate Pyrite Ore",
