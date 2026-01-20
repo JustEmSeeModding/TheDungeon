@@ -2,6 +2,9 @@ package net.emsee.thedungeon;
 
 import net.emsee.thedungeon.events.ModEntityRegisterEvents;
 import net.emsee.thedungeon.item.ModItemProperties;
+import net.emsee.thedungeon.screen.ModMenuTypes;
+import net.emsee.thedungeon.screen.custom.GoblinForgeMenu;
+import net.emsee.thedungeon.screen.custom.GoblinForgeScreen;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -9,6 +12,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -17,7 +21,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
 @EventBusSubscriber(modid = TheDungeon.MOD_ID, value = Dist.CLIENT)
 public class TheDungeonClient {
-        public TheDungeonClient(ModContainer container) {
+    public TheDungeonClient(ModContainer container) {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
@@ -25,10 +29,14 @@ public class TheDungeonClient {
     }
 
     @SubscribeEvent
-    public static void onClientSetup(FMLClientSetupEvent event)
-    {
-        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP,"Client Setup...");
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Client Setup...");
         ModEntityRegisterEvents.ClientEntityRendererSetup(event);
         ModItemProperties.addCustomItemProperties();
+    }
+
+    @SubscribeEvent
+    public static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenuTypes.GOBLIN_FORGE_MENU.get(), GoblinForgeScreen::new);
     }
 }

@@ -35,13 +35,13 @@ public final class ModItems {
     public static final DeferredItem<DungeonItem> INFUSED_ALLOY_INGOT = ITEMS.register("infused_alloy_ingot",
             () -> new DungeonItem(new Item.Properties()));
 
-    public static final DeferredItem<DungeonItem> RAW_KOBALT = ITEMS.register("raw_kobalt",
-            () -> new DungeonItem(new Item.Properties()));
-
     public static final DeferredItem<DungeonItem> KOBALT_INGOT = ITEMS.register("kobalt_ingot",
             () -> new DungeonItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonItem> PYRITE = ITEMS.register("pyrite",
+            () -> new DungeonItem(new Item.Properties()));
+
+    public static final DeferredItem<DungeonItem> PYRITE_COIN = ITEMS.register("pyrite_coin",
             () -> new DungeonItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonClock> DUNGEON_CLOCK = ITEMS.register("dungeon_clock",
@@ -59,7 +59,7 @@ public final class ModItems {
     public static final DeferredItem<DungeonToolItem> INFUSED_CHISEL = ITEMS.register("infused_chisel",
             () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.INFUSED_ALLOY, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.INFUSED_ALLOY, 1, -2f))));
 
-    public static final DeferredItem<DungeonWeaponItem> GOBLINS_DAGGER = ITEMS.register("goblins_dagger",
+    public static final DeferredItem<DungeonWeaponItem> KOBALT_DAGGER = ITEMS.register("kobalt_dagger",
             () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, true,ModTiers.KOBALT, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.KOBALT, 3.5f, -2F))));
 
     public static final DeferredItem<DungeonToolItem> GOBLINS_FORGEHAMMER = ITEMS.register("goblins_forgehammer",

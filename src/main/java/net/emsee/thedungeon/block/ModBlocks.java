@@ -129,6 +129,9 @@ public final class ModBlocks {
     public static final DeferredBlock<AmethystClusterBlock> SMALL_ROSE_QUARTZ_BUD = registerBlock("small_rose_quartz_bud",
             () -> new AmethystClusterBlock(3.0F, 4.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_AMETHYST_BUD)));
 
+    public static final DeferredBlock<GoblinForgeBlock> GOBLIN_FORGE = registerBlock("goblin_forge",
+            () -> new GoblinForgeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLAST_FURNACE)));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

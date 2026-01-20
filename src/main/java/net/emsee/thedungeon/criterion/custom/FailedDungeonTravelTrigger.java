@@ -1,7 +1,8 @@
-package net.emsee.thedungeon.criterion;
+package net.emsee.thedungeon.criterion.custom;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.server.level.ServerPlayer;

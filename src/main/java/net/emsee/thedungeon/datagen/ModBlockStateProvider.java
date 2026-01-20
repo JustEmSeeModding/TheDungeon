@@ -41,6 +41,7 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
         blockWithItem(ModBlocks.ROSE_QUARTZ_BLOCK);
         blockWithItem(ModBlocks.BUDDING_ROSE_QUARTZ);
+
     }
 
     private void crossBlock(DeferredBlock<?> deferredBlock, String modelName, String textureName) {

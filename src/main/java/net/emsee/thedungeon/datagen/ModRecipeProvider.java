@@ -2,6 +2,7 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.datagen.recipeBuilder.GoblinForgeRecipeBuilder;
 import net.emsee.thedungeon.datagen.recipeBuilder.InfusionRecipeBuilder;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.core.HolderLookup;
@@ -48,8 +49,9 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         infusing(RecipeCategory.MISC, Items.IRON_INGOT, ModItems.INFUSED_ALLOY_INGOT, recipeOutput);
 
         infusing(RecipeCategory.MISC, Items.CLOCK, ModItems.DUNGEON_CLOCK, recipeOutput);
-        // for the compass once it's done
-        // infusing(RecipeCategory.MISC, Items.COMPASS, ModItems.DUNGEON_COMPASS, recipeOutput);
+
+        goblin_forge(RecipeCategory.MISC, Items.RAW_IRON, ModItems.PYRITE, ModItems.KOBALT_INGOT, recipeOutput);
+        goblin_forge(RecipeCategory.MISC, Items.IRON_INGOT, ModItems.PYRITE, ModItems.KOBALT_INGOT, recipeOutput);
 
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, PatchouliAPI.get().getBookStack(TheDungeon.defaultResourceLocation("dungeon_guide")))
@@ -128,11 +130,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
 
         oreSmeltingAndBlasting(recipeOutput,
                 List.of(ModBlocks.PYRITE_ORE, ModBlocks.DEEPSLATE_PYRITE_ORE),
-                RecipeCategory.BUILDING_BLOCKS, ModItems.PYRITE, 0.25f, 200, 100, "pyrite");
-
-        oreSmeltingAndBlasting(recipeOutput,
-                List.of(ModItems.RAW_KOBALT),
-                RecipeCategory.BUILDING_BLOCKS, ModItems.KOBALT_INGOT, 0.25f, 200, 100, "kobalt_ingot");
+                RecipeCategory.MISC, ModItems.PYRITE, 0.25f, 200, 100, "pyrite");
 
         /*oreBlasting(recipeOutput,
                 List.of(ModItems.DUNGEON_DEBUG_TOOL, Items.DIAMOND_AXE),
@@ -147,6 +145,12 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
     private static void infusing(RecipeCategory category, ItemLike ingredient, ItemLike result, RecipeOutput recipeOutput) {
         InfusionRecipeBuilder.infuse(category, ingredient, result)
                 .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+
+    }
+
+    private static void goblin_forge(RecipeCategory category, ItemLike ingredientOne, ItemLike ingredientTwo, ItemLike result, RecipeOutput recipeOutput) {
+        GoblinForgeRecipeBuilder.goblin_forge(category, ingredientOne, ingredientTwo, result)
+                .unlockedBy("has_"+getItemName(ingredientOne), has(ingredientOne)).save(recipeOutput);
 
     }
 

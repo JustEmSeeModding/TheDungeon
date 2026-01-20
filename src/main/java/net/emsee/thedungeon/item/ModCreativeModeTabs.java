@@ -27,7 +27,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
                         output.accept(ModItems.INFUSED_CHISEL);
-                        output.accept(ModItems.GOBLINS_DAGGER);
+                        output.accept(ModItems.KOBALT_DAGGER);
                         output.accept(ModItems.GOBLINS_FORGEHAMMER);
                         output.accept(ModItems.KOBALT_SHIELD);
                         output.accept(ModItems.INFUSED_ALLOY_HELMET);
@@ -54,9 +54,9 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
-                        output.accept(ModItems.RAW_KOBALT);
                         output.accept(ModItems.KOBALT_INGOT);
                         output.accept(ModItems.PYRITE);
+                        output.accept(ModItems.PYRITE_COIN);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_FOOD_TAB = CREATIVE_MODE_TAB.register("dungeon_food_tab",
@@ -73,6 +73,7 @@ public final class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.DUNGEON_PORTAL);
+                        output.accept(ModBlocks.CATALIST_BROKEN);
                         output.accept(ModBlocks.CATALIST_F);
                         output.accept(ModBlocks.CATALIST_E);
                         //output.accept(ModBlocks.CATALIST_D);
@@ -81,8 +82,7 @@ public final class ModCreativeModeTabs {
                         //output.accept(ModBlocks.CATALIST_A);
                         //output.accept(ModBlocks.CATALIST_S);
                         //output.accept(ModBlocks.CATALIST_SS);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
+                        output.accept(ModBlocks.GOBLIN_FORGE);
                         output.accept(ModBlocks.PYRITE_ORE);
                         output.accept(ModBlocks.DEEPSLATE_PYRITE_ORE);
                         output.accept(ModBlocks.INFUSED_GRASS_BLOCK);

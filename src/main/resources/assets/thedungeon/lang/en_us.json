@@ -28,6 +28,7 @@
 
   "jei.thedungeon.infusion_in_world_recipe_title" : "In World Infusion",
   "jei.thedungeon.infusion_recipe_title" : "Infusion",
+  "jei.thedungeon.goblin_forge_title": "Goblin's Alloy Forge",
 
   "advancements.thedungeon.root.title" : "The Dungeon",
   "advancements.thedungeon.root.description" : "All things dungeneering",
@@ -37,6 +38,8 @@
   "advancements.thedungeon.infused_alloy.description" : "A strong metal but quite heavy",
   "advancements.thedungeon.failed_portal_travel.title" : "YOU SHALL NOT PASS!",
   "advancements.thedungeon.failed_portal_travel.description" : "Only the Attuned may pass. The dungeon devours all else.",
+  "advancements.thedungeon.enter_rank_f.title" : "To The Caves",
+  "advancements.thedungeon.enter_rank_f.description" : "Enter the first dungeon, the goblin caves.",
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
@@ -96,7 +99,7 @@
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
-  "item.thedungeon.goblins_dagger": "Goblin's Dagger",
+  "item.thedungeon.kobalt_dagger": "Kobalt Dagger",
   "item.thedungeon.goblins_forgehammer": "Goblin's Forgehammer",
   "item.thedungeon.kobalt_shield": "Kobalt Shield",
 
@@ -120,7 +123,7 @@
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
-  "item.thedungeon.raw_kobalt": "Raw Kobalt",
+  "item.thedungeon.pyrite_coin": "Pyrite Coin",
   "item.thedungeon.kobalt_ingot": "Kobalt Ingot",
   "item.thedungeon.goblin_meat": "Goblin Meat",
 
@@ -165,6 +168,8 @@
   "block.thedungeon.medium_rose_quartz_bud": "Medium Rose Quartz Bud",
   "block.thedungeon.small_rose_quartz_bud": "Small Rose Quartz Bud",
 
+  "block.thedungeon.goblin_forge": "Goblin's Alloy Forge",
+
   "death.attack.thedungeon.unstable_portal":"%1$s tried to use an unstable portal",
   "death.attack.thedungeon.dungeon_reset":"%1$s was consumed by the dungeon",
 
@@ -184,5 +189,6 @@
 
   "attribute.thedungeon.extra.hob_goblin_friendly" : "Hob Goblin's Friend",
 
-  "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable"
+  "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable",
+  "container.thedungeon.goblin_forge_block": "Goblin's Alloy Forge"
 }

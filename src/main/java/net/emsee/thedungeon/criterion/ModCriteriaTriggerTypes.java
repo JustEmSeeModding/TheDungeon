@@ -1,7 +1,8 @@
 package net.emsee.thedungeon.criterion;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.emsee.thedungeon.criterion.custom.FailedDungeonTravelTrigger;
+import net.emsee.thedungeon.criterion.custom.DungeonTravelRankTrigger;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
@@ -15,6 +16,9 @@ public class ModCriteriaTriggerTypes {
 
     public static final Supplier<FailedDungeonTravelTrigger> FAILED_DUNGEON_TRAVEL =
             TRIGGER_TYPES.register("failed_dungeon_travel", FailedDungeonTravelTrigger::new);
+
+    public static final Supplier<DungeonTravelRankTrigger> TRAVEL_TO_RANK =
+            TRIGGER_TYPES.register("travel_to_rank", DungeonTravelRankTrigger::new);
 
     public static void register(IEventBus eventBus) {
         TRIGGER_TYPES.register(eventBus);

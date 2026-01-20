@@ -2,7 +2,9 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
-import net.emsee.thedungeon.criterion.FailedDungeonTravelTrigger;
+import net.emsee.thedungeon.criterion.custom.FailedDungeonTravelTrigger;
+import net.emsee.thedungeon.criterion.custom.DungeonTravelRankTrigger;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -30,10 +32,37 @@ public final class ModAdvancementProvider extends AdvancementProvider {
     }
 
     private static void generateAdvancements(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {
-        AdvancementHolder dungeonRoot = createRootAdvancement("thedungeon", ModBlocks.DUNGEON_PORTAL, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"), Map.of("pickup_infused_alloy", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
-        AdvancementHolder essenceShard = createItemAdvancement("thedungeon", "dungeon_essence_shard", ModItems.DUNGEON_ESSENCE_SHARD, dungeonRoot, AdvancementType.TASK, false, saver, existingFileHelper);
-        AdvancementHolder infusedAlloy = createItemAdvancement("thedungeon", "infused_alloy", ModItems.INFUSED_ALLOY_INGOT, essenceShard, AdvancementType.TASK, false, saver, existingFileHelper);
+        AdvancementHolder dungeonRoot = createRootAdvancement(
+                "thedungeon",
+                ModBlocks.DUNGEON_PORTAL,
+                ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "textures/block/infused_dirt.png"),
+                Map.of("pickup_infused_alloy", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.INFUSED_ALLOY_INGOT)), saver, existingFileHelper);
+
+        AdvancementHolder essenceShard = createItemAdvancement(
+                "thedungeon",
+                "dungeon_essence_shard",
+                ModItems.DUNGEON_ESSENCE_SHARD, // item
+                dungeonRoot, // root
+                AdvancementType.TASK,
+                false, saver, existingFileHelper);
+
+        AdvancementHolder infusedAlloy = createItemAdvancement(
+                "thedungeon",
+                "infused_alloy",
+                ModItems.INFUSED_ALLOY_INGOT, // item
+                essenceShard,  // root
+                AdvancementType.TASK, false, saver, existingFileHelper);
         AdvancementHolder FailedToTraveledToDungeon = createSimpleAdvancement("thedungeon", "failed_portal_travel", new ItemStack(ModBlocks.DUNGEON_PORTAL.get()), "has_tried", FailedDungeonTravelTrigger.criterion(), dungeonRoot, AdvancementType.TASK, true, saver, existingFileHelper);
+
+        AdvancementHolder EnterRankF =
+                createSimpleAdvancement(
+                        "thedungeon",
+                        "enter_rank_f",
+                        new ItemStack(ModBlocks.DUNGEON_PORTAL.get()),
+                        "has_traveled", DungeonTravelRankTrigger.has_traveled_to(DungeonRank.F),
+                dungeonRoot, //root
+                AdvancementType.TASK,
+                false, saver, existingFileHelper);
     }
 
     private static AdvancementHolder createItemAdvancement(String location, String name, ItemLike item, AdvancementHolder parent, AdvancementType advancementType, boolean hidden, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {

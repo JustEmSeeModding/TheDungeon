@@ -55,24 +55,10 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1.0f))
                                 .add(LootItem
-                                        .lootTableItem(ModItems.RAW_KOBALT)
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0f, 1.0f)))
+                                        .lootTableItem(ModItems.PYRITE_COIN)
+                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 3.0f)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.05f, 0.02f)))
-                        .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1.0f))
-                                .add(LootItem
-                                        .lootTableItem(Items.RAW_IRON)
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0f, 1.0f)))
-                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.25f, 0.05f)))
-                        .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1.0f))
-                                .add(LootItem
-                                        .lootTableItem(ModItems.PYRITE)
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0f, 1.0f)))
-                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.25f, 0.05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.3f, 0.1f)))
         );
         this.add(ModEntities.SKELETON_KNIGHT.get(), LootTable.lootTable());
         this.add(ModEntities.DEATH_KNIGHT.get(), LootTable.lootTable());

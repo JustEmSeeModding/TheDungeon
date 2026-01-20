@@ -3,6 +3,8 @@ package net.emsee.thedungeon.events;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.block.entity.ModBlockEntities;
+import net.emsee.thedungeon.block.entity.custom.GoblinForgeBlockEntity;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.dungeonClass.ModSubClasses;
@@ -11,12 +13,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.GrassColor;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
-public class IModEventBusEvents {
+public class ModEventBusEvents {
     @SubscribeEvent
     public static void entityAttributeModificationEvent(EntityAttributeModificationEvent event) {
         event.add(EntityType.PLAYER, ModAttributes.PLAYER_DUNGEON_AGGRO_TO_ENEMY, 500);
@@ -37,5 +41,10 @@ public class IModEventBusEvents {
         event.register(ModDungeons.DUNGEON_REGISTRY);
         event.register(ModClasses.CLASS_REGISTRY);
         event.register(ModSubClasses.SUBCLASS_REGISTRY);
+    }
+
+    @SubscribeEvent
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.GOBLIN_FORGE_BLOCK_ENTITY.get(), GoblinForgeBlockEntity::getItemHandler);
     }
 }

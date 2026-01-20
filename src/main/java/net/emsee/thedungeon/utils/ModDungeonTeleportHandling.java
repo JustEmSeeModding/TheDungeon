@@ -69,6 +69,7 @@ public final class ModDungeonTeleportHandling {
 
             teleport(player, portalDimension, teleportPos);
             setPlayerGameMode(player, returnFromDungeon);
+            ModCriteriaTriggerTypes.TRAVEL_TO_RANK.get().trigger(serverPlayer, rank);
         }
     }
 

@@ -18,6 +18,8 @@ public final class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        simpleBlockItem(ModBlocks.GOBLIN_FORGE.get());
+
         basicItem(ModItems.CATALIST_CORE.asItem());
         basicItem(ModItems.SHATTERED_CATALIST_CORE.asItem());
         basicItem(ModItems.DUNGEON_ESSENCE_SHARD.asItem());
@@ -33,7 +35,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
 
         basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
         basicItem(ModItems.PYRITE.asItem());
-        basicItem(ModItems.RAW_KOBALT.asItem());
+        basicItem(ModItems.PYRITE_COIN.asItem());
         basicItem(ModItems.KOBALT_INGOT.asItem());
 
         basicItem(ModItems.INFUSED_ALLOY_HELMET.asItem());
@@ -53,7 +55,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
 
         withExistingParent(ModItems.INFUSED_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/infused_dagger"));
         withExistingParent(ModItems.INFUSED_CHISEL.getId().getPath(), TheDungeon.defaultResourceLocation("item/chisel")).texture("0", TheDungeon.defaultResourceLocation("item/infused_chisel"));
-        withExistingParent(ModItems.GOBLINS_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/goblins_dagger"));
+        withExistingParent(ModItems.KOBALT_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/goblins_dagger"));
         withExistingParent(ModItems.GOBLINS_FORGEHAMMER.getId().getPath(), TheDungeon.defaultResourceLocation("item/small_hammer")).texture("0", TheDungeon.defaultResourceLocation("item/goblins_forgehammer"));
         withExistingParent(ModItems.KOBALT_SHIELD.getId().getPath(), TheDungeon.defaultResourceLocation("item/small_shield")).texture("0", TheDungeon.defaultResourceLocation("item/kobalt_shield"));
 

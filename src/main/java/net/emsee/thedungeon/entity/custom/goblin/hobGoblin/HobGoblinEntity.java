@@ -1,7 +1,6 @@
 package net.emsee.thedungeon.entity.custom.goblin.hobGoblin;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.attribute.ModAttributes;
@@ -76,9 +75,9 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     protected void setupAttackGoal() {
         this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
                 // default attacks
-                .withAttack(0, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.GOBLINS_DAGGER.get(), Items.AIR),List.of()),3)
-                .withAttack(1, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(),List.of(ModItems.GOBLINS_DAGGER.get())),2)
-                .withAttack(2,12,18, h -> h.withDamageMultiplier(2f).withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.GOBLINS_DAGGER.get()),List.of(ModItems.GOBLINS_DAGGER.get())), 1 )
+                .withAttack(0, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.KOBALT_DAGGER.get(), ModItems.INFUSED_CHISEL.get(), Items.AIR),List.of()),3)
+                .withAttack(1, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(),List.of(ModItems.KOBALT_DAGGER.get(), ModItems.INFUSED_CHISEL.get())),2)
+                .withAttack(2,12,18, h -> h.withDamageMultiplier(2f).withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.KOBALT_DAGGER.get(), ModItems.INFUSED_CHISEL.get()),List.of(ModItems.KOBALT_DAGGER.get(), ModItems.INFUSED_CHISEL.get())), 1 )
 
                 // hammer attacks
                 .withAttack(0, 12,23,h -> h.withRequiredItems(List.of(ModItems.GOBLINS_FORGEHAMMER.get()),List.of()),3)
@@ -106,24 +105,29 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         switch (getVariant()) {
             case FIGHTER -> {
                 if (rDouble>.67) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
                 }
                 else if (rDouble>.33){
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
                 } else {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
                     this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_SHIELD.get()));
                 }
             }
             case FORGER -> {
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_FORGEHAMMER.get()));
             }
-            case SCAVENGER -> {}
+            case SCAVENGER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+            }
+            case MINER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.INFUSED_CHISEL.get()));
+            }
             default -> {
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
             }
         }
 
@@ -198,7 +202,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     }
 
     @Override
-    public void notifyTradeUpdated(ItemStack itemStack) {}
+    public void notifyTradeUpdated(ItemStack itemStack) {} //TODO
 
     @Override
     public int getVillagerXp() {
@@ -206,7 +210,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     }
 
     @Override
-    public void overrideXp(int i) {    }
+    public void overrideXp(int i) {}
 
     @Override
     public boolean showProgressBar() {
@@ -336,7 +340,8 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     public enum Variant {
         FIGHTER(0, 100, "fighter"),
         FORGER(1,50, "forge_worker"),
-        SCAVENGER(2,10, "scavenger")
+        SCAVENGER(2,5, "scavenger"),
+        MINER(3,30, "miner")
         ;
 
         private static final Variant[] BY_ID = Arrays.stream(values()).sorted(

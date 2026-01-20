@@ -18,7 +18,7 @@ public class HobGoblinRenderer extends MobRenderer<HobGoblinEntity, HobGoblinMod
     private static final Map<HobGoblinEntity.Variant, ResourceLocation> LOCATION_BY_VARIANTS= Util.make(Maps.newEnumMap(HobGoblinEntity.Variant.class), map -> {
         for (HobGoblinEntity.Variant variant : HobGoblinEntity.Variant.values()) {
             map.put(variant,
-                    TheDungeon.defaultResourceLocation("textures/entity/goblin/hob_goblin/"+variant.getResource()+".png"));
+                    TheDungeon.defaultResourceLocation("textures/entity/goblin/hob_goblin/hob_goblin_"+variant.getResource()+".png"));
         }
     });
 

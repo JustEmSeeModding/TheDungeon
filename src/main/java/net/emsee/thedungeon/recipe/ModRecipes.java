@@ -26,6 +26,17 @@ public final class ModRecipes {
             });
 
 
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GoblinForgeRecipe>> GOBLIN_FORGE_SERIALIZER =
+            SERIALIZERS.register("goblin_forge", GoblinForgeRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<GoblinForgeRecipe>> GOBLIN_FORGE_TYPE =
+            TYPES.register("goblin_forge", () -> new RecipeType<>() {
+                @Override
+                public String toString() {
+                    return "goblin_forge";
+                }
+            });
+
+
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
         TYPES.register(eventBus);

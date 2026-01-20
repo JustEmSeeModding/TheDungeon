@@ -177,11 +177,6 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
     }
 
     @Override
-    public MutableComponent getName() {
-        return Component.translatable(this.getDescriptionId()+"_f");
-    }
-
-    @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return getNewBlockState(context.getLevel(), context.getClickedPos());
     }

@@ -17,6 +17,7 @@ import net.emsee.thedungeon.item.ModCreativeModeTabs;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.recipe.ModRecipes;
+import net.emsee.thedungeon.screen.ModMenuTypes;
 import net.emsee.thedungeon.villager.ModVillagers;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -50,12 +51,13 @@ public final class TheDungeon
         ModItems.register(modEventBus);
         ModArmorMaterials.register(modEventBus);
         ModBlocks.register(modEventBus);
-        //ModBlockEntities.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
         ModMobEffects.register(modEventBus);
 
         ModDataComponentTypes.register(modEventBus);
 
         ModEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         ModAttachmentTypes.register(modEventBus);
         ModRecipes.register(modEventBus);

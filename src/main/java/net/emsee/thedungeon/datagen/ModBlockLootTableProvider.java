@@ -2,6 +2,7 @@ package net.emsee.thedungeon.datagen;
 
 
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.block.custom.GoblinForgeBlock;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -64,6 +65,8 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         simpleItemDropSelfWithSilk(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get());
         simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get());
         simpleItemDropSelfWithSilk(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get());
+
+        dropSelf(ModBlocks.GOBLIN_FORGE.get());
     }
 
     @Override
