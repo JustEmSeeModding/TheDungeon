@@ -81,7 +81,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('^', ModItems.DUNGEON_ESSENCE_SHARD.get())
                 .define('#', ModItems.INFUSED_ALLOY_INGOT.get())
                 .define('o', Items.ENDER_EYE)
-                .unlockedBy("has_shattered_portal_core", has(ModItems.SHATTERED_CATALIST_CORE)).save(recipeOutput);
+                .unlockedBy("has_shattered_catalist_core", has(ModItems.SHATTERED_CATALIST_CORE)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.DUNGEON_CLOCK.get(), 1)
                 .pattern(" # ")

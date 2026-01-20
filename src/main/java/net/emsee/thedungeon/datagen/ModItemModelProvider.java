@@ -55,7 +55,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
 
         withExistingParent(ModItems.INFUSED_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/infused_dagger"));
         withExistingParent(ModItems.INFUSED_CHISEL.getId().getPath(), TheDungeon.defaultResourceLocation("item/chisel")).texture("0", TheDungeon.defaultResourceLocation("item/infused_chisel"));
-        withExistingParent(ModItems.KOBALT_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/goblins_dagger"));
+        withExistingParent(ModItems.KOBALT_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/kobalt_dagger"));
         withExistingParent(ModItems.GOBLINS_FORGEHAMMER.getId().getPath(), TheDungeon.defaultResourceLocation("item/small_hammer")).texture("0", TheDungeon.defaultResourceLocation("item/goblins_forgehammer"));
         withExistingParent(ModItems.KOBALT_SHIELD.getId().getPath(), TheDungeon.defaultResourceLocation("item/small_shield")).texture("0", TheDungeon.defaultResourceLocation("item/kobalt_shield"));
 

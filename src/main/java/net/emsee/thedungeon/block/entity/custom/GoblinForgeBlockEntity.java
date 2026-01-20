@@ -90,10 +90,11 @@ public class GoblinForgeBlockEntity extends BlockEntity implements MenuProvider{
             @Override
             public void set(int index, int value) {
                 switch (index) {
-                    case 0: GoblinForgeBlockEntity.this.progress = value;
-                    case 1: GoblinForgeBlockEntity.this.maxProgress = value;
-                    case 2: GoblinForgeBlockEntity.this.burnTimeLeft = value;
-                    case 3: GoblinForgeBlockEntity.this.fuelMaxBurnTime = value;
+                    case 0: GoblinForgeBlockEntity.this.progress = value; break;
+                    case 1: GoblinForgeBlockEntity.this.maxProgress = value; break;
+                    case 2: GoblinForgeBlockEntity.this.burnTimeLeft = value; break;
+                    case 3: GoblinForgeBlockEntity.this.fuelMaxBurnTime = value; break;
+                    default: break;
                 }
             }
 

@@ -79,12 +79,12 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
         builder.add(STABLE,EXIT,PORTAL_ID,RANK);
     }
 
-    public int getExitID(MinecraftServer server, BlockState state) {
+    public int getExitID(MinecraftServer server, BlockState state, BlockPos pos, Level level) {
         int id = state.getValue(PORTAL_ID) - 1;
 
         if (id < 0 || id >= GlobalDungeonManager.getPortalPositions(server, state.getValue(RANK)).size()) {
             id = GlobalDungeonManager.giveRandomPortalID(server, state.getValue(RANK));
-            state.setValue(PORTAL_ID, id + 1);
+            level.setBlockAndUpdate(pos,state.setValue(PORTAL_ID, id + 1));
         }
         return id;
     }
@@ -96,7 +96,7 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
                 MinecraftServer server = level.getServer();
                 if (player.isCreative() || GlobalDungeonManager.isOpen(server, state.getValue(RANK))) {
                     if (timeCheck(player, server, state) || player.isCreative())
-                        ModDungeonTeleportHandling.playerTeleportDungeon(player, getExitID(server, state), state.getValue(RANK));
+                        ModDungeonTeleportHandling.playerTeleportDungeon(player, getExitID(server, state,pos,level), state.getValue(RANK));
                 } else {
                     player.displayClientMessage(Component.translatable("message.thedungeon.dungeon_portal.dungeon_closed"), true);
                 }
@@ -126,7 +126,7 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
             GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
         }
         if (!GlobalDungeonManager.isOpen(level.getServer(), state.getValue(RANK)))
-            state.setValue(PORTAL_ID, 0);
+            level.setBlockAndUpdate(pos, state.setValue(PORTAL_ID, 0));
         super.randomTick(state, level, pos, random);
     }
 
