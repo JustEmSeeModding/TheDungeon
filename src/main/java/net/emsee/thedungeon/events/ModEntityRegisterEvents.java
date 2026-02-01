@@ -2,10 +2,12 @@ package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.ModEntities;
+import net.emsee.thedungeon.entity.client.Goblin.BrainTestModel;
 import net.emsee.thedungeon.entity.client.Goblin.caveGoblin.CaveGoblinModel;
 import net.emsee.thedungeon.entity.client.Goblin.caveGoblin.CaveGoblinRenderer;
 import net.emsee.thedungeon.entity.client.Goblin.hobGoblin.HobGoblinModel;
 import net.emsee.thedungeon.entity.client.Goblin.hobGoblin.HobGoblinRenderer;
+import net.emsee.thedungeon.entity.client.Goblin.shadowGoblin.BrainTestRenderer;
 import net.emsee.thedungeon.entity.client.Goblin.shadowGoblin.ShadowGoblinModel;
 import net.emsee.thedungeon.entity.client.Goblin.shadowGoblin.ShadowGoblinRenderer;
 import net.emsee.thedungeon.entity.client.ModModelLayers;
@@ -15,6 +17,7 @@ import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightModel;
 import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightRenderer;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightModel;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightRenderer;
+import net.emsee.thedungeon.entity.custom.TestBrainedEntity;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.hobGoblin.HobGoblinEntity;
@@ -37,6 +40,7 @@ public class ModEntityRegisterEvents {
         EntityRenderers.register(ModEntities.CAVE_GOBLIN.get(), CaveGoblinRenderer::new);
         EntityRenderers.register(ModEntities.SHADOW_GOBLIN.get(), ShadowGoblinRenderer::new);
         EntityRenderers.register(ModEntities.HOB_GOBLIN.get(), HobGoblinRenderer::new);
+        EntityRenderers.register(ModEntities.BRAIN_TEST.get(), BrainTestRenderer::new);
     }
 
     @SubscribeEvent
@@ -47,6 +51,7 @@ public class ModEntityRegisterEvents {
         event.registerLayerDefinition(ModModelLayers.CAVE_GOBLIN, CaveGoblinModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SHADOW_GOBLIN, ShadowGoblinModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.HOB_GOBLIN, HobGoblinModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.BRAIN_TEST, BrainTestModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -57,5 +62,6 @@ public class ModEntityRegisterEvents {
         event.put(ModEntities.CAVE_GOBLIN.get(), CaveGoblinEntity.createAttributes().build());
         event.put(ModEntities.SHADOW_GOBLIN.get(), ShadowGoblinEntity.createAttributes().build());
         event.put(ModEntities.HOB_GOBLIN.get(), HobGoblinEntity.createAttributes().build());
+        event.put(ModEntities.BRAIN_TEST.get(), TestBrainedEntity.createAttributes().build());
     }
 }

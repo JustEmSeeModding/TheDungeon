@@ -2,7 +2,7 @@ package net.emsee.thedungeon.entity.custom.goblin;
 
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
-import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
+import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
 import net.emsee.thedungeon.item.ModItems;
@@ -23,8 +23,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
 public class AbstractGoblinEntity extends DungeonPathfinderMob implements IMultiAttackAnimatedEntity {
-    protected static final EntityDataAccessor<Boolean> RUNNING =
-            SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
             SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_VERSION =
@@ -52,7 +50,7 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IMulti
     }
 
     protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.3f,15, 4f, true));
+        this.goalSelector.addGoal(0, new DungeonRunToTargetGoal(this,1.3f,15, 4f, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
     }
 
@@ -127,15 +125,6 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IMulti
         return attackAnimationTimeout >0;
     }
 
-    @Override
-    public void startRunning() {
-        this.entityData.set(RUNNING, true);
-    }
-
-    @Override
-    public void stopRunning() {
-        this.entityData.set(RUNNING, false);
-    }
 
     void setAnimationID(int id, byte version) {
         this.entityData.set(ATTACK_ANIMATION_ID, id);
@@ -152,15 +141,10 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IMulti
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(RUNNING, false);
         builder.define(ATTACK_ANIMATION_ID, -1);
         builder.define(ATTACK_ANIMATION_VERSION, (byte)-1);
     }
 
-    @Override
-    public boolean isRunning() {
-        return this.entityData.get(RUNNING);
-    }
 
     @Override
     public void attackAnimation(int id, byte version) {

@@ -1,9 +1,8 @@
 package net.emsee.thedungeon.entity.ai;
 
-import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
+import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Node;
@@ -11,9 +10,8 @@ import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
-/** when mob is far enough away it wil run at its target*/
-public class RunToTargetGoal extends Goal {
-        protected final PathfinderMob mob;
+public class DungeonWalkToTargetGoal extends Goal {
+        protected final DungeonPathfinderMob mob;
         private final double speedModifier;
         private final boolean followingTargetEvenIfNotSeen;
         private final float startDistance;
@@ -27,7 +25,7 @@ public class RunToTargetGoal extends Goal {
         private int failedPathFindingPenalty = 0;
         private final boolean canPenalize = false;
 
-        public RunToTargetGoal(PathfinderMob mob, double speedModifier, float startDistance, float stopDistance, boolean followingTargetEvenIfNotSeen) {
+        public DungeonWalkToTargetGoal(DungeonPathfinderMob mob, double speedModifier, float startDistance, float stopDistance, boolean followingTargetEvenIfNotSeen) {
             this.mob = mob;
             this.speedModifier = speedModifier;
             this.followingTargetEvenIfNotSeen = followingTargetEvenIfNotSeen;
@@ -86,9 +84,6 @@ public class RunToTargetGoal extends Goal {
             this.mob.getNavigation().moveTo(this.path, this.speedModifier);
             this.mob.setAggressive(true);
             this.ticksUntilNextPathRecalculation = 0;
-            if (this.mob instanceof IBasicAnimatedEntity animatedEntity) {
-                animatedEntity.startRunning();
-            }
         }
 
         @Override
@@ -100,9 +95,6 @@ public class RunToTargetGoal extends Goal {
 
             this.mob.setAggressive(false);
             this.mob.getNavigation().stop();
-            if (this.mob instanceof IBasicAnimatedEntity animatedEntity) {
-                animatedEntity.stopRunning();
-            }
         }
 
         @Override
@@ -152,5 +144,7 @@ public class RunToTargetGoal extends Goal {
             }
 
         }
-    }
 
+
+
+}

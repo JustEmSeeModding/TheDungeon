@@ -2,9 +2,8 @@ package net.emsee.thedungeon.entity.custom.knight;
 
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
-import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
+import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
-import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
 import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,8 +21,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractKnightEntity extends DungeonPathfinderMob implements IMultiAttackAnimatedEntity {
-    protected static final EntityDataAccessor<Boolean> RUNNING =
-            SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
             SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_VERSION =
@@ -51,7 +48,7 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
     }
 
     protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.2f,10, 3.5f, true));
+        this.goalSelector.addGoal(0, new DungeonRunToTargetGoal(this,1.2f,10, 3.5f, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
     }
 
@@ -117,16 +114,6 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         return attackAnimationTimeout >0;
     }
 
-    @Override
-    public void startRunning() {
-        this.entityData.set(RUNNING, true);
-    }
-
-    @Override
-    public void stopRunning() {
-        this.entityData.set(RUNNING, false);
-    }
-
     protected final void setAnimationID(int id, byte version) {
         this.entityData.set(ATTACK_ANIMATION_ID, id);
         this.entityData.set(ATTACK_ANIMATION_VERSION, version);
@@ -142,14 +129,8 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(RUNNING, false);
         builder.define(ATTACK_ANIMATION_ID, -1);
         builder.define(ATTACK_ANIMATION_VERSION, (byte)-1);
-    }
-
-    @Override
-    public boolean isRunning() {
-        return this.entityData.get(RUNNING);
     }
 
     @Override

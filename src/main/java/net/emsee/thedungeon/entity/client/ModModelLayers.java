@@ -24,4 +24,7 @@ public final class ModModelLayers {
 
     public static final ModelLayerLocation HOB_GOBLIN = new ModelLayerLocation(
             TheDungeon.defaultResourceLocation("hob_goblin"), "main");
+
+    public static final ModelLayerLocation BRAIN_TEST = new ModelLayerLocation(
+            TheDungeon.defaultResourceLocation("brain_test"), "main");
 }

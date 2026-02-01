@@ -2,6 +2,7 @@ package net.emsee.thedungeon.entity.custom.abstracts;
 
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
+import net.emsee.thedungeon.entity.custom.goblin.AbstractGoblinEntity;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class DungeonPathfinderMob extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> ATTACKING =
+            SynchedEntityData.defineId(DungeonPathfinderMob.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> RUNNING =
             SynchedEntityData.defineId(DungeonPathfinderMob.class, EntityDataSerializers.BOOLEAN);
 
     protected boolean finalizedSpawn = false;
@@ -50,13 +53,13 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
 
     @Override
     public boolean isWithinMeleeAttackRange(LivingEntity pEnemy) {
+        if (pEnemy==null) return false;
         if (this.getAttribute(ModAttributes.DUNGEON_MOB_REACH) != null) {
             double maxReach = this.getAttributeValue(ModAttributes.DUNGEON_MOB_REACH);
             float distance = pEnemy.distanceTo(this);
             return super.isWithinMeleeAttackRange(pEnemy) || (distance <= maxReach);
         } else
             return super.isWithinMeleeAttackRange(pEnemy);
-        //return super.isWithinMeleeAttackRange(entity);
     }
 
     public boolean isWithinMeleeAttackRange(LivingEntity pEnemy, double maxReach) {
@@ -65,7 +68,6 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
             return super.isWithinMeleeAttackRange(pEnemy) || (distance <= maxReach);
         } else
             return super.isWithinMeleeAttackRange(pEnemy);
-        //return super.isWithinMeleeAttackRange(entity);
     }
 
     public boolean isWithinMeleeAttackRange(LivingEntity pEnemy, double minReach, double maxReach) {
@@ -119,6 +121,7 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(ATTACKING, false);
+        builder.define(RUNNING, false);
     }
 
     @Override
@@ -157,5 +160,13 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
         finalizedSpawn=true;
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+    }
+
+    public void setRunning(boolean running) {
+        this.entityData.set(RUNNING, running);
+    }
+
+    public boolean isRunning() {
+        return this.entityData.get(RUNNING);
     }
 }

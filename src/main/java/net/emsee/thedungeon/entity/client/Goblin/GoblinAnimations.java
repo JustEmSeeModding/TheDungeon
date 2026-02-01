@@ -5,7 +5,8 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-public class GoblinAnimations {
+public class GoblinAnimations{
+
 
     public static final AnimationDefinition ANIM_GOBLIN_POSE = AnimationDefinition.Builder.withLength(0f).looping()
             .addAnimation("body",

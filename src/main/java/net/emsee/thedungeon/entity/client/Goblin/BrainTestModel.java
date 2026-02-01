@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.entity.client.Goblin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.emsee.thedungeon.entity.custom.TestBrainedEntity;
 import net.emsee.thedungeon.entity.custom.goblin.AbstractGoblinEntity;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.HierarchicalModel;
@@ -10,7 +11,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 
-public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends HierarchicalModel<T> implements ArmedModel {
+public class BrainTestModel extends HierarchicalModel<TestBrainedEntity> implements ArmedModel {
     private final ModelPart base;
     private final ModelPart body;
     private final ModelPart head;
@@ -19,7 +20,7 @@ public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends Hierarc
     private final ModelPart right_arm;
     private final ModelPart lower_right_arm;
 
-    public AbstractGoblinModel(ModelPart root) {
+    public BrainTestModel(ModelPart root) {
         this.base = root.getChild("base");
         this.body = base.getChild("body");
         this.head = body.getChild("head");
@@ -84,15 +85,19 @@ public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends Hierarc
     }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(TestBrainedEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.base.getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(netHeadYaw, headPitch);
 
         this.applyStatic(GoblinAnimations.ANIM_GOBLIN_POSE);
         this.animateWalk(entity.isRunning()? GoblinAnimations.ANIM_GOBLIN_RUN:GoblinAnimations.ANIM_GOBLIN_WALK, limbSwing, limbSwingAmount, 4f, 2.5f);
-        this.animate(entity.idleAnimationState, GoblinAnimations.ANIM_GOBLIN_IDLE, ageInTicks, 1);
-        this.animate(entity.basicAttackAnimationStateRight, GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_RIGHT, ageInTicks, 1);
-        this.animate(entity.basicAttackAnimationStateLeft, GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
+
+        this.animate(entity.animationController.idleAnimationState, GoblinAnimations.ANIM_GOBLIN_IDLE, ageInTicks, 1);
+
+        this.animate(entity.animationController.attackAnimationStates.get(0).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_RIGHT, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(1).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(2).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_RIGHT, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(2).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
     }
 
     private void applyHeadRotation(float headYaw, float headPitch) {
