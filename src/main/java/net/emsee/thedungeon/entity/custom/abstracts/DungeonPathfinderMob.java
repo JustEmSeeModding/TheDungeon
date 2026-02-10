@@ -2,7 +2,6 @@ package net.emsee.thedungeon.entity.custom.abstracts;
 
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
-import net.emsee.thedungeon.entity.custom.goblin.AbstractGoblinEntity;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -12,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -177,5 +177,62 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
 
     public boolean isRunning() {
         return this.entityData.get(RUNNING);
+    }
+
+    private int tickCounter = 0;
+
+    @Override
+    public void tick() {
+        super.tick();
+        tickCounter++;
+        if (tickCounter >= 20) { // every second
+            boolean outOfRange = playerOutOfRange();
+            setNoAi(outOfRange);
+            if (!hasEffect(MobEffects.INVISIBILITY))
+                setInvisible(outOfRange);
+            setInvulnerable(outOfRange);
+            noPhysics = outOfRange;
+            tickCounter = 0;
+        }
+    }
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return distance <= playerCullingRange()*playerCullingRange();
+    }
+
+    @Override
+    public boolean shouldRender(double x, double y, double z) {
+        double dx = this.getX() - x;
+        double dy = this.getY() - y;
+        double dz = this.getZ() - z;
+        return !(dx * dx + dz * dz > playerCullingRangeSq()) &&
+                !(Math.abs(dy) > playerVerticalCullingRange());
+    }
+
+    protected boolean playerOutOfRange() {
+        for (Player player : this.level().players()) {
+            double dx = player.getX() - getX();
+            double dz = player.getZ() - getZ();
+            double horizontalDistSq = dx*dx + dz*dz;
+            if (horizontalDistSq <= playerCullingRangeSq() &&
+                    Math.abs(player.getY() - getY()) <= playerVerticalCullingRange())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected final int playerCullingRangeSq() {
+        return playerCullingRange()*playerCullingRange();
+    }
+
+    protected int playerCullingRange() {
+        return 75;
+    }
+
+    protected int playerVerticalCullingRange() {
+        return 40;
     }
 }

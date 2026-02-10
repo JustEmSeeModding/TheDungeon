@@ -41,11 +41,11 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     public static final ResourceLocation WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_damage");
     public static final ResourceLocation  WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_speed");
 
-    private final WeaponType weaponType;
-    private final boolean isSweeping;
-    private final DungeonItemRank rank;
-    private final DeferredHolder<DungeonClass,?>[] classes;
-    private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
+    protected final WeaponType weaponType;
+    protected final boolean isSweeping;
+    protected final DungeonItemRank rank;
+    protected final DeferredHolder<DungeonClass,?>[] classes;
+    protected final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
     public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Properties properties) {
         super(tier, properties.rarity(Rarity.RARE), createToolProperties());

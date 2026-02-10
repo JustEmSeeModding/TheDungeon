@@ -12,6 +12,8 @@ public class ModTickEvents {
     @SubscribeEvent
     public static void DungeonServerTick(ServerTickEvent.Pre event) {
         GlobalDungeonManager.tick(event);
-        DungeonSaveData.Get(event.getServer()).serverUpdateTimeLeft(event.getServer());
+        DungeonSaveData saveData = DungeonSaveData.Get(event.getServer());
+        saveData.serverUpdateTimeLeft(event.getServer());
+        saveData.packetDataTick();
     }
 }

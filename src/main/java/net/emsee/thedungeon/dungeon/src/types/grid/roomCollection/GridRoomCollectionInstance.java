@@ -52,6 +52,19 @@ public class GridRoomCollectionInstance {
         return null;
     }
 
+    public AbstractGridRoom getRandomRequiredRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
+        WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
+        for (AbstractGridRoom gridRoom : getAllPossibleRequiredRooms().keySet()) {
+            if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
+                returnList.put(gridRoom, gridRoom.getWeight());
+            }
+        }
+        if (!returnList.isEmpty()) {
+            return returnList.getRandom(random);
+        }
+        return null;
+    }
+
     public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random) {
         WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
 
@@ -100,13 +113,53 @@ public class GridRoomCollectionInstance {
         return toReturn;
     }
 
-    /****
-     * Updates the placement count for required rooms or required room groups when a room is placed.
-     * <p>
-     * in the case that the room is both separate or in a list, or mentioned in multiple list:
-     * the separate one will be marked first, then the first list found
+    /**
+     * Returns a map of all required rooms that are eligible for placement based on individual and grouped placement constraints.
      */
-    public void updatePlacedRequirements(AbstractGridRoom placed) {
+    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRequiredRooms() {
+        WeightedMap.Int<AbstractGridRoom> toReturn = new WeightedMap.Int<>();
+        for (AbstractGridRoom room : collection.getAllRooms().keySet()) {
+            boolean allowed = true;
+            if (requiredPlacements.containsKey(room)) {
+                RequiredRoomPlacementsInstance constraints = requiredPlacements.get(room);
+                // test for max
+                if (constraints.hasMax() && !constraints.placementBelowMax()) {
+                    allowed = false;
+                }
+                if (!constraints.hasMin() || constraints.placementAboveMin()) {
+                    allowed = false;
+                }
+            } else {
+                allowed = false;
+            }
+            if (allowed)
+                for (List<AbstractGridRoom> rooms : requiredListPlacements.keySet()) {
+                    if (rooms.contains(room)) {
+                        RequiredRoomPlacementsInstance constraints = requiredListPlacements.get(rooms);
+                        // Skip if no maximum
+                        if ((constraints.hasMax() && !constraints.placementBelowMax()) || !constraints.hasMin() || constraints.placementAboveMin()) {
+                            allowed = false;
+                            break;
+                        }
+                    }
+                }
+            if (allowed) {
+                toReturn.put(room, room.getWeight());
+            }
+        }
+        return toReturn;
+    }
+
+    /**
+     *
+     *  Updates the placement count for required rooms or required room groups when a room is placed.
+     *  <p>
+     *  in the case that the room is both separate or in a list, or mentioned in multiple list:
+     *  the separate one will be marked first, then the first list found
+
+     * @return true if a required room was placed
+     */
+    public boolean updatePlacedRequirements(AbstractGridRoom placed) {
         if (requiredPlacements.containsKey(placed)) {
             requiredPlacements.get(placed).addPlacement();
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_REQUIRED_PLACEMENTS, "requirement found:{}",placed);
@@ -114,7 +167,7 @@ public class GridRoomCollectionInstance {
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}-{}",requiredPlacements.get(placed).placed, requiredPlacements.get(placed).min, requiredPlacements.get(placed).max);
             else
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}",requiredPlacements.get(placed).placed, requiredPlacements.get(placed).min);
-            return;
+            return requiredPlacements.get(placed).placed<=requiredPlacements.get(placed).max;
         }
         for (List<AbstractGridRoom> rooms : requiredListPlacements.keySet()) {
             if (rooms.contains(placed)) {
@@ -124,9 +177,10 @@ public class GridRoomCollectionInstance {
                     DebugLog.logInfo(DebugLog.DebugType.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}-{}",requiredListPlacements.get(rooms).placed,requiredListPlacements.get(rooms).min,requiredListPlacements.get(rooms).max);
                 else
                     DebugLog.logInfo(DebugLog.DebugType.GENERATING_REQUIRED_PLACEMENTS, "total placed:{}/{}",requiredListPlacements.get(rooms).placed,requiredListPlacements.get(rooms).min);
-                return;
+                return requiredListPlacements.get(rooms).placed<=requiredListPlacements.get(rooms).max;
             }
         }
+        return false;
     }
 
     /**
@@ -159,6 +213,10 @@ public class GridRoomCollectionInstance {
 
         boolean hasMax() {
             return max > 0;
+        }
+
+        boolean hasMin() {
+            return min > 0;
         }
 
         boolean placementBelowMax() {

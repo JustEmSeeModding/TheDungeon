@@ -50,4 +50,16 @@ public class ModSubClasses {
         }
         return toReturn;
     }
+
+    public static void setClassForPlayer(Player player, DeferredHolder<DungeonSubClass<?>, ?> toSet) {
+        DungeonSubClass<?> oldClass = getClassForPlayer(player);
+        oldClass.onRemoveClass();
+        player.setData(ModAttachmentTypes.PLAYER_SUBCLASS, toSet.getId().getPath());
+        DungeonSubClass<?> newClass = toSet.get();
+        newClass.onRemoveClass();
+    }
+
+    public static void removeClassForPlayer(Player player) {
+        setClassForPlayer(player, CLASSLESS);
+    }
 }

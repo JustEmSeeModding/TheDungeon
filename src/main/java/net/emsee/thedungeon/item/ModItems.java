@@ -2,6 +2,7 @@ package net.emsee.thedungeon.item;
 
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.item.custom.*;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
@@ -77,6 +78,9 @@ public final class ModItems {
 
     public static final DeferredItem<DungeonItem> GOBLIN_MEAT = ITEMS.register("goblin_meat",
             () -> new DungeonItem((new Item.Properties().food(new FoodProperties(2,1,false, 2, Optional.empty(), List.of())))));
+
+    public static final DeferredItem<EffigyCurio> HEAVY_EFFIGY = ITEMS.register("heavy_effigy",
+            () -> new EffigyCurio(new Item.Properties(),DungeonItemRank.F, ModClasses.TANK, null));
 
 
     public static final DeferredItem<InfusedAlloyArmorItem> INFUSED_ALLOY_HELMET = ITEMS.register("infused_alloy_helmet",

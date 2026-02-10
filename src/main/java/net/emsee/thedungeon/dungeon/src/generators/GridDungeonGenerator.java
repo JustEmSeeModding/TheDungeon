@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.Rotation;
 import java.util.*;
 
 public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
-    public enum GenerationTask {
+        public enum GenerationTask {
         UN_STARTED,
         CALCULATING,
         CHECK_REQUIREMENTS,
@@ -57,6 +57,9 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     protected final Queue<GeneratedRoom> toSpawnMobsRooms = new LinkedList<>();
     protected final Queue<GeneratedRoom> toRegisterPortals = new LinkedList<>();
 
+    protected int requirementStepInterval = 0;
+    protected final int STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES;
+
 
     public List<ConnectionRule> getConnectionRules() {
         return new ArrayList<>(dungeon.getRoomCollection().getRaw().getConnectionRules());
@@ -81,6 +84,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         this.collection = dungeon.getRoomCollection();
         this.occupationArray = new GridArray(dungeon.getRaw().getDungeonDepth(), dungeon.getRaw().getMaxFloorHeight(), !dungeon.getRaw().isDownGenerationDisabled());
         this.biomeRegistry = new GridDungeonBiomeRegistry(collection.getRaw().getGridCellWidth(),collection.getRaw().getGridCellHeight(), dungeon.getRaw().getCenterPos());
+        this.STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES = dungeon.getRaw().getStepIntervalBetweenForcesRequirementTries();
 
         // select the starting room
         AbstractGridRoom startingRoom = dungeon.getRaw().getStartingRoom();
@@ -127,14 +131,12 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
 
             List<GeneratedRoom> nextGenerationOptions = getPossibleRoomSelection();
 
-            final GeneratedRoom roomToDo;
-
             // selects a room to generate its connection according to the dungeon rules
-            switch (dungeon.getRaw().getRoomPickMethod()) {
-                case LAST -> roomToDo = nextGenerationOptions.getLast();
-                case RANDOM -> roomToDo = ListAndArrayUtils.getRandomFromList(nextGenerationOptions, random);
-                default -> roomToDo = nextGenerationOptions.getFirst();
-            }
+            final GeneratedRoom roomToDo = switch (dungeon.getRaw().getRoomPickMethod()) {
+                case LAST -> nextGenerationOptions.getLast();
+                case RANDOM -> ListAndArrayUtils.getRandomFromList(nextGenerationOptions, random);
+                default -> nextGenerationOptions.getFirst();
+            };
             if (roomToDo == null)
                 throw new IllegalStateException("the room to generate its next connection was NULL");
 
@@ -144,9 +146,13 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
                 todoRooms.remove(roomToDo);
             if (newRoom != null) {
                 // if placement was success add the room to all required lists
-                collection.updatePlacedRequirements(newRoom.getRoom());
+                boolean wasRequirement = collection.updatePlacedRequirements(newRoom.getRoom());
+                if (wasRequirement) {
+                    requirementStepInterval=0;
+                }
                 addRoomToLists(newRoom);
             }
+            requirementStepInterval++;
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Dungeon calculation tick completed");
     }
@@ -168,6 +174,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         }
         return toReturn;
     }
+
 
     protected void checkRequirementStep(MinecraftServer server) {
         if (!collection.requiredRoomsDone()) {
@@ -428,6 +435,10 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         return collection.getRandomRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random);
     }
 
+    public AbstractGridRoom GetRandomRequiredRoomByConnection(Connection connection, String fromTag, Random random) {
+        return collection.getRandomRequiredRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random);
+    }
+
     public boolean isDone() {
         return currentTask == GenerationTask.DONE;
     }
@@ -438,5 +449,10 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
 
     public GenerationTask currentStep() {
         return currentTask;
+    }
+
+    public boolean hasToTryRequiredRoom() {
+        if (STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES <= 0) return false;
+        return requirementStepInterval >= STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES;
     }
 }

@@ -4,6 +4,7 @@ import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
+import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonArmorItem;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
@@ -28,7 +29,7 @@ public class KobaltArmorItem extends DungeonArmorItem {
 
 
     public KobaltArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
-        super(material, type, properties, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{});
+        super(material, type, properties, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{ModSubClasses.VANGUARD});
     }
 
     @Override
@@ -54,6 +55,6 @@ public class KobaltArmorItem extends DungeonArmorItem {
 
     @Override
     protected void onFullSetTick(LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 100, 1, true, false));
+        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 100, 0, true, false));
     }
 }

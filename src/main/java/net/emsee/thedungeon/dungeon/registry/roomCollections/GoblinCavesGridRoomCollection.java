@@ -40,13 +40,13 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
         super(11, 11);
         this
 
-                .addRequiredRoomsOf(20, 50, spawn_rooms().build().getList())
-                .addRequiredRoomsOf(5, dens().build().getList())
+                .addRequiredRoomsOf(10, 50, spawn_rooms().build().getList())
+                .addRequiredRoomsOf(4, 8, dens().build().getList())
 
                 // the magma forge
                 .addRequiredRoom(1,1, GridRoomBasic.builder("goblin_caves/magma/forge",11,11)
                         .setSizeHeight(5,5,3)
-                        .withWeight(5)
+                        .withWeight(40)
                         .horizontalConnections()
                         .setHorizontalConnectionOffset(Connection.NORTH,0,2)
                         .setHorizontalConnectionOffset(Connection.EAST,0,2)
@@ -64,7 +64,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
 
                 // stone to gilded
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
-                        .withWeight(3)
+                        .withWeight(5)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, STONE_TAG)
                         .setConnectionTag(Connection.SOUTH, GILDED_TAG)
@@ -78,7 +78,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                 //deep to crystal
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_deep", 11, 11)
                         .setHeight(2)
-                        .withWeight(3)
+                        .withWeight(5)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, CRYSTAL_TAG)
                         .setConnectionTag(Connection.SOUTH, DEEP_TAG)
@@ -92,10 +92,10 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //stone to deep
+                // stone to deep
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_deep", 11, 11)
                         .setHeight(2)
-                        .withWeight(3)
+                        .withWeight(5)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, STONE_TAG)
                         .setConnectionTag(Connection.SOUTH, DEEP_TAG)
@@ -107,10 +107,10 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //stone to waterlogged
+                // stone to waterlogged
                 .addRequiredRoom(1, 2, GridRoomBasic.builder("goblin_caves/convert/stone_waterlogged", 11, 11)
                         .setHeight(2)
-                        .withWeight(3)
+                        .withWeight(2)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, STONE_TAG)
                         .setConnectionTag(Connection.SOUTH, WATERLOGGED)
@@ -121,9 +121,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //deep to gilded
+                // deep to gilded
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
-                        .withWeight(3)
+                        .withWeight(6)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, DEEP_TAG)
                         .setConnectionTag(Connection.SOUTH, GILDED_TAG)
@@ -134,9 +134,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //ice to deep
+                // ice to deep
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
-                        .withWeight(3)
+                        .withWeight(5)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, ICE_TAG)
                         .setConnectionTag(Connection.SOUTH, DEEP_TAG)
@@ -148,9 +148,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //stone to overgrown
+                // stone to overgrown
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_overgrown", 11, 11)
-                        .withWeight(3)
+                        .withWeight(5)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, STONE_TAG)
                         .setConnectionTag(Connection.SOUTH, OVERGROWN_TAG)
@@ -160,7 +160,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //overgrown to fungal
+                // overgrown to fungal
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/fungal_overgrown", 11, 11)
                         .withWeight(3)
                         .horizontalConnections(1, 0, 1, 0)
@@ -173,9 +173,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //deep to crystal
+                // deep to crystal
                 .addRequiredRoom(0, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
-                        .withWeight(3)
+                        .withWeight(6)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, CRYSTAL_TAG)
                         .setConnectionTag(Connection.SOUTH, DEEP_TAG)
@@ -188,9 +188,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .setOverrideEndChance(0)
                         .setGenerationPriority(1).build())
 
-                //gilded to magma
+                // gilded to magma
                 .addRequiredRoom(1, 2, GridRoomBasic.builder("goblin_caves/convert/stone_blackstone", 11, 11)
-                        .withWeight(3)
+                        .withWeight(6)
                         .horizontalConnections(1, 0, 1, 0)
                         .setConnectionTag(Connection.NORTH, GILDED_TAG)
                         .setConnectionTag(Connection.SOUTH, MAGMA_TAG)

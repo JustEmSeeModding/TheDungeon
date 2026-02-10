@@ -26,11 +26,19 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public final class ModEquipmentEvents {
+    static int checkCount = 0;
+    static final int CHECK_INTERVAL = 10;
+
     @SubscribeEvent
     public static void entityEquipmentChanged(LivingEquipmentChangeEvent event) {
-        armorSwapChanges(event);
-        handleSwapChanges(event);
-        handleWeaponChanges(event);
+        checkCount++;
+        if (checkCount >= CHECK_INTERVAL) {
+            if (event.getEntity().level().isClientSide) return;
+            armorSwapChanges(event);
+            handleSwapChanges(event);
+            handleWeaponChanges(event);
+            checkCount = 0;
+        }
     }
 
     private static void armorSwapChanges(LivingEquipmentChangeEvent event) {

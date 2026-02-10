@@ -2,44 +2,135 @@ package net.emsee.thedungeon.events;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
+import net.emsee.thedungeon.datagen.ModCuriosDataProvider;
 import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
-import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
-import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
+import net.emsee.thedungeon.item.custom.EffigyCurio;
+import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.utils.ModDungeonTeleportHandling;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
+import top.theillusivec4.curios.api.event.CurioCanUnequipEvent;
+import top.theillusivec4.curios.api.event.CurioDropsEvent;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public class ModEntityEvents {
     @SubscribeEvent
-    public static void resetGamemodeOnPlayerDeath(PlayerEvent.Clone event) {
-        if (event.isWasDeath() && event.getOriginal().level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY))
-            ModDungeonTeleportHandling.setPlayerGameMode(event.getEntity(), true);
+    public static void onPlayerDeath(PlayerEvent.Clone event) {
+        if (event.isWasDeath()) {
+            DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "ON_DEATH");
+            Player original = event.getOriginal();
+            Player clone = event.getEntity();
+            // Reset gamemode on death
+            if (original.level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY)) {
+                ModDungeonTeleportHandling.setPlayerGameMode(clone, true);
+            }
+
+            // Keep curio effigy on death
+            CuriosApi.getCuriosInventory(original).ifPresent(originalHandler -> {
+                CuriosApi.getCuriosInventory(clone).ifPresent(cloneHandler -> {
+
+                    DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "HAS_CURIO_HANDELERS");
+                    ICurioStacksHandler originalStack = originalHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
+                    ICurioStacksHandler cloneStack = cloneHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
+
+                    if (originalStack != null && cloneStack != null) {
+                        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "HAS_CURIO_SLOTS");
+                        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "OLD_STACK: "+ originalStack.getStacks().getStackInSlot(0));
+                        ItemStack stackToKeep = originalStack.getStacks().getStackInSlot(0).copy();
+                        cloneStack.getStacks().setStackInSlot(0, stackToKeep);
+                    }
+                });
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCurioDrops(CurioDropsEvent event) {
+        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "CURIO_DROPS");
+        if (!(event.getEntity() instanceof Player player)) return;
+        AtomicBoolean triggered = new AtomicBoolean(false);
+        event.getDrops().removeIf(itemEntity -> {
+            if (triggered.get()) {
+                return false;
+            }
+            if (itemEntity.getItem() instanceof ItemStack stack && stack.getItem() instanceof EffigyCurio effigyCurio) {
+                event.getCurioHandler().getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER).getStacks().setStackInSlot(0, stack.copy());
+                triggered.set(true);
+                return true;
+            }
+            return false;
+        });
     }
 
     @SubscribeEvent
     public static void playerBiomeTrigger(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (player instanceof ServerPlayer serverPlayer) {
-            DungeonBiome biome = GlobalDungeonManager.getBiomeForPlayer(player);
-            if (biome != null) {
-                ModCriteriaTriggerTypes.ENTER_DUNGEON_BIOME.get().trigger(serverPlayer, biome);
+        if (isInDungeon(player)) {
+            // Biome Criterion
+            if (player instanceof ServerPlayer serverPlayer) {
+                DungeonBiome biome = GlobalDungeonManager.getBiomeForPlayer(player);
+                if (biome != null) {
+                    ModCriteriaTriggerTypes.ENTER_DUNGEON_BIOME.get().trigger(serverPlayer, biome);
+                }
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onCurioUnequip(CurioCanUnequipEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.isCreative()) {
+            event.setUnequipResult(TriState.DEFAULT);
+            return;
+        }
+        if (isInDungeon(player)) {
+            event.setUnequipResult(TriState.FALSE);
+            return;
+        }
+        if (Objects.equals(event.getSlotContext().identifier(), ModCuriosDataProvider.EFFIGY_IDENTIFIER)) {
+            if (player.hasEffect(ModMobEffects.EFFIGY_LOCKED)) {
+                event.setUnequipResult(TriState.FALSE);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCurioUnequip(CurioCanEquipEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.isCreative()) {
+            event.setEquipResult(TriState.DEFAULT);
+            return;
+        }
+        /*if (isInDungeon(player)) {
+            event.setEquipResult(TriState.FALSE);
+            return;
+        }*/
+        if (Objects.equals(event.getSlotContext().identifier(), ModCuriosDataProvider.EFFIGY_IDENTIFIER)) {
+            if (player.hasEffect(ModMobEffects.EFFIGY_LOCKED)) {
+                event.setEquipResult(TriState.FALSE);
+            }
+        }
+
+    }
+
+    private static boolean isInDungeon(Player player) {
+        return player.level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY);
+    }
+
 }

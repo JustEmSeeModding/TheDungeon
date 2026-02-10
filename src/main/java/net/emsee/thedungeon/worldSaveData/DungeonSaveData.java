@@ -33,6 +33,10 @@ public final class DungeonSaveData extends SavedData {
     private static final String DATA_NAME = TheDungeon.MOD_ID + "_dungeon_data";
     private final DungeonNBTData dungeonData = new DungeonNBTData();
 
+    private boolean packetDataDirty = true;
+    private int packetDataCheckCount = 0;
+    private final int PACKET_DATA_INTERVAL = 10;
+
     @OnlyIn(Dist.CLIENT)
     private static DungeonNBTData.DataPacket CLIENT_DATA = null;
 
@@ -50,14 +54,26 @@ public final class DungeonSaveData extends SavedData {
     public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider pRegistries) {
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA,"DungeonData saving");
         tag.put("DungeonData", dungeonData.SerializeNBT());
-        PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
         return tag;
     }
 
     @Override
     public void setDirty() {
         this.setDirty(true);
-        PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
+        packetDataDirty = true;
+    }
+
+    public void packetDataTick() {
+        if (packetDataCheckCount >= PACKET_DATA_INTERVAL) {
+
+            if (packetDataDirty) {
+                packetDataCheckCount = 0;
+                PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
+                packetDataDirty = false;
+            }
+        } else {
+            packetDataCheckCount++;
+        }
     }
 
     /**
@@ -235,7 +251,7 @@ public final class DungeonSaveData extends SavedData {
 
     public void serverUpdateTimeLeft(MinecraftServer server) {
         dungeonData.serverUpdateTimeLeft(server);
-        PacketDistributor.sendToAllPlayers(dungeonData.createPacket());
+        setDirty();
     }
 
     public void setBiomeRegistry(DungeonRank rank, DungeonBiomeRegistry registry) {

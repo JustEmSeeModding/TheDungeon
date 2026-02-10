@@ -34,7 +34,7 @@ public final class ModItemTagProvider extends ItemTagsProvider {
         tag(CuriosTags.createItemTag("trinket"))
                 .add(ModItems.TEST_BELT.get());
 
-        tag(CuriosTags.createItemTag("effigy"));
-        //.add(ModItems.TEST_BELT.get());
+        tag(CuriosTags.createItemTag("effigy"))
+                .add(ModItems.HEAVY_EFFIGY.get());
     }
 }

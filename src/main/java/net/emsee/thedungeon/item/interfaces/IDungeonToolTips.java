@@ -4,6 +4,7 @@ import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonCurio;
+import net.emsee.thedungeon.item.custom.EffigyCurio;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -71,7 +72,12 @@ public interface IDungeonToolTips {
             addFixedComponents(
                     Util.make(new LinkedHashMap<>(), map -> {
                         if (classes.length>0 || subClasses.length>0) {
-                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), Util.make(new Component[classes.length + subClasses.length], array -> {
+                            Component classTitle = Component.translatable("item.thedungeon.tooltip.classes");
+                            if (classedItem instanceof EffigyCurio effigyCurio) {
+                                // different title for effigies (as they give the class)
+                                classTitle = Component.translatable("item.thedungeon.tooltip.effigy_classes");
+                            }
+                            map.put(classTitle, Util.make(new Component[classes.length + subClasses.length], array -> {
                                 int i = 0;
                                 for (DeferredHolder<DungeonClass,?> dClass : classes) {
                                     array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);

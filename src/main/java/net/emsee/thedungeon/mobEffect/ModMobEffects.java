@@ -14,6 +14,8 @@ public class ModMobEffects {
 
     public static final Holder<MobEffect> HOB_GOBLIN_TRADEABLE = register("hob_goblin_tradeable", new ModMobEffect(MobEffectCategory.BENEFICIAL, 3402751));
 
+    public static final Holder<MobEffect> EFFIGY_LOCKED = register("effigy_locked", new ModMobEffect(MobEffectCategory.NEUTRAL, 3402751));
+
 
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);

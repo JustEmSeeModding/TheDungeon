@@ -341,7 +341,15 @@ public final class GeneratedRoom {
         while (triesLeft > 0) {
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: trying placement, tries left: {}", this, triesLeft);
 
-            AbstractGridRoom targetGridRoom = generator.GetRandomRoomByConnection(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), random);
+
+            AbstractGridRoom targetGridRoom = null;
+            if (generator.hasToTryRequiredRoom()) {
+                targetGridRoom= generator.GetRandomRequiredRoomByConnection(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), random);
+            }
+            if (targetGridRoom == null){
+                targetGridRoom = generator.GetRandomRoomByConnection(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), random);
+
+            }
             if (targetGridRoom == null) {
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: found no new room for connection", this);
                 triesLeft--;

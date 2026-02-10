@@ -35,7 +35,7 @@ public class HobGoblinVariantLayer extends RenderLayer<HobGoblinEntity, HobGobli
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, HobGoblinEntity entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         HobGoblinEntity.Variant variant = entity.getVariant();
         ResourceLocation location = LOCATION_BY_VARIANTS.get(variant);
-        if (location != null) {
+        if (location != null && !entity.isInvisible()) {
             this.getParentModel().copyPropertiesTo(this.model);
             this.model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
             this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);

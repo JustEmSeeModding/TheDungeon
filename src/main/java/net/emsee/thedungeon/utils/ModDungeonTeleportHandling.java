@@ -2,6 +2,7 @@ package net.emsee.thedungeon.utils;
 
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
+import net.emsee.thedungeon.datagen.ModCuriosDataProvider;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,45 +45,46 @@ public final class ModDungeonTeleportHandling {
 
     public static void playerTeleportDungeon(Player player, int portalID, DungeonRank rank) {
         Level level = player.level();
-        if (!level.isClientSide) {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
-            MinecraftServer server = level.getServer();
-            assert server != null;
+        if (level.isClientSide) return;
+        ServerPlayer serverPlayer = (ServerPlayer) player;
+        MinecraftServer server = level.getServer();
+        if (server == null) return;
 
-            BlockPos teleportPos = new BlockPos(0, 0, 0);
-            ResourceKey<Level> resourceKey = null;
+        BlockPos teleportPos = new BlockPos(0, 0, 0);
+        ResourceKey<Level> resourceKey = null;
 
-            boolean returnFromDungeon = player.level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY);
-            if (returnFromDungeon) {
-                teleportPos = serverPlayer.getRespawnPosition();
-                if (teleportPos == null) {
-                    teleportPos = server.overworld().getSharedSpawnPos();
-                }
-                resourceKey = serverPlayer.getRespawnDimension();
-            } else if (rank != null) {
-                if (!player.isCreative() && !CheckInventory(player)) return;
-                teleportPos = GlobalDungeonManager.getPortalPosition(server, portalID, rank).above(2);
-                resourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
+        boolean returnFromDungeon = player.level().dimension().equals(ModDimensions.DUNGEON_LEVEL_KEY);
+
+        if (returnFromDungeon) {
+            teleportPos = serverPlayer.getRespawnPosition();
+            if (teleportPos == null) {
+                teleportPos = server.overworld().getSharedSpawnPos();
             }
-
-            if (resourceKey == null) return;
-            ServerLevel portalDimension = server.getLevel(resourceKey);
-
-            teleport(player, portalDimension, teleportPos);
-            setPlayerGameMode(player, returnFromDungeon);
-            if (rank != null)
-                ModCriteriaTriggerTypes.TRAVEL_TO_RANK.get().trigger(serverPlayer, rank);
+            resourceKey = serverPlayer.getRespawnDimension();
+        } else if (rank != null) {
+            if (!player.isCreative() && !CheckInventory(player)) return;
+            teleportPos = GlobalDungeonManager.getPortalPosition(server, portalID, rank).above(2);
+            resourceKey = ModDimensions.DUNGEON_LEVEL_KEY;
         }
+
+        if (resourceKey == null) return;
+        ServerLevel portalDimension = server.getLevel(resourceKey);
+
+        teleport(player, portalDimension, teleportPos);
+        setPlayerGameMode(player, returnFromDungeon);
+        if (rank != null)
+            ModCriteriaTriggerTypes.TRAVEL_TO_RANK.get().trigger(serverPlayer, rank);
+
     }
 
     private static boolean CheckInventory(Player player) {
         boolean hasInvalidItem = false;
         for (ItemStack stack : player.getInventory().items) {
-            if (hasInvalidItem) break;
-            if (stack.getCount() == 0) continue;
+            if (stack.isEmpty()) continue;
             if (!(stack.getItem() instanceof IDungeonCarryItem ||
                     (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IDungeonCarryItem))) {
                 hasInvalidItem = true;
+                break;
             }
         }
         if (CuriosApi.getCuriosInventory(player).isPresent()) {

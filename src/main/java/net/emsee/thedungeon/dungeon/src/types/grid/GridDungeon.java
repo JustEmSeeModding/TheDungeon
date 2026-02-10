@@ -21,6 +21,7 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
     private int maxFloorHeight = 999999;
     private boolean canGenerateDown = true;
     private boolean fillWithFallbackWhenDone = false;
+    private int stepIntervalBetweenForcesRequirementTries = 0;
 
     private RoomGenerationPickMethod pickMethod = RoomGenerationPickMethod.FIRST;
 
@@ -100,6 +101,14 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
         return this;
     }
 
+    /**
+     * the amount of steps until the dungeon tries to force a required room (ignored if 0)
+     */
+    public GridDungeon setStepIntervalBetweenForcesRequirementTries(int interval) {
+        stepIntervalBetweenForcesRequirementTries = interval;
+        return this;
+    }
+
     //// methods
 
 
@@ -152,5 +161,9 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
     @Override
     public GridDungeonInstance createInstance() {
         return new GridDungeonInstance(this);
+    }
+
+    public int getStepIntervalBetweenForcesRequirementTries() {
+        return stepIntervalBetweenForcesRequirementTries;
     }
 }
