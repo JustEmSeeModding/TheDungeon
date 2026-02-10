@@ -29,6 +29,14 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
 
     protected boolean finalizedSpawn = false;
 
+    @Override
+    protected void registerGoals() {
+        this.addBehaviourGoals();
+        this.addTargetGoals();
+    }
+
+    protected abstract void addBehaviourGoals();
+    protected abstract void addTargetGoals();
 
     protected DungeonPathfinderMob(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -159,6 +167,7 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
         finalizedSpawn=true;
+        setPersistenceRequired();
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 

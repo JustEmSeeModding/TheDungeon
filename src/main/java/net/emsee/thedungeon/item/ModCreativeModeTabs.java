@@ -45,18 +45,19 @@ public final class ModCreativeModeTabs {
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_INGREDIENTS_TAB = CREATIVE_MODE_TAB.register("dungeon_ingredients_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.CATALIST_CORE.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.CATALYST_CORE.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_tools_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_ingredients"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModItems.CATALIST_CORE);
-                        output.accept(ModItems.SHATTERED_CATALIST_CORE);
+                        output.accept(ModItems.CATALYST_CORE);
+                        output.accept(ModItems.SHATTERED_CATALYST_CORE);
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
                         output.accept(ModItems.KOBALT_INGOT);
                         output.accept(ModItems.PYRITE);
                         output.accept(ModItems.PYRITE_COIN);
+                        output.accept(ModItems.ROSE_QUARTZ);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_FOOD_TAB = CREATIVE_MODE_TAB.register("dungeon_food_tab",
@@ -73,15 +74,15 @@ public final class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.DUNGEON_PORTAL);
-                        output.accept(ModBlocks.CATALIST_BROKEN);
-                        output.accept(ModBlocks.CATALIST_F);
-                        output.accept(ModBlocks.CATALIST_E);
-                        //output.accept(ModBlocks.CATALIST_D);
-                        //output.accept(ModBlocks.CATALIST_C);
-                        //output.accept(ModBlocks.CATALIST_B);
-                        //output.accept(ModBlocks.CATALIST_A);
-                        //output.accept(ModBlocks.CATALIST_S);
-                        //output.accept(ModBlocks.CATALIST_SS);
+                        output.accept(ModBlocks.CATALYST_BROKEN);
+                        output.accept(ModBlocks.CATALYST_F);
+                        output.accept(ModBlocks.CATALYST_E);
+                        //output.accept(ModBlocks.CATALYST_D);
+                        //output.accept(ModBlocks.CATALYST_C);
+                        //output.accept(ModBlocks.CATALYST_B);
+                        //output.accept(ModBlocks.CATALYST_A);
+                        //output.accept(ModBlocks.CATALYST_S);
+                        //output.accept(ModBlocks.CATALYST_SS);
                         output.accept(ModBlocks.GOBLIN_FORGE);
                         output.accept(ModBlocks.PYRITE_ORE);
                         output.accept(ModBlocks.DEEPSLATE_PYRITE_ORE);
@@ -117,6 +118,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG);
                         output.accept(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG);
                         output.accept(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG);
+                        output.accept(ModSpawnEggs.CRYSTAL_GOLEM_SPAWN_EGG);
                     }).build());
 
     public static void register(IEventBus eventBus) {

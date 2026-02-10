@@ -27,8 +27,8 @@ public final class LibraryGridRoomCollection extends GridRoomCollection {
                 .addRoom(crosses.withWeight(15).build())
                 .addRoom(smallRooms.withWeight(3).build())
 
-                .addRequiredRoom(1, 1, GridRoomBasic.builder("library/big/portal",13, 9).withWeight(4).setGenerationPriority(1).horizontalConnections().setSizeHeight(3, 3, 1).build())
-                .addRequiredRoom(3, 5, GridRoomBasic.builder("library/crosses/portal",13, 9).withWeight(4).setGenerationPriority(1).horizontalConnections().build())
+                .addRequiredRoom(1, 1, GridRoomBasic.builder("library/big/portal",13, 9).withWeight(4).setGenerationPriority(1).horizontalConnections().setSizeHeight(3, 3, 1).setPortalPosition(0,3,0).build())
+                .addRequiredRoom(3, 5, GridRoomBasic.builder("library/crosses/portal",13, 9).withWeight(4).setGenerationPriority(1).horizontalConnections().setPortalPosition(0,3,0).build())
                 .withStructureProcessor(DefaultLibraryProcessor.INSTANCE)
 
                 .addTagRule(new FloorFailRule(ConnectionRule.DEFAULT_CONNECTION_TAG, 13, false, Blocks.OAK_PLANKS::defaultBlockState, 169));

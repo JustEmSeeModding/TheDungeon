@@ -16,8 +16,6 @@ import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollectionInstance;
-import net.emsee.thedungeon.gameRule.GameruleRegistry;
-import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.core.BlockPos;
@@ -39,6 +37,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         PLACING_FAIL_RULES,
         POST_PROCESSING_ROOMS,
         FILLING_WITH_MOBS,
+        REGISTERING_PORTAL_LOCATIONS,
         SAVING_ADDITIONAL,
         DONE
     }
@@ -56,6 +55,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     protected final Queue<FailRule.Instance> toPlaceFailRules = new LinkedList<>();
     protected final Queue<GeneratedRoom> toPostProcessRooms = new LinkedList<>();
     protected final Queue<GeneratedRoom> toSpawnMobsRooms = new LinkedList<>();
+    protected final Queue<GeneratedRoom> toRegisterPortals = new LinkedList<>();
 
 
     public List<ConnectionRule> getConnectionRules() {
@@ -69,6 +69,9 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
             toSpawnMobsRooms.add(room);
         if (room.hasPostProcessing() || dungeon.getRoomCollection().getRaw().hasPostProcessing())
             toPostProcessRooms.add(room);
+        if (room.hasPortalPosition()) {
+            toRegisterPortals.add(room);
+        }
     }
 
     public GridDungeonGenerator(GridDungeonInstance dungeon, long seed) {
@@ -109,6 +112,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         else if (currentTask == GenerationTask.PLACING_FAIL_RULES) placeFailRuleStep(serverLevel);
         else if (currentTask == GenerationTask.POST_PROCESSING_ROOMS) postProcessRoomsStep(serverLevel);
         else if (currentTask == GenerationTask.FILLING_WITH_MOBS) fillWithMobsStep(serverLevel);
+        else if (currentTask == GenerationTask.REGISTERING_PORTAL_LOCATIONS) registerPortalLocations(serverLevel);
         else if (currentTask == GenerationTask.SAVING_ADDITIONAL) saveAdditional(serverLevel);
     }
 
@@ -329,7 +333,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         for (int i = 0; i < Config.SPAWNER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toSpawnMobsRooms.isEmpty()) {
                 // if all mobs spawned, start the next task
-                currentTask = GenerationTask.SAVING_ADDITIONAL;
+                currentTask = GenerationTask.REGISTERING_PORTAL_LOCATIONS;
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Mob Spawning Complete");
                 return;
             }
@@ -339,6 +343,18 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
             toSpawnMobs.spawnMobs(serverLevel);
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Mob spawn tick complete");
+    }
+
+    protected void registerPortalLocations(ServerLevel level) {
+        DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Registering Portal Locations");
+
+        while (!toRegisterPortals.isEmpty()) {
+            GeneratedRoom toRegisterPortal = toRegisterPortals.remove();
+            toRegisterPortal.registerPortal(level.getServer(), dungeon.getRank());
+        }
+
+        DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Registered Portal Locations");
+        currentTask = GenerationTask.SAVING_ADDITIONAL;
     }
 
     protected void saveAdditional(ServerLevel serverLevel) {

@@ -2,8 +2,10 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.criterion.custom.DungeonBiomeTrigger;
 import net.emsee.thedungeon.criterion.custom.FailedDungeonTravelTrigger;
 import net.emsee.thedungeon.criterion.custom.DungeonTravelRankTrigger;
+import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.advancements.*;
@@ -15,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -52,17 +55,36 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                 ModItems.INFUSED_ALLOY_INGOT, // item
                 essenceShard,  // root
                 AdvancementType.TASK, false, saver, existingFileHelper);
-        AdvancementHolder FailedToTraveledToDungeon = createSimpleAdvancement("thedungeon", "failed_portal_travel", new ItemStack(ModBlocks.DUNGEON_PORTAL.get()), "has_tried", FailedDungeonTravelTrigger.criterion(), dungeonRoot, AdvancementType.TASK, true, saver, existingFileHelper);
 
-        AdvancementHolder EnterRankF =
+        AdvancementHolder FailedToTraveledToDungeon =
+                createSimpleAdvancement(
+                        "thedungeon",
+                        "failed_portal_travel",
+                        new ItemStack(ModBlocks.DUNGEON_PORTAL.get()),
+                        "has_tried", FailedDungeonTravelTrigger.criterion(),
+                        dungeonRoot, //root
+                        AdvancementType.TASK,
+                        true, saver, existingFileHelper);
+
+        AdvancementHolder enterRankF =
                 createSimpleAdvancement(
                         "thedungeon",
                         "enter_rank_f",
                         new ItemStack(ModBlocks.DUNGEON_PORTAL.get()),
                         "has_traveled", DungeonTravelRankTrigger.has_traveled_to(DungeonRank.F),
-                dungeonRoot, //root
-                AdvancementType.TASK,
-                false, saver, existingFileHelper);
+                        dungeonRoot, //root
+                        AdvancementType.TASK,
+                        false, saver, existingFileHelper);
+
+        AdvancementHolder enterMagmaBiome =
+                createSimpleAdvancement(
+                        "thedungeon",
+                        "enter_magma_biome",
+                        new ItemStack(Blocks.MAGMA_BLOCK),
+                        "has_seen", DungeonBiomeTrigger.has_traveled_to(DungeonBiome.GOBLIN_MAGMA_CAVE),
+                        enterRankF,
+                        AdvancementType.TASK,
+                        false, saver, existingFileHelper);
     }
 
     private static AdvancementHolder createItemAdvancement(String location, String name, ItemLike item, AdvancementHolder parent, AdvancementType advancementType, boolean hidden, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper) {

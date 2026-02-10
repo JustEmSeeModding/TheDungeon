@@ -50,6 +50,12 @@ public class TestDummyEntity extends DungeonPathfinderMob {
     }
 
     @Override
+    protected void addBehaviourGoals() {}
+
+    @Override
+    protected void addTargetGoals() {}
+
+    @Override
     public boolean isInvulnerableTo(DamageSource source) {
         if (
                 source.is(ModDamageTypes.DUNGEON_RESET) ||

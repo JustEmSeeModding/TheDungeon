@@ -1,15 +1,17 @@
 package net.emsee.thedungeon.utils;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Consumer;
 
 public final class BlockUtils {
-    public static Boolean NeverValidSpawn(BlockState state, BlockGetter blockGetter, BlockPos blockPos, EntityType<?> type) {return false;}
+    public static Boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos, EntityType<?> entity) {return false;}
 
     public static void forEachInArea(int X, int Y, int Z, int X2, int Y2, int Z2, ForEachMethod method, Level level, Consumer<BlockPos> consumer) {
         forEachInArea(X,Y,Z,X2,Y2,Z2,method,level, false,consumer);
@@ -67,5 +69,14 @@ public final class BlockUtils {
     public enum ForEachMethod {
         BOTTOM_TO_TOP,
         TOP_TO_BOTTOM
+    }
+
+    public static Rotation directionToRotation(Direction direction) {
+        return switch (direction) {
+            case DOWN,UP,NORTH -> Rotation.NONE;
+            case SOUTH -> Rotation.CLOCKWISE_90;
+            case WEST -> Rotation.COUNTERCLOCKWISE_90;
+            case EAST -> Rotation.CLOCKWISE_180;
+        };
     }
 }

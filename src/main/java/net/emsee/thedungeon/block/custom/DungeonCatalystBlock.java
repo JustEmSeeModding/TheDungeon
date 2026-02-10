@@ -11,10 +11,10 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-public class DungeonCatalistBlock extends Block implements IDungeonCarryItem {
+public class DungeonCatalystBlock extends Block implements IDungeonCarryItem {
     final DungeonRank catalistRank;
 
-    public DungeonCatalistBlock(DungeonRank catalistRank, Properties properties) {
+    public DungeonCatalystBlock(DungeonRank catalistRank, Properties properties) {
         super(properties);
         this.catalistRank = catalistRank;
     }

@@ -37,7 +37,7 @@ public class HobGoblinTrades {
 
                             // rare trades
                             2,new VillagerTrades.ItemListing[]{
-                                    new ItemsForCash(ModItems.CATALIST_CORE, 14, 1, 1),
+                                    new ItemsForCash(ModItems.CATALYST_CORE, 14, 1, 1),
                             }));
             case FORGER ->
                     toIntMap(ImmutableMap.of(
@@ -53,7 +53,7 @@ public class HobGoblinTrades {
 
                             // rare trades
                             2,new VillagerTrades.ItemListing[]{
-                                    new ItemsForCash(ModItems.CATALIST_CORE, 14, 1,1),
+                                    new ItemsForCash(ModItems.CATALYST_CORE, 14, 1,1),
                             }));
             case SCAVENGER -> toIntMap(ImmutableMap.of(
                     // common trades
@@ -64,7 +64,7 @@ public class HobGoblinTrades {
 
                     // rare trades
                     2,new VillagerTrades.ItemListing[]{
-                            new ItemsForCash(ModItems.SHATTERED_CATALIST_CORE, 14, 1,1),
+                            new ItemsForCash(ModItems.SHATTERED_CATALYST_CORE, 14, 1,1),
                     }));
             case MINER -> toIntMap(ImmutableMap.of(
                     // common trades

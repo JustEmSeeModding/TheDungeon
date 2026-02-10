@@ -2,8 +2,11 @@ package net.emsee.thedungeon.entity.client;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
-public final class ModModelLayers {
+@OnlyIn(Dist.CLIENT)
+public final class ModEntityModelLayers {
     public static final ModelLayerLocation FLYING_BOOK = new ModelLayerLocation(
             TheDungeon.defaultResourceLocation("flying_book_layer"), "main");
 
@@ -24,7 +27,9 @@ public final class ModModelLayers {
 
     public static final ModelLayerLocation HOB_GOBLIN = new ModelLayerLocation(
             TheDungeon.defaultResourceLocation("hob_goblin"), "main");
+    public static final ModelLayerLocation HOB_GOBLIN_VARIANT = new ModelLayerLocation(
+            TheDungeon.defaultResourceLocation("hob_goblin_variant"), "variant");
 
-    public static final ModelLayerLocation BRAIN_TEST = new ModelLayerLocation(
-            TheDungeon.defaultResourceLocation("brain_test"), "main");
+    public static final ModelLayerLocation CRYSTAL_GOLEM = new ModelLayerLocation(
+            TheDungeon.defaultResourceLocation("crystal_golem"), "main");
 }

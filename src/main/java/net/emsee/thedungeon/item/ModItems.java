@@ -23,10 +23,10 @@ public final class ModItems {
     public static final DeferredItem<DungeonDebugTool> DUNGEON_DEBUG_TOOL = ITEMS.register("dungeon_debug_tool",
             () -> new DungeonDebugTool(new Item.Properties()));
 
-    public static final DeferredItem<DungeonItem> SHATTERED_CATALIST_CORE = ITEMS.register("shattered_catalist_core",
+    public static final DeferredItem<DungeonItem> SHATTERED_CATALYST_CORE = ITEMS.register("shattered_catalist_core",
             () -> new DungeonItem(new Item.Properties().stacksTo(1)));
 
-    public static final DeferredItem<DungeonItem> CATALIST_CORE = ITEMS.register("catalist_core",
+    public static final DeferredItem<DungeonItem> CATALYST_CORE = ITEMS.register("catalist_core",
             () -> new DungeonItem(new Item.Properties().stacksTo(1)));
 
     public static final DeferredItem<DungeonItem> DUNGEON_ESSENCE_SHARD = ITEMS.register("dungeon_essence_shard",
@@ -42,6 +42,9 @@ public final class ModItems {
             () -> new DungeonItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonItem> PYRITE_COIN = ITEMS.register("pyrite_coin",
+            () -> new DungeonItem(new Item.Properties()));
+
+    public static final DeferredItem<DungeonItem> ROSE_QUARTZ = ITEMS.register("rose_quartz",
             () -> new DungeonItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonClock> DUNGEON_CLOCK = ITEMS.register("dungeon_clock",

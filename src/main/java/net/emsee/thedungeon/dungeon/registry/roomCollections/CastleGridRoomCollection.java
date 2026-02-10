@@ -5,12 +5,14 @@ import net.emsee.thedungeon.dungeon.src.connectionRules.connection.CanConnectOne
 import net.emsee.thedungeon.dungeon.src.connectionRules.connection.CantConnectToSelf;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.connectionRules.fail.WallFailRule;
+import net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules.SpawnInRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomBasic;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GridRoomMultiResource;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.rules.SpawnAt;
 import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollection;
+import net.emsee.thedungeon.entity.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Blocks;
@@ -27,9 +29,12 @@ public final class CastleGridRoomCollection extends GridRoomCollection {
 
                 .addRequiredRoom(4, 6, GridRoomBasic.builder("castle/portals/default",9, 9)
                         .withWeight(4)
+                        .setPortalPosition(0,2,0)
                         .addConnection(Connection.NORTH).build())
 
-                .addRoom(mainHallSegments().withWeight(3).build())
+                .addRoom(mainHallSegments().withWeight(3)
+                        .addMobSpawnRule(new SpawnInRoom<>(ModEntities.SKELETON_KNIGHT, 1,1,.5f, 5))
+                        .build())
                 .addRoom(GridRoomBasic.builder("castle/mainhall/hallway_entrance_one",9, 9)
                         .setSizeHeight(1, 3, 4)
                         .withWeight(2)

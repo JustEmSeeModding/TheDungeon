@@ -73,15 +73,15 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('/', Items.STICK)
                 .unlockedBy("has_infused_alloy", has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.CATALIST_CORE.get(), 1)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.CATALYST_CORE.get(), 1)
                 .pattern("^o^")
                 .pattern("#*#")
                 .pattern("^o^")
-                .define('*', ModItems.SHATTERED_CATALIST_CORE.get())
+                .define('*', ModItems.SHATTERED_CATALYST_CORE.get())
                 .define('^', ModItems.DUNGEON_ESSENCE_SHARD.get())
                 .define('#', ModItems.INFUSED_ALLOY_INGOT.get())
                 .define('o', Items.ENDER_EYE)
-                .unlockedBy("has_shattered_catalist_core", has(ModItems.SHATTERED_CATALIST_CORE)).save(recipeOutput);
+                .unlockedBy("has_shattered_catalist_core", has(ModItems.SHATTERED_CATALYST_CORE)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.DUNGEON_CLOCK.get(), 1)
                 .pattern(" # ")
@@ -99,14 +99,14 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('#', ModItems.PYRITE.get())
                 .unlockedBy("has_pyrite", has(ModItems.PYRITE)).save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CATALIST_F.get(), 1)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CATALYST_F.get(), 1)
                 .pattern("+#+")
                 .pattern("#*#")
                 .pattern("+#+")
-                .define('*', ModItems.CATALIST_CORE.get())
+                .define('*', ModItems.CATALYST_CORE.get())
                 .define('#', Blocks.STONE_BRICKS)
                 .define('+', Items.IRON_INGOT)
-                .unlockedBy("has_catalist_core", has(ModItems.CATALIST_CORE)).save(recipeOutput);
+                .unlockedBy("has_catalist_core", has(ModItems.CATALYST_CORE)).save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.INFUSED_ALLOY_INGOT.get(), 1)
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD, 2)

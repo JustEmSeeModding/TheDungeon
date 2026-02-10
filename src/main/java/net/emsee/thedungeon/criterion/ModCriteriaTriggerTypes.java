@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.criterion;
 
 import net.emsee.thedungeon.TheDungeon;
+import net.emsee.thedungeon.criterion.custom.DungeonBiomeTrigger;
 import net.emsee.thedungeon.criterion.custom.FailedDungeonTravelTrigger;
 import net.emsee.thedungeon.criterion.custom.DungeonTravelRankTrigger;
 import net.minecraft.advancements.CriterionTrigger;
@@ -19,6 +20,9 @@ public class ModCriteriaTriggerTypes {
 
     public static final Supplier<DungeonTravelRankTrigger> TRAVEL_TO_RANK =
             TRIGGER_TYPES.register("travel_to_rank", DungeonTravelRankTrigger::new);
+
+    public static final Supplier<DungeonBiomeTrigger> ENTER_DUNGEON_BIOME =
+            TRIGGER_TYPES.register("enter_dungeon_biome", DungeonBiomeTrigger::new);
 
     public static void register(IEventBus eventBus) {
         TRIGGER_TYPES.register(eventBus);

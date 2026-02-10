@@ -2,7 +2,7 @@ package net.emsee.thedungeon.entity;
 
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.entity.custom.TestBrainedEntity;
+import net.emsee.thedungeon.entity.custom.CrystalGolemEntity;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.hobGoblin.HobGoblinEntity;
@@ -45,9 +45,9 @@ public final class ModEntities {
             ENTITY_TYPES.register("hob_goblin", () -> EntityType.Builder.of(HobGoblinEntity::new, MobCategory.MONSTER)
                     .sized(.7f, 1.8f).build("hob_goblin"));
 
-    public static final Supplier<EntityType<TestBrainedEntity>> BRAIN_TEST =
-            ENTITY_TYPES.register("brain_test", () -> EntityType.Builder.of(TestBrainedEntity::new, MobCategory.MONSTER)
-                    .sized(.7f, 1.8f).build("brain_test"));
+    public static final Supplier<EntityType<CrystalGolemEntity>> CRYSTAL_GOLEM =
+            ENTITY_TYPES.register("crystal_golem", () -> EntityType.Builder.of(CrystalGolemEntity::new, MobCategory.MONSTER)
+                    .sized(.8f, 1.2f).build("crystal_golem"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

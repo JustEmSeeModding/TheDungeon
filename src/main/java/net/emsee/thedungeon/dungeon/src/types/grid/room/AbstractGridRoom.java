@@ -64,6 +64,7 @@ public abstract class AbstractGridRoom {
         public boolean skipCollectionPostProcessors = false;
 
         public DungeonBiome biome = DungeonBiome.none;
+        public Vec3i portalPosition = null;
 
         public final PriorityMap<Connection> connections = new PriorityMap<>();
         public final Map<Connection, Pair<Integer, Integer>> connectionOffsets = new HashMap<>(); /* Offset map */
@@ -293,11 +294,17 @@ public abstract class AbstractGridRoom {
             return self();
         }
 
+        /**
+         * ignores the collections processing
+         */
         public S skipCollectionProcessors() {
             data.skipCollectionProcessors = true;
             return self();
         }
 
+        /**
+         * ignores the collections post-processing
+         */
         public S skipCollectionPostProcessors() {
             data.skipCollectionPostProcessors = true;
             return self();
@@ -307,6 +314,25 @@ public abstract class AbstractGridRoom {
             data.skipCollectionProcessors = skip;
             data.skipCollectionPostProcessors = skipPost;
             return self();
+        }
+
+        /**
+         * sets and enables a portal position in this room (max of 1)
+         * @param position offset from bottom center
+         */
+        public S setPortalPosition(Vec3i position) {
+            data.portalPosition = position;
+            return self();
+        }
+
+        /**
+         * sets and enables a portal position in this room (max of 1)
+         * @param x offset from bottom center
+         * @param y offset from bottom center
+         * @param z offset from bottom center
+         */
+        public S setPortalPosition(int x, int y, int z) {
+            return setPortalPosition(new Vec3i(x, y, z));
         }
     }
     // methods
@@ -537,6 +563,10 @@ public abstract class AbstractGridRoom {
 
     public boolean hasPostProcessing() {
         return !data.structurePostProcessors.list().isEmpty();
+    }
+
+    public boolean hasPortalPosition() {
+        return !(data.portalPosition == null);
     }
 
     public abstract void placeFeature(ServerLevel serverLevel, BlockPos centre, Rotation roomRotation, StructureProcessorList processors, Random random);

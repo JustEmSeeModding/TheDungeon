@@ -20,8 +20,8 @@ public final class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         simpleBlockItem(ModBlocks.GOBLIN_FORGE.get());
 
-        basicItem(ModItems.CATALIST_CORE.asItem());
-        basicItem(ModItems.SHATTERED_CATALIST_CORE.asItem());
+        basicItem(ModItems.CATALYST_CORE.asItem());
+        basicItem(ModItems.SHATTERED_CATALYST_CORE.asItem());
         basicItem(ModItems.DUNGEON_ESSENCE_SHARD.asItem());
         basicItem(ModItems.GOBLIN_MEAT.asItem());
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");
@@ -36,6 +36,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
         basicItem(ModItems.PYRITE.asItem());
         basicItem(ModItems.PYRITE_COIN.asItem());
+        basicItem(ModItems.ROSE_QUARTZ.asItem());
         basicItem(ModItems.KOBALT_INGOT.asItem());
 
         basicItem(ModItems.INFUSED_ALLOY_HELMET.asItem());
@@ -66,6 +67,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModSpawnEggs.CRYSTAL_GOLEM_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
     }
 

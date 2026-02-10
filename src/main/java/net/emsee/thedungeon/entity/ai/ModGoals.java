@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.entity.ai.goals;
+package net.emsee.thedungeon.entity.ai;
 
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;

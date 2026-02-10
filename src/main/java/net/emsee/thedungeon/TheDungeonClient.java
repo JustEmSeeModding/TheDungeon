@@ -1,11 +1,9 @@
 package net.emsee.thedungeon;
 
-import net.emsee.thedungeon.events.ModEntityRegisterEvents;
+import net.emsee.thedungeon.events.ModClientRendererEvents;
 import net.emsee.thedungeon.item.ModItemProperties;
 import net.emsee.thedungeon.screen.ModMenuTypes;
-import net.emsee.thedungeon.screen.custom.GoblinForgeMenu;
 import net.emsee.thedungeon.screen.custom.GoblinForgeScreen;
-import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -31,7 +29,7 @@ public class TheDungeonClient {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Client Setup...");
-        ModEntityRegisterEvents.ClientEntityRendererSetup(event);
+        ModClientRendererEvents.ClientEntityRendererSetup(event);
         ModItemProperties.addCustomItemProperties();
     }
 

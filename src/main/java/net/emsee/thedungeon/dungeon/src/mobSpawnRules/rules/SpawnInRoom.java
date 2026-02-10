@@ -13,6 +13,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -22,55 +25,82 @@ public class SpawnInRoom<T extends Entity> extends MobSpawnRule {
     final int min;
     final int max;
     final Consumer<T> postSpawnFunction;
+    final int maxRoomHeight;
 
 
     public SpawnInRoom(Supplier<EntityType<T>> entity) {
-        this(entity, 1, 1);
+        this(entity, 1, 1, -1);
     }
 
+    public SpawnInRoom(Supplier<EntityType<T>> entity, int min, int max, int maxRoomHeight) {
+        this(entity, null, min, max, 1, maxRoomHeight);
+    }
+
+    public SpawnInRoom(Supplier<EntityType<T>> entity, int min, int max, float chance, int maxRoomHeight) {
+        this(entity, null, min, max, chance, maxRoomHeight);
+    }
+
+
     public SpawnInRoom(Supplier<EntityType<T>> entity, int min, int max) {
-        this(entity, null, min, max, 1);
+        this(entity, null, min, max, 1, -1);
     }
 
     public SpawnInRoom(Supplier<EntityType<T>> entity, int min, int max, float chance) {
-        this(entity, null, min, max, chance);
+        this(entity, null, min, max, chance, -1);
     }
 
     public SpawnInRoom(Supplier<EntityType<T>> entity, Consumer<T> postSpawnFunction, int min, int max, float chance) {
+        this (entity, postSpawnFunction, min, max, chance, -1);
+    }
+
+    public SpawnInRoom(Supplier<EntityType<T>> entity, Consumer<T> postSpawnFunction, int min, int max, float chance, int maxRoomHeight) {
         this.entity = entity;
         this.chance = chance;
         this.min = min;
         this.max = max;
         this.postSpawnFunction = postSpawnFunction;
+        this.maxRoomHeight = maxRoomHeight;
     }
 
 
     @Override
-    public void spawn(ServerLevel level, GeneratedRoom room) {
-        BlockPos roomCenter = room.getPlacedWorldPos();
-        Rotation roomRotation = room.getPlacedWorldRotation();
+    public List<UUID> spawn(ServerLevel level, BlockPos roomCenter, BlockPos minCorner, BlockPos maxCorner, Rotation roomRotation) {
+        List<UUID> uuids = new ArrayList<>();
+        if (maxRoomHeight>=0) {
+            int height = maxCorner.getY() - minCorner.getY();
+            int clampedHeight  = Math.min(height,maxRoomHeight);
 
-        BlockPos cornerOne = room.getRoom().getMinCorner(roomCenter, roomRotation);
-        BlockPos cornerTwo = room.getRoom().getMaxCorner(roomCenter, roomRotation);
+            maxCorner = maxCorner.atY(minCorner.above(clampedHeight).getY());
+        }
 
         RandomSource random = level.random;
-        if (chance == 1 || chance > random.nextFloat()) {
-            int count = random.nextInt(min, max+1);
-            Iterable<BlockPos> positions = BlockPos.randomBetweenClosed(random, count, cornerOne.getX(), cornerOne.getY(), cornerOne.getZ(), cornerTwo.getX(), cornerTwo.getY(), cornerTwo.getZ());
+        if (tryChance(random)) {
+            int count = getAmountForSpawns(random);
+            Iterable<BlockPos> positions = BlockPos.randomBetweenClosed(random, count, minCorner.getX(), minCorner.getY(), minCorner.getZ(), maxCorner.getX(), maxCorner.getY(), maxCorner.getZ());
 
             for (BlockPos pos : positions) {
                 T spawned = entity.get().spawn(level, roomCenter, MobSpawnType.STRUCTURE);
-                BlockPos finalPos = findClosestValidSpawn(pos, level, spawned, cornerOne, cornerTwo);
+                BlockPos finalPos = findClosestValidSpawn(pos, level, spawned, minCorner, maxCorner);
                 if (spawned!=null) {
                     if (finalPos != null)
                         spawned.setPos(finalPos.getBottomCenter());
                     if (postSpawnFunction != null) {
                         postSpawnFunction.accept(spawned);
                     }
+                    uuids.add(spawned.getUUID());
                 }
 
             }
         }
+        return uuids;
+    }
+
+    protected boolean tryChance(RandomSource random) {
+        return chance >= 1f || random.nextFloat() < chance;
+    }
+
+    protected int getAmountForSpawns(RandomSource random) {
+        return random.nextInt(min, max+1);
     }
 
     protected BlockPos findClosestValidSpawn(BlockPos chosenPos, Level level, Entity entity, BlockPos minCorner, BlockPos maxCorner) {

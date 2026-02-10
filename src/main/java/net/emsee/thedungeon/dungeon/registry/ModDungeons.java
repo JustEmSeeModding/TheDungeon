@@ -58,7 +58,7 @@ public class ModDungeons {
 
     public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CASTLE = register("castle", ()->new GridDungeon(
             "dungeon.the_dungeon.castle",
-            DungeonRank.D,
+            DungeonRank.E,
             1,
             9,
             9,

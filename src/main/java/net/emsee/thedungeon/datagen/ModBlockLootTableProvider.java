@@ -27,15 +27,15 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        dropSelf(ModBlocks.CATALIST_F.get());
-        dropSelf(ModBlocks.CATALIST_E.get());
-        dropSelf(ModBlocks.CATALIST_D.get());
-        dropSelf(ModBlocks.CATALIST_C.get());
-        dropSelf(ModBlocks.CATALIST_B.get());
-        dropSelf(ModBlocks.CATALIST_A.get());
-        dropSelf(ModBlocks.CATALIST_S.get());
-        dropSelf(ModBlocks.CATALIST_SS.get());
-        dropOther(ModBlocks.CATALIST_BROKEN.get(), ModItems.SHATTERED_CATALIST_CORE);
+        dropSelf(ModBlocks.CATALYST_F.get());
+        dropSelf(ModBlocks.CATALYST_E.get());
+        dropSelf(ModBlocks.CATALYST_D.get());
+        dropSelf(ModBlocks.CATALYST_C.get());
+        dropSelf(ModBlocks.CATALYST_B.get());
+        dropSelf(ModBlocks.CATALYST_A.get());
+        dropSelf(ModBlocks.CATALYST_S.get());
+        dropSelf(ModBlocks.CATALYST_SS.get());
+        dropOther(ModBlocks.CATALYST_BROKEN.get(), ModItems.SHATTERED_CATALYST_CORE);
 
         oreDrops(ModBlocks.PYRITE_ORE.get(), ModItems.PYRITE, 2f, 3f);
         oreDrops(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), ModItems.PYRITE, 2f, 3f);
@@ -60,13 +60,15 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         simpleItemDropWithSilk(ModBlocks.INFUSED_GLASS.get(), ModItems.DUNGEON_ESSENCE_SHARD);
         dropSelf(ModBlocks.INFUSED_THREAD.get());
         dropSelf(ModBlocks.ROSE_QUARTZ_BLOCK.get());
-        dropSelf(ModBlocks.BUDDING_ROSE_QUARTZ.get());
-        dropSelf(ModBlocks.ROSE_QUARTZ_CLUSTER.get());
+        simpleItemDropSelfWithSilk(ModBlocks.BUDDING_ROSE_QUARTZ.get());
+        oreDrops(ModBlocks.ROSE_QUARTZ_CLUSTER.get(), ModItems.ROSE_QUARTZ, 1f, 2f);
         simpleItemDropSelfWithSilk(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get());
         simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get());
         simpleItemDropSelfWithSilk(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get());
 
         dropSelf(ModBlocks.GOBLIN_FORGE.get());
+
+        dropSelf(ModBlocks.TEST_FIGHT.get());
     }
 
     @Override

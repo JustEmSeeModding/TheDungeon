@@ -5,6 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
 
@@ -96,40 +97,43 @@ public interface AttackPattern<E extends PathfinderMob> {
         }
 
         public static class ItemExact extends HandPredicate {
-            private final Item predicate;
+            private final ItemLike predicate;
 
-            public ItemExact(Item item) {
+            public ItemExact(ItemLike item) {
                 predicate = item;
             }
 
             @Override
             public boolean test(ItemStack stack) {
-                return stack.is(predicate);
+                return stack.is(predicate.asItem());
             }
         }
 
         public static class ItemList extends HandPredicate {
-            private final List<Item> predicates;
+            private final List<ItemLike> predicates;
 
-            public ItemList(List<Item> predicates) {
+            public ItemList(List<ItemLike> predicates) {
                 this.predicates = predicates;
             }
 
             @Override
             public boolean test(ItemStack stack) {
-                Item test = stack.getItem();
-                return predicates.contains(test);
+                for (ItemLike predicate : predicates) {
+                    if (stack.is(predicate.asItem()))
+                        return true;
+                }
+                return false;
             }
         }
 
         public static class ItemListOrEmpty extends Or {
-            ItemListOrEmpty(List<Item> predicates) {
+            public ItemListOrEmpty(List<ItemLike> predicates) {
                 super(List.of(new Empty(), new ItemList(predicates)));
             }
         }
 
         public static class ItemExactOrEmpty extends Or {
-            ItemExactOrEmpty(Item predicate) {
+            public ItemExactOrEmpty(ItemLike predicate) {
                 super(List.of(new Empty(), new ItemExact(predicate)));
             }
         }

@@ -92,9 +92,9 @@ public abstract class AbstractKnightModel<T extends AbstractKnightEntity> extend
         this.applyHeadRotation(netHeadYaw, headPitch);
 
         this.animateWalk(entity.isRunning()?KnightAnimations.ANIM_KNIGHT_RUN:KnightAnimations.ANIM_KNIGHT_WALK, limbSwing, limbSwingAmount, 4f, 2.5f);
-        this.animate(entity.idleAnimationState, KnightAnimations.ANIM_KNIGHT_IDLE, ageInTicks, 1);
-        this.animate(entity.basicAttackAnimationState, KnightAnimations.ANIM_KNIGHT_BASIC_ATTACK, ageInTicks, 1);
-        this.animate(entity.quickAttackAnimationState, KnightAnimations.ANIM_KNIGHT_BASIC_ATTACK, ageInTicks, 2);
+        this.animate(entity.animationController.idleAnimationState, KnightAnimations.ANIM_KNIGHT_IDLE, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(0).state(), KnightAnimations.ANIM_KNIGHT_BASIC_ATTACK, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(1).state(), KnightAnimations.ANIM_KNIGHT_BASIC_ATTACK, ageInTicks, 2);
     }
 
     private void applyHeadRotation(float headYaw, float headPitch) {

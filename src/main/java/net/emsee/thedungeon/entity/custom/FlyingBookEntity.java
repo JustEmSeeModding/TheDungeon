@@ -2,7 +2,7 @@ package net.emsee.thedungeon.entity.custom;
 
 //TODO fix this
 
-import net.emsee.thedungeon.entity.ai.goals.ModGoals;
+import net.emsee.thedungeon.entity.ai.ModGoals;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;

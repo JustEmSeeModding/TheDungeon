@@ -62,6 +62,8 @@
   "entity.thedungeon.hob_goblin.fighter" : "Hob Goblin Fighter",
   "entity.thedungeon.hob_goblin.forge_worker" : "Hob Goblin Forge Worker",
   "entity.thedungeon.hob_goblin.scavenger" : "Hob Goblin Scavenger",
+  "entity.thedungeon.hob_goblin.miner" : "Hob Goblin Miner",
+  "entity.thedungeon.crystal_golem" : "Crystal Golem",
 
   "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
 
@@ -70,6 +72,7 @@
   "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
   "item.thedungeon.shadow_goblin_spawn_egg" :"Shadow Goblin Spawn Egg",
   "item.thedungeon.hob_goblin_spawn_egg" :"Hob Goblin Spawn Egg",
+  "item.thedungeon.crystal_golem_spawn_egg" :"Crystal Golem Spawn Egg",
 
   "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
 
@@ -118,12 +121,13 @@
   "item.thedungeon.kobalt_leggings" : "Kobalt Leggings",
   "item.thedungeon.kobalt_boots" : "Kobalt Boots",
 
-  "item.thedungeon.shattered_catalist_core": "Shattered Catalist Core",
-  "item.thedungeon.catalist_core": "Catalist Core",
+  "item.thedungeon.shattered_catalyst_core": "Shattered Catalyst Core",
+  "item.thedungeon.catalyst_core": "Catalyst Core",
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
   "item.thedungeon.pyrite_coin": "Pyrite Coin",
+  "item.thedungeon.rose_quartz": "Rose Quartz",
   "item.thedungeon.kobalt_ingot": "Kobalt Ingot",
   "item.thedungeon.goblin_meat": "Goblin Meat",
 

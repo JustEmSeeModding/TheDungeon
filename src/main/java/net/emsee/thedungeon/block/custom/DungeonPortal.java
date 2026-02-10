@@ -1,7 +1,8 @@
 package net.emsee.thedungeon.block.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.Config;
-import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.block.entity.custom.DungeonPortalBlockEntity;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
@@ -20,7 +21,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -39,6 +39,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -51,7 +52,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class DungeonPortal extends Block implements IDungeonCarryItem {
+public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem {
+    public static final MapCodec<DungeonPortal> CODEC = simpleCodec(DungeonPortal::new);
+
     public static final BooleanProperty STABLE = BooleanProperty.create("stable");
     public static final BooleanProperty EXIT = BooleanProperty.create("is_exit");
     public static final IntegerProperty PORTAL_ID = IntegerProperty.create("portal_id", 0, 500);
@@ -70,8 +73,13 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
     }
 
     @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
@@ -82,8 +90,9 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
     public int getExitID(MinecraftServer server, BlockState state, BlockPos pos, Level level) {
         int id = state.getValue(PORTAL_ID) - 1;
 
-        if (id < 0 || id >= GlobalDungeonManager.getPortalPositions(server, state.getValue(RANK)).size()) {
-            id = GlobalDungeonManager.giveRandomPortalID(server, state.getValue(RANK));
+        if (id < 0) {
+            id = GlobalDungeonManager.giveRandomPortalID(level.random);
+
             level.setBlockAndUpdate(pos,state.setValue(PORTAL_ID, id + 1));
         }
         return id;
@@ -122,9 +131,9 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
         if (!state.getValue(STABLE)) {
             transformBlocks(level, pos);
         }
-        if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
+        /*if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             GlobalDungeonManager.addPortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
-        }
+        }*/ // portals are now handled different
         if (!GlobalDungeonManager.isOpen(level.getServer(), state.getValue(RANK)))
             level.setBlockAndUpdate(pos, state.setValue(PORTAL_ID, 0));
         super.randomTick(state, level, pos, random);
@@ -137,6 +146,7 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
         return state;
     }
 
+    /*
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         if (!level.isClientSide && level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
@@ -155,7 +165,7 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
             GlobalDungeonManager.removePortalLocation(level.getServer(), pos, DungeonRank.getClosestTo(pos));
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
-    }
+    }*/
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
@@ -186,7 +196,7 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
         if (level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY) {
             return defaultBlockState().setValue(STABLE, true).setValue(EXIT,true).setValue(PORTAL_ID, 0).setValue(RANK, DungeonRank.getClosestTo(pos));
         }
-        else if (below.getBlock() instanceof DungeonCatalistBlock catalistBlock) {
+        else if (below.getBlock() instanceof DungeonCatalystBlock catalistBlock) {
             return defaultBlockState().setValue(STABLE, true).setValue(EXIT,false).setValue(PORTAL_ID, 0).setValue(RANK, catalistBlock.getCatalistRank());
         }
         return defaultBlockState().setValue(STABLE, false).setValue(EXIT,false).setValue(PORTAL_ID, 0).setValue(RANK, DungeonRank.F);
@@ -234,5 +244,10 @@ public class DungeonPortal extends Block implements IDungeonCarryItem {
 
     private Optional<RecipeHolder<DungeonInfusionRecipe>> getCurrentRecipe(Item item, Level level) {
         return level.getRecipeManager().getRecipeFor(ModRecipes.DUNGEON_INFUSION_TYPE.get(), new DungeonInfusionRecipeInput(new ItemStack(item)), level);
+    }
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new DungeonPortalBlockEntity(blockPos, blockState);
     }
 }

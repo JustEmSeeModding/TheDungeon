@@ -26,7 +26,8 @@ public class DungeonMobBrain<E extends DungeonAnimatedMob> {
     }
 
     /** Tick the brain every game tick */
-    public void tick(LivingEntity target) {
+    public void tick(E entity) {
+        LivingEntity target = entity.getTarget();
         if (target != null) {
             if (currentAttack != null) {
                 currentAttack.tick(entity, target);

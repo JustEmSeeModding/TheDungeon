@@ -81,7 +81,7 @@ public final class GridArray {
     }
 
     public void insertChildren(GridCell parent, Vec3i from, Vec3i to) {
-        for (int y = from.getY(); y < to.getY(); y++) {
+        for (int y = from.getY(); y <= to.getY(); y++) {
             for (int x = from.getX(); x <= to.getX(); x++) {
                 for (int z = from.getZ(); z <= to.getZ(); z++) {
                     if (getCellAt(new Vec3i(x,y,z)) == parent) continue;

@@ -4,6 +4,7 @@ import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.damageType.ModDamageTypes;
+import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeon.src.types.Dungeon;
@@ -24,7 +25,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -270,7 +273,7 @@ public final class GlobalDungeonManager {
         for (BlockPos pos : posList) {
             dungeonDimension.destroyBlock(pos, false);
         }
-        saveData.clearPortalPositions(rank);
+        clearPortalLocations(server, rank);
     }
 
     private static void sendMessageToPlayers(MinecraftServer server, Component component) {
@@ -367,14 +370,18 @@ public final class GlobalDungeonManager {
     }
 
     /**
-     * Retrieves the portal position linked to the ID, if no portals ar present defaults to the rank center pos
+     * Retrieves the portal position linked to the ID uses MOD to overflow the ID and returns the center if no portals are present
      */
     public static BlockPos getPortalPosition(MinecraftServer server, int portalID, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (portalID >= saveData.portalPositionAmount(rank) || portalID < 0) {
+        int amount = saveData.portalPositionAmount(rank);
+
+        if (amount <= 0) {
             return rank.getDefaultCenterPos();
-        } else
-            return saveData.getPortalPosition(portalID, rank);
+        }
+
+        int wrappedID = Math.floorMod(portalID, amount);
+        return saveData.getPortalPosition(wrappedID, rank);
     }
 
     public static List<BlockPos> getPortalPositions(MinecraftServer server, DungeonRank rank) {
@@ -382,10 +389,11 @@ public final class GlobalDungeonManager {
         return saveData.getAllPortalPositions(rank);
     }
 
-    public static int giveRandomPortalID(MinecraftServer server, DungeonRank rank) {
-        DungeonSaveData saveData = DungeonSaveData.Get(server);
-        if (saveData.portalPositionsEmpty(rank)) return -1;
-        return new Random().nextInt(saveData.portalPositionAmount(rank));
+    /**
+     * gives a random ID from 0 to 9999
+     */
+    public static int giveRandomPortalID(RandomSource random) {
+        return random.nextInt(490);
     }
 
     public static void addPortalLocation(MinecraftServer server, BlockPos pos, DungeonRank rank) {
@@ -396,6 +404,11 @@ public final class GlobalDungeonManager {
     public static void removePortalLocation(MinecraftServer server, BlockPos pos, DungeonRank rank) {
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         saveData.removePortalPosition(pos, rank);
+    }
+
+    public static void clearPortalLocations(MinecraftServer server, DungeonRank rank) {
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        saveData.clearPortalPositions(rank);
     }
 
     public static void updateForcedChunks(MinecraftServer server) {
@@ -490,5 +503,12 @@ public final class GlobalDungeonManager {
 
         GlobalDungeonManager.addToQueueFront(cleanup, server);
         GlobalDungeonManager.killAllInDungeon(server, rank);
+    }
+
+    public static DungeonBiome getBiomeForPlayer(Player player) {
+        MinecraftServer server = player.level().getServer();
+        if (server == null) return null;
+        DungeonSaveData saveData = DungeonSaveData.Get(server);
+        return saveData.getBiomeAt(player.blockPosition());
     }
 }

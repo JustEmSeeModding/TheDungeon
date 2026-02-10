@@ -9,7 +9,7 @@ public class TestDummyRenderer extends LivingEntityRenderer<TestDummyEntity, Tes
 
 
     public TestDummyRenderer(EntityRendererProvider.Context context) {
-        super(context, new TestDummyModel(context.bakeLayer(ModModelLayers.TEST_DUMMY)), .5f);
+        super(context, new TestDummyModel(context.bakeLayer(ModEntityModelLayers.TEST_DUMMY)), .5f);
         //this.addLayer(new ItemInHandLayer(this, context.getItemInHandRenderer()));
     }
 
