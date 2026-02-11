@@ -1,8 +1,8 @@
-package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPallets;
+package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPalettes;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
-import net.emsee.thedungeon.structureProcessor.BlockPalletReplacementProcessor;
+import net.emsee.thedungeon.structureProcessor.BlockPaletteReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;
@@ -11,19 +11,20 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 
 import java.util.Map;
 
-public class BlackstoneToDeepslateProcessor extends BlockPalletReplacementProcessor {
+public class BlackstoneToDeepslateProcessor extends BlockPaletteReplacementProcessor {
     public static final BlackstoneToDeepslateProcessor INSTANCE = new BlackstoneToDeepslateProcessor();
 
     public static final MapCodec<BlackstoneToDeepslateProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
-    protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
-            Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.BLACKSTONE, Util.make(new WeightedMap.Int<>(), replace -> replace.put( new ReplaceInstance(Blocks.DEEPSLATE::defaultBlockState), 1)));
-            });
 
     @Override
-    protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
-        return replacements;
+    protected Map<Block, WeightedMap.Int<ReplaceInstance>> createReplacements() {
+        return Util.make(Maps.newHashMap(), (map) -> {
+            map.put(Blocks.BLACKSTONE,
+                    Util.make(new WeightedMap.Int<>(), blackstoneMap -> {
+                        blackstoneMap.put(new ReplaceInstance(Blocks.DEEPSLATE::defaultBlockState), 1);
+                    }));
+        });
     }
 
     @Override

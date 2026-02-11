@@ -2,7 +2,6 @@ package net.emsee.thedungeon.datagen;
 
 
 import net.emsee.thedungeon.block.ModBlocks;
-import net.emsee.thedungeon.block.custom.GoblinForgeBlock;
 import net.emsee.thedungeon.item.ModItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -59,12 +58,30 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
         simpleItemDropWithSilk(ModBlocks.INFUSED_GLASS.get(), ModItems.DUNGEON_ESSENCE_SHARD);
         dropSelf(ModBlocks.INFUSED_THREAD.get());
-        dropSelf(ModBlocks.ROSE_QUARTZ_BLOCK.get());
-        simpleItemDropSelfWithSilk(ModBlocks.BUDDING_ROSE_QUARTZ.get());
-        oreDrops(ModBlocks.ROSE_QUARTZ_CLUSTER.get(), ModItems.ROSE_QUARTZ, 1f, 2f);
-        simpleItemDropSelfWithSilk(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get());
+
+        dropSelf(ModBlocks.ROSELITH_BLOCK.get());
+        oreDrops(ModBlocks.ROSELITH_CLUSTER.get(), ModItems.ROSELITH_CRYSTAL, 1f, 2f);
+        simpleItemDropSelfWithSilk(ModBlocks.LARGE_ROSELITH_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_ROSELITH_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.SMALL_ROSELITH_BUD.get());
+
+        dropSelf(ModBlocks.GARNETORE_BLOCK.get());
+        oreDrops(ModBlocks.GARNETORE_CLUSTER.get(), ModItems.GARNETORE_PIECE, 1f, 2f);
+        simpleItemDropSelfWithSilk(ModBlocks.LARGE_GARNETORE_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_GARNETORE_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.SMALL_GARNETORE_BUD.get());
+
+        dropSelf(ModBlocks.VERDATITE_BLOCK.get());
+        oreDrops(ModBlocks.VERDATITE_CLUSTER.get(), ModItems.VERDANTITE_CHUNK, 1f, 2f);
+        simpleItemDropSelfWithSilk(ModBlocks.LARGE_VERDATITE_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_VERDATITE_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.SMALL_VERDATITE_BUD.get());
+
+        dropSelf(ModBlocks.LUMANITE_BLOCK.get());
+        oreDrops(ModBlocks.LUMANITE_CLUSTER.get(), ModItems.LUMANITE_FRAGMENT, 1f, 2f);
+        simpleItemDropSelfWithSilk(ModBlocks.LARGE_LUMANITE_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_LUMANITE_BUD.get());
+        simpleItemDropSelfWithSilk(ModBlocks.SMALL_LUMANITE_BUD.get());
 
         dropSelf(ModBlocks.GOBLIN_FORGE.get());
 

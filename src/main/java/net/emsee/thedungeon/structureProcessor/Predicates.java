@@ -3,7 +3,6 @@ package net.emsee.thedungeon.structureProcessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
@@ -27,7 +26,7 @@ public abstract class Predicates extends AbstractReplacementProcessor {
 
         @Override
         public boolean test(PredicateInfo predicateInfo) {
-            BlockState worldBaseBlock = predicateInfo.level.getBlockState(predicateInfo.pos.relative(direction));
+            BlockState worldBaseBlock = predicateInfo.level().getBlockState(predicateInfo.pos().relative(direction));
             return worldBaseBlock.is(baseBlock.get());
         }
     }
@@ -41,9 +40,9 @@ public abstract class Predicates extends AbstractReplacementProcessor {
 
         @Override
         public boolean test(PredicateInfo predicateInfo) {
-            BlockPos baseBlockPos = predicateInfo.pos.relative(direction);
-            BlockState worldBaseBlock = predicateInfo.level.getBlockState(baseBlockPos);
-            return worldBaseBlock.isFaceSturdy(predicateInfo.level, baseBlockPos, direction.getOpposite());}
+            BlockPos baseBlockPos = predicateInfo.pos().relative(direction);
+            BlockState worldBaseBlock = predicateInfo.level().getBlockState(baseBlockPos);
+            return worldBaseBlock.isFaceSturdy(predicateInfo.level(), baseBlockPos, direction.getOpposite());}
     }
 }
 

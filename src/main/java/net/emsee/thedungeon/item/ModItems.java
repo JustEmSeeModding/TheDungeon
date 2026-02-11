@@ -45,7 +45,16 @@ public final class ModItems {
     public static final DeferredItem<DungeonItem> PYRITE_COIN = ITEMS.register("pyrite_coin",
             () -> new DungeonItem(new Item.Properties()));
 
-    public static final DeferredItem<DungeonItem> ROSE_QUARTZ = ITEMS.register("rose_quartz",
+    public static final DeferredItem<DungeonItem> ROSELITH_CRYSTAL = ITEMS.register("roselith_crystal",
+            () -> new DungeonItem(new Item.Properties()));
+
+    public static final DeferredItem<DungeonItem> GARNETORE_PIECE = ITEMS.register("garnetore_piece",
+            () -> new DungeonItem(new Item.Properties()));
+
+    public static final DeferredItem<DungeonItem> VERDANTITE_CHUNK = ITEMS.register("verdantite_chunk",
+            () -> new DungeonItem(new Item.Properties()));
+
+    public static final DeferredItem<DungeonItem> LUMANITE_FRAGMENT = ITEMS.register("lumanite_fragment",
             () -> new DungeonItem(new Item.Properties()));
 
     public static final DeferredItem<DungeonClock> DUNGEON_CLOCK = ITEMS.register("dungeon_clock",

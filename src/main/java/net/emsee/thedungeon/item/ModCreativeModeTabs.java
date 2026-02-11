@@ -57,7 +57,10 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.KOBALT_INGOT);
                         output.accept(ModItems.PYRITE);
                         output.accept(ModItems.PYRITE_COIN);
-                        output.accept(ModItems.ROSE_QUARTZ);
+                        output.accept(ModItems.ROSELITH_CRYSTAL);
+                        output.accept(ModItems.GARNETORE_PIECE);
+                        output.accept(ModItems.VERDANTITE_CHUNK);
+                        output.accept(ModItems.LUMANITE_FRAGMENT);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_FOOD_TAB = CREATIVE_MODE_TAB.register("dungeon_food_tab",
@@ -100,12 +103,30 @@ public final class ModCreativeModeTabs {
                         output.accept(ModBlocks.INFUSED_END_STONE);
                         output.accept(ModBlocks.INFUSED_END_STONE_BRICKS);
                         output.accept(ModBlocks.INFUSED_GLASS);
-                        output.accept(ModBlocks.ROSE_QUARTZ_BLOCK);
-                        output.accept(ModBlocks.BUDDING_ROSE_QUARTZ);
-                        output.accept(ModBlocks.SMALL_ROSE_QUARTZ_BUD);
-                        output.accept(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD);
-                        output.accept(ModBlocks.LARGE_ROSE_QUARTZ_BUD);
-                        output.accept(ModBlocks.ROSE_QUARTZ_CLUSTER);
+                        output.accept(ModBlocks.ROSELITH_BLOCK);
+                        output.accept(ModBlocks.BUDDING_ROSELITH);
+                        output.accept(ModBlocks.SMALL_ROSELITH_BUD);
+                        output.accept(ModBlocks.MEDIUM_ROSELITH_BUD);
+                        output.accept(ModBlocks.LARGE_ROSELITH_BUD);
+                        output.accept(ModBlocks.ROSELITH_CLUSTER);
+                        output.accept(ModBlocks.GARNETORE_BLOCK);
+                        output.accept(ModBlocks.BUDDING_GARNETORE);
+                        output.accept(ModBlocks.SMALL_GARNETORE_BUD);
+                        output.accept(ModBlocks.MEDIUM_GARNETORE_BUD);
+                        output.accept(ModBlocks.LARGE_GARNETORE_BUD);
+                        output.accept(ModBlocks.GARNETORE_CLUSTER);
+                        output.accept(ModBlocks.VERDATITE_BLOCK);
+                        output.accept(ModBlocks.BUDDING_VERDATITE);
+                        output.accept(ModBlocks.SMALL_VERDATITE_BUD);
+                        output.accept(ModBlocks.MEDIUM_VERDATITE_BUD);
+                        output.accept(ModBlocks.LARGE_VERDATITE_BUD);
+                        output.accept(ModBlocks.VERDATITE_CLUSTER);
+                        output.accept(ModBlocks.LUMANITE_BLOCK);
+                        output.accept(ModBlocks.BUDDING_LUMANITE);
+                        output.accept(ModBlocks.SMALL_LUMANITE_BUD);
+                        output.accept(ModBlocks.MEDIUM_LUMANITE_BUD);
+                        output.accept(ModBlocks.LARGE_LUMANITE_BUD);
+                        output.accept(ModBlocks.LUMANITE_CLUSTER);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_SPAWN_EGGS_TAB = CREATIVE_MODE_TAB.register("dungeon_spawn_eggs_tab",

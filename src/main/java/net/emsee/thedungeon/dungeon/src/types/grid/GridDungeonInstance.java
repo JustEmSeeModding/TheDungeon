@@ -8,6 +8,7 @@ import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollectionInstance;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 
@@ -73,25 +74,17 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
     }
 
     @Override
-    public void loadSaveString(String[] saveArray) {
-        savedSeed= Long.parseLong(saveArray[1]);
-        generated = Integer.parseInt(saveArray[2])==1;
+    public void loadSaveTag(CompoundTag tag) {
+        savedSeed= tag.getLong("savedSeed");
+        generated = tag.getBoolean("generated");
     }
 
     @Override
-    public String toSaveString() {
-
-        Optional<ResourceKey<Dungeon<?,?>>> resourceKey = ModDungeons.DUNGEON_REGISTRY.getResourceKey(dungeon);
-        if (resourceKey.isEmpty()) {
-            DebugLog.logError(DebugLog.DebugType.WARNINGS, "Can't find resource key for dungeon: {}", dungeon);
-            throw new IllegalStateException("Dungeon not registered: " + dungeon);
-        }
-        String dungeonName = resourceKey.get().location().getPath();
-        return
-
-                dungeonName + ":" +
-                        savedSeed + ":" +
-                        (generated ? 1 : 0);
+    public CompoundTag toSaveTag() {
+        CompoundTag tag = new CompoundTag();
+        tag.putLong("savedSeed", savedSeed);
+        tag.putBoolean("generated", generated);
+        return tag;
     }
 
     @Override

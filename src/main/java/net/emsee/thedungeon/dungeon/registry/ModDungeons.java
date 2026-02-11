@@ -75,11 +75,11 @@ public class ModDungeons {
             11,
             11,
             new GoblinCavesGridRoomCollection())
-            .setDepth(20)
+            .setDepth(22)
             .setRoomEndChance(.005f)
-            .setMaxFloorHeight(5)
+            .setMaxFloorHeight(11)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM)
-            .setStepIntervalBetweenForcesRequirementTries(30));
+            .setStepIntervalBetweenForcesRequirementTries(25));
 
     protected static <T extends Dungeon<?,?>> DeferredHolder<Dungeon<?,?>, T> register(String name, Supplier<T> dungeon) {
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", name);

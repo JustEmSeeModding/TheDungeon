@@ -157,8 +157,11 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
     @Override
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return switch (getVariant()) {
-            case ROSE_QUARTZ -> ModLootTables.CRYSTAL_GOLEM_ROSE_QUARTZ;
             case AMETHYST -> ModLootTables.CRYSTAL_GOLEM_AMETHYST;
+            case ROSELITH -> ModLootTables.CRYSTAL_GOLEM_ROSELITH;
+            case GARNETORE -> ModLootTables.CRYSTAL_GOLEM_GARNETORE;
+            case VERDANTITE -> ModLootTables.CRYSTAL_GOLEM_VERDANTITE;
+            case LUMANITE -> ModLootTables.CRYSTAL_GOLEM_LUMANITE;
             case DIAMOND -> ModLootTables.CRYSTAL_GOLEM_DIAMOND;
             case EMERALD -> ModLootTables.CRYSTAL_GOLEM_EMERALD;
         };
@@ -166,10 +169,13 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
 
 
     public enum Variant {
-        ROSE_QUARTZ(0, 200, "rose_quartz"),
-        AMETHYST(1, 200, "amethyst"),
-        DIAMOND(2, 10, "diamond"),
-        EMERALD(3, 5, "emerald");
+        AMETHYST(1, 300, "amethyst"),
+        ROSELITH(2, 500, "roselith"),
+        GARNETORE(3, 300, "garnetore"),
+        VERDANTITE(4, 200, "verdantite"),
+        LUMANITE(5, 400, "lumanite"),
+        DIAMOND(6, 10, "diamond"),
+        EMERALD(7, 5, "emerald");
 
         private static final Variant[] BY_ID = Arrays.stream(values()).sorted(
                 Comparator.comparingInt(Variant::getId)).toArray(Variant[]::new);
@@ -193,6 +199,10 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
 
         public String getResource() {
             return resource;
+        }
+
+        public int getWeight() {
+            return weight;
         }
     }
 }

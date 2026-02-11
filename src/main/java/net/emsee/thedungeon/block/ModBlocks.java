@@ -112,22 +112,76 @@ public final class ModBlocks {
     public static final DeferredBlock<DungeonThreadBlock> INFUSED_THREAD = registerBlock("infused_thread",
             () -> new DungeonThreadBlock(Blocks.TRIPWIRE_HOOK, BlockBehaviour.Properties.ofFullCopy(Blocks.TRIPWIRE)));
 
-    public static final DeferredBlock<AmethystBlock> ROSE_QUARTZ_BLOCK = registerBlock("rose_quartz_block",
+    public static final DeferredBlock<AmethystBlock> ROSELITH_BLOCK = registerBlock("roselith_block",
             () -> new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
 
-    public static final DeferredBlock<BuddingRoseQuartzBlock> BUDDING_ROSE_QUARTZ = registerBlock("budding_rose_quartz",
-            () -> new BuddingRoseQuartzBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BUDDING_AMETHYST)));
+    public static final DeferredBlock<BuddingRoselithBlock> BUDDING_ROSELITH = registerBlock("budding_roselith",
+            () -> new BuddingRoselithBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BUDDING_AMETHYST).noLootTable()));
 
-    public static final DeferredBlock<AmethystClusterBlock> ROSE_QUARTZ_CLUSTER = registerBlock("rose_quartz_cluster",
+    public static final DeferredBlock<AmethystClusterBlock> ROSELITH_CLUSTER = registerBlock("roselith_cluster",
             () -> new AmethystClusterBlock(7.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER)));
 
-    public static final DeferredBlock<AmethystClusterBlock> LARGE_ROSE_QUARTZ_BUD = registerBlock("large_rose_quartz_bud",
+    public static final DeferredBlock<AmethystClusterBlock> LARGE_ROSELITH_BUD = registerBlock("large_roselith_bud",
             () -> new AmethystClusterBlock(5.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.LARGE_AMETHYST_BUD)));
 
-    public static final DeferredBlock<AmethystClusterBlock> MEDIUM_ROSE_QUARTZ_BUD = registerBlock("medium_rose_quartz_bud",
+    public static final DeferredBlock<AmethystClusterBlock> MEDIUM_ROSELITH_BUD = registerBlock("medium_roselith_bud",
             () -> new AmethystClusterBlock(4.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.MEDIUM_AMETHYST_BUD)));
 
-    public static final DeferredBlock<AmethystClusterBlock> SMALL_ROSE_QUARTZ_BUD = registerBlock("small_rose_quartz_bud",
+    public static final DeferredBlock<AmethystClusterBlock> SMALL_ROSELITH_BUD = registerBlock("small_roselith_bud",
+            () -> new AmethystClusterBlock(3.0F, 4.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystBlock> GARNETORE_BLOCK = registerBlock("garnetore_block",
+            () -> new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
+
+    public static final DeferredBlock<BuddingGarnetoreBlock> BUDDING_GARNETORE = registerBlock("budding_garnetore",
+            () -> new BuddingGarnetoreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BUDDING_AMETHYST).noLootTable()));
+
+    public static final DeferredBlock<AmethystClusterBlock> GARNETORE_CLUSTER = registerBlock("garnetore_cluster",
+            () -> new AmethystClusterBlock(7.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER)));
+
+    public static final DeferredBlock<AmethystClusterBlock> LARGE_GARNETORE_BUD = registerBlock("large_garnetore_bud",
+            () -> new AmethystClusterBlock(5.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.LARGE_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> MEDIUM_GARNETORE_BUD = registerBlock("medium_garnetore_bud",
+            () -> new AmethystClusterBlock(4.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.MEDIUM_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> SMALL_GARNETORE_BUD = registerBlock("small_garnetore_bud",
+            () -> new AmethystClusterBlock(3.0F, 4.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystBlock> VERDATITE_BLOCK = registerBlock("verdantite_block",
+            () -> new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
+
+    public static final DeferredBlock<BuddingVerdantiteBlock> BUDDING_VERDATITE = registerBlock("budding_verdantite",
+            () -> new BuddingVerdantiteBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BUDDING_AMETHYST).noLootTable()));
+
+    public static final DeferredBlock<AmethystClusterBlock> VERDATITE_CLUSTER = registerBlock("verdantite_cluster",
+            () -> new AmethystClusterBlock(7.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER)));
+
+    public static final DeferredBlock<AmethystClusterBlock> LARGE_VERDATITE_BUD = registerBlock("large_verdantite_bud",
+            () -> new AmethystClusterBlock(5.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.LARGE_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> MEDIUM_VERDATITE_BUD = registerBlock("medium_verdantite_bud",
+            () -> new AmethystClusterBlock(4.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.MEDIUM_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> SMALL_VERDATITE_BUD = registerBlock("small_verdantite_bud",
+            () -> new AmethystClusterBlock(3.0F, 4.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystBlock> LUMANITE_BLOCK = registerBlock("lumanite_block",
+            () -> new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
+
+    public static final DeferredBlock<BuddingLumaniteBlock> BUDDING_LUMANITE = registerBlock("budding_lumanite",
+            () -> new BuddingLumaniteBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BUDDING_AMETHYST).noLootTable()));
+
+    public static final DeferredBlock<AmethystClusterBlock> LUMANITE_CLUSTER = registerBlock("lumanite_cluster",
+            () -> new AmethystClusterBlock(7.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER)));
+
+    public static final DeferredBlock<AmethystClusterBlock> LARGE_LUMANITE_BUD = registerBlock("large_lumanite_bud",
+            () -> new AmethystClusterBlock(5.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.LARGE_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> MEDIUM_LUMANITE_BUD = registerBlock("medium_lumanite_bud",
+            () -> new AmethystClusterBlock(4.0F, 3.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.MEDIUM_AMETHYST_BUD)));
+
+    public static final DeferredBlock<AmethystClusterBlock> SMALL_LUMANITE_BUD = registerBlock("small_lumanite_bud",
             () -> new AmethystClusterBlock(3.0F, 4.0F,BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_AMETHYST_BUD)));
 
     public static final DeferredBlock<GoblinForgeBlock> GOBLIN_FORGE = registerBlock("goblin_forge",

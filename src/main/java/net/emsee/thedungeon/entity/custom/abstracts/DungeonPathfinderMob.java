@@ -188,8 +188,6 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
         if (tickCounter >= 20) { // every second
             boolean outOfRange = playerOutOfRange();
             setNoAi(outOfRange);
-            if (!hasEffect(MobEffects.INVISIBILITY))
-                setInvisible(outOfRange);
             setInvulnerable(outOfRange);
             noPhysics = outOfRange;
             tickCounter = 0;

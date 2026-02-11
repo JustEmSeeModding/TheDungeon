@@ -66,14 +66,14 @@ public final class DungeonNBTData {
 
         int i = 0;
         for (DungeonInstance<?> dungeon : dungeonProgressQueue) {
-            toReturn.putString("dungeonProgressQueue_" + i, dungeon.toSaveString());
+            toReturn.put("dungeonProgressQueue_" + i, dungeon.getSaveTag());
             i++;
         }
         DebugLog.logInfo(DebugLog.DebugType.SAVE_DATA_DETAILED, "dungeonProgressQueue: {}", dungeonProgressQueue);
         int i2 = 0;
         for (DungeonRank rank : dungeonPassiveQueue.keySet()) {
             for (DungeonInstance<?> dungeon : dungeonPassiveQueue.get(rank)) {
-                toReturn.putString("dungeonPassiveQueue_" + rank.getName() + "_" + i2, dungeon.toSaveString());
+                toReturn.put("dungeonPassiveQueue_" + rank.getName() + "_" + i2, dungeon.getSaveTag());
                 i++;
             }
         }
@@ -116,7 +116,7 @@ public final class DungeonNBTData {
         int i = 0;
         dungeonProgressQueue.clear();
         while (tag.contains("dungeonProgressQueue_" + i)) {
-            DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonProgressQueue_" + i));
+            DungeonInstance<?> toAdd = DungeonInstance.fromSaveTag(tag.getCompound("dungeonProgressQueue_" + i));
             dungeonProgressQueue.add(toAdd);
             i++;
         }
@@ -126,7 +126,7 @@ public final class DungeonNBTData {
             int i2 = 0;
             Queue<DungeonInstance<?>> passiveQueue = dungeonPassiveQueue.get(rank);
             while (tag.contains("dungeonPassiveQueue_" + rank.getName() + "_" + i2)) {
-                DungeonInstance<?> toAdd = DungeonInstance.fromSaveString(tag.getString("dungeonPassiveQueue_" + rank.getName() + "_" + i2));
+                DungeonInstance<?> toAdd = DungeonInstance.fromSaveTag(tag.getCompound("dungeonPassiveQueue_" + rank.getName() + "_" + i2));
                 passiveQueue.add(toAdd);
                 i2++;
             }

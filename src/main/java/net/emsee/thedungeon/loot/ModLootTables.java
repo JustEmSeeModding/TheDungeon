@@ -23,9 +23,21 @@ public class ModLootTables {
             ResourceKey.create(Registries.LOOT_TABLE,
                     TheDungeon.defaultResourceLocation("entities/hob_goblin/miner"));
 
-    public static final ResourceKey<LootTable> CRYSTAL_GOLEM_ROSE_QUARTZ =
+    public static final ResourceKey<LootTable> CRYSTAL_GOLEM_ROSELITH =
             ResourceKey.create(Registries.LOOT_TABLE,
                     TheDungeon.defaultResourceLocation("entities/crystal_golem/rose_quartz"));
+
+    public static final ResourceKey<LootTable> CRYSTAL_GOLEM_GARNETORE =
+            ResourceKey.create(Registries.LOOT_TABLE,
+                    TheDungeon.defaultResourceLocation("entities/hob_goblin/garnetore"));
+
+    public static final ResourceKey<LootTable> CRYSTAL_GOLEM_VERDANTITE =
+            ResourceKey.create(Registries.LOOT_TABLE,
+                    TheDungeon.defaultResourceLocation("entities/hob_goblin/verdantite"));
+
+    public static final ResourceKey<LootTable> CRYSTAL_GOLEM_LUMANITE =
+            ResourceKey.create(Registries.LOOT_TABLE,
+                    TheDungeon.defaultResourceLocation("entities/hob_goblin/lumanite"));
 
     public static final ResourceKey<LootTable> CRYSTAL_GOLEM_AMETHYST =
             ResourceKey.create(Registries.LOOT_TABLE,

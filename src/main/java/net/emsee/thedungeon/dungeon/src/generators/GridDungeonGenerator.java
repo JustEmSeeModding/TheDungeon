@@ -217,13 +217,13 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
      */
     protected boolean FillUnoccupied() {
         int depth = dungeon.getRaw().getDungeonDepth();
-        int maxFloorHeight = dungeon.getRaw().getMaxFloorHeight();
+        int maxFloorHeight = dungeon.getRaw().getMaxFloorHeightFromCenterOffset()+1;
         int gridCellWidth = collection.getRaw().getGridCellWidth();
         int gridCellHeight = collection.getRaw().getGridCellHeight();
         BlockPos centerPos = dungeon.getRaw().getCenterPos();
 
         // Determine Y bounds based on whether down generation is disabled
-        int minY = dungeon.getRaw().isDownGenerationDisabled() ? 0 : -depth;
+        int minY = dungeon.getRaw().isDownGenerationDisabled() ? 0 : -Math.min(depth, maxFloorHeight);
         int maxY = Math.min(depth, maxFloorHeight);
 
         // Resume from last position

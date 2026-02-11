@@ -11,16 +11,16 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 
-public class BuddingRoseQuartzBlock extends AmethystBlock {
-    public static final MapCodec<BuddingAmethystBlock> CODEC = simpleCodec(BuddingAmethystBlock::new);
+public class BuddingRoselithBlock extends AmethystBlock {
+    public static final MapCodec<BuddingRoselithBlock> CODEC = simpleCodec(BuddingRoselithBlock::new);
     public static final int GROWTH_CHANCE = 5;
     private static final Direction[] DIRECTIONS = Direction.values();
 
-    public MapCodec<BuddingAmethystBlock> codec() {
+    public MapCodec<BuddingRoselithBlock> codec() {
         return CODEC;
     }
 
-    public BuddingRoseQuartzBlock(BlockBehaviour.Properties properties) {
+    public BuddingRoselithBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }
 
@@ -31,18 +31,18 @@ public class BuddingRoseQuartzBlock extends AmethystBlock {
             BlockState blockstate = level.getBlockState(blockpos);
             Block block = null;
             if (canClusterGrowAtState(blockstate)) {
-                block = ModBlocks.SMALL_ROSE_QUARTZ_BUD.get();
-            } else if (blockstate.is(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get();
-            } else if (blockstate.is(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.LARGE_ROSE_QUARTZ_BUD.get();
-            } else if (blockstate.is(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.ROSE_QUARTZ_CLUSTER.get();
+                block = ModBlocks.SMALL_ROSELITH_BUD.get();
+            } else if (blockstate.is(ModBlocks.SMALL_ROSELITH_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.MEDIUM_ROSELITH_BUD.get();
+            } else if (blockstate.is(ModBlocks.MEDIUM_ROSELITH_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.LARGE_ROSELITH_BUD.get();
+            } else if (blockstate.is(ModBlocks.LARGE_ROSELITH_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.ROSELITH_CLUSTER.get();
             }
 
             if (block != null) {
-                BlockState blockstate1 = (BlockState)((BlockState)block.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction)).setValue(AmethystClusterBlock.WATERLOGGED, blockstate.getFluidState().getType() == Fluids.WATER);
-                level.setBlockAndUpdate(blockpos, blockstate1);
+                BlockState newState = block.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction).setValue(AmethystClusterBlock.WATERLOGGED, blockstate.getFluidState().getType() == Fluids.WATER);
+                level.setBlockAndUpdate(blockpos, newState);
             }
         }
 

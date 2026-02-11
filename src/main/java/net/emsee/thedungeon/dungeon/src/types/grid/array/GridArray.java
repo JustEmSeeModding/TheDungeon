@@ -57,7 +57,7 @@ public final class GridArray {
         if (pos.getY()<0 && !doGenerateDown)
             return false;
         else
-            return !(Math.abs(pos.getY()) > maxFloorHeight);
+            return !(Math.abs(pos.getY()) >= maxFloorHeight/2-1);
     }
 
     public boolean isAtBorder(Vec3i pos, boolean checkFloorLimit) {

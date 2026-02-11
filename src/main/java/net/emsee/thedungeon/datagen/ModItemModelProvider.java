@@ -27,16 +27,24 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");
         basicItemOtherTexturePath(ModItems.DUNGEON_DEBUG_TOOL, "minecraft", "item/stick");
 
-        basicSingleTextureBlockItem(ModBlocks.ROSE_QUARTZ_CLUSTER);
-        basicSingleTextureBlockItem(ModBlocks.LARGE_ROSE_QUARTZ_BUD);
-        basicSingleTextureBlockItem(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD);
-        basicSingleTextureBlockItem(ModBlocks.SMALL_ROSE_QUARTZ_BUD);
+        //basicSingleTextureBlockItem(ModBlocks.ROSELITH_CLUSTER);
+        //basicSingleTextureBlockItem(ModBlocks.LARGE_ROSELITH_BUD);
+        //basicSingleTextureBlockItem(ModBlocks.MEDIUM_ROSELITH_BUD);
+        //basicSingleTextureBlockItem(ModBlocks.SMALL_ROSELITH_BUD);
+
+        //basicSingleTextureBlockItem(ModBlocks.GARNETORE_CLUSTER);
+        //basicSingleTextureBlockItem(ModBlocks.LARGE_GARNETORE_BUD);
+        //basicSingleTextureBlockItem(ModBlocks.MEDIUM_GARNETORE_BUD);
+        //basicSingleTextureBlockItem(ModBlocks.SMALL_GARNETORE_BUD);
 
 
         basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
         basicItem(ModItems.PYRITE.asItem());
         basicItem(ModItems.PYRITE_COIN.asItem());
-        basicItem(ModItems.ROSE_QUARTZ.asItem());
+        basicItem(ModItems.ROSELITH_CRYSTAL.asItem());
+        basicItem(ModItems.GARNETORE_PIECE.asItem());
+        basicItem(ModItems.VERDANTITE_CHUNK.asItem());
+        basicItem(ModItems.LUMANITE_FRAGMENT.asItem());
         basicItem(ModItems.KOBALT_INGOT.asItem());
 
         basicItem(ModItems.INFUSED_ALLOY_HELMET.asItem());
@@ -69,6 +77,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.CRYSTAL_GOLEM_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
+        basicBlockItemOtherTexturePath(ModBlocks.DUNGEON_PORTAL, TheDungeon.MOD_ID, "item/dungeon_portal");
     }
 
     private void basicSingleTextureBlockItem(DeferredBlock<?> block) {

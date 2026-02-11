@@ -3,7 +3,6 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.clusters;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.structureProcessor.HollowOrganicClusterProcessor;
-import net.emsee.thedungeon.structureProcessor.OrganicClusterProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
 import net.minecraft.world.level.block.Block;
@@ -48,19 +47,19 @@ public class MagmaHollowClusterProcessor extends HollowOrganicClusterProcessor {
         return 1f;
     }
 
-    protected final WeightedMap.Int<ReplaceInstance> basicMap =
-            Util.make(new WeightedMap.Int<>(), (map) -> {
-                map.put(new ReplaceInstance(Blocks.MAGMA_BLOCK::defaultBlockState), 1);
-            });
-
-    protected final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements =
-            Util.make(Maps.newHashMap(), (map) -> {
-                map.put(Blocks.STONE, basicMap);
-            });
 
     @Override
-    protected Map<Block, WeightedMap.Int<ReplaceInstance>> getReplacements() {
-        return replacements;
+    protected Map<Block, WeightedMap.Int<ReplaceInstance>> createReplacements() {
+        return Util.make(Maps.newHashMap(), (map) -> {
+            map.put(Blocks.STONE,
+                    Util.make(new WeightedMap.Int<>(), (stoneMap) -> {
+                        stoneMap.put(new ReplaceInstance(Blocks.MAGMA_BLOCK::defaultBlockState), 1);
+                    }));
+            map.put(Blocks.BLACKSTONE,
+                    Util.make(new WeightedMap.Int<>(), (stoneMap) -> {
+                        stoneMap.put(new ReplaceInstance(Blocks.MAGMA_BLOCK::defaultBlockState), 1);
+                    }));
+        });
     }
 
     protected StructureProcessorType<?> getType() {

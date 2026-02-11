@@ -1,5 +1,4 @@
-package net.emsee.thedungeon.structureProcessor.library;
-
+package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPalettes;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
@@ -12,29 +11,23 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 
 import java.util.Map;
 
-public class DefaultLibraryProcessor extends BlockPaletteReplacementProcessor {
+public class BlackstoneToPlainStoneProcessor extends BlockPaletteReplacementProcessor {
+    public static final BlackstoneToPlainStoneProcessor INSTANCE = new BlackstoneToPlainStoneProcessor();
 
-
-    public static final DefaultLibraryProcessor INSTANCE = new DefaultLibraryProcessor();
-
-    public static final MapCodec<DefaultLibraryProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
-
-    private DefaultLibraryProcessor() {
-    }
+    public static final MapCodec<BlackstoneToPlainStoneProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
 
     @Override
     protected Map<Block, WeightedMap.Int<ReplaceInstance>> createReplacements() {
         return Util.make(Maps.newHashMap(), (map) -> {
-            map.put(Blocks.CHISELED_BOOKSHELF,
-                    Util.make(new WeightedMap.Int<>(), (bookshelfMap) -> {
-                        bookshelfMap.put(new ReplaceInstance(Blocks.BOOKSHELF::defaultBlockState), 10);
-                        bookshelfMap.put(new ReplaceInstance(Blocks.CHISELED_BOOKSHELF::defaultBlockState), 2);
+            map.put(Blocks.BLACKSTONE,
+                    Util.make(new WeightedMap.Int<>(), blackstoneMap -> {
+                        blackstoneMap.put( new ReplaceInstance(Blocks.STONE::defaultBlockState), 1);
                     }));
         });
     }
 
-
+    @Override
     protected StructureProcessorType<?> getType() {
         return StructureProcessorType.RULE;
     }

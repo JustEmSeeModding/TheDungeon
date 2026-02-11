@@ -59,9 +59,9 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
     /**
      * sets the max number of floors the dungeon is allowed to have (including the main floor)
      * <p>
-     * = when a scaled room goes below the lowest or above the highest floor it can generate but any connections below the main floor will not be continued
+     * - when a scaled room goes below the lowest or above the highest floor it can generate but any connections below the main floor will not be continued
      * <p>
-     * = in case allowDownGeneration is false use "setMaxFloorHeightOneWay()" instead
+     * - in case allowDownGeneration is false use "setMaxFloorHeightOneWay()" instead
      */
     public GridDungeon setMaxFloorHeight(int maxFloors) {
         if (maxFloors % 2 != 1)

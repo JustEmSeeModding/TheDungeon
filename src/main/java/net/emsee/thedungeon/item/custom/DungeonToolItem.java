@@ -14,11 +14,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -76,9 +74,12 @@ public class DungeonToolItem extends DungeonWeaponItem {
         map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
         map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
         map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
-        map.put(ModBlocks.SMALL_ROSE_QUARTZ_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.LARGE_ROSE_QUARTZ_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.SMALL_ROSELITH_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.MEDIUM_ROSELITH_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.LARGE_ROSELITH_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.SMALL_GARNETORE_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.MEDIUM_GARNETORE_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.LARGE_GARNETORE_BUD.get(), Blocks.AIR);
 
         map.put(Blocks.SNOW, Blocks.AIR);
         map.put(Blocks.MOSS_CARPET, Blocks.AIR);
@@ -94,7 +95,8 @@ public class DungeonToolItem extends DungeonWeaponItem {
         map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
         map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
         map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
-        map.put(ModBlocks.ROSE_QUARTZ_CLUSTER.get(), Blocks.AIR);
+        map.put(ModBlocks.ROSELITH_CLUSTER.get(), Blocks.AIR);
+        map.put(ModBlocks.GARNETORE_CLUSTER.get(), Blocks.AIR);
     });
 
     /**

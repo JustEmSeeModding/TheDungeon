@@ -62,6 +62,34 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.CATALYST_S.get())
                 .add(ModBlocks.CATALYST_SS.get())
                 .add(ModBlocks.CATALYST_BROKEN.get())
+
+                .add(ModBlocks.ROSELITH_BLOCK.get())
+                .add(ModBlocks.BUDDING_ROSELITH.get())
+                .add(ModBlocks.SMALL_ROSELITH_BUD.get())
+                .add(ModBlocks.MEDIUM_GARNETORE_BUD.get())
+                .add(ModBlocks.LARGE_GARNETORE_BUD.get())
+                .add(ModBlocks.ROSELITH_CLUSTER.get())
+
+                .add(ModBlocks.GARNETORE_BLOCK.get())
+                .add(ModBlocks.BUDDING_GARNETORE.get())
+                .add(ModBlocks.SMALL_GARNETORE_BUD.get())
+                .add(ModBlocks.MEDIUM_GARNETORE_BUD.get())
+                .add(ModBlocks.LARGE_GARNETORE_BUD.get())
+                .add(ModBlocks.GARNETORE_CLUSTER.get())
+
+                .add(ModBlocks.VERDATITE_BLOCK.get())
+                .add(ModBlocks.BUDDING_VERDATITE.get())
+                .add(ModBlocks.SMALL_VERDATITE_BUD.get())
+                .add(ModBlocks.MEDIUM_VERDATITE_BUD.get())
+                .add(ModBlocks.LARGE_VERDATITE_BUD.get())
+                .add(ModBlocks.VERDATITE_CLUSTER.get())
+
+                .add(ModBlocks.LUMANITE_BLOCK.get())
+                .add(ModBlocks.BUDDING_LUMANITE.get())
+                .add(ModBlocks.SMALL_LUMANITE_BUD.get())
+                .add(ModBlocks.MEDIUM_LUMANITE_BUD.get())
+                .add(ModBlocks.LARGE_LUMANITE_BUD.get())
+                .add(ModBlocks.LUMANITE_CLUSTER.get())
         ;
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)

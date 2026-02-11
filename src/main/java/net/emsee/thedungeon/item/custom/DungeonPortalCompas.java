@@ -186,7 +186,8 @@ public class DungeonPortalCompas extends DungeonItem {
             }
         }
 
-        nodeEvaluator.done();
+        //if (cachedPathfindingMob!=null)
+        //    nodeEvaluator.done();
         return closestPortal;
     }
 
@@ -248,8 +249,8 @@ public class DungeonPortalCompas extends DungeonItem {
                 ));
             }
         }
-
-        nodeEvaluator.done();
+        //if (cachedPathfindingMob!=null)
+        //    nodeEvaluator.done();
         return pathPoints;
     }
 
