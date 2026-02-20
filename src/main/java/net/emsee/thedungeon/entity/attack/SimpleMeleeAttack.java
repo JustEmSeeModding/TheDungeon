@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
-public class SimpleMeleeAttack<E extends DungeonAnimatedMob> implements AttackPattern<E> {
+public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPattern<E> {
     private final float damageMultiplier;
     private final float knockbackMultiplier;
     private final int animationID;

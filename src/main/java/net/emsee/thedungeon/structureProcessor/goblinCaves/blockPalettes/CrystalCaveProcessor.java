@@ -26,10 +26,9 @@ public class CrystalCaveProcessor extends BlockPaletteReplacementProcessor {
                         stoneMap.put(new ReplaceInstance(Blocks.ANDESITE::defaultBlockState), 125);
                         stoneMap.put(new ReplaceInstance(Blocks.COBBLESTONE::defaultBlockState), 125);
                         stoneMap.put(new ReplaceInstance(Blocks.TUFF::defaultBlockState), 225);
-                        stoneMap.put(new ReplaceInstance(Blocks.DIAMOND_ORE::defaultBlockState), 40);
-                        stoneMap.put(new ReplaceInstance(Blocks.EMERALD_ORE::defaultBlockState), 20);
-                        stoneMap.put(new ReplaceInstance(Blocks.LAPIS_ORE::defaultBlockState), 15);
-                        stoneMap.put(new ReplaceInstance(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState()), 45);
+                        stoneMap.put(new ReplaceInstance(Blocks.DIAMOND_ORE::defaultBlockState), 70);
+                        stoneMap.put(new ReplaceInstance(Blocks.EMERALD_ORE::defaultBlockState), 35);
+                        stoneMap.put(new ReplaceInstance(Blocks.LAPIS_ORE::defaultBlockState), 25);
                     }));
             map.put(Blocks.CALCITE,
                     Util.make(new WeightedMap.Int<>(), (calciteMap) -> {

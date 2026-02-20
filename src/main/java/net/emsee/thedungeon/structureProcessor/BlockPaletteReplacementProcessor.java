@@ -24,7 +24,7 @@ public abstract class BlockPaletteReplacementProcessor extends AbstractReplaceme
         RandomSource random = settings.getRandom(relativeBlockInfo.pos());
         WeightedMap.Int<ReplaceInstance> options = this.getReplacements(level, offset, pos, blockInfo, relativeBlockInfo, settings, template).get(relativeBlockInfo.state().getBlock());
 
-        if (options == null || options.isEmpty()) return relativeBlockInfo;
+        if (options == null || options.isEmpty() || options.totalWeight() <= 0) return relativeBlockInfo;
 
         Supplier<BlockState> newStateSupplier = options.getRandom(random).stateSupplier;
         if (newStateSupplier == null) return relativeBlockInfo;

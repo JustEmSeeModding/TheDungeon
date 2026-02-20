@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class CrystalCaveBuddingPostProcessor extends BlockPaletteReplacementProcessor implements PostProcessor {
     public static final CrystalCaveBuddingPostProcessor INSTANCE = new CrystalCaveBuddingPostProcessor();
@@ -31,16 +32,11 @@ public class CrystalCaveBuddingPostProcessor extends BlockPaletteReplacementProc
         return BlockUtils.ForEachMethod.BOTTOM_TO_TOP;
     }
 
-    public static final int AMETHYST_BASE_WEIGHT =
-            CrystalGolemEntity.Variant.AMETHYST.getWeight();
-    public static final int ROSELITH_BASE_WEIGHT =
-            CrystalGolemEntity.Variant.ROSELITH.getWeight();
-    public static final int GARNETORE_BASE_WEIGHT =
-            CrystalGolemEntity.Variant.GARNETORE.getWeight();
-    public static final int VERDANTITE_BASE_WEIGHT =
-            CrystalGolemEntity.Variant.VERDANTITE.getWeight();
-    public static final int LUMANITE_BASE_WEIGHT =
-            CrystalGolemEntity.Variant.LUMANITE.getWeight();
+    public static final int AMETHYST_BASE_WEIGHT = 3;
+    public static final int ROSELITH_BASE_WEIGHT = 5;
+    public static final int GARNETORE_BASE_WEIGHT = 3;
+    public static final int VERDANTITE_BASE_WEIGHT = 2;
+    public static final int LUMANITE_BASE_WEIGHT = 4;
 
     @Override
     protected Map<Block, WeightedMap.Int<ReplaceInstance>> createReplacements() {
@@ -84,40 +80,42 @@ public class CrystalCaveBuddingPostProcessor extends BlockPaletteReplacementProc
                             clusterMap.put(new ReplaceInstance(() -> ModBlocks.LUMANITE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.LUMANITE_BLOCK)), 1);
                             clusterMap.put(new ReplaceInstance(Blocks.AIR::defaultBlockState, 0).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), ModBlocks.LUMANITE_BLOCK)), 2);
 
-                            // Amethyst clusters (on calcite)
-                            clusterMap.put(new ReplaceInstance(() -> Blocks.SMALL_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4);
-                            clusterMap.put(new ReplaceInstance(() -> Blocks.MEDIUM_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 3);
-                            clusterMap.put(new ReplaceInstance(() -> Blocks.LARGE_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 2);
-                            clusterMap.put(new ReplaceInstance(() -> Blocks.AMETHYST_CLUSTER.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 1);
+                            Predicate<PredicateInfo> CalciteBasePredicate = new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE).or(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.GRANITE));
+                            
+                            // Amethyst clusters (on stone)
+                            clusterMap.put(new ReplaceInstance(() -> Blocks.SMALL_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 8 * AMETHYST_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> Blocks.MEDIUM_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 6 * AMETHYST_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> Blocks.LARGE_AMETHYST_BUD.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 4 * AMETHYST_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> Blocks.AMETHYST_CLUSTER.defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 2 * AMETHYST_BASE_WEIGHT);
 
-                            // Roselith clusters (on calcite)
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_ROSELITH_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4 * ROSELITH_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_ROSELITH_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 3 * ROSELITH_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_ROSELITH_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 2 * ROSELITH_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.ROSELITH_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 1 * ROSELITH_BASE_WEIGHT);
+                            // Roselith clusters (on stone)
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_ROSELITH_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 8 * ROSELITH_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_ROSELITH_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 6 * ROSELITH_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_ROSELITH_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 4 * ROSELITH_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.ROSELITH_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 2 * ROSELITH_BASE_WEIGHT);
 
-                            // Garnetore clusters (on calcite)
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_GARNETORE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4 * GARNETORE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_GARNETORE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 3 * GARNETORE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_GARNETORE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 2 * GARNETORE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.GARNETORE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 1 * GARNETORE_BASE_WEIGHT);
+                            // Garnetore clusters (on stone)
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_GARNETORE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 8 * GARNETORE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_GARNETORE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 6 * GARNETORE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_GARNETORE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 4 * GARNETORE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.GARNETORE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 2 * GARNETORE_BASE_WEIGHT);
 
-                            // Verdantite clusters (on calcite)
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_VERDATITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4 * VERDANTITE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_VERDATITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 3 * VERDANTITE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_VERDATITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 2 * VERDANTITE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.VERDATITE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 1 * VERDANTITE_BASE_WEIGHT);
+                            // Verdantite clusters (on stone)
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_VERDATITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 8 * VERDANTITE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_VERDATITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 6 * VERDANTITE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_VERDATITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 4 * VERDANTITE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.VERDATITE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 2 * VERDANTITE_BASE_WEIGHT);
 
-                            // Lumanite clusters (on calcite)
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_LUMANITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 4 * LUMANITE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_LUMANITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 3 * LUMANITE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_LUMANITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 2 * LUMANITE_BASE_WEIGHT);
-                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LUMANITE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 1 * LUMANITE_BASE_WEIGHT);
+                            // Lumanite clusters (on stone)
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.SMALL_LUMANITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 8 * LUMANITE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.MEDIUM_LUMANITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 6 * LUMANITE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LARGE_LUMANITE_BUD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 4 * LUMANITE_BASE_WEIGHT);
+                            clusterMap.put(new ReplaceInstance(() -> ModBlocks.LUMANITE_CLUSTER.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, direction), 1).withPredicate(CalciteBasePredicate), 2 * LUMANITE_BASE_WEIGHT);
 
-                            // air (on calcite)
-                            clusterMap.put(new ReplaceInstance(Blocks.AIR::defaultBlockState, 1).withPredicate(new Predicates.BaseBlockPredicate(direction.getOpposite(), Blocks.CALCITE)), 10000);
+                            // air (on stone)
+                            clusterMap.put(new ReplaceInstance(Blocks.AIR::defaultBlockState, 1).withPredicate(CalciteBasePredicate), 1000);
                         }
-                        clusterMap.put(new ReplaceInstance(Blocks.AIR::defaultBlockState, 2), 1);
+                        //clusterMap.put(new ReplaceInstance(Blocks.AIR::defaultBlockState, 2), 1);
                     }));
         });
     }

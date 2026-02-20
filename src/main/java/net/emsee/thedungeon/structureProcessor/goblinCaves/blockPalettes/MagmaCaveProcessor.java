@@ -23,7 +23,9 @@ public class MagmaCaveProcessor extends BlockPaletteReplacementProcessor {
                     Util.make(new WeightedMap.Int<>(), (blackstoneMap) -> {
                         blackstoneMap.put(new ReplaceInstance(Blocks.BLACKSTONE::defaultBlockState), 50);
                         blackstoneMap.put(new ReplaceInstance(Blocks.MAGMA_BLOCK::defaultBlockState), 1);
+                        blackstoneMap.put(new ReplaceInstance(Blocks.NETHERRACK::defaultBlockState), 3);
                         blackstoneMap.put(new ReplaceInstance(Blocks.SMOOTH_BASALT::defaultBlockState), 4);
+                        blackstoneMap.put(new ReplaceInstance(Blocks.OBSIDIAN::defaultBlockState), 6);
                     }));
             map.put(Blocks.RAW_GOLD_BLOCK,
                     Util.make(new WeightedMap.Int<>(), (goldVeinMap) -> {

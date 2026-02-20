@@ -9,77 +9,77 @@ import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
 
-public interface AttackPattern<E extends PathfinderMob> {
+public abstract class AttackPattern<E extends PathfinderMob> {
 
     /**
      * Called when the attack starts
      */
-    void start(E entity, LivingEntity target);
+    public abstract void start(E entity, LivingEntity target);
 
     /**
      * Called every tick while the attack is in progress
      */
-    void tick(E entity, LivingEntity target);
+    public abstract void tick(E entity, LivingEntity target);
 
     /**
      * Called every tick even if this is not the used attack (for cooldowns etc...)
      */
-    void passiveTick(E entity);
+    public abstract void passiveTick(E entity);
 
     /**
      * Whether the attack finished
      */
-    boolean isFinished(E entity);
+    public abstract boolean isFinished(E entity);
 
     /**
      * Damage multiplier
      */
-    float getDamageMultiplier();
+    public abstract float getDamageMultiplier();
 
     /**
      * Knockback multiplier
      */
-    float getKnockbackMultiplier();
+    public abstract float getKnockbackMultiplier();
 
     /**
      * Preferred hands used for this attack
      */
-    AttackHand getHands();
+    public abstract AttackHand getHands();
 
     /**
      * Check if the entity has required items to perform this attack
      */
-    default boolean canUseWithItems(ItemStack mainHand, ItemStack offHand) {
+    public boolean canUseWithItems(ItemStack mainHand, ItemStack offHand) {
         return true;
     }
 
     /**
      * Check if the entity has any other requirements perform this attack
      */
-    default boolean canUseAgainstNow(E entity, LivingEntity target) {
+    public boolean canUseAgainstNow(E entity, LivingEntity target) {
         return true;
     }
 
-    default boolean canUseNow() {
+    public boolean canUseNow() {
         return true;
     }
 
     /**
      * Animation ID and duration
      */
-    int getAnimationID();
+    public abstract int getAnimationID();
 
-    int getAnimationDuration();
+    public abstract int getAnimationDuration();
 
-    CompoundTag toSaveTag();
+    public abstract CompoundTag toSaveTag();
 
-    void fromSaveTag(CompoundTag tag);
+    public abstract void fromSaveTag(CompoundTag tag);
 
-    enum AttackHand {
+    public enum AttackHand {
         MAIN, OFF, BOTH
     }
 
-    abstract class HandPredicate {
+    public static abstract class HandPredicate {
         public abstract boolean test(ItemStack stack);
 
         public static class Empty extends HandPredicate {

@@ -127,7 +127,7 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
         RandomSource random = RandomSource.create(seed);
         WeightedMap.Int<ReplaceInstance> options = replacements.get(currentBlock);
 
-        if (options==null || options.isEmpty()) return relativeBlockInfo;
+        if (options==null || options.isEmpty() || options.totalWeight() <= 0) return relativeBlockInfo;
 
         Supplier<BlockState> newStateSupplier = options.getRandom(random).stateSupplier;
         if (newStateSupplier == null) return relativeBlockInfo;

@@ -20,8 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -32,8 +30,8 @@ public class DungeonPortalCompas extends DungeonItem {
 
     private static final int MAX_RANGE = 350;
     private static final int NODE_LIMIT = 500;
-    private static final int SERVER_UPDATE_INTERVAL = 30; // ticks
-    private static final int CLIENT_UPDATE_INTERVAL = 20;  // ticks
+    private static final int SERVER_UPDATE_INTERVAL = 100; // ticks
+    private static final int CLIENT_UPDATE_INTERVAL = 100;  // ticks
     private static final double MOVE_THRESHOLD_UPDATE = 2;
 
     private static final ParticleOptions PARTICLE_OPTIONS = ParticleTypes.END_ROD;
