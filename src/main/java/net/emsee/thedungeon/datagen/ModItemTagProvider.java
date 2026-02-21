@@ -32,7 +32,8 @@ public final class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModBlocks.INFUSED_SOUL_SOIL.get().asItem());
 
         tag(CuriosTags.createItemTag("trinket"))
-                .add(ModItems.TEST_BELT.get());
+                .add(ModItems.TEST_BELT.get())
+                .add(ModItems.SOUL_BOUND_TOTEM.get());
 
         tag(CuriosTags.createItemTag("effigy"))
                 .add(ModItems.HEAVY_EFFIGY.get());

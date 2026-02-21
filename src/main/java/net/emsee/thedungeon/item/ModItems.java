@@ -4,6 +4,7 @@ package net.emsee.thedungeon.item;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.item.custom.*;
+import net.emsee.thedungeon.item.custom.DungeonCurio;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
 import net.emsee.thedungeon.item.custom.armor.KobaltArmorItem;
@@ -65,6 +66,10 @@ public final class ModItems {
 
     public static final DeferredItem<DungeonCurio> TEST_BELT = ITEMS.register("test_belt",
             () -> new DungeonCurio(new Item.Properties(), DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
+
+    public static final DeferredItem<SoulBoundTotem> SOUL_BOUND_TOTEM = ITEMS.register("soul_bound_totem",
+            () -> new SoulBoundTotem(new Item.Properties(), DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
+
 
     public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
             () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));

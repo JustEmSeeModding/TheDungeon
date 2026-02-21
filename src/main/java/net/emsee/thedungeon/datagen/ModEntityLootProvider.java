@@ -120,14 +120,13 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.SKELETON_KNIGHT.get(), LootTable.lootTable());
         this.add(ModEntities.DEATH_KNIGHT.get(), LootTable.lootTable());
 
-
         LootPool.Builder baseCrystalGolemPool =
                 LootPool.lootPool()
                         .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(Blocks.CALCITE)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                 .apply(EnchantedCountIncreaseFunction.lootingMultiplier(
-                                        this.registries, UniformGenerator.between(0,1)))
+                                        this.registries, UniformGenerator.between(0, 1)))
                                 .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(
                                         this.registries, 0.2f, 0.75f)));
         this.add(ModEntities.CRYSTAL_GOLEM.get(), LootTable.lootTable());
@@ -136,12 +135,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 LootTable.lootTable()
                         .withPool(baseCrystalGolemPool)
                         .withPool(LootPool.lootPool()
-                                .setRolls(UniformGenerator.between(1, 4))
+                                .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem
                                         .lootTableItem(Items.AMETHYST_SHARD)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .1f, .05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .4f, .05f)))
 
         );
         this.add(ModEntities.CRYSTAL_GOLEM.get(),
@@ -149,12 +148,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 LootTable.lootTable()
                         .withPool(baseCrystalGolemPool)
                         .withPool(LootPool.lootPool()
-                                .setRolls(UniformGenerator.between(1, 4))
+                                .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem
                                         .lootTableItem(ModItems.ROSELITH_CRYSTAL)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                        .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .1f, .05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .4f, .05f)))
 
         );
         this.add(ModEntities.CRYSTAL_GOLEM.get(),
@@ -162,12 +161,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 LootTable.lootTable()
                         .withPool(baseCrystalGolemPool)
                         .withPool(LootPool.lootPool()
-                                .setRolls(UniformGenerator.between(1, 4))
+                                .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem
                                         .lootTableItem(ModItems.GARNETORE_PIECE)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .1f, .05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .4f, .05f)))
 
         );
         this.add(ModEntities.CRYSTAL_GOLEM.get(),
@@ -175,12 +174,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 LootTable.lootTable()
                         .withPool(baseCrystalGolemPool)
                         .withPool(LootPool.lootPool()
-                                .setRolls(UniformGenerator.between(1, 4))
+                                .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem
                                         .lootTableItem(ModItems.VERDANTITE_CHUNK)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .1f, .05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .4f, .05f)))
 
         );
         this.add(ModEntities.CRYSTAL_GOLEM.get(),
@@ -188,12 +187,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 LootTable.lootTable()
                         .withPool(baseCrystalGolemPool)
                         .withPool(LootPool.lootPool()
-                                .setRolls(UniformGenerator.between(1, 4))
+                                .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem
                                         .lootTableItem(ModItems.LUMANITE_FRAGMENT)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .1f, .05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .4f, .05f)))
 
         );
         this.add(ModEntities.CRYSTAL_GOLEM.get(),
@@ -201,12 +200,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 LootTable.lootTable()
                         .withPool(baseCrystalGolemPool)
                         .withPool(LootPool.lootPool()
-                                .setRolls(UniformGenerator.between(1, 4))
+                                .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem
                                         .lootTableItem(Items.DIAMOND)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .1f, .05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .4f, .05f)))
 
         );
         this.add(ModEntities.CRYSTAL_GOLEM.get(),
@@ -214,15 +213,14 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 LootTable.lootTable()
                         .withPool(baseCrystalGolemPool)
                         .withPool(LootPool.lootPool()
-                                .setRolls(UniformGenerator.between(1, 4))
+                                .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem
                                         .lootTableItem(Items.EMERALD)
                                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                                         .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f))))
-                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .1f, .05f)))
+                                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .4f, .05f)))
 
         );
-        //throw new RuntimeException("test");
     }
 
 

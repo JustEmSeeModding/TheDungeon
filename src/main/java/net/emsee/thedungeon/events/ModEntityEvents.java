@@ -6,25 +6,29 @@ import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
 import net.emsee.thedungeon.datagen.ModCuriosDataProvider;
 import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
+import net.emsee.thedungeon.item.custom.DungeonCurio;
 import net.emsee.thedungeon.item.custom.EffigyCurio;
+import net.emsee.thedungeon.item.custom.SoulBoundTotem;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.utils.ModDungeonTeleportHandling;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
 import top.theillusivec4.curios.api.event.CurioCanUnequipEvent;
 import top.theillusivec4.curios.api.event.CurioDropsEvent;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -33,7 +37,7 @@ public class ModEntityEvents {
     @SubscribeEvent
     public static void onPlayerDeath(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
-            DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "ON_DEATH");
+            DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "ON_DEATH_CLONE");
             Player original = event.getOriginal();
             Player clone = event.getEntity();
             // Reset gamemode on death
@@ -41,29 +45,46 @@ public class ModEntityEvents {
                 ModDungeonTeleportHandling.setPlayerGameMode(clone, true);
             }
 
-            // Keep curio effigy on death
-            CuriosApi.getCuriosInventory(original).ifPresent(originalHandler -> {
-                CuriosApi.getCuriosInventory(clone).ifPresent(cloneHandler -> {
-
-                    DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "HAS_CURIO_HANDELERS");
-                    ICurioStacksHandler originalStack = originalHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
-                    ICurioStacksHandler cloneStack = cloneHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
-
-                    if (originalStack != null && cloneStack != null) {
-                        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "HAS_CURIO_SLOTS");
-                        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "OLD_STACK: "+ originalStack.getStacks().getStackInSlot(0));
-                        ItemStack stackToKeep = originalStack.getStacks().getStackInSlot(0).copy();
-                        cloneStack.getStacks().setStackInSlot(0, stackToKeep);
-                    }
-                });
-            });
+            if (SoulBoundTotem.hasOrHadInInventory(original)) {
+                SoulBoundTotem.copyPlayerInventory(original, clone);
+            } else
+                EffigyCurio.keepEffigyInInventory(original, clone);
         }
     }
 
     @SubscribeEvent
     public static void onCurioDrops(CurioDropsEvent event) {
-        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "CURIO_DROPS");
+        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "curio Drops");
+
         if (!(event.getEntity() instanceof Player player)) return;
+
+        curioEffigyDrops(event, player);
+        curioSoulTotemDrops(event, player);
+    }
+
+    private static void curioSoulTotemDrops(CurioDropsEvent event, Player player) {
+        AtomicBoolean hasTotem = new AtomicBoolean(false);
+
+        event.getDrops().forEach(drop -> {
+            if (hasTotem.get()) return;
+            if (drop.getItem().getItem() instanceof SoulBoundTotem) {
+                hasTotem.set(true);
+            }
+        });
+
+        if (hasTotem.get()) {
+            SoulBoundTotem.addPlayerData(player);
+        }
+
+        if (SoulBoundTotem.hasOrHadInInventory(player)) {
+            event.getDrops().forEach(drop -> {
+                player.addItem(drop.getItem());
+            });
+            event.getDrops().clear();
+        }
+    }
+
+    private static void curioEffigyDrops(CurioDropsEvent event, Player player) {
         AtomicBoolean triggered = new AtomicBoolean(false);
         event.getDrops().removeIf(itemEntity -> {
             if (triggered.get()) {
@@ -76,6 +97,20 @@ public class ModEntityEvents {
             }
             return false;
         });
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDrops(LivingDropsEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "player Drops");
+
+
+        if (SoulBoundTotem.hasOrHadInInventory(player)) {
+            event.getDrops().forEach(drop -> {
+                player.addItem(drop.getItem());
+            });
+            event.getDrops().clear();
+        }
     }
 
     @SubscribeEvent

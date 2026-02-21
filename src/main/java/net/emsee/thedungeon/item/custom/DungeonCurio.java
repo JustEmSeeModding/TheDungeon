@@ -6,6 +6,7 @@ import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.minecraft.Util;
@@ -56,9 +57,8 @@ public class DungeonCurio extends DungeonItem implements IDungeonToolTips, ICuri
     }
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ItemStack stack) {
-        Multimap<Holder<Attribute>, AttributeModifier> toReturn = LinkedHashMultimap.create();
         //toReturn.put(Attributes.JUMP_STRENGTH, new AttributeModifier(TheDungeon.defaultResourceLocation("test_belt_jump"),15, AttributeModifier.Operation.ADD_VALUE));
-        return toReturn;
+        return LinkedHashMultimap.create();
     }
 
     @Override

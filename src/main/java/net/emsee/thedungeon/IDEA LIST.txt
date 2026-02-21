@@ -10,9 +10,6 @@ Dungeon Pets?
 
 A hidden mini-boss who was once the dungeon’s keeper. Defeating him unlocks a secret "Creator’s Forge" to craft OP gear.
 
-Temporary Portal?
-    Starter portals that only grant single access, forcing players to scavenge quickly in the dungeon for better gear to build a permanent portal.
-
 Essencebound Armor - name TBD
     Full Set Bonus: Absorbs 1 (item) from inventory to negate a lethal hit (60s cooldown).
 
