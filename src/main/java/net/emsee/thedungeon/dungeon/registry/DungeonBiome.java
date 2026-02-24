@@ -14,8 +14,12 @@ public enum DungeonBiome {
         @Override
         public <T> DataResult<DungeonBiome> read(DynamicOps<T> ops, T input) {
             return ops.getStringValue(input).flatMap(name -> {
-                DungeonBiome rank = DungeonBiome.valueOf(name);
-                return rank != null ? DataResult.success(rank) : DataResult.error(() -> "Unknown DungeonBiome: " + name);
+                try {
+                    DungeonBiome rank = DungeonBiome.valueOf(name);
+                    return DataResult.success(rank);
+                } catch (Exception e){
+                    return DataResult.error(() -> "DataResult Error in biome CODEC:"+e);
+                }
             });
         }
 

@@ -20,13 +20,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public abstract class AbstractReplacementProcessor extends StructureProcessor {
-    private final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = Util.make(()-> {
-        Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = createReplacements();
-        if (replacements == null){
-            throw new NullPointerException("createReplacements() must not return null");
-        }
-        return replacements;
-    });
+    private final Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = Util.make(this::createReplacements);
 
     protected AbstractReplacementProcessor() {
         super();

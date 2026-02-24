@@ -20,7 +20,7 @@ public class ModCuriosDataProvider extends CuriosDataProvider {
     @Override
     public void generate(HolderLookup.Provider registries, ExistingFileHelper fileHelper) {
         this.createSlot("effigy").size(1);
-        this.createSlot("trinket").size(1);
+        this.createSlot("trinket").size(2);
 
         this.createEntities("player_default").addPlayer().addSlots("effigy", "trinket");
     }

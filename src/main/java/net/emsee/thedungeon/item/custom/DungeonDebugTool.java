@@ -5,6 +5,7 @@ import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,7 +29,8 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
         ItemStack itemstack = player.getItemInHand(hand);
         int selectedDungeonID = 0;
         if (itemstack.get(ModDataComponentTypes.ITEM_SAVED_DUNGEON_ID.get()) != null) {
-            selectedDungeonID= itemstack.get(ModDataComponentTypes.ITEM_SAVED_DUNGEON_ID.get());
+            DataComponentType<Integer> Id = ModDataComponentTypes.ITEM_SAVED_DUNGEON_ID.get();
+            selectedDungeonID= itemstack.get(Id);
         }
         if (player.isCreative()) {
             if (!level.isClientSide) {

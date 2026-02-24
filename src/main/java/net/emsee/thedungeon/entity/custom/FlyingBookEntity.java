@@ -85,20 +85,16 @@ public class FlyingBookEntity extends FlyingMob implements Enemy {
 
         @Override
         public void tick() {
-            boolean attackThisTick = false;
-
-            if (FlyingBookEntity.this.tickCount > this.nextAttackTick) {
-                attackThisTick = true;
-            }
+            boolean attackThisTick = FlyingBookEntity.this.tickCount > this.nextAttackTick;
 
             LivingEntity livingentity = FlyingBookEntity.this.getTarget();
             if (attackThisTick && livingentity != null) {
                 if (FlyingBookEntity.this.getBoundingBox().inflate(0.2F).intersects(livingentity.getBoundingBox())) {
                     FlyingBookEntity.this.doHurtTarget(livingentity);
                     this.nextAttackTick = FlyingBookEntity.this.tickCount + 20;
-                    if (!FlyingBookEntity.this.isSilent()) {
+                    //if (!FlyingBookEntity.this.isSilent()) {
                         //FlyingBookEntity.this.level().levelEvent(1039, FlyingBookEntity.this.blockPosition(), 0);
-                    }
+                    //}
                 }
             }
         }

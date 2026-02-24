@@ -96,7 +96,7 @@ public class HobGoblinTrades {
         private final int cost;
         private final int maxUses;
         private final float priceMultiplier;
-        private final Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider;
+        private final ResourceKey<EnchantmentProvider> enchantmentProvider;
 
         public ItemsForCash(Block block, int cost, int numberOfItems, int maxUses) {
             this(new ItemStack(block), cost, numberOfItems, maxUses);
@@ -119,14 +119,14 @@ public class HobGoblinTrades {
         }
 
         public ItemsForCash(ItemLike item, int cost, int numberOfItems, int maxUses, float priceMultiplier, ResourceKey<EnchantmentProvider> enchantmentProvider) {
-            this(new ItemStack(item), cost, numberOfItems, maxUses, priceMultiplier, Optional.of(enchantmentProvider));
+            this(new ItemStack(item), cost, numberOfItems, maxUses, priceMultiplier, enchantmentProvider);
         }
 
         public ItemsForCash(ItemStack itemStack, int cost, int numberOfItems, int maxUses, float priceMultiplier) {
-            this(itemStack, cost, numberOfItems, maxUses, priceMultiplier, Optional.empty());
+            this(itemStack, cost, numberOfItems, maxUses, priceMultiplier, null);
         }
 
-        public ItemsForCash(ItemStack itemStack, int cost, int numberOfItems, int maxUses, float priceMultiplier, Optional<ResourceKey<EnchantmentProvider>> enchantmentProvider) {
+        public ItemsForCash(ItemStack itemStack, int cost, int numberOfItems, int maxUses, float priceMultiplier, ResourceKey<EnchantmentProvider> enchantmentProvider) {
             this.itemStack = itemStack;
             this.cost = cost;
             this.itemStack.setCount(numberOfItems);
@@ -138,7 +138,8 @@ public class HobGoblinTrades {
         public MerchantOffer getOffer(Entity trader, RandomSource random) {
             ItemStack itemstack = this.itemStack.copy();
             Level level = trader.level();
-            this.enchantmentProvider.ifPresent((p_348340_) -> EnchantmentHelper.enchantItemFromProvider(itemstack, level.registryAccess(), p_348340_, level.getCurrentDifficultyAt(trader.blockPosition()), random));
+            if (enchantmentProvider!=null)
+                EnchantmentHelper.enchantItemFromProvider(itemstack, level.registryAccess(), enchantmentProvider, level.getCurrentDifficultyAt(trader.blockPosition()), random);
             return new MerchantOffer(new ItemCost(cashItem, this.cost), itemstack, this.maxUses, 1, this.priceMultiplier);
         }
     }

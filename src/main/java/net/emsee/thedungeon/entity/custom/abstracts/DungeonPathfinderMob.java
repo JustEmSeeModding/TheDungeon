@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class DungeonPathfinderMob extends PathfinderMob {
@@ -60,8 +61,7 @@ public abstract class DungeonPathfinderMob extends PathfinderMob {
     }*/
 
     @Override
-    public boolean isWithinMeleeAttackRange(LivingEntity pEnemy) {
-        if (pEnemy==null) return false;
+    public boolean isWithinMeleeAttackRange(@NotNull LivingEntity pEnemy) {
         if (this.getAttribute(ModAttributes.DUNGEON_MOB_REACH) != null) {
             double maxReach = this.getAttributeValue(ModAttributes.DUNGEON_MOB_REACH);
             float distance = pEnemy.distanceTo(this);

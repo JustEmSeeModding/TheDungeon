@@ -288,8 +288,7 @@ public interface IDungeonToolTips {
         FULL_BODY;
 
         static SlotType fromDefaultSlotGroup(EquipmentSlotGroup slotGroup) {
-            SlotType toReturn = UNASSIGNED;
-            toReturn = switch (slotGroup) {
+            return switch (slotGroup) {
                 case ANY,ARMOR -> UNASSIGNED;
                 case MAINHAND ->  MAIN_HAND;
                 case OFFHAND -> OFFHAND;
@@ -297,7 +296,6 @@ public interface IDungeonToolTips {
                 case HEAD, CHEST, LEGS, FEET ->  EQUIPPED;
                 case BODY ->  FULL_BODY;
             };
-            return toReturn;
         }
     }
 

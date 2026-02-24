@@ -60,6 +60,7 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
     }
 
     public static boolean isInNextToCollapseOrOutside(LivingEntity livingEntity, ClientLevel clientLevel) {
+        if (clientLevel==null) return false;
         if (clientLevel.dimension() != ModDimensions.DUNGEON_LEVEL_KEY) return true;
         if (DungeonSaveData.GetClient() == null) return false;
         if (livingEntity==null) return true;
