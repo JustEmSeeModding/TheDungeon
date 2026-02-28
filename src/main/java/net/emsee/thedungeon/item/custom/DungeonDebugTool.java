@@ -27,11 +27,9 @@ public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        int selectedDungeonID = 0;
-        if (itemstack.get(ModDataComponentTypes.ITEM_SAVED_DUNGEON_ID.get()) != null) {
-            DataComponentType<Integer> Id = ModDataComponentTypes.ITEM_SAVED_DUNGEON_ID.get();
-            selectedDungeonID= itemstack.get(Id);
-        }
+        DataComponentType<Integer> idData = ModDataComponentTypes.ITEM_SAVED_DUNGEON_ID.get();
+        int selectedDungeonID= itemstack.getOrDefault(idData,0);
+
         if (player.isCreative()) {
             if (!level.isClientSide) {
                 if (player.isCrouching()) {

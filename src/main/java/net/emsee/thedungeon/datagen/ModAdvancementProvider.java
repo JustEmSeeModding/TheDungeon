@@ -81,7 +81,7 @@ public final class ModAdvancementProvider extends AdvancementProvider {
                         "thedungeon",
                         "enter_magma_biome",
                         new ItemStack(Blocks.MAGMA_BLOCK),
-                        "has_seen", DungeonBiomeTrigger.has_traveled_to(DungeonBiome.GOBLIN_MAGMA_CAVE),
+                        "has_seen", DungeonBiomeTrigger.has_traveled_to(DungeonBiome.GOBLIN__MAGMA_CAVE),
                         enterRankF,
                         AdvancementType.TASK,
                         false, saver, existingFileHelper);

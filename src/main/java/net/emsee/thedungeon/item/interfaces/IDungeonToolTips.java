@@ -54,14 +54,11 @@ public interface IDungeonToolTips {
         List<ItemAttributeModifiers.Entry> modifiers = stack.getAttributeModifiers().modifiers();
 
         // add every modifier to the list of the correct slot
-        modifiers.forEach(entry -> {
-            entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry);
-        });
+        modifiers.forEach(entry -> entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry));
 
         if (stack.getItem() instanceof DungeonCurio curioItem) {
-            curioItem.getAttributeModifiers(stack).forEach((holder, modifier) -> {
-                entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY));
-            });
+            curioItem.getAttributeModifiers(stack).forEach((holder, modifier) ->
+                    entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY)));
         }
 
         if (stack.getItem() instanceof IClassedItem classedItem) {

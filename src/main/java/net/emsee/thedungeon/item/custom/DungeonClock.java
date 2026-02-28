@@ -1,11 +1,7 @@
 package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.Config;
-import net.emsee.thedungeon.dungeon.src.Biome.DungeonBiomeRegistry;
-import net.emsee.thedungeon.dungeon.src.Biome.GridDungeonBiomeRegistry;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.gameRule.GameruleRegistry;
-import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;

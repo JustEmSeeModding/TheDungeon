@@ -114,12 +114,9 @@ public class PreDeathTotemInventorySave {
 
     public void loadCuriosToPlayer(Player player) {
         if (curios != null)
-            CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-                curios.forEach((id, slotData) ->
-                        slotData.forEach((slotId, stack) -> {
-                            //handler.getCurios().get(id).getStacks().setStackInSlot(slotId, stack);
-                            handler.setEquippedCurio(id, slotId, stack);
-                        }));
-            });
+            CuriosApi.getCuriosInventory(player).ifPresent(handler ->
+                    curios.forEach((id, slotData) ->
+                            slotData.forEach((slotId, stack) ->
+                                    handler.setEquippedCurio(id, slotId, stack))));
     }
 }

@@ -19,8 +19,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
-import java.util.Optional;
-
 /// uses the same logic as wandering trader trades
 public class HobGoblinTrades {
     // the item used for trading

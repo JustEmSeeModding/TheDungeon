@@ -34,7 +34,7 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 public final class TheDungeon
 {
     public static final String MOD_ID = "thedungeon";
-    public static boolean doUpdateForcedChunks = false; //TODO set to true once in production
+    public static boolean doUpdateForcedChunks = false; //TODO set to true once in production (if its still even required by then)
 
     public TheDungeon(IEventBus modEventBus, ModContainer modContainer)
     {

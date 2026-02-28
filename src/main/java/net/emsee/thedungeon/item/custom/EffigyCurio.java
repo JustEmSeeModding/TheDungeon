@@ -50,16 +50,16 @@ public class EffigyCurio extends DungeonCurio {
     }
 
     public static void keepEffigyInInventory(Player original, Player clone) {
-        CuriosApi.getCuriosInventory(original).ifPresent(originalHandler -> {
-            CuriosApi.getCuriosInventory(clone).ifPresent(cloneHandler -> {
-                ICurioStacksHandler originalStacks = originalHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
-                ICurioStacksHandler cloneStacks = cloneHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
+        CuriosApi.getCuriosInventory(original).ifPresent(originalHandler ->
+                CuriosApi.getCuriosInventory(clone).ifPresent(cloneHandler -> {
+                    ICurioStacksHandler originalStacks = originalHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
+                    ICurioStacksHandler cloneStacks = cloneHandler.getCurios().get(ModCuriosDataProvider.EFFIGY_IDENTIFIER);
 
-                if (originalStacks != null && cloneStacks != null) {
-                    ItemStack stackToKeep = originalStacks.getStacks().getStackInSlot(0).copy();
-                    cloneStacks.getStacks().setStackInSlot(0, stackToKeep);
-                }
-            });
-        });
+                    if (originalStacks != null && cloneStacks != null) {
+                        ItemStack stackToKeep = originalStacks.getStacks().getStackInSlot(0).copy();
+                        cloneStacks.getStacks().setStackInSlot(0, stackToKeep);
+                    }
+                })
+        );
     }
 }

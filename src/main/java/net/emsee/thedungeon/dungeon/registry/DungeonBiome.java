@@ -6,9 +6,9 @@ import com.mojang.serialization.codecs.PrimitiveCodec;
 
 public enum DungeonBiome {
     none,
-    GOBLIN_MAGMA_CAVE,
-    GOBLIN_ICE_CAVE,
-    GOBLIN_CRYSTAL_CAVES;
+    GOBLIN__MAGMA_CAVE,
+    GOBLIN__ICE_CAVE,
+    GOBLIN__CRYSTAL_CAVES;
 
     public static final PrimitiveCodec<DungeonBiome> CODEC = new PrimitiveCodec<>() {
         @Override
