@@ -55,6 +55,10 @@ public class WeightedMap {
             }
             return toReturn;
         }
+
+        public int getWeight(T key) {
+            return getOrDefault(key, 0);
+        }
     }
 
     public static class Dbl<T> extends LinkedHashMap<T, Double> {
@@ -105,6 +109,10 @@ public class WeightedMap {
                 toReturn+=i;
             }
             return toReturn;
+        }
+
+        public double getWeight(T key) {
+            return getOrDefault(key, 0d);
         }
     }
 }

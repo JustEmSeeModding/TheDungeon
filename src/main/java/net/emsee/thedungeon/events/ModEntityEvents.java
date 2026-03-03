@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public class ModEntityEvents {
     @SubscribeEvent
-    public static void onPlayerDeath(PlayerEvent.Clone event) {
+    public static void onPlayerDeathClone(PlayerEvent.Clone event) {
         if (event.isWasDeath() && !event.getEntity().level().isClientSide) {
             DebugLog.logInfo(DebugLog.DebugType.WARNINGS, "ON_DEATH_CLONE");
             Player original = event.getOriginal();
@@ -44,7 +44,7 @@ public class ModEntityEvents {
             }
 
             if (SoulBoundTotem.hasOrHadInInventoryOnDeath(original)) {
-                SoulBoundTotem.copyPlayerInventory(original, clone);
+                SoulBoundTotem.onDeathClone(original, clone);
 
                 // run on the original first as the curios seem to be copied later.
                 if (!SoulBoundTotem.useFirstTotem(original))

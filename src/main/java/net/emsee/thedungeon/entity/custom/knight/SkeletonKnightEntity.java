@@ -18,6 +18,7 @@ public class SkeletonKnightEntity extends AbstractKnightEntity{
         super(entityType, level);
     }
 
+
     public static AttributeSupplier.Builder createAttributes() {
         return LivingEntity.createLivingAttributes()
                 .add(Attributes.FOLLOW_RANGE, 48.0)

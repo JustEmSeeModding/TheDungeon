@@ -37,6 +37,10 @@ public final class ModSpawnEggs {
             () -> new DeferredSpawnEggItem(ModEntities.CRYSTAL_GOLEM, 0xBDBDB8, 0xFFBCDD,
                     new Item.Properties()));
 
+    public static final DeferredItem<Item> LUMINOUS_CRAWLER_SPAWN_EGG = ITEMS.register("luminous_crawler_spawn_egg",
+            () -> new DeferredSpawnEggItem(ModEntities.LUMINOUS_CRAWLER, 0x1D1D1D, 0xFFD790,
+                    new Item.Properties()));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

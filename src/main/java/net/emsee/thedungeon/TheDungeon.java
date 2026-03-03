@@ -6,7 +6,6 @@ import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.ModBlockEntities;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
-import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.dungeonClass.ModSubClasses;
@@ -16,6 +15,7 @@ import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.emsee.thedungeon.item.ModCreativeModeTabs;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
+import net.emsee.thedungeon.particle.ModParticleTypes;
 import net.emsee.thedungeon.recipe.ModRecipes;
 import net.emsee.thedungeon.screen.ModMenuTypes;
 import net.emsee.thedungeon.villager.ModVillagers;
@@ -28,7 +28,6 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 @Mod(TheDungeon.MOD_ID)
 public final class TheDungeon
@@ -52,6 +51,8 @@ public final class TheDungeon
         ModArmorMaterials.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModParticleTypes.register(modEventBus);
+
         ModMobEffects.register(modEventBus);
 
         ModDataComponentTypes.register(modEventBus);

@@ -1,4 +1,7 @@
 {
+  "curios.identifier.effigy" : "Effigy",
+  "curios.identifier.trinket" : "Trinket",
+
   "thedungeon.configuration.dungeon_auto_cycling": "Dungeon Auto Cycle",
   "thedungeon.configuration.calculator_steps_per_tick": "Steps Per Tick Calculator",
   "thedungeon.configuration.placer_steps_per_tick": "Steps Per Tick Placer",
@@ -63,7 +66,9 @@
   "entity.thedungeon.hob_goblin.forge_worker" : "Hob Goblin Forge Worker",
   "entity.thedungeon.hob_goblin.scavenger" : "Hob Goblin Scavenger",
   "entity.thedungeon.hob_goblin.miner" : "Hob Goblin Miner",
+  "entity.thedungeon.hob_goblin.totem_maker" : "Hob Goblin Totem Maker",
   "entity.thedungeon.crystal_golem" : "Crystal Golem",
+  "entity.thedungeon.luminous_crawler" : "Luminous Crawler",
 
   "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
 
@@ -73,6 +78,7 @@
   "item.thedungeon.shadow_goblin_spawn_egg" :"Shadow Goblin Spawn Egg",
   "item.thedungeon.hob_goblin_spawn_egg" :"Hob Goblin Spawn Egg",
   "item.thedungeon.crystal_golem_spawn_egg" :"Crystal Golem Spawn Egg",
+  "item.thedungeon.luminous_crawler_spawn_egg" :"Luminous Crawler Spawn Egg",
 
   "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
 
@@ -86,6 +92,8 @@
   "item.thedungeon.tooltip.curio_type.any": "Any",
   "item.thedungeon.tooltip.curio_type.effigy": "Effigy",
   "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
+
+  "item.thedungeon.tooltip.soulbound_totem_equipped": "Returns items on death",
 
   "item.thedungeon.tooltip.classes": "Viable Classes",
   "item.thedungeon.tooltip.effigy_classes": "Class",
@@ -106,6 +114,7 @@
   "item.thedungeon.kobalt_dagger": "Kobalt Dagger",
   "item.thedungeon.goblins_forgehammer": "Goblin's Forgehammer",
   "item.thedungeon.kobalt_shield": "Kobalt Shield",
+  "item.thedungeon.soul_bound_totem": "Soul Bound Totem",
 
   "item.thedungeon.infused_alloy_helmet": "Infused Alloy Helmet",
   "item.thedungeon.infused_alloy_chestplate": "Infused Alloy Chestplate",

@@ -16,17 +16,24 @@ public class AnimationController {
     private int attackAnimationTimeout = 0;
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeoutAmount;
+
+    private boolean cancelIdleAnimationWhenAttacking;
     public final Map<Integer, AttackAnimation> attackAnimationStates = new HashMap<>();
 
     public AnimationController() {}
 
-    public AnimationController withIdleAnimation(int timeout) {
-        idleAnimationTimeoutAmount = timeout;
+    public AnimationController withIdleAnimation(int animationLength) {
+        idleAnimationTimeoutAmount = animationLength;
         return this;
     }
 
-    public AnimationController withAttackAnimation(int ID, int timeout) {
-        attackAnimationStates.put(ID, new AttackAnimation(new AnimationState(), timeout));
+    public AnimationController withAttackAnimation(int ID, int animationLength) {
+        attackAnimationStates.put(ID, new AttackAnimation(new AnimationState(), animationLength));
+        return this;
+    }
+
+    public AnimationController doCancelIdleAnimationWhenAttacking(boolean value) {
+        cancelIdleAnimationWhenAttacking = value;
         return this;
     }
 
@@ -36,10 +43,16 @@ public class AnimationController {
     }
 
     private void tickIdleAnimation(DungeonAnimatedMob entity) {
-        if (idleAnimationTimeout <= 0) {
-            idleAnimationTimeout = idleAnimationTimeoutAmount;
+        boolean attackCancel = cancelIdleAnimationWhenAttacking && attackAnimationTimeout > 0;
+
+        if (idleAnimationTimeout <= 0 && !attackCancel) {
+            idleAnimationTimeout = idleAnimationTimeoutAmount-1; //first tick happens already, so we subtract 1 from the timeout
             idleAnimationState.start(entity.tickCount);
-        } else {
+        } else if (attackCancel) {
+            idleAnimationTimeout = 0;
+            idleAnimationState.stop();
+        }
+        else {
             --idleAnimationTimeout;
         }
     }
@@ -52,7 +65,7 @@ public class AnimationController {
             AttackAnimation animation = attackAnimationStates.get(id);
             if (animation != null) {
                 animation.state.start(entity.tickCount);
-                attackAnimationTimeout = animation.timeout;
+                attackAnimationTimeout = animation.timeout-1; //first tick happens already, so we subtract 1 from the timeout
             }
             lastVersion = version;
             lastAnimationId = id;

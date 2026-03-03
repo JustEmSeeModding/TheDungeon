@@ -3,6 +3,7 @@ package net.emsee.thedungeon.events;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.ModEntities;
 import net.emsee.thedungeon.entity.custom.CrystalGolemEntity;
+import net.emsee.thedungeon.entity.custom.LuminousCrawlerEntity;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.ShadowGoblinEntity;
@@ -24,5 +25,6 @@ public class ModEntityAttributeEvents {
         event.put(ModEntities.SHADOW_GOBLIN.get(), ShadowGoblinEntity.createAttributes().build());
         event.put(ModEntities.HOB_GOBLIN.get(), HobGoblinEntity.createAttributes().build());
         event.put(ModEntities.CRYSTAL_GOLEM.get(), CrystalGolemEntity.createAttributes().build());
+        event.put(ModEntities.LUMINOUS_CRAWLER.get(), LuminousCrawlerEntity.createAttributes().build());
     }
 }

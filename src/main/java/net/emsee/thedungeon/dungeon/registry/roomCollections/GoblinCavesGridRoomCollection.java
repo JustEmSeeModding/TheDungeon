@@ -334,7 +334,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .applyToAll(room -> room.setAllConnectionTags(GILDED_TAG))
                         .addRoom(l_blackstone_vein().withWeight(5).withStructureProcessor(GildedCaveOreProcessor.INSTANCE).setAllConnectionTags(GILDED_TAG)))
 
-                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.SHADOW_GOBLIN, 1, 2, .18f)));
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.SHADOW_GOBLIN, 1, 2, .18f)))
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.LUMINOUS_CRAWLER,1,1, .05f)));
     }
 
     private static GridRoomList.Builder deep_biome() {
@@ -344,7 +345,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .applyToAll(room -> room.withStructureProcessor(DeepCaveProcessor.INSTANCE))
                         .applyToAll(room -> room.setAllConnectionTags(DEEP_TAG)))
 
-                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 1, 2, .15f)));
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.CAVE_GOBLIN, 1, 2, .15f)))
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.LUMINOUS_CRAWLER,1,1, .05f)));
     }
 
     private static GridRoomList.Builder ice_biome() {
@@ -388,6 +390,7 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .applyToAll(room -> room.withStructurePostProcessor(CrystalCaveBuddingPostProcessor.INSTANCE))
                         .applyToAll(room -> room.setAllConnectionTags(CRYSTAL_TAG)))
                 .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.CRYSTAL_GOLEM, 1,2,.6f)))
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.LUMINOUS_CRAWLER,1,1, .05f)))
                 .applyToAll(room -> room.setBiome(DungeonBiome.GOBLIN__CRYSTAL_CAVES));
     }
 
@@ -399,7 +402,8 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .applyToAll(room -> room.withStructureProcessor(MagmaCaveProcessor.INSTANCE))
                         .applyToAll(room -> room.setAllConnectionTags(MAGMA_TAG)))
                 .applyToAll(room -> room.setBiome(DungeonBiome.GOBLIN__MAGMA_CAVE))
-                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, noForgeWorkerSpawn, 1,2,.3f)));
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.HOB_GOBLIN, noForgeWorkerSpawn, 1,2,.3f)))
+                .applyToAll(room -> room.addMobSpawnRule(new SpawnInRoom<>(ModEntities.LUMINOUS_CRAWLER,1,1, .05f)));
     }
 
 

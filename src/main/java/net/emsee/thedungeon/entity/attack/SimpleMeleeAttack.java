@@ -6,26 +6,25 @@ import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPattern<E> {
-    private final float damageMultiplier;
-    private final float knockbackMultiplier;
-    private final int animationID;
-    private final int duration;
-    private final int cooldown;
-    private final int hurtDelay;
-    private final AttackHand hands;
-    private final HandPredicate mainHandPredicate;
-    private final HandPredicate offHandPredicate;
-    private int remainingDuration = 0;
-    private int remainingCooldown = 0;
-    private boolean hasHurt = false;
+public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AbstractAttackPattern<E> {
+    protected final float damage;
+    protected final int animationID;
+    protected final int duration;
+    protected final int cooldown;
+    protected final int hurtDelay;
+    protected final AttackHand hands;
+    protected final HandPredicate mainHandPredicate;
+    protected final HandPredicate offHandPredicate;
+    protected int remainingDuration = 0;
+    protected int remainingCooldown = 0;
+    protected boolean hasHurt = false;
 
-    public SimpleMeleeAttack(float damageMultiplier, float knockbackMultiplier, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands) {
-        this.damageMultiplier = damageMultiplier;
-        this.knockbackMultiplier = knockbackMultiplier;
+    public SimpleMeleeAttack(float damage, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands) {
+        this.damage = damage;
         this.animationID = animationID;
         this.duration = duration;
         this.cooldown = cooldown;
@@ -35,9 +34,8 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPatte
         this.offHandPredicate = new HandPredicate.AlwaysTrue();
     }
 
-    public SimpleMeleeAttack(float damageMultiplier, float knockbackMultiplier, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands, HandPredicate mainHandPredicate, HandPredicate offHandPredicate) {
-        this.damageMultiplier = damageMultiplier;
-        this.knockbackMultiplier = knockbackMultiplier;
+    public SimpleMeleeAttack(float damage, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands, HandPredicate mainHandPredicate, HandPredicate offHandPredicate) {
+        this.damage = damage;
         this.animationID = animationID;
         this.duration = duration;
         this.cooldown = cooldown;
@@ -52,18 +50,18 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPatte
         remainingDuration = duration;
         remainingCooldown = cooldown;
         hasHurt = false;
-        switch (getHands()) {
-            case MAIN -> {
-                entity.swing(InteractionHand.MAIN_HAND);
+        AttackHand hands = getHands();
+        if (hands != null)
+            switch (hands) {
+                case MAIN ->
+                        entity.swing(InteractionHand.MAIN_HAND);
+                case OFF ->
+                        entity.swing(InteractionHand.OFF_HAND);
+                case BOTH -> {
+                    entity.swing(InteractionHand.MAIN_HAND);
+                    entity.swing(InteractionHand.OFF_HAND);
+                }
             }
-            case OFF -> {
-                entity.swing(InteractionHand.OFF_HAND);
-            }
-            case BOTH -> {
-                entity.swing(InteractionHand.MAIN_HAND);
-                entity.swing(InteractionHand.OFF_HAND);
-            }
-        }
     }
 
     @Override
@@ -71,10 +69,14 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPatte
         remainingDuration--;
         if (remainingDuration <= duration-hurtDelay && !hasHurt) {
             if (target!= null && entity.isWithinMeleeAttackRange(target)) {
-                target.hurt(entity.damageSources().mobAttack(entity), (float)entity.getAttributeValue(Attributes.ATTACK_DAMAGE) * damageMultiplier);
+                applyDamage(entity, target);
             }
             hasHurt = true;
         }
+    }
+
+    protected void applyDamage(E entity, LivingEntity target) {
+        target.hurt(entity.damageSources().mobAttack(entity), damage);
     }
 
     @Override
@@ -88,13 +90,10 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPatte
     }
 
     @Override
-    public float getDamageMultiplier() { return damageMultiplier; }
+    public float getDamage() { return damage; }
 
     @Override
-    public float getKnockbackMultiplier() { return knockbackMultiplier; }
-
-    @Override
-    public AttackHand getHands() { return hands; }
+    public @Nullable AttackHand getHands() { return hands; }
 
     @Override
     public boolean canUseWithItems(ItemStack mainHand, ItemStack offHand) {
@@ -119,7 +118,7 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPatte
     public int getAnimationDuration() { return duration; }
 
     @Override
-    public CompoundTag toSaveTag() {
+    public @NotNull CompoundTag toSaveTag() {
         CompoundTag tag = new CompoundTag();
         tag.putInt("Duration", remainingDuration);
         tag.putInt("Cooldown", remainingCooldown);
@@ -128,7 +127,8 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AttackPatte
     }
 
     @Override
-    public void fromSaveTag(CompoundTag tag) {
+    public void fromSaveTag(@Nullable CompoundTag tag) {
+        if (tag == null) return;
         remainingDuration = tag.getInt("Duration");
         remainingCooldown = tag.getInt("Cooldown");
         hasHurt = tag.getBoolean("HasHurt");

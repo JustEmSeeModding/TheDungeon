@@ -3,7 +3,6 @@ package net.emsee.thedungeon.dungeon.src.types.grid.roomCollection;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
-import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.utils.WeightedMap;
 
@@ -18,19 +17,17 @@ public class GridRoomCollectionInstance {
         this.collection = collection;
 
         // copy the requirements into the instance list
-        collection.getRequiredPlacements().forEach((room, placements) -> {
-            requiredPlacements.put(room, new RequiredRoomPlacementsInstance(placements.min, placements.max));
-        });
-        collection.getRequiredListPlacements().forEach((list, placements) -> {
-            requiredListPlacements.put(list, new RequiredRoomPlacementsInstance(placements.min, placements.max));
-        });
+        collection.getRequiredPlacements().forEach((room, placements) ->
+                requiredPlacements.put(room, new RequiredRoomPlacementsInstance(placements.min, placements.max)));
+        collection.getRequiredListPlacements().forEach((list, placements) ->
+            requiredListPlacements.put(list, new RequiredRoomPlacementsInstance(placements.min, placements.max)));
     }
 
-    public AbstractGridRoom getRandomRoom(Random random, AbstractGridRoom.PredicateData placementData) {
+    public AbstractGridRoom getRandomRoom(Random random, AbstractGridRoom.PlacementPredicateData placementData) {
         return getAllPossibleRooms(placementData).getRandom(random);
     }
 
-    public AbstractGridRoom getRandomRoom(int maxRoomScale, Random random, AbstractGridRoom.PredicateData placementData) {
+    public AbstractGridRoom getRandomRoom(int maxRoomScale, Random random, AbstractGridRoom.PlacementPredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnMap = new WeightedMap.Int<>();
         for (AbstractGridRoom gridRoom : getAllPossibleRooms(placementData).keySet()) {
             if (gridRoom.getMaxSizeScale() <= maxRoomScale) {
@@ -40,7 +37,7 @@ public class GridRoomCollectionInstance {
         return returnMap.getRandom(random);
     }
 
-    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random, AbstractGridRoom.PredicateData placementData) {
+    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random, AbstractGridRoom.PlacementPredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
         for (AbstractGridRoom gridRoom : getAllPossibleRooms(placementData).keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
@@ -53,7 +50,7 @@ public class GridRoomCollectionInstance {
         return null;
     }
 
-    public AbstractGridRoom getRandomRequiredRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random, AbstractGridRoom.PredicateData placementData) {
+    public AbstractGridRoom getRandomRequiredRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random, AbstractGridRoom.PlacementPredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
         for (AbstractGridRoom gridRoom : getAllPossibleRequiredRooms(placementData).keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
@@ -66,7 +63,7 @@ public class GridRoomCollectionInstance {
         return null;
     }
 
-    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random, AbstractGridRoom.PredicateData placementData) {
+    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random, AbstractGridRoom.PlacementPredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
 
         for (AbstractGridRoom gridRoom : getAllPossibleRooms(placementData).keySet()) {
@@ -85,7 +82,7 @@ public class GridRoomCollectionInstance {
     /**
      * Returns a map of all rooms that are eligible for placement based on individual and grouped placement constraints.
      */
-    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRooms(AbstractGridRoom.PredicateData placementData) {
+    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRooms(AbstractGridRoom.PlacementPredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> toReturn = new WeightedMap.Int<>();
         for (AbstractGridRoom room : collection.getAllRooms().keySet()) {
             boolean allowed = room.canPlace(placementData);
@@ -118,7 +115,7 @@ public class GridRoomCollectionInstance {
     /**
      * Returns a map of all required rooms that are eligible for placement based on individual and grouped placement constraints.
      */
-    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRequiredRooms(AbstractGridRoom.PredicateData placementData) {
+    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRequiredRooms(AbstractGridRoom.PlacementPredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> toReturn = new WeightedMap.Int<>();
         for (AbstractGridRoom room : collection.getAllRooms().keySet()) {
             boolean allowed = room.canPlace(placementData);

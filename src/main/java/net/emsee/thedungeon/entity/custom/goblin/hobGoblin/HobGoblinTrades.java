@@ -78,6 +78,20 @@ public class HobGoblinTrades {
                             new ItemsForCash(Items.EMERALD, 3, 1,3),
                             new CashForItems(ModItems.INFUSED_CHISEL, 1, 2,9),
                     }));
+            case TOTEM_MAKER -> toIntMap(ImmutableMap.of(
+                    // common trades
+                    1, new VillagerTrades.ItemListing[]{
+                            new CashForItems(ModItems.PYRITE, 4, 4,2),
+                            new CashForItems(ModItems.ROSELITH_CRYSTAL, 2, 3,3),
+                            new CashForItems(ModItems.LUMANITE_FRAGMENT, 2, 3,3),
+                            new CashForItems(ModItems.VERDANTITE_CHUNK, 2, 3,3),
+                            new CashForItems(ModItems.GARNETORE_PIECE, 2, 3,3),
+                    },
+
+                    // rare trades
+                    2,new VillagerTrades.ItemListing[]{
+                            new ItemsForCash(ModItems.SOUL_BOUND_TOTEM, 10, 1,2),
+                    }));
         };
 
     }

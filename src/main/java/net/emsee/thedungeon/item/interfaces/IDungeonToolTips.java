@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.item.interfaces;
 
+import com.google.common.collect.Multimap;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
@@ -7,10 +8,13 @@ import net.emsee.thedungeon.item.custom.DungeonCurio;
 import net.emsee.thedungeon.item.custom.EffigyCurio;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -18,6 +22,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.neoforge.client.event.AddAttributeTooltipsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.ISlotType;
 
 import java.util.*;
 
@@ -57,8 +64,15 @@ public interface IDungeonToolTips {
         modifiers.forEach(entry -> entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry));
 
         if (stack.getItem() instanceof DungeonCurio curioItem) {
-            curioItem.getAttributeModifiers(stack).forEach((holder, modifier) ->
-                    entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY)));
+            Map<String, ISlotType> slots = CuriosApi.getItemStackSlots(stack, event.getContext().player());
+
+            for (String identifier : slots.keySet()) {
+                SlotContext slotContext = new SlotContext(identifier, event.getContext().player(), 0, false, true);
+                Multimap<Holder<Attribute>, AttributeModifier> attributes = CuriosApi.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack);
+
+                curioItem.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack).forEach((holder, modifier) ->
+                        entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY)));
+            }
         }
 
         if (stack.getItem() instanceof IClassedItem classedItem) {

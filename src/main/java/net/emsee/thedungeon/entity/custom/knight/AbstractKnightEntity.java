@@ -3,8 +3,8 @@ package net.emsee.thedungeon.entity.custom.knight;
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
 import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
-import net.emsee.thedungeon.entity.attack.AttackPattern;
-import net.emsee.thedungeon.entity.attack.SimpleMeleeAttack;
+import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
+import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
 import net.emsee.thedungeon.entity.brain.DungeonMobBrain;
 import net.emsee.thedungeon.entity.client.animation.AnimationController;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
@@ -36,10 +36,21 @@ public abstract class AbstractKnightEntity extends DungeonAnimatedMob{
         setupBrain();
     }
 
-    protected void setupBrain() {
-        brain.addAttack(new SimpleMeleeAttack<>(1, 1, 0, 20, 40, 15, AttackPattern.AttackHand.MAIN));
-        brain.addAttack(new SimpleMeleeAttack<>(0.5f, 0.25f, 1, 10, 30, 7, AttackPattern.AttackHand.OFF));
-
+    protected  void setupBrain() {
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                1,
+                0,
+                20,
+                40,
+                15,
+                AbstractAttackPattern.AttackHand.MAIN));
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                1,
+                1,
+                10,
+                30,
+                7,
+                AbstractAttackPattern.AttackHand.OFF));
     }
 
     @Override

@@ -4,7 +4,7 @@ package net.emsee.thedungeon.entity.custom;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
 import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
-import net.emsee.thedungeon.entity.attack.AttackPattern;
+import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
 import net.emsee.thedungeon.entity.attack.SimpleMeleeAttack;
 import net.emsee.thedungeon.entity.brain.DungeonMobBrain;
 import net.emsee.thedungeon.entity.client.animation.AnimationController;
@@ -56,7 +56,7 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
     }
 
     protected void setupBrain() {
-        brain.addAttack(new SimpleMeleeAttack<>(1f, 1f, 0, 12, 15, 6, AttackPattern.AttackHand.BOTH));
+        brain.addAttack(new SimpleMeleeAttack<>(2, 0, 12, 15, 6, AbstractAttackPattern.AttackHand.BOTH));
     }
 
     @Override

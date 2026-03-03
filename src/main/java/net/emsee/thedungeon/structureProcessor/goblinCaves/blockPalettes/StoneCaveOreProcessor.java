@@ -26,8 +26,8 @@ public class StoneCaveOreProcessor extends BlockPaletteReplacementProcessor {
                         stoneMap.put(new ReplaceInstance(Blocks.ANDESITE::defaultBlockState), 375);
                         stoneMap.put(new ReplaceInstance(Blocks.COBBLESTONE::defaultBlockState), 375);
                         stoneMap.put(new ReplaceInstance(Blocks.TUFF::defaultBlockState), 375);
-                        stoneMap.put(new ReplaceInstance(Blocks.GOLD_ORE::defaultBlockState), 10);
-                        stoneMap.put(new ReplaceInstance(Blocks.COAL_ORE::defaultBlockState), 7);
+                        //stoneMap.put(new ReplaceInstance(Blocks.GOLD_ORE::defaultBlockState), 10);
+                        //stoneMap.put(new ReplaceInstance(Blocks.COAL_ORE::defaultBlockState), 7);
                         stoneMap.put(new ReplaceInstance(() -> ModBlocks.PYRITE_ORE.get().defaultBlockState()), 4);
                         stoneMap.put(new ReplaceInstance(() -> ModBlocks.INFUSED_STONE.get().defaultBlockState()), 2);
                     }));

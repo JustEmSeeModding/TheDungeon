@@ -5,8 +5,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 public final class ModRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
@@ -15,9 +16,9 @@ public final class ModRecipes {
             DeferredRegister.create(Registries.RECIPE_TYPE, TheDungeon.MOD_ID);
 
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DungeonInfusionRecipe>> DUNGEON_INFUSION_SERIALIZER =
+    public static final Supplier<RecipeSerializer<DungeonInfusionRecipe>> DUNGEON_INFUSION_SERIALIZER =
             SERIALIZERS.register("dungeon_infusion", DungeonInfusionRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<DungeonInfusionRecipe>> DUNGEON_INFUSION_TYPE =
+    public static final Supplier<RecipeType<DungeonInfusionRecipe>> DUNGEON_INFUSION_TYPE =
             TYPES.register("dungeon_infusion", () -> new RecipeType<>() {
                 @Override
                 public String toString() {
@@ -26,9 +27,9 @@ public final class ModRecipes {
             });
 
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GoblinForgeRecipe>> GOBLIN_FORGE_SERIALIZER =
+    public static final Supplier<RecipeSerializer<GoblinForgeRecipe>> GOBLIN_FORGE_SERIALIZER =
             SERIALIZERS.register("goblin_forge", GoblinForgeRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeType<?>, RecipeType<GoblinForgeRecipe>> GOBLIN_FORGE_TYPE =
+    public static final Supplier<RecipeType<GoblinForgeRecipe>> GOBLIN_FORGE_TYPE =
             TYPES.register("goblin_forge", () -> new RecipeType<>() {
                 @Override
                 public String toString() {

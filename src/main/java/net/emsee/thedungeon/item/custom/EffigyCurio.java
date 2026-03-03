@@ -1,5 +1,7 @@
 package net.emsee.thedungeon.item.custom;
 
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import net.emsee.thedungeon.datagen.ModCuriosDataProvider;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
@@ -7,7 +9,11 @@ import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -61,5 +67,12 @@ public class EffigyCurio extends DungeonCurio {
                     }
                 })
         );
+    }
+
+    @Override
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation resourceLocation, ItemStack stack) {
+        Multimap<Holder<Attribute>, AttributeModifier> map = LinkedHashMultimap.create();
+        CuriosApi.addSlotModifier(map, "trinket", resourceLocation, 1, AttributeModifier.Operation.ADD_VALUE);
+        return map;
     }
 }

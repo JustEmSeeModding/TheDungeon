@@ -11,6 +11,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 
 import java.util.Map;
 
+
+//TODO, add dungeon variant of gold
 public class GildedCaveOreProcessor extends BlockPaletteReplacementProcessor {
     public static final GildedCaveOreProcessor INSTANCE = new GildedCaveOreProcessor();
 

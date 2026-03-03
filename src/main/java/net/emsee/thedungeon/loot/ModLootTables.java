@@ -23,6 +23,10 @@ public class ModLootTables {
             ResourceKey.create(Registries.LOOT_TABLE,
                     TheDungeon.defaultResourceLocation("entities/hob_goblin/miner"));
 
+    public static final ResourceKey<LootTable> HOB_GOBLIN_TOTEM_MAKER =
+            ResourceKey.create(Registries.LOOT_TABLE,
+                    TheDungeon.defaultResourceLocation("entities/hob_goblin/totem_maker"));
+
     public static final ResourceKey<LootTable> CRYSTAL_GOLEM_ROSELITH =
             ResourceKey.create(Registries.LOOT_TABLE,
                     TheDungeon.defaultResourceLocation("entities/crystal_golem/rose_quartz"));

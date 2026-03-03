@@ -3,8 +3,8 @@ package net.emsee.thedungeon.entity.custom.goblin;
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
 import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
-import net.emsee.thedungeon.entity.attack.AttackPattern;
-import net.emsee.thedungeon.entity.attack.SimpleMeleeAttack;
+import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
+import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
 import net.emsee.thedungeon.entity.brain.DungeonMobBrain;
 import net.emsee.thedungeon.entity.client.animation.AnimationController;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
@@ -24,12 +24,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public class AbstractGoblinEntity extends DungeonAnimatedMob {
+public abstract class AbstractGoblinEntity extends DungeonAnimatedMob {
     public final AnimationController animationController = new AnimationController()
-            .withIdleAnimation(59)
-            .withAttackAnimation(0,9) // right slash
-            .withAttackAnimation(1,9) // left slash
-            .withAttackAnimation(2,9); // both slash
+            .withIdleAnimation(50)
+            .withAttackAnimation(0,10) // right slash
+            .withAttackAnimation(1,10) // left slash
+            .withAttackAnimation(2,10); // both slash
     protected final DungeonMobBrain<AbstractGoblinEntity> brain = new DungeonMobBrain<>(this);
 
 
@@ -40,9 +40,27 @@ public class AbstractGoblinEntity extends DungeonAnimatedMob {
     }
 
     protected void setupBrain() {
-        brain.addAttack(new SimpleMeleeAttack<>(0.5f, 0.75f, 0, 15, 30, 12, AttackPattern.AttackHand.MAIN));
-        brain.addAttack(new SimpleMeleeAttack<>(0.5f, 0.75f, 1, 15, 30, 12, AttackPattern.AttackHand.OFF));
-        brain.addAttack(new SimpleMeleeAttack<>(1, 1, 2, 30, 60, 12, AttackPattern.AttackHand.BOTH));
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                .5f,
+                0,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.MAIN));
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                .5f,
+                1,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.OFF));
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                1,
+                2,
+                30,
+                60,
+                12,
+                AbstractAttackPattern.AttackHand.BOTH));
     }
 
     @Override

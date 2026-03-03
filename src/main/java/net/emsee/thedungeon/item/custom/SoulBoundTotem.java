@@ -6,6 +6,9 @@ import net.emsee.thedungeon.attachmentType.PreDeathTotemInventorySave;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.item.ModItems;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -13,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -66,9 +70,17 @@ public class SoulBoundTotem extends DungeonCurio{
         player.getPersistentData().putBoolean("hasOrHadSoulBoundTotem", true);
     }
 
-    public static void copyPlayerInventory(Player original, Player clone) {
+    @Override
+    public LinkedHashMap<SlotType, Component[]> getExtraComponents(ItemStack stack) {
+        LinkedHashMap<SlotType, Component[]> toReturn = super.getExtraComponents(stack);
+        toReturn.put(SlotType.CURIO, new Component[]{Component.translatable("item.thedungeon.tooltip.soulbound_totem_equipped").withStyle(POSITIVE_FORMATTING)});
+        return toReturn;
+    }
+
+    public static void onDeathClone(Player original, Player clone) {
         PreDeathTotemInventorySave invSave = original.getData(ModAttachmentTypes.PRE_DEATH_TOTEM_INVENTORY_SAVE);
         invSave.loadInventoryToPlayer(clone);
+        Minecraft.getInstance().gameRenderer.displayItemActivation(new ItemStack(ModItems.SOUL_BOUND_TOTEM.get()));
     }
 
 

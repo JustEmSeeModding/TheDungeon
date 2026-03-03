@@ -93,7 +93,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         // select the starting room
         AbstractGridRoom startingRoom = dungeon.getRaw().getStartingRoom();
         if (startingRoom == null)
-            startingRoom = dungeon.getRoomCollection().getRandomRoom(random, new AbstractGridRoom.PredicateData(serverLevel, dungeon.getRaw().getCenterPos(), this));
+            startingRoom = dungeon.getRoomCollection().getRandomRoom(random, new AbstractGridRoom.PlacementPredicateData(serverLevel, dungeon.getRaw().getCenterPos(), this));
         if (startingRoom == null)
             throw new IllegalStateException("error finding dungeon starting room");
 
@@ -436,11 +436,11 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     }
 
     public AbstractGridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random, Vec3i originArrayPos) {
-        return collection.getRandomRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PredicateData(cashedServerLevel, originArrayPos, this));
+        return collection.getRandomRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PlacementPredicateData(cashedServerLevel, originArrayPos, this));
     }
 
     public AbstractGridRoom GetRandomRequiredRoomByConnection(Connection connection, String fromTag, Random random, Vec3i originArrayPos) {
-        return collection.getRandomRequiredRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PredicateData(cashedServerLevel, originArrayPos, this));
+        return collection.getRandomRequiredRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PlacementPredicateData(cashedServerLevel, originArrayPos, this));
     }
 
     public boolean isDone() {

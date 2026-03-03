@@ -68,7 +68,7 @@ public final class ModItems {
             () -> new DungeonCurio(new Item.Properties(), DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
 
     public static final DeferredItem<SoulBoundTotem> SOUL_BOUND_TOTEM = ITEMS.register("soul_bound_totem",
-            () -> new SoulBoundTotem(new Item.Properties(), DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
+            () -> new SoulBoundTotem(new Item.Properties(), DungeonItemRank.E, new DeferredHolder[]{}, new DeferredHolder[]{}));
 
 
     public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",

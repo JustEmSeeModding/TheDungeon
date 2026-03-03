@@ -32,4 +32,7 @@ public final class ModEntityModelLayers {
 
     public static final ModelLayerLocation CRYSTAL_GOLEM = new ModelLayerLocation(
             TheDungeon.defaultResourceLocation("crystal_golem"), "main");
+
+    public static final ModelLayerLocation LUMINOUS_CRAWLER = new ModelLayerLocation(
+            TheDungeon.defaultResourceLocation("luminous_crawler"), "main");
 }

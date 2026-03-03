@@ -24,6 +24,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_DEBUG_TOOL);//TODO comment out at release
                         output.accept(ModItems.DUNGEON_CLOCK);
                         output.accept(ModItems.PYRITE_COMPASS);
+                        output.accept(ModItems.SOUL_BOUND_TOTEM);
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
                         output.accept(ModItems.INFUSED_CHISEL);
@@ -140,6 +141,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG);
                         output.accept(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG);
                         output.accept(ModSpawnEggs.CRYSTAL_GOLEM_SPAWN_EGG);
+                        output.accept(ModSpawnEggs.LUMINOUS_CRAWLER_SPAWN_EGG);
                     }).build());
 
     public static void register(IEventBus eventBus) {

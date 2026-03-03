@@ -3,6 +3,7 @@ package net.emsee.thedungeon.entity;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.entity.custom.CrystalGolemEntity;
+import net.emsee.thedungeon.entity.custom.LuminousCrawlerEntity;
 import net.emsee.thedungeon.entity.custom.TestDummyEntity;
 import net.emsee.thedungeon.entity.custom.goblin.CaveGoblinEntity;
 import net.emsee.thedungeon.entity.custom.goblin.hobGoblin.HobGoblinEntity;
@@ -48,6 +49,10 @@ public final class ModEntities {
     public static final Supplier<EntityType<CrystalGolemEntity>> CRYSTAL_GOLEM =
             ENTITY_TYPES.register("crystal_golem", () -> EntityType.Builder.of(CrystalGolemEntity::new, MobCategory.MONSTER)
                     .sized(.8f, 1.2f).build("crystal_golem"));
+
+    public static final Supplier<EntityType<LuminousCrawlerEntity>> LUMINOUS_CRAWLER =
+            ENTITY_TYPES.register("luminous_crawler", () -> EntityType.Builder.of(LuminousCrawlerEntity::new, MobCategory.MONSTER)
+                    .sized(1.4f, .7f).build("luminous_crawler"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

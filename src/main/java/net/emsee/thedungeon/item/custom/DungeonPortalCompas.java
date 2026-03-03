@@ -24,6 +24,8 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.*;
 
+
+//TODO: class is badly optimized and can cause lag when held or in inventory.
 public class DungeonPortalCompas extends DungeonItem {
     // Optimization parameters
     private static final boolean ONLY_UPDATE_IN_HAND = false;

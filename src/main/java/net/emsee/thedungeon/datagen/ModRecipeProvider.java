@@ -59,6 +59,15 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD)
                 .unlockedBy("has_dungeon_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SOUL_BOUND_TOTEM.get(), 1)
+                .pattern("0u0")
+                .pattern("0*0")
+                .pattern("0u0")
+                .define('u', Items.SHULKER_SHELL)
+                .define('0', ModItems.PYRITE.get())
+                .define('*', ModItems.VERDANTITE_CHUNK.get())
+                .unlockedBy("has_infused_alloy", has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.INFUSED_DAGGER.get(), 1)
                 .pattern("*")
                 .pattern("/")

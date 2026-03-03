@@ -1,6 +1,5 @@
 package net.emsee.thedungeon.events;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.entity.ModBlockEntities;
 import net.emsee.thedungeon.block.entity.renderer.ModBlockEntityModelLayers;
@@ -15,14 +14,14 @@ import net.emsee.thedungeon.entity.client.Goblin.hobGoblin.HobGoblinRenderer;
 import net.emsee.thedungeon.entity.client.Goblin.shadowGoblin.ShadowGoblinModel;
 import net.emsee.thedungeon.entity.client.Goblin.shadowGoblin.ShadowGoblinRenderer;
 import net.emsee.thedungeon.entity.client.ModEntityModelLayers;
-import net.emsee.thedungeon.entity.client.TestDummyModel;
-import net.emsee.thedungeon.entity.client.TestDummyRenderer;
+import net.emsee.thedungeon.entity.client.luminousCrawler.LuminousCrawlerModel;
+import net.emsee.thedungeon.entity.client.luminousCrawler.LuminousCrawlerRenderer;
+import net.emsee.thedungeon.entity.client.testDummy.TestDummyModel;
+import net.emsee.thedungeon.entity.client.testDummy.TestDummyRenderer;
 import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightModel;
 import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightRenderer;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightModel;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightRenderer;
-import net.emsee.thedungeon.renderer.ModRenderType;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
@@ -31,8 +30,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterNamedRenderTypesEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
@@ -46,6 +43,7 @@ public class ModClientRendererEvents {
         EntityRenderers.register(ModEntities.SHADOW_GOBLIN.get(), ShadowGoblinRenderer::new);
         EntityRenderers.register(ModEntities.HOB_GOBLIN.get(), HobGoblinRenderer::new);
         EntityRenderers.register(ModEntities.CRYSTAL_GOLEM.get(), CrystalGolemRenderer::new);
+        EntityRenderers.register(ModEntities.LUMINOUS_CRAWLER.get(), LuminousCrawlerRenderer::new);
 
         //BlockEntities
         BlockEntityRenderers.register(ModBlockEntities.DUNGEON_PORTAL_BLOCK_ENTITY.get(), DungeonPortalBlockEntityRenderer::new);
@@ -62,6 +60,7 @@ public class ModClientRendererEvents {
         event.registerLayerDefinition(ModEntityModelLayers.HOB_GOBLIN, HobGoblinModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityModelLayers.HOB_GOBLIN_VARIANT, HobGoblinModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityModelLayers.CRYSTAL_GOLEM, CrystalGolemModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityModelLayers.LUMINOUS_CRAWLER, LuminousCrawlerModel::createBodyLayer);
 
         //BlockEntities
         event.registerLayerDefinition(ModBlockEntityModelLayers.DUNGEON_PORTAL, DungeonPortalBlockEntityRenderer::createBodyLayer);

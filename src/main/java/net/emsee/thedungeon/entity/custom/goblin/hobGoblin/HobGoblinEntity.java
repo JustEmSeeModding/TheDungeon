@@ -3,11 +3,10 @@ package net.emsee.thedungeon.entity.custom.goblin.hobGoblin;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.DataResult;
 import net.emsee.thedungeon.DebugLog;
-import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
-import net.emsee.thedungeon.entity.attack.AttackPattern;
-import net.emsee.thedungeon.entity.attack.SimpleMeleeAttack;
+import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
+import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.goblin.AbstractGoblinEntity;
 import net.emsee.thedungeon.item.ModItems;
@@ -15,7 +14,6 @@ import net.emsee.thedungeon.loot.ModLootTables;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
@@ -23,7 +21,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -70,15 +67,44 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
 
     @Override
     protected void setupBrain() {
-        brain.addAttack(new SimpleMeleeAttack<>(0.5f, 0.75f, 0, 15, 30, 12, AttackPattern.AttackHand.MAIN,
-                new AttackPattern.HandPredicate.ItemListOrEmpty(List.of(ModItems.KOBALT_DAGGER, ModItems.INFUSED_CHISEL, ModItems.GOBLINS_FORGEHAMMER)),
-                new AttackPattern.HandPredicate.AlwaysTrue()));
-        brain.addAttack(new SimpleMeleeAttack<>(0.5f, 0.75f, 1, 15, 30, 12, AttackPattern.AttackHand.OFF,
-                new AttackPattern.HandPredicate.AlwaysTrue(),
-                new AttackPattern.HandPredicate.ItemList(List.of(ModItems.KOBALT_DAGGER))));
-        brain.addAttack(new SimpleMeleeAttack<>(1, 1, 2, 30, 60, 12, AttackPattern.AttackHand.BOTH,
-                new AttackPattern.HandPredicate.ItemListOrEmpty(List.of(ModItems.KOBALT_DAGGER, ModItems.INFUSED_CHISEL)),
-                new AttackPattern.HandPredicate.ItemList(List.of(ModItems.KOBALT_DAGGER, ModItems.INFUSED_CHISEL))));
+        // main hand slash
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                0.5f,
+                0,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.MAIN,
+                new AbstractAttackPattern.HandPredicate.ItemListOrEmpty(List.of(
+                                ModItems.KOBALT_DAGGER,
+                                ModItems.INFUSED_CHISEL,
+                                ModItems.GOBLINS_FORGEHAMMER)),
+                new AbstractAttackPattern.HandPredicate.AlwaysTrue()));
+        // offhand slash
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                0.5f,
+                1,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.OFF,
+                new AbstractAttackPattern.HandPredicate.AlwaysTrue(),
+                new AbstractAttackPattern.HandPredicate.ItemList(List.of(
+                        ModItems.KOBALT_DAGGER))));
+        // both hand slash
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                1,
+                2,
+                30,
+                60,
+                12,
+                AbstractAttackPattern.AttackHand.BOTH,
+                new AbstractAttackPattern.HandPredicate.ItemListOrEmpty(List.of(
+                        ModItems.KOBALT_DAGGER,
+                        ModItems.INFUSED_CHISEL)),
+                new AbstractAttackPattern.HandPredicate.ItemList(List.of(
+                        ModItems.KOBALT_DAGGER,
+                        ModItems.INFUSED_CHISEL))));
 
     }
 
@@ -130,6 +156,10 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
             }
             case MINER -> {
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.INFUSED_CHISEL.get()));
+            }
+            case TOTEM_MAKER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.SOUL_BOUND_TOTEM.get()));
             }
             default -> {
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
@@ -351,6 +381,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
             case FORGER -> ModLootTables.HOB_GOBLIN_FORGER;
             case SCAVENGER -> ModLootTables.HOB_GOBLIN_SCAVENGER;
             case MINER -> ModLootTables.HOB_GOBLIN_MINER;
+           case TOTEM_MAKER -> ModLootTables.HOB_GOBLIN_TOTEM_MAKER;
         };
     }
 
@@ -358,7 +389,8 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         FIGHTER(0, 100, "fighter"),
         FORGER(1, 50, "forge_worker"),
         SCAVENGER(2, 5, "scavenger"),
-        MINER(3, 30, "miner");
+        MINER(3, 30, "miner"),
+        TOTEM_MAKER(4, 4, "totem_maker");
 
         private static final Variant[] BY_ID = Arrays.stream(values()).sorted(
                 Comparator.comparingInt(Variant::getId)).toArray(Variant[]::new);

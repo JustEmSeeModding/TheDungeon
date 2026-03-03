@@ -47,6 +47,8 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.LUMANITE_FRAGMENT.asItem());
         basicItem(ModItems.KOBALT_INGOT.asItem());
 
+        basicItem(ModItems.SOUL_BOUND_TOTEM.asItem());
+
         basicItem(ModItems.INFUSED_ALLOY_HELMET.asItem());
         basicItem(ModItems.INFUSED_ALLOY_CHESTPLATE.asItem());
         basicItem(ModItems.INFUSED_ALLOY_LEGGINGS.asItem());
@@ -76,6 +78,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModSpawnEggs.CRYSTAL_GOLEM_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModSpawnEggs.LUMINOUS_CRAWLER_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
         basicBlockItemOtherTexturePath(ModBlocks.DUNGEON_PORTAL, TheDungeon.MOD_ID, "item/dungeon_portal");
     }

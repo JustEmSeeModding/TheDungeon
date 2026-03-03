@@ -48,7 +48,7 @@ public abstract class AbstractGridRoom {
             this.differentiationID = differentiationID;
         }
 
-        public Predicate<PredicateData> worldPlacementPredicate;
+        public Predicate<PlacementPredicateData> worldPlacementPredicate;
         public final int gridWidth;
         public final int gridHeight;
 
@@ -82,7 +82,7 @@ public abstract class AbstractGridRoom {
         public final StructureProcessorList structurePostProcessors = new StructureProcessorList(new ArrayList<>());
     }
 
-    public record PredicateData(Level level, Vec3i originArrayPos, GridDungeonGenerator generator) {}
+    public record PlacementPredicateData(Level level, Vec3i originArrayPos, GridDungeonGenerator generator) {}
     
     public static abstract class Builder<T extends AbstractGridRoom, S extends Builder<T,?>> {
         final Data data;
@@ -341,7 +341,7 @@ public abstract class AbstractGridRoom {
             return setPortalPosition(new Vec3i(x, y, z));
         }
 
-        public S predicate(Predicate<PredicateData> predicate) {
+        public S predicate(Predicate<PlacementPredicateData> predicate) {
             data.worldPlacementPredicate = predicate;
             return self();
         }
@@ -601,10 +601,10 @@ public abstract class AbstractGridRoom {
     }
 
     public boolean canPlace(Level level, BlockPos pos, GridDungeonGenerator generator) {
-        return canPlace(new PredicateData(level, pos, generator));
+        return canPlace(new PlacementPredicateData(level, pos, generator));
     }
 
-    public boolean canPlace(PredicateData placementData) {
+    public boolean canPlace(PlacementPredicateData placementData) {
         if (data.worldPlacementPredicate == null) return true;
         return data.worldPlacementPredicate.test(placementData);
     }
