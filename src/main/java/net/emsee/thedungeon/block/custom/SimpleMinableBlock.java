@@ -1,7 +1,6 @@
 package net.emsee.thedungeon.block.custom;
 
 import net.emsee.thedungeon.block.custom.interfaces.IDungeonPickaxeMinable;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Supplier;

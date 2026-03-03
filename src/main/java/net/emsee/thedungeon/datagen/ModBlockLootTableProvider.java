@@ -98,9 +98,8 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     private void oreDrops(SimpleBlockGroup.WithOres group, ItemLike item, float min, float max) {
         HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
-        group.getAllOres().forEach(ore -> {
-            add(ore.get(), createSilkTouchDispatchTable(ore.get(), this.applyExplosionDecay(ore.get(), LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))).apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))))));
-        });
+        group.getAllOres().forEach(ore ->
+                add(ore.get(), createSilkTouchDispatchTable(ore.get(), this.applyExplosionDecay(ore.get(), LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))).apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))))));
     }
 
     private <G extends SimpleBlockGroup & SimpleBlockGroup.WithOres> void blockAndOreGroupDrops(G group, ItemLike item, float min, float max) {

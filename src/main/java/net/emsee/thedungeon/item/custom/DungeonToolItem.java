@@ -1,7 +1,5 @@
 package net.emsee.thedungeon.item.custom;
 
-import com.google.common.collect.Maps;
-import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.custom.interfaces.IDungeonPickaxeMinable;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
@@ -9,9 +7,7 @@ import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.utils.ModTags;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.advancements.critereon.BlockPredicate;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;

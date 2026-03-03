@@ -21,26 +21,25 @@ public class DeepCaveProcessor extends BlockPaletteReplacementProcessor {
 
     @Override
     protected Map<Block, WeightedMap.Int<ReplaceInstance>> createReplacements() {
-        return Util.make(Maps.newHashMap(), (map) -> {
-            map.put(Blocks.DEEPSLATE,
-                    Util.make(new WeightedMap.Int<>(), (deepslateMap) -> {
-                        deepslateMap.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X)), 150);
-                        deepslateMap.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)), 150);
-                        deepslateMap.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z)), 150);
-                        deepslateMap.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X)), 100);
-                        deepslateMap.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)), 100);
-                        deepslateMap.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z)), 100);
-                        deepslateMap.put(new ReplaceInstance(Blocks.COBBLED_DEEPSLATE::defaultBlockState), 300);
-                        deepslateMap.put(new ReplaceInstance(Blocks.SMOOTH_BASALT::defaultBlockState), 200);
-                        deepslateMap.put(new ReplaceInstance(Blocks.BEDROCK::defaultBlockState), 200);
-                        //deepslateMap.put(new ReplaceInstance(Blocks.DEEPSLATE_GOLD_ORE::defaultBlockState), 11);
-                        deepslateMap.put(new ReplaceInstance(()->ModBlocks.GILDREAN.DEEPSLATE_ORE.get().defaultBlockState()), 5);
-                        deepslateMap.put(new ReplaceInstance(()->ModBlocks.LAVINTINE.DEEPSLATE_ORE.get().defaultBlockState()), 2);
-                        //deepslateMap.put(new ReplaceInstance(Blocks.DEEPSLATE_DIAMOND_ORE::defaultBlockState), 2);
-                        deepslateMap.put(new ReplaceInstance(ModBlocks.PYRITE_BLOCKS.DEEPSLATE_ORE.get()::defaultBlockState), 4);
-                        deepslateMap.put(new ReplaceInstance(ModBlocks.INFUSED_DEEPSLATE.get()::defaultBlockState), 1);
-                    }));
-        });
+        return Util.make(Maps.newHashMap(), (map) ->
+                map.put(Blocks.DEEPSLATE,
+                        Util.make(new WeightedMap.Int<>(), (deepslateMap) -> {
+                            deepslateMap.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X)), 150);
+                            deepslateMap.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)), 150);
+                            deepslateMap.put(new ReplaceInstance(() -> Blocks.DEEPSLATE.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z)), 150);
+                            deepslateMap.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.X)), 100);
+                            deepslateMap.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y)), 100);
+                            deepslateMap.put(new ReplaceInstance(() -> Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z)), 100);
+                            deepslateMap.put(new ReplaceInstance(Blocks.COBBLED_DEEPSLATE::defaultBlockState), 300);
+                            deepslateMap.put(new ReplaceInstance(Blocks.SMOOTH_BASALT::defaultBlockState), 200);
+                            deepslateMap.put(new ReplaceInstance(Blocks.BEDROCK::defaultBlockState), 200);
+                            //deepslateMap.put(new ReplaceInstance(Blocks.DEEPSLATE_GOLD_ORE::defaultBlockState), 11);
+                            deepslateMap.put(new ReplaceInstance(() -> ModBlocks.GILDREAN.DEEPSLATE_ORE.get().defaultBlockState()), 5);
+                            deepslateMap.put(new ReplaceInstance(() -> ModBlocks.LAVINTINE.DEEPSLATE_ORE.get().defaultBlockState()), 2);
+                            //deepslateMap.put(new ReplaceInstance(Blocks.DEEPSLATE_DIAMOND_ORE::defaultBlockState), 2);
+                            deepslateMap.put(new ReplaceInstance(ModBlocks.PYRITE_BLOCKS.DEEPSLATE_ORE.get()::defaultBlockState), 4);
+                            deepslateMap.put(new ReplaceInstance(ModBlocks.INFUSED_DEEPSLATE.get()::defaultBlockState), 1);
+                        })));
     }
 
     @Override

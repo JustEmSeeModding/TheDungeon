@@ -10,7 +10,6 @@ import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
 import net.emsee.thedungeon.item.custom.armor.KobaltArmorItem;
 import net.emsee.thedungeon.simpleRegisterGroup.SimpleItemGroup;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;

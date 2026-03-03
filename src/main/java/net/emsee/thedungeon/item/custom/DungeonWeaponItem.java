@@ -170,12 +170,10 @@ public class DungeonWeaponItem extends SwordItem implements ICanTakeItemToDungeo
 
     @Override
     public LinkedHashMap<Component, Component[]> getPrefixComponents(ItemStack stack) {
-        return Util.make(new LinkedHashMap<>(), map -> {
-            map.put(Component.translatable("item.thedungeon.tooltip.weapon_type"),
-                    new Component[]{
-                            weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN)
-                    });
-        });
+        return Util.make(new LinkedHashMap<>(), map -> map.put(Component.translatable("item.thedungeon.tooltip.weapon_type"),
+                new Component[]{
+                        weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN)
+                }));
     }
 
     @Override
