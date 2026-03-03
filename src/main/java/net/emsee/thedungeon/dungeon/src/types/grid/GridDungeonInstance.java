@@ -29,11 +29,11 @@ public class GridDungeonInstance extends DungeonInstance<GridDungeon> {
     }
 
     @Override
-    protected void localGenerateSeeded(long seed) {
+    protected void localGenerateSeeded(long seed, ServerLevel serverLevel) {
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Starting Dungeon Generation...");
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Dungeon: {}", dungeon.getResourceName());
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS, "Seed: {}", seed);
-        generator = new GridDungeonGenerator(this, seed);
+        generator = new GridDungeonGenerator(this, seed, serverLevel);
         reset();
     }
 

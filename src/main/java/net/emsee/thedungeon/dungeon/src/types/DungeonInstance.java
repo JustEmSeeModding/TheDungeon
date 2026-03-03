@@ -7,6 +7,7 @@ import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.gameRule.GameruleRegistry;
 import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
+import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
@@ -47,10 +48,10 @@ public abstract class DungeonInstance<T extends Dungeon<?,?>>{
         savedSeed = seed;
         DungeonSaveData saveData = DungeonSaveData.Get(server);
         saveData.setDirty();
-        localGenerateSeeded(seed);
+        localGenerateSeeded(seed, server.getLevel(ModDimensions.DUNGEON_LEVEL_KEY));
     }
 
-    protected abstract void localGenerateSeeded(long seed);
+    protected abstract void localGenerateSeeded(long seed, ServerLevel serverLevel);
 
     /**
      * runs every tick while generating.

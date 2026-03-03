@@ -3,6 +3,7 @@ package net.emsee.thedungeon.dungeon.src.types.grid.roomCollection;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
+import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.utils.WeightedMap;
 
@@ -25,13 +26,13 @@ public class GridRoomCollectionInstance {
         });
     }
 
-    public AbstractGridRoom getRandomRoom(Random random) {
-        return getAllPossibleRooms().getRandom(random);
+    public AbstractGridRoom getRandomRoom(Random random, AbstractGridRoom.PredicateData placementData) {
+        return getAllPossibleRooms(placementData).getRandom(random);
     }
 
-    public AbstractGridRoom getRandomRoom(int maxRoomScale, Random random) {
+    public AbstractGridRoom getRandomRoom(int maxRoomScale, Random random, AbstractGridRoom.PredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnMap = new WeightedMap.Int<>();
-        for (AbstractGridRoom gridRoom : getAllPossibleRooms().keySet()) {
+        for (AbstractGridRoom gridRoom : getAllPossibleRooms(placementData).keySet()) {
             if (gridRoom.getMaxSizeScale() <= maxRoomScale) {
                 returnMap.put(gridRoom, gridRoom.getWeight());
             }
@@ -39,9 +40,9 @@ public class GridRoomCollectionInstance {
         return returnMap.getRandom(random);
     }
 
-    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
+    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random, AbstractGridRoom.PredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
-        for (AbstractGridRoom gridRoom : getAllPossibleRooms().keySet()) {
+        for (AbstractGridRoom gridRoom : getAllPossibleRooms(placementData).keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
                 returnList.put(gridRoom, gridRoom.getWeight());
             }
@@ -52,9 +53,9 @@ public class GridRoomCollectionInstance {
         return null;
     }
 
-    public AbstractGridRoom getRandomRequiredRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random) {
+    public AbstractGridRoom getRandomRequiredRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, Random random, AbstractGridRoom.PredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
-        for (AbstractGridRoom gridRoom : getAllPossibleRequiredRooms().keySet()) {
+        for (AbstractGridRoom gridRoom : getAllPossibleRequiredRooms(placementData).keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
                 returnList.put(gridRoom, gridRoom.getWeight());
             }
@@ -65,10 +66,10 @@ public class GridRoomCollectionInstance {
         return null;
     }
 
-    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random) {
+    public AbstractGridRoom getRandomRoomByConnection(Connection connection, String fromTag, List<ConnectionRule> connectionRules, int maxRoomScale, Random random, AbstractGridRoom.PredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> returnList = new WeightedMap.Int<>();
 
-        for (AbstractGridRoom gridRoom : getAllPossibleRooms().keySet()) {
+        for (AbstractGridRoom gridRoom : getAllPossibleRooms(placementData).keySet()) {
             if (gridRoom.isAllowedPlacementConnection(connection, fromTag, connectionRules)) {
                 if (gridRoom.getMaxSizeScale() <= maxRoomScale) {
                     returnList.put(gridRoom, gridRoom.getWeight());
@@ -84,10 +85,11 @@ public class GridRoomCollectionInstance {
     /**
      * Returns a map of all rooms that are eligible for placement based on individual and grouped placement constraints.
      */
-    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRooms() {
+    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRooms(AbstractGridRoom.PredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> toReturn = new WeightedMap.Int<>();
         for (AbstractGridRoom room : collection.getAllRooms().keySet()) {
-            boolean allowed = true;
+            boolean allowed = room.canPlace(placementData);
+            if (!allowed) continue;
             if (requiredPlacements.containsKey(room)) {
                 RequiredRoomPlacementsInstance constraints = requiredPlacements.get(room);
                 // Skip if no maximum
@@ -116,10 +118,11 @@ public class GridRoomCollectionInstance {
     /**
      * Returns a map of all required rooms that are eligible for placement based on individual and grouped placement constraints.
      */
-    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRequiredRooms() {
+    private WeightedMap.Int<AbstractGridRoom> getAllPossibleRequiredRooms(AbstractGridRoom.PredicateData placementData) {
         WeightedMap.Int<AbstractGridRoom> toReturn = new WeightedMap.Int<>();
         for (AbstractGridRoom room : collection.getAllRooms().keySet()) {
-            boolean allowed = true;
+            boolean allowed = room.canPlace(placementData);
+            if (!allowed) continue;
             if (requiredPlacements.containsKey(room)) {
                 RequiredRoomPlacementsInstance constraints = requiredPlacements.get(room);
                 // test for max
@@ -203,6 +206,7 @@ public class GridRoomCollectionInstance {
     public GridRoomCollection getRaw() {
         return collection;
     }
+
 
     private static class RequiredRoomPlacementsInstance extends GridRoomCollection.RequiredRoomPlacements {
         int placed = 0;

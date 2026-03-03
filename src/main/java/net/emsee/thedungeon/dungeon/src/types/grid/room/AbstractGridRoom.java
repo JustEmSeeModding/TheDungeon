@@ -6,6 +6,7 @@ import net.emsee.thedungeon.dungeon.registry.DungeonBiome;
 import net.emsee.thedungeon.dungeon.src.Connection;
 import net.emsee.thedungeon.dungeon.src.DungeonUtils;
 import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
+import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.MobSpawnRule;
 import net.emsee.thedungeon.structureProcessor.PostProcessor;
 import net.emsee.thedungeon.utils.BlockUtils;
@@ -22,12 +23,14 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static net.emsee.thedungeon.dungeon.src.DungeonUtils.getInvertedRotation;
 import static net.emsee.thedungeon.dungeon.src.DungeonUtils.getRotatedConnectionMap;
 
 public abstract class AbstractGridRoom {
     protected final Data data;
+
     
     //// constructor
     protected AbstractGridRoom(Data data) {
@@ -44,7 +47,8 @@ public abstract class AbstractGridRoom {
             this.gridHeight = gridHeight;
             this.differentiationID = differentiationID;
         }
-        
+
+        public Predicate<PredicateData> worldPlacementPredicate;
         public final int gridWidth;
         public final int gridHeight;
 
@@ -77,6 +81,8 @@ public abstract class AbstractGridRoom {
         public final StructureProcessorList structureProcessors = new StructureProcessorList(new ArrayList<>());
         public final StructureProcessorList structurePostProcessors = new StructureProcessorList(new ArrayList<>());
     }
+
+    public record PredicateData(Level level, Vec3i originArrayPos, GridDungeonGenerator generator) {}
     
     public static abstract class Builder<T extends AbstractGridRoom, S extends Builder<T,?>> {
         final Data data;
@@ -334,6 +340,11 @@ public abstract class AbstractGridRoom {
         public S setPortalPosition(int x, int y, int z) {
             return setPortalPosition(new Vec3i(x, y, z));
         }
+
+        public S predicate(Predicate<PredicateData> predicate) {
+            data.worldPlacementPredicate = predicate;
+            return self();
+        }
     }
     // methods
 
@@ -587,6 +598,15 @@ public abstract class AbstractGridRoom {
 
     public void forEachBlockPosInBounds(BlockPos centre, Rotation roomRotation, BlockUtils.ForEachMethod method, Level level, Consumer<BlockPos> consumer) {
         BlockUtils.forEachInArea(getMinCorner(centre, roomRotation), getMaxCorner(centre,roomRotation), method,level, consumer);
+    }
+
+    public boolean canPlace(Level level, BlockPos pos, GridDungeonGenerator generator) {
+        return canPlace(new PredicateData(level, pos, generator));
+    }
+
+    public boolean canPlace(PredicateData placementData) {
+        if (data.worldPlacementPredicate == null) return true;
+        return data.worldPlacementPredicate.test(placementData);
     }
 }
 

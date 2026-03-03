@@ -57,6 +57,8 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     protected final Queue<GeneratedRoom> toSpawnMobsRooms = new LinkedList<>();
     protected final Queue<GeneratedRoom> toRegisterPortals = new LinkedList<>();
 
+    protected final ServerLevel cashedServerLevel;
+
     protected int requirementStepInterval = 0;
     protected final int STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES;
 
@@ -77,7 +79,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         }
     }
 
-    public GridDungeonGenerator(GridDungeonInstance dungeon, long seed) {
+    public GridDungeonGenerator(GridDungeonInstance dungeon, long seed, ServerLevel serverLevel) {
         this.seed = seed;
         this.random = new Random(seed);
         this.dungeon = dungeon;
@@ -86,10 +88,12 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         this.biomeRegistry = new GridDungeonBiomeRegistry(collection.getRaw().getGridCellWidth(),collection.getRaw().getGridCellHeight(), dungeon.getRaw().getCenterPos());
         this.STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES = dungeon.getRaw().getStepIntervalBetweenForcesRequirementTries();
 
+        this.cashedServerLevel = serverLevel;
+
         // select the starting room
         AbstractGridRoom startingRoom = dungeon.getRaw().getStartingRoom();
         if (startingRoom == null)
-            startingRoom = dungeon.getRoomCollection().getRandomRoom(random);
+            startingRoom = dungeon.getRoomCollection().getRandomRoom(random, new AbstractGridRoom.PredicateData(serverLevel, dungeon.getRaw().getCenterPos(), this));
         if (startingRoom == null)
             throw new IllegalStateException("error finding dungeon starting room");
 
@@ -431,12 +435,12 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         return dungeon;
     }
 
-    public AbstractGridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random) {
-        return collection.getRandomRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random);
+    public AbstractGridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random, Vec3i originArrayPos) {
+        return collection.getRandomRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PredicateData(cashedServerLevel, originArrayPos, this));
     }
 
-    public AbstractGridRoom GetRandomRequiredRoomByConnection(Connection connection, String fromTag, Random random) {
-        return collection.getRandomRequiredRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random);
+    public AbstractGridRoom GetRandomRequiredRoomByConnection(Connection connection, String fromTag, Random random, Vec3i originArrayPos) {
+        return collection.getRandomRequiredRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PredicateData(cashedServerLevel, originArrayPos, this));
     }
 
     public boolean isDone() {
