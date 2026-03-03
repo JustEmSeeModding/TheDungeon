@@ -2,6 +2,7 @@ package net.emsee.thedungeon.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 
-public class BuddingVerdantiteBlock extends AmethystBlock {
+public class BuddingVerdantiteBlock extends DungeonAmethystBlock {
     public static final MapCodec<BuddingVerdantiteBlock> CODEC = simpleCodec(BuddingVerdantiteBlock::new);
     public static final int GROWTH_CHANCE = 5;
     private static final Direction[] DIRECTIONS = Direction.values();
@@ -33,13 +34,13 @@ public class BuddingVerdantiteBlock extends AmethystBlock {
             BlockState blockstate = level.getBlockState(blockpos);
             Block block = null;
             if (canClusterGrowAtState(blockstate)) {
-                block = ModBlocks.SMALL_VERDATITE_BUD.get();
-            } else if (blockstate.is(ModBlocks.SMALL_VERDATITE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.MEDIUM_VERDATITE_BUD.get();
-            } else if (blockstate.is(ModBlocks.MEDIUM_VERDATITE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.LARGE_VERDATITE_BUD.get();
-            } else if (blockstate.is(ModBlocks.LARGE_VERDATITE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.VERDATITE_CLUSTER.get();
+                block = ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get();
+            } else if (blockstate.is(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get();
+            } else if (blockstate.is(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get();
+            } else if (blockstate.is(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get();
             }
 
             if (block != null) {

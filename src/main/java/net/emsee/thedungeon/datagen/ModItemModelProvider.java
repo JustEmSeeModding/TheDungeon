@@ -4,6 +4,7 @@ import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.item.ModSpawnEggs;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleItemGroup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -20,49 +21,29 @@ public final class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         simpleBlockItem(ModBlocks.GOBLIN_FORGE.get());
 
-        basicItem(ModItems.CATALYST_CORE.asItem());
-        basicItem(ModItems.SHATTERED_CATALYST_CORE.asItem());
-        basicItem(ModItems.DUNGEON_ESSENCE_SHARD.asItem());
-        basicItem(ModItems.GOBLIN_MEAT.asItem());
+        basicItem(ModItems.CATALYST_CORE.get());
+        basicItem(ModItems.SHATTERED_CATALYST_CORE.get());
+        basicItem(ModItems.DUNGEON_ESSENCE_SHARD.get());
+        basicItem(ModItems.GOBLIN_MEAT.get());
         basicBlockItemOtherTexturePath(ModBlocks.INFUSED_THREAD, "thedungeon", "item/infused_thread");
         basicItemOtherTexturePath(ModItems.DUNGEON_DEBUG_TOOL, "minecraft", "item/stick");
 
-        //basicSingleTextureBlockItem(ModBlocks.ROSELITH_CLUSTER);
-        //basicSingleTextureBlockItem(ModBlocks.LARGE_ROSELITH_BUD);
-        //basicSingleTextureBlockItem(ModBlocks.MEDIUM_ROSELITH_BUD);
-        //basicSingleTextureBlockItem(ModBlocks.SMALL_ROSELITH_BUD);
+        basicItem(ModItems.INFUSED_ALLOY_INGOT.get());
+        basicItem(ModItems.PYRITE.get());
+        basicItem(ModItems.PYRITE_COIN.get());
+        simpleItemGroup(ModItems.GILDREAN);
+        basicItem(ModItems.GILDREAN_APPLE.get());
+        basicItem(ModItems.ROSELITH_CRYSTAL.get());
+        basicItem(ModItems.GARNETORE_PIECE.get());
+        basicItem(ModItems.VERDANTITE_CHUNK.get());
+        basicItem(ModItems.LUMANITE_FRAGMENT.get());
+        simpleItemGroup(ModItems.KOBALT);
 
-        //basicSingleTextureBlockItem(ModBlocks.GARNETORE_CLUSTER);
-        //basicSingleTextureBlockItem(ModBlocks.LARGE_GARNETORE_BUD);
-        //basicSingleTextureBlockItem(ModBlocks.MEDIUM_GARNETORE_BUD);
-        //basicSingleTextureBlockItem(ModBlocks.SMALL_GARNETORE_BUD);
+        basicItem(ModItems.SOUL_BOUND_TOTEM.get());
 
-
-        basicItem(ModItems.INFUSED_ALLOY_INGOT.asItem());
-        basicItem(ModItems.PYRITE.asItem());
-        basicItem(ModItems.PYRITE_COIN.asItem());
-        basicItem(ModItems.ROSELITH_CRYSTAL.asItem());
-        basicItem(ModItems.GARNETORE_PIECE.asItem());
-        basicItem(ModItems.VERDANTITE_CHUNK.asItem());
-        basicItem(ModItems.LUMANITE_FRAGMENT.asItem());
-        basicItem(ModItems.KOBALT_INGOT.asItem());
-
-        basicItem(ModItems.SOUL_BOUND_TOTEM.asItem());
-
-        basicItem(ModItems.INFUSED_ALLOY_HELMET.asItem());
-        basicItem(ModItems.INFUSED_ALLOY_CHESTPLATE.asItem());
-        basicItem(ModItems.INFUSED_ALLOY_LEGGINGS.asItem());
-        basicItem(ModItems.INFUSED_ALLOY_BOOTS.asItem());
-
-        basicItem(ModItems.SCHOLAR_HELMET.asItem());
-        basicItem(ModItems.SCHOLAR_CHESTPLATE.asItem());
-        basicItem(ModItems.SCHOLAR_LEGGINGS.asItem());
-        basicItem(ModItems.SCHOLAR_BOOTS.asItem());
-
-        basicItem(ModItems.KOBALT_HELMET.asItem());
-        basicItem(ModItems.KOBALT_CHESTPLATE.asItem());
-        basicItem(ModItems.KOBALT_LEGGINGS.asItem());
-        basicItem(ModItems.KOBALT_BOOTS.asItem());
+        basicArmorItems(ModItems.INFUSED_ARMOR_SET);
+        basicArmorItems(ModItems.SCHOLAR_ARMOR_SET);
+        basicArmorItems(ModItems.KOBALT_ARMOR_SET);
 
         withExistingParent(ModItems.INFUSED_DAGGER.getId().getPath(), TheDungeon.defaultResourceLocation("item/dagger")).texture("0", TheDungeon.defaultResourceLocation("item/infused_dagger"));
         withExistingParent(ModItems.INFUSED_CHISEL.getId().getPath(), TheDungeon.defaultResourceLocation("item/chisel")).texture("0", TheDungeon.defaultResourceLocation("item/infused_chisel"));
@@ -81,6 +62,17 @@ public final class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(ModSpawnEggs.LUMINOUS_CRAWLER_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
         basicBlockItemOtherTexturePath(ModBlocks.DUNGEON_PORTAL, TheDungeon.MOD_ID, "item/dungeon_portal");
+    }
+
+    private void simpleItemGroup(SimpleItemGroup itemGroup) {
+        itemGroup.getAll().forEach(entry -> basicItem(entry.get()));
+    }
+
+    private void basicArmorItems(SimpleItemGroup.ArmorSet<?> armorSet) {
+        basicItem(armorSet.HELMET.get());
+        basicItem(armorSet.CHESTPLATE.get());
+        basicItem(armorSet.LEGGINGS.get());
+        basicItem(armorSet.BOOTS.get());
     }
 
     private void basicSingleTextureBlockItem(DeferredBlock<?> block) {

@@ -2,6 +2,7 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPalettes;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.structureProcessor.BlockPaletteReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
@@ -24,12 +25,17 @@ public class GildedCaveOreProcessor extends BlockPaletteReplacementProcessor {
             map.put(Blocks.BLACKSTONE,
                     Util.make(new WeightedMap.Int<>(), (blackstoneMap) -> {
                         blackstoneMap.put(new ReplaceInstance(Blocks.BLACKSTONE::defaultBlockState), 5);
-                        blackstoneMap.put(new ReplaceInstance(Blocks.GILDED_BLACKSTONE::defaultBlockState), 1);
+                        blackstoneMap.put(new ReplaceInstance(() -> ModBlocks.INGILDERD_BLACKSTONE.get().defaultBlockState()), 1);
                     }));
             map.put(Blocks.RAW_GOLD_BLOCK,
                     Util.make(new WeightedMap.Int<>(), (goldVeinMap) -> {
-                        goldVeinMap.put(new ReplaceInstance(Blocks.RAW_GOLD_BLOCK::defaultBlockState), 2);
-                        goldVeinMap.put(new ReplaceInstance(Blocks.GILDED_BLACKSTONE::defaultBlockState), 3);
+                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.GILDREAN_BLOCKS.RAW_BLOCK.get().defaultBlockState()), 2);
+                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.INGILDERD_BLACKSTONE.get().defaultBlockState()), 3);
+                    }));
+            map.put(ModBlocks.GILDREAN_BLOCKS.RAW_BLOCK.get(),
+                    Util.make(new WeightedMap.Int<>(), (goldVeinMap) -> {
+                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.GILDREAN_BLOCKS.RAW_BLOCK.get().defaultBlockState()), 2);
+                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.INGILDERD_BLACKSTONE.get().defaultBlockState()), 3);
                     }));
         });
     }

@@ -2,6 +2,7 @@ package net.emsee.thedungeon.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 
-public class BuddingRoselithBlock extends AmethystBlock {
+public class BuddingRoselithBlock extends DungeonAmethystBlock {
     public static final MapCodec<BuddingRoselithBlock> CODEC = simpleCodec(BuddingRoselithBlock::new);
     public static final int GROWTH_CHANCE = 5;
     private static final Direction[] DIRECTIONS = Direction.values();
@@ -31,13 +32,13 @@ public class BuddingRoselithBlock extends AmethystBlock {
             BlockState blockstate = level.getBlockState(blockpos);
             Block block = null;
             if (canClusterGrowAtState(blockstate)) {
-                block = ModBlocks.SMALL_ROSELITH_BUD.get();
-            } else if (blockstate.is(ModBlocks.SMALL_ROSELITH_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.MEDIUM_ROSELITH_BUD.get();
-            } else if (blockstate.is(ModBlocks.MEDIUM_ROSELITH_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.LARGE_ROSELITH_BUD.get();
-            } else if (blockstate.is(ModBlocks.LARGE_ROSELITH_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.ROSELITH_CLUSTER.get();
+                block = ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get();
+            } else if (blockstate.is(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get();
+            } else if (blockstate.is(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get();
+            } else if (blockstate.is(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get();
             }
 
             if (block != null) {

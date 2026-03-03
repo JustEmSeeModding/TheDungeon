@@ -5,6 +5,8 @@ import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.datagen.recipeBuilder.GoblinForgeRecipeBuilder;
 import net.emsee.thedungeon.datagen.recipeBuilder.InfusionRecipeBuilder;
 import net.emsee.thedungeon.item.ModItems;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleBlockGroup;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleItemGroup;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -19,6 +21,7 @@ import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.PatchouliAPI;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -50,9 +53,19 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
 
         infusing(RecipeCategory.MISC, Items.CLOCK, ModItems.DUNGEON_CLOCK, recipeOutput);
 
-        goblin_forge(RecipeCategory.MISC, Items.RAW_IRON, ModItems.PYRITE, ModItems.KOBALT_INGOT, recipeOutput);
-        goblin_forge(RecipeCategory.MISC, Items.IRON_INGOT, ModItems.PYRITE, ModItems.KOBALT_INGOT, recipeOutput);
+        goblin_forge(RecipeCategory.MISC, Items.RAW_IRON, ModItems.PYRITE, ModItems.KOBALT.INGOT, recipeOutput);
+        goblin_forge(RecipeCategory.MISC, Items.IRON_INGOT, ModItems.PYRITE, ModItems.KOBALT.INGOT, recipeOutput);
 
+        simpleIngotAndNuggetRecipes(recipeOutput,ModItems.KOBALT);
+        simpleBlockAndOreIngotRecipes(recipeOutput,ModBlocks.GILDREAN_BLOCKS, ModItems.GILDREAN);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.GILDREAN_APPLE.get(), 1)
+                .pattern("000")
+                .pattern("0*0")
+                .pattern("000")
+                .define('0', ModItems.GILDREAN.INGOT.get())
+                .define('*', Items.APPLE)
+                .unlockedBy("has_gildrean_ingot", has(ModItems.GILDREAN.INGOT)).save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, PatchouliAPI.get().getBookStack(TheDungeon.defaultResourceLocation("dungeon_guide")))
                 .requires(Items.BOOK)
@@ -122,33 +135,27 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .requires(Items.IRON_INGOT)
                 .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
-        simpleArmor(ModItems.KOBALT_INGOT, ModItems.KOBALT_HELMET, ModItems.KOBALT_CHESTPLATE, ModItems.KOBALT_LEGGINGS, ModItems.KOBALT_BOOTS, recipeOutput);
+        simpleArmor(ModItems.KOBALT.INGOT, ModItems.KOBALT_ARMOR_SET, recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.KOBALT_SHIELD, 1)
                 .pattern(" # ")
                 .pattern("#*#")
                 .pattern(" # ")
                 .define('*', ItemTags.PLANKS)
-                .define('#', ModItems.KOBALT_INGOT)
-                .unlockedBy("has_"+getItemName(ModItems.KOBALT_INGOT), has(ModItems.KOBALT_INGOT)).save(recipeOutput);
+                .define('#', ModItems.KOBALT.INGOT)
+                .unlockedBy("has_"+getItemName(ModItems.KOBALT.INGOT), has(ModItems.KOBALT.INGOT)).save(recipeOutput);
 
 
         oreSmeltingAndBlasting(recipeOutput,
                 List.of(ModBlocks.INFUSED_SAND),
                 RecipeCategory.BUILDING_BLOCKS, ModBlocks.INFUSED_GLASS, 0.25f, 200, 100, "infused_glass");
 
-        oreSmeltingAndBlasting(recipeOutput,
-                List.of(ModBlocks.PYRITE_ORE, ModBlocks.DEEPSLATE_PYRITE_ORE),
-                RecipeCategory.MISC, ModItems.PYRITE, 0.25f, 200, 100, "pyrite");
+        simpleBlockAndOreItemRecipes(recipeOutput, ModBlocks.PYRITE_BLOCKS, ModItems.PYRITE.get());
 
-        /*oreBlasting(recipeOutput,
-                List.of(ModItems.DUNGEON_DEBUG_TOOL, Items.DIAMOND_AXE),
-                RecipeCategory.MISC, ModBlocks.DUNGEON_PORTAL.get(), 0.25f, 100, "portal");*/
-
-        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_HELMET, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ALLOY_HELMET.get(), RecipeCategory.COMBAT, recipeOutput);
-        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_CHESTPLATE, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ALLOY_CHESTPLATE.get(), RecipeCategory.COMBAT, recipeOutput);
-        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_LEGGINGS, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ALLOY_LEGGINGS.get(), RecipeCategory.COMBAT, recipeOutput);
-        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_BOOTS, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ALLOY_BOOTS.get(), RecipeCategory.COMBAT, recipeOutput);
+        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_HELMET, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.HELMET.get(), RecipeCategory.COMBAT, recipeOutput);
+        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_CHESTPLATE, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.CHESTPLATE.get(), RecipeCategory.COMBAT, recipeOutput);
+        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_LEGGINGS, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.LEGGINGS.get(), RecipeCategory.COMBAT, recipeOutput);
+        smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_BOOTS, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.BOOTS.get(), RecipeCategory.COMBAT, recipeOutput);
     }
 
     private static void infusing(RecipeCategory category, ItemLike ingredient, ItemLike result, RecipeOutput recipeOutput) {
@@ -172,6 +179,68 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
     private static void oreSmeltingAndBlasting(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, int blastingTime, String group) {
         oreSmelting(recipeOutput, ingredients, category, result, experience, cookingTime, group);
         oreBlasting(recipeOutput, ingredients, category, result, experience, blastingTime, group);
+    }
+
+    private static <I extends SimpleItemGroup.WithIngot, BG extends SimpleBlockGroup & SimpleBlockGroup.WithOres> void  simpleBlockAndOreIngotRecipes(RecipeOutput recipeOutput, BG blockGroup, I items) {
+        List<ItemLike> Ingredient = new ArrayList<>(blockGroup.getAllOresAsItems());
+        if (items instanceof SimpleItemGroup.WithRaw withRaw)
+            Ingredient.add(withRaw.getRaw());
+
+        oreSmeltingAndBlasting(recipeOutput, Ingredient, RecipeCategory.MISC, items.getIngot(), 0.25f, 200, 100, getItemName(items.getIngot()));
+
+        if (blockGroup instanceof SimpleBlockGroup.WithPackedItemBlock withPackedBlock) {
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, withPackedBlock.getPackedItemBlock(), 1)
+                    .pattern("###")
+                    .pattern("###")
+                    .pattern("###")
+                    .define('#', items.getIngot())
+                    .unlockedBy("has_" + getItemName(items.getIngot()), has(items.getIngot())).save(recipeOutput);
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, items.getIngot(), 9)
+                    .requires(withPackedBlock.getPackedItemBlock())
+                    .unlockedBy("has_" + getItemName(withPackedBlock.getPackedItemBlock()), has(withPackedBlock.getPackedItemBlock())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(items.getIngot()) + "_from_block"));
+        }
+        if (blockGroup instanceof SimpleBlockGroup.WithRawBlock withRawBlock && items instanceof SimpleItemGroup.WithRaw withRawItem) {
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, withRawBlock.getRawBlock(), 1)
+                    .pattern("###")
+                    .pattern("###")
+                    .pattern("###")
+                    .define('#', withRawItem.getRaw())
+                    .unlockedBy("has_"+getItemName(withRawItem.getRaw()), has(withRawItem.getRaw())).save(recipeOutput);
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, withRawItem.getRaw(),9)
+                    .requires(withRawBlock.getRawBlock())
+                    .unlockedBy("has_"+getItemName(withRawBlock.getRawBlock()), has(withRawBlock.getRawBlock())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(withRawItem.getRaw()) + "_from_block"));
+        }
+        if (items instanceof SimpleItemGroup.WithNugget) {
+            simpleIngotAndNuggetRecipes(recipeOutput, (SimpleItemGroup & SimpleItemGroup.WithIngot & SimpleItemGroup.WithNugget) items);
+        }
+    }
+
+    private static <BG extends SimpleBlockGroup & SimpleBlockGroup.WithOres> void simpleBlockAndOreItemRecipes(RecipeOutput recipeOutput, BG blockGroup, Item linkedItem) {
+        oreSmeltingAndBlasting(recipeOutput, blockGroup.getAllOresAsItems(), RecipeCategory.MISC, linkedItem, 0.25f, 200, 100, getItemName(linkedItem));
+        if (blockGroup instanceof SimpleBlockGroup.WithPackedItemBlock withPackedItem) {
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS,withPackedItem.getPackedItemBlock(), 1)
+                .pattern("###")
+                    .pattern("###")
+                    .pattern("###")
+                    .define('#', linkedItem)
+                    .unlockedBy("has_" + getItemName(linkedItem), has(linkedItem)).save(recipeOutput);
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, linkedItem, 9)
+                    .requires(withPackedItem.getPackedItemBlock())
+                    .unlockedBy("has_" + getItemName(withPackedItem.getPackedItemBlock()), has(withPackedItem.getPackedItemBlock())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(linkedItem) + "_from_block"));
+        }
+    }
+
+    private static <I extends SimpleItemGroup & SimpleItemGroup.WithIngot & SimpleItemGroup.WithNugget> void simpleIngotAndNuggetRecipes(RecipeOutput recipeOutput, I itemGroup) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, itemGroup.getIngot(), 1)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', itemGroup.getNugget())
+                .unlockedBy("has_"+getItemName(itemGroup.getNugget()), has(itemGroup.getNugget())).save(recipeOutput);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, itemGroup.getNugget(),9)
+                .requires(itemGroup.getIngot())
+                .unlockedBy("has_"+getItemName(itemGroup.getIngot()), has(itemGroup.getIngot())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(itemGroup.getNugget()) + "_from_ingot"));
+
     }
 
     private static void oreSmeltingAndSmoking(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, int smokingTime, String group) {
@@ -206,6 +275,10 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
             SimpleCookingRecipeBuilder.generic(Ingredient.of(itemLike), pCategory, pResult, pExperience, pCookingTime, pCookingSerializer, factory).group(pGroup).unlockedBy(getHasName(itemLike), has(itemLike))
                     .save(recipeOutput, TheDungeon.MOD_ID + ":" + getItemName(pResult) + pRecipeName + "_" + getItemName(itemLike));
         }
+    }
+
+    private static void simpleArmor(ItemLike ingredient, SimpleItemGroup.ArmorSet<?> armorGroup, RecipeOutput recipeOutput) {
+        simpleArmor(ingredient, armorGroup.HELMET, armorGroup.CHESTPLATE, armorGroup.LEGGINGS, armorGroup.BOOTS, recipeOutput);
     }
 
     private static void simpleArmor(ItemLike ingredient, ItemLike helmet, ItemLike chestplate, ItemLike leggings, ItemLike boots, RecipeOutput recipeOutput) {

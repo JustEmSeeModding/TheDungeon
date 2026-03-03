@@ -57,10 +57,10 @@ public class CrystalCaveClusterProcessor extends OrganicClusterProcessor {
                         calciteMap.put(new ReplaceInstance(Blocks.STONE::defaultBlockState), 300);
 
                         calciteMap.put(new ReplaceInstance(Blocks.AMETHYST_BLOCK::defaultBlockState), CrystalGolemEntity.Variant.AMETHYST.getWeight());
-                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.ROSELITH_BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.ROSELITH.getWeight());
-                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.GARNETORE_BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.GARNETORE.getWeight());
-                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.VERDATITE_BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.VERDANTITE.getWeight());
-                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.LUMANITE_BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.LUMANITE.getWeight());
+                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.ROSELITH_CRYSTAL_GROUP.BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.ROSELITH.getWeight());
+                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.GARNETORE_CRYSTAL_GROUP.BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.GARNETORE.getWeight());
+                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.VERDANTITE_CRYSTAL_GROUP.BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.VERDANTITE.getWeight());
+                        calciteMap.put(new ReplaceInstance(() -> ModBlocks.LUMANITE_CRYSTAL_GROUP.BLOCK.get().defaultBlockState()), CrystalGolemEntity.Variant.LUMANITE.getWeight());
                     }));
         });
     }

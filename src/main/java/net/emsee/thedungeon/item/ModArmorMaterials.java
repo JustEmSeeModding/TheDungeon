@@ -51,7 +51,7 @@ public final class ModArmorMaterials {
                         map.put(ArmorItem.Type.CHESTPLATE, 6);
                         map.put(ArmorItem.Type.HELMET, 2);
                         map.put(ArmorItem.Type.BODY, 5);
-                    }), 7, SoundEvents.ARMOR_EQUIP_IRON, ()->Ingredient.of(ModItems.KOBALT_INGOT),
+                    }), 7, SoundEvents.ARMOR_EQUIP_IRON, ()->Ingredient.of(ModItems.KOBALT.INGOT),
                     List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "kobalt"))),
                     0, 0));
 

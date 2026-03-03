@@ -11,18 +11,12 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-public class DungeonCatalystBlock extends Block implements IDungeonCarryItem {
+public class DungeonCatalystBlock extends DungeonBlock {
     final DungeonRank catalistRank;
 
     public DungeonCatalystBlock(DungeonRank catalistRank, Properties properties) {
         super(properties);
         this.catalistRank = catalistRank;
-    }
-
-    @Override
-    public void appendHoverText( ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents,  TooltipFlag tooltipFlag) {
-        tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
     public DungeonRank getCatalistRank() {

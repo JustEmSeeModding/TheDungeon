@@ -60,21 +60,21 @@ public final class ModVillagerTrades {
             ));*/
             trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(Items.EMERALD, 4),
-                    new ItemStack(ModItems.SCHOLAR_HELMET.get()),
+                    new ItemStack(ModItems.SCHOLAR_ARMOR_SET.HELMET.get()),
                     12,
                     10,
                     VANILLA_HIGH_MULTIPLIER
             ));
             trades.get(3).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(Items.EMERALD, 6),
-                    new ItemStack(ModItems.SCHOLAR_LEGGINGS.get()),
+                    new ItemStack(ModItems.SCHOLAR_ARMOR_SET.LEGGINGS.get()),
                     12,
                     15,
                     VANILLA_HIGH_MULTIPLIER
             ));
             trades.get(/*villager level*/3).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(Items.EMERALD, 4),
-                    new ItemStack(ModItems.SCHOLAR_BOOTS.get()),
+                    new ItemStack(ModItems.SCHOLAR_ARMOR_SET.BOOTS.get()),
                     12,
                     15,
                     VANILLA_HIGH_MULTIPLIER
@@ -88,7 +88,7 @@ public final class ModVillagerTrades {
             ));
             trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemCost(Items.EMERALD, 8),
-                    new ItemStack(ModItems.SCHOLAR_CHESTPLATE.get()),
+                    new ItemStack(ModItems.SCHOLAR_ARMOR_SET.CHESTPLATE.get()),
                     12,
                     20,
                     VANILLA_HIGH_MULTIPLIER

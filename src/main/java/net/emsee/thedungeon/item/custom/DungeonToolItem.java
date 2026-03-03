@@ -60,8 +60,8 @@ public class DungeonToolItem extends DungeonWeaponItem {
         map.put(Blocks.ANCIENT_DEBRIS, Blocks.GRAY_TERRACOTTA);
         //map.put(Blocks.AMETHYST_BLOCK, Blocks.PURPLE_CONCRETE);
 
-        map.put(ModBlocks.PYRITE_ORE.get(), Blocks.STONE);
-        map.put(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), Blocks.DEEPSLATE);
+        map.put(ModBlocks.PYRITE_BLOCKS.ORE.get(), Blocks.STONE);
+        map.put(ModBlocks.PYRITE_BLOCKS.DEEPSLATE_ORE.get(), Blocks.DEEPSLATE);
 
         map.put(ModBlocks.INFUSED_STONE.get(), Blocks.STONE);
         map.put(ModBlocks.INFUSED_DEEPSLATE.get(), Blocks.DEEPSLATE);
@@ -74,12 +74,18 @@ public class DungeonToolItem extends DungeonWeaponItem {
         map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
         map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
         map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
-        map.put(ModBlocks.SMALL_ROSELITH_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.MEDIUM_ROSELITH_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.LARGE_ROSELITH_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.SMALL_GARNETORE_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.MEDIUM_GARNETORE_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.LARGE_GARNETORE_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
+        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
 
         map.put(Blocks.SNOW, Blocks.AIR);
         map.put(Blocks.MOSS_CARPET, Blocks.AIR);
@@ -95,8 +101,10 @@ public class DungeonToolItem extends DungeonWeaponItem {
         map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
         map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
         map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
-        map.put(ModBlocks.ROSELITH_CLUSTER.get(), Blocks.AIR);
-        map.put(ModBlocks.GARNETORE_CLUSTER.get(), Blocks.AIR);
+        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
+        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
+        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
+        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
     });
 
     /**

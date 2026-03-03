@@ -3,6 +3,7 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.item.ModItems;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleBlockGroup;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -36,8 +37,9 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.CATALYST_SS.get());
         dropOther(ModBlocks.CATALYST_BROKEN.get(), ModItems.SHATTERED_CATALYST_CORE);
 
-        oreDrops(ModBlocks.PYRITE_ORE.get(), ModItems.PYRITE, 2f, 3f);
-        oreDrops(ModBlocks.DEEPSLATE_PYRITE_ORE.get(), ModItems.PYRITE, 2f, 3f);
+        blockAndOreGroupDrops(ModBlocks.PYRITE_BLOCKS,ModItems.PYRITE, 2f, 3f);
+        blockAndOreGroupDrops(ModBlocks.GILDREAN_BLOCKS,ModItems.GILDREAN.RAW, 1f, 2f);
+        oreDrops(ModBlocks.INGILDERD_BLACKSTONE.get(), ModItems.GILDREAN.NUGGET, 3f, 8f);
 
         simpleItemDropWithSilk(ModBlocks.INFUSED_DIRT.get(), ModItems.DUNGEON_ESSENCE_SHARD);
         simpleItemDropWithSilk(ModBlocks.INFUSED_GRASS_BLOCK.get(), ModItems.DUNGEON_ESSENCE_SHARD);
@@ -59,29 +61,10 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         simpleItemDropWithSilk(ModBlocks.INFUSED_GLASS.get(), ModItems.DUNGEON_ESSENCE_SHARD);
         dropSelf(ModBlocks.INFUSED_THREAD.get());
 
-        dropSelf(ModBlocks.ROSELITH_BLOCK.get());
-        oreDrops(ModBlocks.ROSELITH_CLUSTER.get(), ModItems.ROSELITH_CRYSTAL, 1f, 2f);
-        simpleItemDropSelfWithSilk(ModBlocks.LARGE_ROSELITH_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_ROSELITH_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.SMALL_ROSELITH_BUD.get());
-
-        dropSelf(ModBlocks.GARNETORE_BLOCK.get());
-        oreDrops(ModBlocks.GARNETORE_CLUSTER.get(), ModItems.GARNETORE_PIECE, 1f, 2f);
-        simpleItemDropSelfWithSilk(ModBlocks.LARGE_GARNETORE_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_GARNETORE_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.SMALL_GARNETORE_BUD.get());
-
-        dropSelf(ModBlocks.VERDATITE_BLOCK.get());
-        oreDrops(ModBlocks.VERDATITE_CLUSTER.get(), ModItems.VERDANTITE_CHUNK, 1f, 2f);
-        simpleItemDropSelfWithSilk(ModBlocks.LARGE_VERDATITE_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_VERDATITE_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.SMALL_VERDATITE_BUD.get());
-
-        dropSelf(ModBlocks.LUMANITE_BLOCK.get());
-        oreDrops(ModBlocks.LUMANITE_CLUSTER.get(), ModItems.LUMANITE_FRAGMENT, 1f, 2f);
-        simpleItemDropSelfWithSilk(ModBlocks.LARGE_LUMANITE_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.MEDIUM_LUMANITE_BUD.get());
-        simpleItemDropSelfWithSilk(ModBlocks.SMALL_LUMANITE_BUD.get());
+        crystalBlockAndClusterDrops(ModBlocks.ROSELITH_CRYSTAL_GROUP , ModItems.ROSELITH_CRYSTAL);
+        crystalBlockAndClusterDrops(ModBlocks.GARNETORE_CRYSTAL_GROUP , ModItems.GARNETORE_PIECE);
+        crystalBlockAndClusterDrops(ModBlocks.VERDANTITE_CRYSTAL_GROUP , ModItems.VERDANTITE_CHUNK);
+        crystalBlockAndClusterDrops(ModBlocks.LUMANITE_CRYSTAL_GROUP , ModItems.LUMANITE_FRAGMENT);
 
         dropSelf(ModBlocks.GOBLIN_FORGE.get());
 
@@ -107,5 +90,29 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
     private void oreDrops(Block block, ItemLike item, float min, float max) {
         HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
         add(block, createSilkTouchDispatchTable(block, this.applyExplosionDecay(block, LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))).apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))))));
+    }
+
+    private void oreDrops(SimpleBlockGroup.WithOres group, ItemLike item, float min, float max) {
+        HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        group.getAllOres().forEach(ore -> {
+            add(ore.get(), createSilkTouchDispatchTable(ore.get(), this.applyExplosionDecay(ore.get(), LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max))).apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE))))));
+        });
+    }
+
+    private <G extends SimpleBlockGroup & SimpleBlockGroup.WithOres> void blockAndOreGroupDrops(G group, ItemLike item, float min, float max) {
+        if (group instanceof SimpleBlockGroup.WithPackedItemBlock withBase)dropSelf(withBase.getPackedItemBlock().get());
+        if (group instanceof SimpleBlockGroup.WithRawBlock withRaw)dropSelf(withRaw.getRawBlock().get());
+        oreDrops(group, item, min, max);
+    }
+    private void crystalBlockAndClusterDrops(SimpleBlockGroup.CrystalBlockAndClusterGroup<?,?> group, ItemLike item) {
+        dropSelf(group.BLOCK.get());
+        crystalClusterDrops(group.CLUSTERS, item);
+    }
+
+    private void crystalClusterDrops(SimpleBlockGroup.CrystalClusterGroup group, ItemLike item) {
+        oreDrops(group.CLUSTER.get(), item, 1f, 2f);
+        simpleItemDropSelfWithSilk(group.LARGE_BUD.get());
+        simpleItemDropSelfWithSilk(group.MEDIUM_BUD.get());
+        simpleItemDropSelfWithSilk(group.SMALL_BUD.get());
     }
 }

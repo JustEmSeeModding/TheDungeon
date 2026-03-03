@@ -2,6 +2,7 @@ package net.emsee.thedungeon.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 
-public class BuddingGarnetoreBlock extends AmethystBlock {
+public class BuddingGarnetoreBlock extends DungeonAmethystBlock {
     public static final MapCodec<BuddingGarnetoreBlock> CODEC = simpleCodec(BuddingGarnetoreBlock::new);
     public static final int GROWTH_CHANCE = 5;
     private static final Direction[] DIRECTIONS = Direction.values();
@@ -30,13 +31,13 @@ public class BuddingGarnetoreBlock extends AmethystBlock {
             BlockState blockstate = level.getBlockState(blockpos);
             Block block = null;
             if (canClusterGrowAtState(blockstate)) {
-                block = ModBlocks.SMALL_GARNETORE_BUD.get();
-            } else if (blockstate.is(ModBlocks.SMALL_GARNETORE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.MEDIUM_GARNETORE_BUD.get();
-            } else if (blockstate.is(ModBlocks.MEDIUM_GARNETORE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.LARGE_GARNETORE_BUD.get();
-            } else if (blockstate.is(ModBlocks.LARGE_GARNETORE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
-                block = ModBlocks.GARNETORE_CLUSTER.get();
+                block = ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get();
+            } else if (blockstate.is(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get();
+            } else if (blockstate.is(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get();
+            } else if (blockstate.is(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get()) && blockstate.getValue(AmethystClusterBlock.FACING) == direction) {
+                block = ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get();
             }
 
             if (block != null) {

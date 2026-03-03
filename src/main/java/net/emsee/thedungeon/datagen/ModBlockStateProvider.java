@@ -3,6 +3,7 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleBlockGroup;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -23,8 +24,9 @@ public final class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         block(ModBlocks.DUNGEON_PORTAL);
 
-        blockWithItem(ModBlocks.PYRITE_ORE);
-        blockWithItem(ModBlocks.DEEPSLATE_PYRITE_ORE);
+        simpleBlockGroup(ModBlocks.PYRITE_BLOCKS);
+        simpleBlockGroup(ModBlocks.GILDREAN_BLOCKS);
+        blockWithItem(ModBlocks.INGILDERD_BLACKSTONE);
 
         blockWithItem(ModBlocks.INFUSED_DIRT);
         blockWithItem(ModBlocks.INFUSED_CLAY);
@@ -44,34 +46,10 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
         semiTransparentBlockWithItem(ModBlocks.INFUSED_GLASS);
 
-        blockWithItem(ModBlocks.ROSELITH_BLOCK);
-        blockWithItem(ModBlocks.BUDDING_ROSELITH);
-        blockWithItem(ModBlocks.GARNETORE_BLOCK);
-        blockWithItem(ModBlocks.BUDDING_GARNETORE);
-        blockWithItem(ModBlocks.VERDATITE_BLOCK);
-        blockWithItem(ModBlocks.BUDDING_VERDATITE);
-        blockWithItem(ModBlocks.LUMANITE_BLOCK);
-        blockWithItem(ModBlocks.BUDDING_LUMANITE);
-
-        clusterBlock(ModBlocks.ROSELITH_CLUSTER, "roselith_cluster");
-        clusterBlock(ModBlocks.LARGE_ROSELITH_BUD, "large_roselith_bud");
-        clusterBlock(ModBlocks.MEDIUM_ROSELITH_BUD, "medium_roselith_bud");
-        clusterBlock(ModBlocks.SMALL_ROSELITH_BUD, "small_roselith_bud");
-
-        clusterBlock(ModBlocks.GARNETORE_CLUSTER, "garnetore_cluster");
-        clusterBlock(ModBlocks.LARGE_GARNETORE_BUD, "large_garnetore_bud");
-        clusterBlock(ModBlocks.MEDIUM_GARNETORE_BUD, "medium_garnetore_bud");
-        clusterBlock(ModBlocks.SMALL_GARNETORE_BUD, "small_garnetore_bud");
-
-        clusterBlock(ModBlocks.VERDATITE_CLUSTER, "verdantite_cluster");
-        clusterBlock(ModBlocks.LARGE_VERDATITE_BUD, "large_verdantite_bud");
-        clusterBlock(ModBlocks.MEDIUM_VERDATITE_BUD, "medium_verdantite_bud");
-        clusterBlock(ModBlocks.SMALL_VERDATITE_BUD, "small_verdantite_bud");
-
-        clusterBlock(ModBlocks.LUMANITE_CLUSTER, "lumanite_cluster");
-        clusterBlock(ModBlocks.LARGE_LUMANITE_BUD, "large_lumanite_bud");
-        clusterBlock(ModBlocks.MEDIUM_LUMANITE_BUD, "medium_lumanite_bud");
-        clusterBlock(ModBlocks.SMALL_LUMANITE_BUD, "small_lumanite_bud");
+        crystalBlocksAndClusters(ModBlocks.ROSELITH_CRYSTAL_GROUP);
+        crystalBlocksAndClusters(ModBlocks.GARNETORE_CRYSTAL_GROUP);
+        crystalBlocksAndClusters(ModBlocks.VERDANTITE_CRYSTAL_GROUP);
+        crystalBlocksAndClusters(ModBlocks.LUMANITE_CRYSTAL_GROUP);
     }
 
     private void crossBlock(DeferredBlock<?> deferredBlock, String modelName, String textureName) {
@@ -92,6 +70,23 @@ public final class ModBlockStateProvider extends BlockStateProvider {
 
     private void blockWithItem(DeferredBlock<?> deferredBlock, ResourceLocation texture) {
         simpleBlockWithItem(deferredBlock.get(), this.models().cubeAll(BuiltInRegistries.BLOCK.getKey(deferredBlock.get()).getPath(), texture));
+    }
+
+    private void simpleBlockGroup(SimpleBlockGroup group) {
+        group.getAll().forEach(this::blockWithItem);
+    }
+
+    private void crystalBlocksAndClusters(SimpleBlockGroup.CrystalBlockAndClusterGroup<?,?> group) {
+        blockWithItem(group.BLOCK);
+        blockWithItem(group.BUDDING_BLOCK);
+        clusterBlocks(group.CLUSTERS);
+    }
+
+    private void clusterBlocks(SimpleBlockGroup.CrystalClusterGroup group) {
+        clusterBlock(group.CLUSTER, group.name+"_cluster");
+        clusterBlock(group.LARGE_BUD, "large_"+group.name+"_bud");
+        clusterBlock(group.MEDIUM_BUD, "medium_"+group.name+"_bud");
+        clusterBlock(group.SMALL_BUD, "small_"+group.name+"_bud");
     }
 
     private void blockWithItemCopyFromOtherBlock(DeferredBlock<?> deferredBlock, DeferredBlock<?> copyDeferredBlock) {

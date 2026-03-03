@@ -42,7 +42,7 @@ public class HobGoblinTrades {
                             // common trades
                             1, new VillagerTrades.ItemListing[]{
                                     new ItemsForCash(ModItems.INFUSED_ALLOY_INGOT, 3, 1,7, 1),
-                                    new ItemsForCash(ModItems.KOBALT_INGOT, 2, 1,5, 1),
+                                    new ItemsForCash(ModItems.KOBALT.INGOT, 2, 1,5, 1),
                                     new CashForItems(Items.COPPER_INGOT, 1,8,1),
                                     new CashForItems(Items.IRON_INGOT, 1,8,2),
                                     new CashForItems(ModItems.DUNGEON_ESSENCE_SHARD, 1,10,1),

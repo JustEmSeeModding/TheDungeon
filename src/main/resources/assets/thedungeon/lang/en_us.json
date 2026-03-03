@@ -140,6 +140,11 @@
   "item.thedungeon.roselith_crystal": "Roselith Crystal",
   "item.thedungeon.garnetore_piece": "Garnetore Piece",
   "item.thedungeon.kobalt_ingot": "Kobalt Ingot",
+  "item.thedungeon.kobalt_nugget": "Kobalt Nugget",
+  "item.thedungeon.gildrean_ingot": "Gildrean Ingot",
+  "item.thedungeon.gildrean_nugget": "Gildrean Nugget",
+  "item.thedungeon.raw_gildrean": "Raw Gildrean",
+  "item.thedungeon.gildrean_apple": "Gildrean Apple",
   "item.thedungeon.goblin_meat": "Goblin Meat",
   "item.thedungeon.verdantite_chunk": "Verdantite Chunk",
   "item.thedungeon.lumanite_fragment": "Lumanite Fragment",
@@ -156,8 +161,14 @@
 
   "block.thedungeon.dungeon_portal" : "Dungeon Portal",
 
+  "block.thedungeon.pyrite_block" : "Block of Pyrite",
   "block.thedungeon.pyrite_ore" : "Pyrite Ore",
   "block.thedungeon.deepslate_pyrite_ore" : "Deepslate Pyrite Ore",
+  "block.thedungeon.gildrean_block": "Block of Gildrean",
+  "block.thedungeon.raw_gildrean_block": "Raw Gildrean Block",
+  "block.thedungeon.gildrean_ore": "Gildrean Ore",
+  "block.thedungeon.deepslate_gildrean_ore": "Deepslate Gildrean Ore",
+  "block.thedungeon.ingilderd_blackstone": "Ingilderd Blackstone",
 
   "block.thedungeon.infused_grass_block" : "Infused Grass Block",
   "block.thedungeon.infused_dirt" : "Infused Dirt",

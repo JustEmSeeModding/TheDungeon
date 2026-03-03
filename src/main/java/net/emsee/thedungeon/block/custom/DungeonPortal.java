@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem {
+public class DungeonPortal extends BaseDungeonEntityBlock {
     public static final MapCodec<DungeonPortal> CODEC = simpleCodec(DungeonPortal::new);
 
     public static final BooleanProperty STABLE = BooleanProperty.create("stable");
@@ -118,12 +118,6 @@ public class DungeonPortal extends BaseEntityBlock implements IDungeonCarryItem 
             }
         }
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
     @Override

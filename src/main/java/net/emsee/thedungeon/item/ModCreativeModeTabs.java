@@ -2,6 +2,8 @@ package net.emsee.thedungeon.item;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleBlockGroup;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleItemGroup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,19 +33,11 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.KOBALT_DAGGER);
                         output.accept(ModItems.GOBLINS_FORGEHAMMER);
                         output.accept(ModItems.KOBALT_SHIELD);
-                        output.accept(ModItems.INFUSED_ALLOY_HELMET);
-                        output.accept(ModItems.INFUSED_ALLOY_CHESTPLATE);
-                        output.accept(ModItems.INFUSED_ALLOY_LEGGINGS);
-                        output.accept(ModItems.INFUSED_ALLOY_BOOTS);
-                        output.accept(ModItems.SCHOLAR_HELMET);
-                        output.accept(ModItems.SCHOLAR_CHESTPLATE);
-                        output.accept(ModItems.SCHOLAR_LEGGINGS);
-                        output.accept(ModItems.SCHOLAR_BOOTS);
-                        output.accept(ModItems.KOBALT_HELMET);
-                        output.accept(ModItems.KOBALT_CHESTPLATE);
-                        output.accept(ModItems.KOBALT_LEGGINGS);
-                        output.accept(ModItems.KOBALT_BOOTS);
+                        acceptItemGroup(output, ModItems.INFUSED_ARMOR_SET);
+                        acceptItemGroup(output, ModItems.SCHOLAR_ARMOR_SET);
+                        acceptItemGroup(output, ModItems.KOBALT_ARMOR_SET);
                     }).build());
+
 
     public static final Supplier<CreativeModeTab> DUNGEON_INGREDIENTS_TAB = CREATIVE_MODE_TAB.register("dungeon_ingredients_tab",
             () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.CATALYST_CORE.get()))
@@ -55,9 +49,10 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
-                        output.accept(ModItems.KOBALT_INGOT);
+                        acceptItemGroup(output, ModItems.KOBALT);
                         output.accept(ModItems.PYRITE);
                         output.accept(ModItems.PYRITE_COIN);
+                        acceptItemGroup(output, ModItems.GILDREAN);
                         output.accept(ModItems.ROSELITH_CRYSTAL);
                         output.accept(ModItems.GARNETORE_PIECE);
                         output.accept(ModItems.VERDANTITE_CHUNK);
@@ -65,15 +60,16 @@ public final class ModCreativeModeTabs {
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_FOOD_TAB = CREATIVE_MODE_TAB.register("dungeon_food_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.GOBLIN_MEAT.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.GILDREAN_APPLE.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_ingredients_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_food"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.GOBLIN_MEAT);
+                        output.accept(ModItems.GILDREAN_APPLE);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_BLOCKS_TAB = CREATIVE_MODE_TAB.register("dungeon_blocks_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.DUNGEON_PORTAL.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.PYRITE_BLOCKS.BLOCK.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_food_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
@@ -88,8 +84,9 @@ public final class ModCreativeModeTabs {
                         //output.accept(ModBlocks.CATALYST_S);
                         //output.accept(ModBlocks.CATALYST_SS);
                         output.accept(ModBlocks.GOBLIN_FORGE);
-                        output.accept(ModBlocks.PYRITE_ORE);
-                        output.accept(ModBlocks.DEEPSLATE_PYRITE_ORE);
+                        acceptBlockGroup(output,ModBlocks.PYRITE_BLOCKS);
+                        acceptBlockGroup(output,ModBlocks.GILDREAN_BLOCKS);
+                        output.accept(ModBlocks.INGILDERD_BLACKSTONE);
                         output.accept(ModBlocks.INFUSED_GRASS_BLOCK);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);
@@ -104,30 +101,10 @@ public final class ModCreativeModeTabs {
                         output.accept(ModBlocks.INFUSED_END_STONE);
                         output.accept(ModBlocks.INFUSED_END_STONE_BRICKS);
                         output.accept(ModBlocks.INFUSED_GLASS);
-                        output.accept(ModBlocks.ROSELITH_BLOCK);
-                        output.accept(ModBlocks.BUDDING_ROSELITH);
-                        output.accept(ModBlocks.SMALL_ROSELITH_BUD);
-                        output.accept(ModBlocks.MEDIUM_ROSELITH_BUD);
-                        output.accept(ModBlocks.LARGE_ROSELITH_BUD);
-                        output.accept(ModBlocks.ROSELITH_CLUSTER);
-                        output.accept(ModBlocks.GARNETORE_BLOCK);
-                        output.accept(ModBlocks.BUDDING_GARNETORE);
-                        output.accept(ModBlocks.SMALL_GARNETORE_BUD);
-                        output.accept(ModBlocks.MEDIUM_GARNETORE_BUD);
-                        output.accept(ModBlocks.LARGE_GARNETORE_BUD);
-                        output.accept(ModBlocks.GARNETORE_CLUSTER);
-                        output.accept(ModBlocks.VERDATITE_BLOCK);
-                        output.accept(ModBlocks.BUDDING_VERDATITE);
-                        output.accept(ModBlocks.SMALL_VERDATITE_BUD);
-                        output.accept(ModBlocks.MEDIUM_VERDATITE_BUD);
-                        output.accept(ModBlocks.LARGE_VERDATITE_BUD);
-                        output.accept(ModBlocks.VERDATITE_CLUSTER);
-                        output.accept(ModBlocks.LUMANITE_BLOCK);
-                        output.accept(ModBlocks.BUDDING_LUMANITE);
-                        output.accept(ModBlocks.SMALL_LUMANITE_BUD);
-                        output.accept(ModBlocks.MEDIUM_LUMANITE_BUD);
-                        output.accept(ModBlocks.LARGE_LUMANITE_BUD);
-                        output.accept(ModBlocks.LUMANITE_CLUSTER);
+                        acceptBlockGroup(output,ModBlocks.ROSELITH_CRYSTAL_GROUP);
+                        acceptBlockGroup(output,ModBlocks.GARNETORE_CRYSTAL_GROUP);
+                        acceptBlockGroup(output,ModBlocks.VERDANTITE_CRYSTAL_GROUP);
+                        acceptBlockGroup(output,ModBlocks.LUMANITE_CRYSTAL_GROUP);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_SPAWN_EGGS_TAB = CREATIVE_MODE_TAB.register("dungeon_spawn_eggs_tab",
@@ -143,6 +120,14 @@ public final class ModCreativeModeTabs {
                         output.accept(ModSpawnEggs.CRYSTAL_GOLEM_SPAWN_EGG);
                         output.accept(ModSpawnEggs.LUMINOUS_CRAWLER_SPAWN_EGG);
                     }).build());
+
+    private static void acceptItemGroup(CreativeModeTab.Output output, SimpleItemGroup group) {
+        group.getAllAsItem().forEach(output::accept);
+    }
+
+    private static void acceptBlockGroup(CreativeModeTab.Output output, SimpleBlockGroup group) {
+        group.getAllAsBlock().forEach(output::accept);
+    }
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TAB.register(eventBus);

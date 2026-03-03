@@ -20,9 +20,9 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(BlockTags.NEEDS_STONE_TOOL)
-                .add(ModBlocks.PYRITE_ORE.get())
-                .add(ModBlocks.DEEPSLATE_PYRITE_ORE.get())
-        ;
+                .addAll(ModBlocks.PYRITE_BLOCKS.getAllAsResourceKey())
+                ;
+
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.DUNGEON_PORTAL.get())
@@ -35,6 +35,8 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.CATALYST_S.get())
                 .add(ModBlocks.CATALYST_SS.get())
                 .add(ModBlocks.CATALYST_BROKEN.get())
+                .add(ModBlocks.INGILDERD_BLACKSTONE.get())
+                .addAll(ModBlocks.GILDREAN_BLOCKS.getAllAsResourceKey())
         ;
 
         /*tag(BlockTags.NEEDS_DIAMOND_TOOL)
@@ -43,8 +45,6 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.DUNGEON_PORTAL.get())
-                .add(ModBlocks.PYRITE_ORE.get())
-                .add(ModBlocks.DEEPSLATE_PYRITE_ORE.get())
                 .add(ModBlocks.INFUSED_STONE.get())
                 .add(ModBlocks.INFUSED_DEEPSLATE.get())
                 .add(ModBlocks.INFUSED_STONE_BRICKS.get())
@@ -63,33 +63,16 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.CATALYST_SS.get())
                 .add(ModBlocks.CATALYST_BROKEN.get())
 
-                .add(ModBlocks.ROSELITH_BLOCK.get())
-                .add(ModBlocks.BUDDING_ROSELITH.get())
-                .add(ModBlocks.SMALL_ROSELITH_BUD.get())
-                .add(ModBlocks.MEDIUM_GARNETORE_BUD.get())
-                .add(ModBlocks.LARGE_GARNETORE_BUD.get())
-                .add(ModBlocks.ROSELITH_CLUSTER.get())
+                .add(ModBlocks.INGILDERD_BLACKSTONE.get())
 
-                .add(ModBlocks.GARNETORE_BLOCK.get())
-                .add(ModBlocks.BUDDING_GARNETORE.get())
-                .add(ModBlocks.SMALL_GARNETORE_BUD.get())
-                .add(ModBlocks.MEDIUM_GARNETORE_BUD.get())
-                .add(ModBlocks.LARGE_GARNETORE_BUD.get())
-                .add(ModBlocks.GARNETORE_CLUSTER.get())
+                .addAll(ModBlocks.PYRITE_BLOCKS.getAllAsResourceKey())
+                .addAll(ModBlocks.GILDREAN_BLOCKS.getAllAsResourceKey())
 
-                .add(ModBlocks.VERDATITE_BLOCK.get())
-                .add(ModBlocks.BUDDING_VERDATITE.get())
-                .add(ModBlocks.SMALL_VERDATITE_BUD.get())
-                .add(ModBlocks.MEDIUM_VERDATITE_BUD.get())
-                .add(ModBlocks.LARGE_VERDATITE_BUD.get())
-                .add(ModBlocks.VERDATITE_CLUSTER.get())
+                .addAll(ModBlocks.ROSELITH_CRYSTAL_GROUP.getAllAsResourceKey())
+                .addAll(ModBlocks.GARNETORE_CRYSTAL_GROUP.getAllAsResourceKey())
+                .addAll(ModBlocks.VERDANTITE_CRYSTAL_GROUP.getAllAsResourceKey())
+                .addAll(ModBlocks.LUMANITE_CRYSTAL_GROUP.getAllAsResourceKey())
 
-                .add(ModBlocks.LUMANITE_BLOCK.get())
-                .add(ModBlocks.BUDDING_LUMANITE.get())
-                .add(ModBlocks.SMALL_LUMANITE_BUD.get())
-                .add(ModBlocks.MEDIUM_LUMANITE_BUD.get())
-                .add(ModBlocks.LARGE_LUMANITE_BUD.get())
-                .add(ModBlocks.LUMANITE_CLUSTER.get())
         ;
 
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
