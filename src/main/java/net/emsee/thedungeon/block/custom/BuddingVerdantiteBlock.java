@@ -2,12 +2,11 @@ package net.emsee.thedungeon.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.ModBlocks;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.block.custom.dungeonBlockCopies.DungeonAmethystBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.AmethystBlock;
 import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;

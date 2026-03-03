@@ -46,12 +46,6 @@ public class GoblinForgeBlock extends BaseDungeonEntityBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item. TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, LIT);
     }

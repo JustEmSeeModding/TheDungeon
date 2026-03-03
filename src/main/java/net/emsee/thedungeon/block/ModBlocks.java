@@ -2,6 +2,7 @@ package net.emsee.thedungeon.block;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.custom.*;
+import net.emsee.thedungeon.block.custom.dungeonBlockCopies.*;
 import net.emsee.thedungeon.block.custom.fightRoom.TestFightRoomBlock;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.item.ModItems;
@@ -70,8 +71,8 @@ public final class ModBlocks {
     public static final DeferredBlock<DungeonBlock> INFUSED_DIRT = registerBlock("infused_dirt",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)));
 
-    public static final DeferredBlock<GrassBlock> INFUSED_GRASS_BLOCK = registerBlock("infused_grass_block",
-            () -> new GrassBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK)));
+    public static final DeferredBlock<DungeonGrassBlock> INFUSED_GRASS_BLOCK = registerBlock("infused_grass_block",
+            () -> new DungeonGrassBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK)));
 
     public static final DeferredBlock<DungeonBlock> INFUSED_CLAY = registerBlock("infused_clay",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CLAY)));
@@ -94,8 +95,8 @@ public final class ModBlocks {
     public static final DeferredBlock<DungeonBlock> INFUSED_NETHERRACK = registerBlock("infused_netherrack",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERRACK)));
 
-    public static final DeferredBlock<SoulSandBlock> INFUSED_SOUL_SAND = registerBlock("infused_soul_sand",
-            () -> new SoulSandBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SAND)));
+    public static final DeferredBlock<DungeonSoulSandBlock> INFUSED_SOUL_SAND = registerBlock("infused_soul_sand",
+            () -> new DungeonSoulSandBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SAND)));
 
     public static final DeferredBlock<DungeonBlock> INFUSED_SOUL_SOIL = registerBlock("infused_soul_soil",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SOIL)));
