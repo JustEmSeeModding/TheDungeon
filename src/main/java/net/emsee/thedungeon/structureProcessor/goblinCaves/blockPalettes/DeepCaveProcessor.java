@@ -34,8 +34,8 @@ public class DeepCaveProcessor extends BlockPaletteReplacementProcessor {
                         deepslateMap.put(new ReplaceInstance(Blocks.SMOOTH_BASALT::defaultBlockState), 200);
                         deepslateMap.put(new ReplaceInstance(Blocks.BEDROCK::defaultBlockState), 200);
                         //deepslateMap.put(new ReplaceInstance(Blocks.DEEPSLATE_GOLD_ORE::defaultBlockState), 11);
-                        deepslateMap.put(new ReplaceInstance(()->ModBlocks.GILDREAN_BLOCKS.DEEPSLATE_ORE.get().defaultBlockState()), 5);
-                        //deepslateMap.put(new ReplaceInstance(Blocks.DEEPSLATE_IRON_ORE::defaultBlockState), 3);
+                        deepslateMap.put(new ReplaceInstance(()->ModBlocks.GILDREAN.DEEPSLATE_ORE.get().defaultBlockState()), 5);
+                        deepslateMap.put(new ReplaceInstance(()->ModBlocks.LAVINTINE.DEEPSLATE_ORE.get().defaultBlockState()), 2);
                         //deepslateMap.put(new ReplaceInstance(Blocks.DEEPSLATE_DIAMOND_ORE::defaultBlockState), 2);
                         deepslateMap.put(new ReplaceInstance(ModBlocks.PYRITE_BLOCKS.DEEPSLATE_ORE.get()::defaultBlockState), 4);
                         deepslateMap.put(new ReplaceInstance(ModBlocks.INFUSED_DEEPSLATE.get()::defaultBlockState), 1);

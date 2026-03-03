@@ -25,8 +25,11 @@ public final class ModBlockStateProvider extends BlockStateProvider {
         block(ModBlocks.DUNGEON_PORTAL);
 
         simpleBlockGroup(ModBlocks.PYRITE_BLOCKS);
-        simpleBlockGroup(ModBlocks.GILDREAN_BLOCKS);
+        simpleBlockGroup(ModBlocks.GILDREAN);
         blockWithItem(ModBlocks.INGILDERD_BLACKSTONE);
+        simpleBlockGroup(ModBlocks.INFERNAL_TIN);
+        simpleBlockGroup(ModBlocks.ARCTIC_IRON);
+        simpleBlockGroup(ModBlocks.LAVINTINE);
 
         blockWithItem(ModBlocks.INFUSED_DIRT);
         blockWithItem(ModBlocks.INFUSED_CLAY);

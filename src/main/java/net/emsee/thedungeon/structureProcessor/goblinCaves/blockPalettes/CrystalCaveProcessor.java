@@ -2,6 +2,7 @@ package net.emsee.thedungeon.structureProcessor.goblinCaves.blockPalettes;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
+import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.structureProcessor.BlockPaletteReplacementProcessor;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
@@ -25,9 +26,7 @@ public class CrystalCaveProcessor extends BlockPaletteReplacementProcessor {
                         stoneMap.put(new ReplaceInstance(Blocks.ANDESITE::defaultBlockState), 125);
                         stoneMap.put(new ReplaceInstance(Blocks.COBBLESTONE::defaultBlockState), 125);
                         stoneMap.put(new ReplaceInstance(Blocks.TUFF::defaultBlockState), 225);
-                        //stoneMap.put(new ReplaceInstance(Blocks.DIAMOND_ORE::defaultBlockState), 70);
-                        //stoneMap.put(new ReplaceInstance(Blocks.EMERALD_ORE::defaultBlockState), 35);
-                        //stoneMap.put(new ReplaceInstance(Blocks.LAPIS_ORE::defaultBlockState), 25);
+                        stoneMap.put(new ReplaceInstance(()->ModBlocks.LAVINTINE.ORE.get().defaultBlockState()), 50);
                     }));
             map.put(Blocks.CALCITE,
                     Util.make(new WeightedMap.Int<>(), (calciteMap) -> {

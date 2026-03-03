@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.block.custom.dungeonBlockCopies;
 
 import net.emsee.thedungeon.item.custom.DungeonItem;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.StainedGlassBlock;
 
 import java.util.List;
 
-public class InfusedGlassBlock extends StainedGlassBlock implements IDungeonCarryItem {
+public class InfusedGlassBlock extends StainedGlassBlock implements ICanTakeItemToDungeon {
     public InfusedGlassBlock(Properties properties) {
         super(DyeColor.CYAN, properties);
     }
@@ -21,4 +21,5 @@ public class InfusedGlassBlock extends StainedGlassBlock implements IDungeonCarr
         tooltipComponents.add(DungeonItem.DUNGEON_ITEM_HOVER_MESSAGE);
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
+
 }

@@ -4,7 +4,7 @@ import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -21,13 +21,13 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import java.util.List;
 import java.util.Objects;
 
-public class DungeonArmorItem extends ArmorItem implements IDungeonCarryItem, IDungeonToolTips, IClassedItem {
+public class DungeonArmorItem extends ArmorItem implements ICanTakeItemToDungeon, IDungeonToolTips, IClassedItem {
     private final DungeonItemRank rank;
     private final DeferredHolder<DungeonClass,?>[] classes;
     private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
     public DungeonArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes,DeferredHolder<DungeonSubClass<?>,?>[] subClasses) {
-        super(material, type, properties.rarity(Rarity.RARE));
+        super(material, type, properties.rarity(ICanTakeItemToDungeon.DUNGEON_ITEM_RARITY));
         this.rank=rank;
         this.classes=classes;
         this.subClasses=subClasses;

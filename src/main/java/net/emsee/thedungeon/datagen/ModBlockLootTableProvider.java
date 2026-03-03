@@ -38,8 +38,12 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropOther(ModBlocks.CATALYST_BROKEN.get(), ModItems.SHATTERED_CATALYST_CORE);
 
         blockAndOreGroupDrops(ModBlocks.PYRITE_BLOCKS,ModItems.PYRITE, 2f, 3f);
-        blockAndOreGroupDrops(ModBlocks.GILDREAN_BLOCKS,ModItems.GILDREAN.RAW, 1f, 2f);
+        blockAndOreGroupDrops(ModBlocks.GILDREAN,ModItems.GILDREAN.RAW, 1f, 2f);
         oreDrops(ModBlocks.INGILDERD_BLACKSTONE.get(), ModItems.GILDREAN.NUGGET, 3f, 8f);
+        blockAndOreGroupDrops(ModBlocks.INFERNAL_TIN,ModItems.INFERNAL_TIN.RAW, 2f, 3f);
+        blockAndOreGroupDrops(ModBlocks.ARCTIC_IRON,ModItems.ARCTIC_IRON.RAW, 2f, 5f);
+        blockAndOreGroupDrops(ModBlocks.LAVINTINE,ModItems.LAVINTINE.RAW, 1f, 2f);
+
 
         simpleItemDropWithSilk(ModBlocks.INFUSED_DIRT.get(), ModItems.DUNGEON_ESSENCE_SHARD);
         simpleItemDropWithSilk(ModBlocks.INFUSED_GRASS_BLOCK.get(), ModItems.DUNGEON_ESSENCE_SHARD);

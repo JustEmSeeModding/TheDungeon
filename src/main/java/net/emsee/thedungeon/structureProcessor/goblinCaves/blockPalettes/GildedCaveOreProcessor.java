@@ -29,12 +29,12 @@ public class GildedCaveOreProcessor extends BlockPaletteReplacementProcessor {
                     }));
             map.put(Blocks.RAW_GOLD_BLOCK,
                     Util.make(new WeightedMap.Int<>(), (goldVeinMap) -> {
-                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.GILDREAN_BLOCKS.RAW_BLOCK.get().defaultBlockState()), 2);
+                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.GILDREAN.RAW_BLOCK.get().defaultBlockState()), 2);
                         goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.INGILDERD_BLACKSTONE.get().defaultBlockState()), 3);
                     }));
-            map.put(ModBlocks.GILDREAN_BLOCKS.RAW_BLOCK.get(),
+            map.put(ModBlocks.GILDREAN.RAW_BLOCK.get(),
                     Util.make(new WeightedMap.Int<>(), (goldVeinMap) -> {
-                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.GILDREAN_BLOCKS.RAW_BLOCK.get().defaultBlockState()), 2);
+                        goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.GILDREAN.RAW_BLOCK.get().defaultBlockState()), 2);
                         goldVeinMap.put(new ReplaceInstance(() -> ModBlocks.INGILDERD_BLACKSTONE.get().defaultBlockState()), 3);
                     }));
         });

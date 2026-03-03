@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.block.custom.dungeonBlockCopies;
 
 import net.emsee.thedungeon.item.custom.DungeonItem;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.TripWireBlock;
 
 import java.util.List;
 
-public class DungeonThreadBlock extends TripWireBlock implements IDungeonCarryItem {
+public class DungeonThreadBlock extends TripWireBlock implements ICanTakeItemToDungeon {
     public DungeonThreadBlock(Block hook, Properties properties) {
         super(hook, properties);
     }

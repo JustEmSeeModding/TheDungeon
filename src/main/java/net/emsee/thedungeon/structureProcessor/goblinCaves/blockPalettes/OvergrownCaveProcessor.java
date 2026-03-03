@@ -24,7 +24,7 @@ public class OvergrownCaveProcessor extends StoneCaveOreProcessor {
                         stoneMap.put(new ReplaceInstance(Blocks.COBBLESTONE::defaultBlockState), 275);
                         stoneMap.put(new ReplaceInstance(Blocks.MOSSY_COBBLESTONE::defaultBlockState), 100);
                         stoneMap.put(new ReplaceInstance(Blocks.TUFF::defaultBlockState), 375);
-                        stoneMap.put(new ReplaceInstance(()-> ModBlocks.GILDREAN_BLOCKS.ORE.get().defaultBlockState()), 10);
+                        stoneMap.put(new ReplaceInstance(()-> ModBlocks.GILDREAN.ORE.get().defaultBlockState()), 10);
                         //stoneMap.put(new ReplaceInstance(Blocks.COAL_ORE::defaultBlockState), 7);
                         //stoneMap.put(new ReplaceInstance(Blocks.COPPER_ORE::defaultBlockState), 2);
                         stoneMap.put(new ReplaceInstance(() -> ModBlocks.PYRITE_BLOCKS.ORE.get().defaultBlockState()), 4);

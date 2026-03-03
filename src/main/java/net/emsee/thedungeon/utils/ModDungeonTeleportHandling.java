@@ -2,10 +2,8 @@ package net.emsee.thedungeon.utils;
 
 import net.emsee.thedungeon.attachmentType.ModAttachmentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
-import net.emsee.thedungeon.datagen.ModCuriosDataProvider;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
@@ -81,8 +79,7 @@ public final class ModDungeonTeleportHandling {
         boolean hasInvalidItem = false;
         for (ItemStack stack : player.getInventory().items) {
             if (stack.isEmpty()) continue;
-            if (!(stack.getItem() instanceof IDungeonCarryItem ||
-                    (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IDungeonCarryItem))) {
+            if (stack.is(ModTags.Items.CAN_CARRY_TO_DUNGEON)) {
                 hasInvalidItem = true;
                 break;
             }
@@ -93,8 +90,7 @@ public final class ModDungeonTeleportHandling {
                 if (hasInvalidItem) break;
                 ItemStack stack = curios.getStackInSlot(i);
                 if (stack.getCount() == 0) continue;
-                if (!(stack.getItem() instanceof IDungeonCarryItem ||
-                        (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IDungeonCarryItem))) {
+                if (stack.is(ModTags.Items.CAN_CARRY_TO_DUNGEON)) {
                     hasInvalidItem = true;
                 }
             }

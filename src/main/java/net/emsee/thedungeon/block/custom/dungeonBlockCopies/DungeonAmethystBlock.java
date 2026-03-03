@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.block.custom.dungeonBlockCopies;
 
 import net.emsee.thedungeon.item.custom.DungeonItem;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.AmethystBlock;
 
 import java.util.List;
 
-public class DungeonAmethystBlock extends AmethystBlock implements IDungeonCarryItem {
+public class DungeonAmethystBlock extends AmethystBlock implements ICanTakeItemToDungeon {
     public DungeonAmethystBlock(Properties properties) {
         super(properties);
     }

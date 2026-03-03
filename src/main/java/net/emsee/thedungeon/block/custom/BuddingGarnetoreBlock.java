@@ -3,6 +3,7 @@ package net.emsee.thedungeon.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.custom.dungeonBlockCopies.DungeonAmethystBlock;
+import net.emsee.thedungeon.block.custom.interfaces.IDungeonPickaxeMinable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -10,6 +11,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+
+import java.util.function.Supplier;
 
 public class BuddingGarnetoreBlock extends DungeonAmethystBlock {
     public static final MapCodec<BuddingGarnetoreBlock> CODEC = simpleCodec(BuddingGarnetoreBlock::new);

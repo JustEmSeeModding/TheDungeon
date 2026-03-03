@@ -32,6 +32,9 @@ public final class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.PYRITE.get());
         basicItem(ModItems.PYRITE_COIN.get());
         simpleItemGroup(ModItems.GILDREAN);
+        simpleItemGroup(ModItems.INFERNAL_TIN);
+        simpleItemGroup(ModItems.ARCTIC_IRON);
+        simpleItemGroup(ModItems.LAVINTINE);
         basicItem(ModItems.GILDREAN_APPLE.get());
         basicItem(ModItems.ROSELITH_CRYSTAL.get());
         basicItem(ModItems.GARNETORE_PIECE.get());

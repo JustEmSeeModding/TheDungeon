@@ -53,6 +53,9 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.PYRITE);
                         output.accept(ModItems.PYRITE_COIN);
                         acceptItemGroup(output, ModItems.GILDREAN);
+                        acceptItemGroup(output, ModItems.INFERNAL_TIN);
+                        acceptItemGroup(output, ModItems.ARCTIC_IRON);
+                        acceptItemGroup(output, ModItems.LAVINTINE);
                         output.accept(ModItems.ROSELITH_CRYSTAL);
                         output.accept(ModItems.GARNETORE_PIECE);
                         output.accept(ModItems.VERDANTITE_CHUNK);
@@ -85,8 +88,11 @@ public final class ModCreativeModeTabs {
                         //output.accept(ModBlocks.CATALYST_SS);
                         output.accept(ModBlocks.GOBLIN_FORGE);
                         acceptBlockGroup(output,ModBlocks.PYRITE_BLOCKS);
-                        acceptBlockGroup(output,ModBlocks.GILDREAN_BLOCKS);
+                        acceptBlockGroup(output,ModBlocks.GILDREAN);
                         output.accept(ModBlocks.INGILDERD_BLACKSTONE);
+                        acceptBlockGroup(output,ModBlocks.INFERNAL_TIN);
+                        acceptBlockGroup(output,ModBlocks.ARCTIC_IRON);
+                        acceptBlockGroup(output,ModBlocks.LAVINTINE);
                         output.accept(ModBlocks.INFUSED_GRASS_BLOCK);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);

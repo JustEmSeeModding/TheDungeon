@@ -2,7 +2,7 @@ package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.Config;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
+public class DungeonClock extends DungeonItem implements ICanTakeItemToDungeon {
     public DungeonClock(Properties pProperties) {
         super(pProperties.stacksTo(1));
     }

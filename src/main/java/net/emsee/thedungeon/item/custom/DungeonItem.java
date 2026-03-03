@@ -1,15 +1,15 @@
 package net.emsee.thedungeon.item.custom;
 
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 
 import java.util.List;
 
-public class DungeonItem extends Item implements IDungeonCarryItem {
+public class DungeonItem extends Item implements ICanTakeItemToDungeon {
 
     public DungeonItem(Item.Properties pProperties) {
-        super(pProperties.rarity(Rarity.RARE));
+        super(pProperties.rarity(ICanTakeItemToDungeon.DUNGEON_ITEM_RARITY));
     }
 
     @Override

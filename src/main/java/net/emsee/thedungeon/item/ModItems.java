@@ -98,6 +98,9 @@ public final class ModItems {
             () -> new EffigyCurio(new Item.Properties(),DungeonItemRank.F, ModClasses.TANK, null));
 
     public static final SimpleItemGroup.IngotAndNuggetAndRaw GILDREAN = new SimpleItemGroup.IngotAndNuggetAndRaw("gildrean");
+    public static final SimpleItemGroup.IngotAndRaw INFERNAL_TIN = new SimpleItemGroup.IngotAndRaw("infernal_tin");
+    public static final SimpleItemGroup.IngotAndRaw ARCTIC_IRON = new SimpleItemGroup.IngotAndRaw("arctic_iron");
+    public static final SimpleItemGroup.IngotAndRaw LAVINTINE = new SimpleItemGroup.IngotAndRaw("lavintine");
 
     public static final DeferredItem<DungeonItem> GILDREAN_APPLE = ITEMS.register("gildrean_apple",
             () -> new DungeonItem((new Item.Properties()).rarity(Rarity.RARE).food(ModFoods.GIDLDREAN_APPLE)));

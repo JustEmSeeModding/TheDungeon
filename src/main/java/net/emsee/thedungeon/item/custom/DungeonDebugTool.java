@@ -4,7 +4,7 @@ package net.emsee.thedungeon.item.custom;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class DungeonDebugTool extends DungeonItem implements IDungeonCarryItem {
+public class DungeonDebugTool extends DungeonItem implements ICanTakeItemToDungeon {
     public DungeonDebugTool(Properties pProperties) {
         super(pProperties.stacksTo(1));
     }

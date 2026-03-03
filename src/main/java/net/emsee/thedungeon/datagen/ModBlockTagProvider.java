@@ -2,15 +2,24 @@ package net.emsee.thedungeon.datagen;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.block.custom.interfaces.IDungeonPickaxeMinable;
+import net.emsee.thedungeon.utils.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 public final class ModBlockTagProvider extends BlockTagsProvider {
     ModBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
@@ -19,9 +28,32 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
+        addIDungeonPickaxeMinableToTag();
+        tag(ModTags.Blocks.DUNGEON_TOOL_MINABLE)
+                .add(Blocks.VINE)
+                .add(Blocks.HANGING_ROOTS)
+                .add(Blocks.GLOW_LICHEN)
+                .add(Blocks.SMALL_AMETHYST_BUD)
+                .add(Blocks.MEDIUM_AMETHYST_BUD)
+                .add(Blocks.LARGE_AMETHYST_BUD)
+                .add(Blocks.SNOW)
+                .add(Blocks.MOSS_CARPET)
+                .add(Blocks.OAK_LEAVES)
+                .add(Blocks.SPRUCE_LEAVES)
+                .add(Blocks.BIRCH_LEAVES)
+                .add(Blocks.JUNGLE_LEAVES)
+                .add(Blocks.ACACIA_LEAVES)
+                .add(Blocks.DARK_OAK_LEAVES)
+                .add(Blocks.MANGROVE_LEAVES)
+                .add(Blocks.CHERRY_LEAVES)
+                .add(Blocks.AZALEA_LEAVES)
+                .add(Blocks.FLOWERING_AZALEA_LEAVES)
+                .add(Blocks.AMETHYST_CLUSTER);
+
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .addAll(ModBlocks.PYRITE_BLOCKS.getAllAsResourceKey())
-                ;
+                .addAll(ModBlocks.ARCTIC_IRON.getAllAsResourceKey())
+        ;
 
 
         tag(BlockTags.NEEDS_IRON_TOOL)
@@ -36,12 +68,13 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.CATALYST_SS.get())
                 .add(ModBlocks.CATALYST_BROKEN.get())
                 .add(ModBlocks.INGILDERD_BLACKSTONE.get())
-                .addAll(ModBlocks.GILDREAN_BLOCKS.getAllAsResourceKey())
+                .addAll(ModBlocks.GILDREAN.getAllAsResourceKey())
+                .addAll(ModBlocks.INFERNAL_TIN.getAllAsResourceKey())
         ;
 
-        /*tag(BlockTags.NEEDS_DIAMOND_TOOL)
-
-        ;*/
+        tag(BlockTags.NEEDS_DIAMOND_TOOL)
+                .addAll(ModBlocks.LAVINTINE.getAllAsResourceKey())
+        ;
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.DUNGEON_PORTAL.get())
@@ -66,7 +99,10 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.INGILDERD_BLACKSTONE.get())
 
                 .addAll(ModBlocks.PYRITE_BLOCKS.getAllAsResourceKey())
-                .addAll(ModBlocks.GILDREAN_BLOCKS.getAllAsResourceKey())
+                .addAll(ModBlocks.GILDREAN.getAllAsResourceKey())
+                .addAll(ModBlocks.INFERNAL_TIN.getAllAsResourceKey())
+                .addAll(ModBlocks.ARCTIC_IRON.getAllAsResourceKey())
+                .addAll(ModBlocks.LAVINTINE.getAllAsResourceKey())
 
                 .addAll(ModBlocks.ROSELITH_CRYSTAL_GROUP.getAllAsResourceKey())
                 .addAll(ModBlocks.GARNETORE_CRYSTAL_GROUP.getAllAsResourceKey())
@@ -183,5 +219,19 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 
 
         //tag(BlockTags.FALL_DAMAGE_RESETTING).add(ModBlocks.INFUSED_COBWEB.get());
+    }
+
+    private void addIDungeonPickaxeMinableToTag() {
+        List<ResourceKey<Block>> blocks = new ArrayList<>();
+        getAllKnownModBlockKeys().forEach(block -> {
+            if (block instanceof IDungeonPickaxeMinable)
+                tag(ModTags.Blocks.DUNGEON_TOOL_MINABLE).add(block);
+        });
+    }
+
+    private Stream<? extends Block> getAllKnownModBlockKeys() {
+        return ModBlocks.BLOCKS.getEntries().stream()
+                .map(DeferredHolder::value)
+                .filter(block -> block != Blocks.AIR);
     }
 }

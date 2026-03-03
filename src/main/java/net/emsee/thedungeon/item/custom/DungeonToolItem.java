@@ -2,13 +2,16 @@ package net.emsee.thedungeon.item.custom;
 
 import com.google.common.collect.Maps;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.block.custom.interfaces.IDungeonPickaxeMinable;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
+import net.emsee.thedungeon.utils.ModTags;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.BlockPredicate;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -31,88 +34,7 @@ import java.util.*;
 
 
 public class DungeonToolItem extends DungeonWeaponItem {
-    protected static final Map<Block, Block> DEFAULT_BREAKABLES = Util.make(Maps.newHashMap(), (map) -> {
-        map.put(Blocks.GILDED_BLACKSTONE, Blocks.BLACKSTONE);
-        map.put(Blocks.COAL_ORE, Blocks.STONE);
-        map.put(Blocks.IRON_ORE, Blocks.STONE);
-        map.put(Blocks.COPPER_ORE, Blocks.STONE);
-        map.put(Blocks.GOLD_ORE, Blocks.STONE);
-        map.put(Blocks.REDSTONE_ORE, Blocks.STONE);
-        map.put(Blocks.EMERALD_ORE, Blocks.STONE);
-        map.put(Blocks.LAPIS_ORE, Blocks.STONE);
-        map.put(Blocks.DIAMOND_ORE, Blocks.STONE);
 
-        map.put(Blocks.DEEPSLATE_COAL_ORE, Blocks.DEEPSLATE);
-        map.put(Blocks.DEEPSLATE_IRON_ORE, Blocks.DEEPSLATE);
-        map.put(Blocks.DEEPSLATE_COPPER_ORE, Blocks.DEEPSLATE);
-        map.put(Blocks.DEEPSLATE_GOLD_ORE, Blocks.DEEPSLATE);
-        map.put(Blocks.DEEPSLATE_REDSTONE_ORE, Blocks.DEEPSLATE);
-        map.put(Blocks.DEEPSLATE_EMERALD_ORE, Blocks.DEEPSLATE);
-        map.put(Blocks.DEEPSLATE_LAPIS_ORE, Blocks.DEEPSLATE);
-        map.put(Blocks.DEEPSLATE_DIAMOND_ORE, Blocks.DEEPSLATE);
-
-        map.put(Blocks.NETHER_GOLD_ORE, Blocks.NETHERRACK);
-        map.put(Blocks.NETHER_QUARTZ_ORE, Blocks.NETHERRACK);
-
-        map.put(Blocks.RAW_IRON_BLOCK, Blocks.WHITE_TERRACOTTA);
-        map.put(Blocks.RAW_GOLD_BLOCK, Blocks.YELLOW_TERRACOTTA);
-        map.put(Blocks.RAW_COPPER_BLOCK, Blocks.TERRACOTTA);
-        map.put(Blocks.ANCIENT_DEBRIS, Blocks.GRAY_TERRACOTTA);
-        //map.put(Blocks.AMETHYST_BLOCK, Blocks.PURPLE_CONCRETE);
-
-        map.put(ModBlocks.PYRITE_BLOCKS.ORE.get(), Blocks.STONE);
-        map.put(ModBlocks.PYRITE_BLOCKS.DEEPSLATE_ORE.get(), Blocks.DEEPSLATE);
-
-        map.put(ModBlocks.INFUSED_STONE.get(), Blocks.STONE);
-        map.put(ModBlocks.INFUSED_DEEPSLATE.get(), Blocks.DEEPSLATE);
-
-        // can remove foliage and some other (mainly to access ores behind it but also maybe hidden entrances)
-        map.put(Blocks.VINE, Blocks.AIR);
-        map.put(Blocks.HANGING_ROOTS, Blocks.AIR);
-        map.put(Blocks.GLOW_LICHEN, Blocks.AIR);
-
-        map.put(Blocks.SMALL_AMETHYST_BUD, Blocks.AIR);
-        map.put(Blocks.MEDIUM_AMETHYST_BUD, Blocks.AIR);
-        map.put(Blocks.LARGE_AMETHYST_BUD, Blocks.AIR);
-        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.SMALL_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.MEDIUM_BUD.get(), Blocks.AIR);
-        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.LARGE_BUD.get(), Blocks.AIR);
-
-        map.put(Blocks.SNOW, Blocks.AIR);
-        map.put(Blocks.MOSS_CARPET, Blocks.AIR);
-
-        map.put(Blocks.OAK_LEAVES, Blocks.AIR);
-        map.put(Blocks.SPRUCE_LEAVES, Blocks.AIR);
-        map.put(Blocks.BIRCH_LEAVES, Blocks.AIR);
-        map.put(Blocks.JUNGLE_LEAVES, Blocks.AIR);
-        map.put(Blocks.ACACIA_LEAVES, Blocks.AIR);
-        map.put(Blocks.DARK_OAK_LEAVES, Blocks.AIR);
-        map.put(Blocks.MANGROVE_LEAVES, Blocks.AIR);
-        map.put(Blocks.CHERRY_LEAVES, Blocks.AIR);
-        map.put(Blocks.AZALEA_LEAVES, Blocks.AIR);
-        map.put(Blocks.FLOWERING_AZALEA_LEAVES, Blocks.AIR);
-        map.put(Blocks.AMETHYST_CLUSTER, Blocks.AIR);
-        map.put(ModBlocks.ROSELITH_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
-        map.put(ModBlocks.VERDANTITE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
-        map.put(ModBlocks.GARNETORE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
-        map.put(ModBlocks.LUMANITE_CRYSTAL_GROUP.CLUSTERS.CLUSTER.get(), Blocks.AIR);
-    });
-
-    /**
-     * A map of blocks this tool can break and what they would be replaced with
-     */
-    protected static Map<Block, Block> getBreakableBlocks() {
-        return DEFAULT_BREAKABLES;
-    }
 
     public DungeonToolItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Properties properties) {
         super(weaponType, isSweeping, tier, rank, classes, subClasses, properties.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.CAN_BREAK, createAdventureCheck(tier)), tier.createToolProperties(BlockTags.MINEABLE_WITH_PICKAXE));
@@ -121,17 +43,19 @@ public class DungeonToolItem extends DungeonWeaponItem {
     @Override
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         if (level.dimension() == ModDimensions.DUNGEON_LEVEL_KEY)
-            return getBreakableBlocks().containsKey(state.getBlock());
+            return state.is(ModTags.Blocks.DUNGEON_TOOL_MINABLE);
         else return super.canAttackBlock(state, level, pos, player);
     }
 
-    private static AdventureModePredicate createAdventureCheck(Tier tier/*, TagKey<Block> blocks*/) {
+    private static AdventureModePredicate createAdventureCheck(Tier tier) {
         List<BlockPredicate> predicates = new ArrayList<>();
-        Collection<Block> breakables = new ArrayList<>(getBreakableBlocks().keySet());
+        //Collection<Block> breakables = new ArrayList<>(/*getBreakableBlocks().keySet()*/);
         BlockPredicate predicate = BlockPredicate.Builder.block()
-                .of(breakables)
+                //.of(breakables)
+                .of(ModTags.Blocks.DUNGEON_TOOL_MINABLE)
                 //.of(blocks)
                 .build();
+
         predicates.add(predicate);
 
 
@@ -146,14 +70,17 @@ public class DungeonToolItem extends DungeonWeaponItem {
             BlockPos pos = event.getPos();
             ItemStack stack = player.getMainHandItem();
             BlockState oldState = event.getState();
-            Block replaceBlock = getBreakableBlocks().get(oldState.getBlock());
+            BlockState replaceBlock = Blocks.AIR.defaultBlockState();
+            if (oldState.getBlock() instanceof IDungeonPickaxeMinable minable) {
+                replaceBlock = minable.getMinedReplacement().get();
+            }
             BlockEntity blockentity = oldState.hasBlockEntity() ? level.getBlockEntity(pos) : null;
             List<ItemStack> drops = new ArrayList<>();
             if (!oldState.requiresCorrectToolForDrops() || isCorrectToolForDrops(stack, oldState))
                 drops = Block.getDrops(oldState, serverLevel, pos, blockentity);
             for (ItemStack drop : drops)
                 player.getInventory().placeItemBackInInventory(drop);
-            level.setBlockAndUpdate(pos, replaceBlock.defaultBlockState());
+            level.setBlockAndUpdate(pos, replaceBlock);
             stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
     }

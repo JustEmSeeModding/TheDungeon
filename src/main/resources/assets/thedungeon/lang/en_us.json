@@ -134,6 +134,7 @@
   "item.thedungeon.shattered_catalyst_core": "Shattered Catalyst Core",
   "item.thedungeon.catalyst_core": "Catalyst Core",
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
+
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
   "item.thedungeon.pyrite_coin": "Pyrite Coin",
@@ -148,6 +149,16 @@
   "item.thedungeon.goblin_meat": "Goblin Meat",
   "item.thedungeon.verdantite_chunk": "Verdantite Chunk",
   "item.thedungeon.lumanite_fragment": "Lumanite Fragment",
+
+  "item.thedungeon.infernal_tin_ingot": "Infernal Tin Ingot",
+  "item.thedungeon.raw_infernal_tin": "Raw Infernal Tin",
+
+  "item.thedungeon.arctic_iron_ingot": "Arctic Iron Ingot",
+  "item.thedungeon.raw_arctic_iron": "Raw Arctic Iron",
+
+  "item.thedungeon.lavintine_ingot": "Lavintine Ingot",
+  "item.thedungeon.raw_lavintine": "Raw Lavintine",
+
   "item.thedungeon.heavy_effigy": "Heavy Effigy",
 
   "item.thedungeon.dungeon_clock": "Dungeon Clock",
@@ -169,6 +180,19 @@
   "block.thedungeon.gildrean_ore": "Gildrean Ore",
   "block.thedungeon.deepslate_gildrean_ore": "Deepslate Gildrean Ore",
   "block.thedungeon.ingilderd_blackstone": "Ingilderd Blackstone",
+
+  "block.thedungeon.infernal_tin_block": "Block of Infernal Tin",
+  "block.thedungeon.raw_infernal_tin_block": "Raw Infernal Tin Block",
+  "block.thedungeon.infernal_tin_ore": "Infernal Tin Ore",
+
+  "block.thedungeon.arctic_iron_block": "Block of Arctic Iron",
+  "block.thedungeon.raw_arctic_iron_block": "Raw Arctic Iron Block",
+  "block.thedungeon.arctic_iron_ore": "Arctic Iron Ore",
+
+  "block.thedungeon.lavintine_block": "Block of Lavintine",
+  "block.thedungeon.raw_lavintine_block": "Raw Lavintine Block",
+  "block.thedungeon.lavintine_ore": "Lavintine Ore",
+  "block.thedungeon.deepslate_lavintine_ore": "Deepslate Lavintine Ore",
 
   "block.thedungeon.infused_grass_block" : "Infused Grass Block",
   "block.thedungeon.infused_dirt" : "Infused Dirt",

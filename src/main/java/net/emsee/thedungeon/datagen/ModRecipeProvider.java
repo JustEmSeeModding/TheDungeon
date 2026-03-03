@@ -53,11 +53,14 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
 
         infusing(RecipeCategory.MISC, Items.CLOCK, ModItems.DUNGEON_CLOCK, recipeOutput);
 
-        goblin_forge(RecipeCategory.MISC, Items.RAW_IRON, ModItems.PYRITE, ModItems.KOBALT.INGOT, recipeOutput);
-        goblin_forge(RecipeCategory.MISC, Items.IRON_INGOT, ModItems.PYRITE, ModItems.KOBALT.INGOT, recipeOutput);
+        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.INGOT, ModItems.INFERNAL_TIN.INGOT, ModItems.KOBALT.INGOT, recipeOutput);
+        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.INGOT, ModItems.INFERNAL_TIN.RAW, ModItems.KOBALT.INGOT, recipeOutput);
+        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.RAW, ModItems.INFERNAL_TIN.INGOT, ModItems.KOBALT.INGOT, recipeOutput);
+        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.RAW, ModItems.INFERNAL_TIN.RAW, ModItems.KOBALT.INGOT, recipeOutput);
+
 
         simpleIngotAndNuggetRecipes(recipeOutput,ModItems.KOBALT);
-        simpleBlockAndOreIngotRecipes(recipeOutput,ModBlocks.GILDREAN_BLOCKS, ModItems.GILDREAN);
+        simpleBlockAndOreIngotRecipes(recipeOutput,ModBlocks.GILDREAN, ModItems.GILDREAN);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.GILDREAN_APPLE.get(), 1)
                 .pattern("000")
@@ -151,6 +154,9 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 RecipeCategory.BUILDING_BLOCKS, ModBlocks.INFUSED_GLASS, 0.25f, 200, 100, "infused_glass");
 
         simpleBlockAndOreItemRecipes(recipeOutput, ModBlocks.PYRITE_BLOCKS, ModItems.PYRITE.get());
+        simpleBlockAndOreIngotRecipes(recipeOutput, ModBlocks.INFERNAL_TIN, ModItems.INFERNAL_TIN);
+        simpleBlockAndOreIngotRecipes(recipeOutput, ModBlocks.ARCTIC_IRON, ModItems.ARCTIC_IRON);
+        simpleBlockAndOreIngotRecipes(recipeOutput, ModBlocks.LAVINTINE, ModItems.LAVINTINE);
 
         smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_HELMET, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.HELMET.get(), RecipeCategory.COMBAT, recipeOutput);
         smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_CHESTPLATE, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.CHESTPLATE.get(), RecipeCategory.COMBAT, recipeOutput);
