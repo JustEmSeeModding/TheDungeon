@@ -27,6 +27,6 @@ public class LuminousGoggles extends DungeonCurio{
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         super.curioTick(slotContext, stack);
-        slotContext.entity().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 60, 0));
+        slotContext.entity().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20*15, 0));
     }
 }
