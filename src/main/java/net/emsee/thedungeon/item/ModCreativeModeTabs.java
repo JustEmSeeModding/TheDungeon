@@ -27,6 +27,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_CLOCK);
                         output.accept(ModItems.PYRITE_COMPASS);
                         output.accept(ModItems.SOUL_BOUND_TOTEM);
+                        output.accept(ModItems.LUMINOUS_GOGGLES);
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
                         output.accept(ModItems.INFUSED_CHISEL);
