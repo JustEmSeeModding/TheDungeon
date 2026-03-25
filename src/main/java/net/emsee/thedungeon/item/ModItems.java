@@ -70,6 +70,9 @@ public final class ModItems {
     public static final DeferredItem<SoulBoundTotem> SOUL_BOUND_TOTEM = ITEMS.register("soul_bound_totem",
             () -> new SoulBoundTotem(new Item.Properties(), DungeonItemRank.E, new DeferredHolder[]{}, new DeferredHolder[]{}));
 
+    public static final DeferredItem<LuminousGoggles> LUMINOUS_GOGGLES = ITEMS.register("luminous_goggles",
+            () -> new LuminousGoggles(new Item.Properties(), DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
+
 
     public static final DeferredItem<DungeonWeaponItem> INFUSED_DAGGER = ITEMS.register("infused_dagger",
             () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED,true,ModTiers.INFUSED_ALLOY, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.INFUSED_ALLOY, 2, -2F))));

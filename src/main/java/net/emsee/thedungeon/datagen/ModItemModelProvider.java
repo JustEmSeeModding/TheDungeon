@@ -66,6 +66,7 @@ public final class ModItemModelProvider extends ItemModelProvider {
         simpleItemGroup(ModItems.KOBALT);
 
         basicItem(ModItems.SOUL_BOUND_TOTEM.get());
+        basicItem(ModItems.LUMINOUS_GOGGLES.get());
 
         basicItem(ModItems.INFUSED_BREAD.get());
         basicItem(ModItems.INFUSED_WHEAT.get());

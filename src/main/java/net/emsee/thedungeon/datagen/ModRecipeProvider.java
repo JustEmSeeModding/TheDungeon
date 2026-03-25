@@ -80,21 +80,27 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('u', Items.SHULKER_SHELL)
                 .define('0', ModItems.PYRITE.get())
                 .define('*', ModItems.VERDANTITE_CHUNK.get())
-                .unlockedBy("has_infused_alloy", has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.INFUSED_ALLOY_INGOT), has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.LUMINOUS_GOGGLES.get(), 1)
+                .pattern("0-0")
+                .define('0', ModItems.LUMANITE_FRAGMENT.get())
+                .define('-', ModBlocks.INFUSED_THREAD.get())
+                .unlockedBy(getUnlockedByName(ModItems.LUMANITE_FRAGMENT), has(ModItems.LUMANITE_FRAGMENT)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.INFUSED_DAGGER.get(), 1)
                 .pattern("*")
                 .pattern("/")
                 .define('*', ModItems.INFUSED_ALLOY_INGOT.get())
                 .define('/', Items.STICK)
-                .unlockedBy("has_infused_alloy", has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.INFUSED_ALLOY_INGOT), has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.INFUSED_CHISEL.get(), 1)
                 .pattern(" *")
                 .pattern("/ ")
                 .define('*', ModItems.INFUSED_ALLOY_INGOT.get())
                 .define('/', Items.STICK)
-                .unlockedBy("has_infused_alloy", has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.INFUSED_ALLOY_INGOT), has(ModItems.INFUSED_ALLOY_INGOT)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.CATALYST_CORE.get(), 1)
                 .pattern("^o^")
@@ -104,7 +110,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('^', ModItems.DUNGEON_ESSENCE_SHARD.get())
                 .define('#', ModItems.INFUSED_ALLOY_INGOT.get())
                 .define('o', Items.ENDER_EYE)
-                .unlockedBy("has_shattered_catalist_core", has(ModItems.SHATTERED_CATALYST_CORE)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.SHATTERED_CATALYST_CORE), has(ModItems.SHATTERED_CATALYST_CORE)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.DUNGEON_CLOCK.get(), 1)
                 .pattern(" # ")
@@ -112,7 +118,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .pattern(" # ")
                 .define('*', Items.CLOCK)
                 .define('#', ModItems.DUNGEON_ESSENCE_SHARD.get())
-                .unlockedBy("has_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.DUNGEON_ESSENCE_SHARD), has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.PYRITE_COMPASS.get(), 1)
                 .pattern(" # ")
@@ -120,7 +126,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .pattern(" # ")
                 .define('*', Items.COMPASS)
                 .define('#', ModItems.PYRITE.get())
-                .unlockedBy("has_pyrite", has(ModItems.PYRITE)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.PYRITE), has(ModItems.PYRITE)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CATALYST_F.get(), 1)
                 .pattern("+#+")
@@ -129,12 +135,12 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .define('*', ModItems.CATALYST_CORE.get())
                 .define('#', Blocks.STONE_BRICKS)
                 .define('+', Items.IRON_INGOT)
-                .unlockedBy("has_catalist_core", has(ModItems.CATALYST_CORE)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.CATALYST_CORE), has(ModItems.CATALYST_CORE)).save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.INFUSED_ALLOY_INGOT.get(), 1)
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD, 2)
                 .requires(Items.IRON_INGOT)
-                .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.DUNGEON_ESSENCE_SHARD), has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
         simpleArmor(ModItems.KOBALT.INGOT, ModItems.KOBALT_ARMOR_SET, recipeOutput);
 
@@ -144,7 +150,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .pattern(" # ")
                 .define('*', ItemTags.PLANKS)
                 .define('#', ModItems.KOBALT.INGOT)
-                .unlockedBy("has_" + getItemName(ModItems.KOBALT.INGOT), has(ModItems.KOBALT.INGOT)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.KOBALT.INGOT), has(ModItems.KOBALT.INGOT)).save(recipeOutput);
 
 
         oreSmeltingAndBlasting(recipeOutput,
@@ -154,17 +160,17 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.INFUSED_WHEAT.get(), 1)
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD, 1)
                 .requires(Items.WHEAT)
-                .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.DUNGEON_ESSENCE_SHARD), has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ModItems.INFUSED_BREAD.get(), 1)
                 .requires(ModItems.DUNGEON_ESSENCE_SHARD, 3)
                 .requires(Items.BREAD)
-                .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput, TheDungeon.defaultResourceLocation(getItemName(ModItems.INFUSED_BREAD) + "alt"));
+                .unlockedBy(getUnlockedByName(ModItems.DUNGEON_ESSENCE_SHARD), has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput, TheDungeon.defaultResourceLocation(getItemName(ModItems.INFUSED_BREAD) + "alt"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, ModItems.INFUSED_BREAD, 1)
                 .pattern("###")
                 .define('#', ModItems.INFUSED_WHEAT)
-                .unlockedBy("has_" + getItemName(ModItems.INFUSED_WHEAT), has(ModItems.INFUSED_WHEAT)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ModItems.INFUSED_WHEAT), has(ModItems.INFUSED_WHEAT)).save(recipeOutput);
 
         infusing(RecipeCategory.MISC, Items.WHEAT, ModItems.INFUSED_WHEAT, recipeOutput);
         infusing(RecipeCategory.FOOD, Items.BREAD, ModItems.INFUSED_BREAD, recipeOutput);
@@ -185,14 +191,14 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
 
     private static void infusing(RecipeCategory category, ItemLike ingredient, ItemLike result, RecipeOutput recipeOutput) {
         InfusionRecipeBuilder.infuse(category, ingredient, result)
-                .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                .unlockedBy(getUnlockedByName(ingredient), has(ingredient)).save(recipeOutput);
 
     }
 
 
     private static void smithing(ItemLike template, ItemLike item, ItemLike ingredient, Item resultItem, RecipeCategory category, RecipeOutput recipeOutput) {
         SmithingTransformRecipeBuilder.smithing(Ingredient.of(template), Ingredient.of(item), Ingredient.of(ingredient), category, resultItem)
-                .unlocks("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(resultItem) + "_smithing"));
+                .unlocks(getUnlockedByName(ingredient), has(ingredient)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(resultItem) + "_smithing"));
 
     }
 
@@ -236,10 +242,10 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .pattern("###")
                 .pattern("###")
                 .define('#', unPacked)
-                .unlockedBy("has_" + getItemName(unPacked), has(unPacked)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(packed) + "_from_" + getItemName(unPacked)));
+                .unlockedBy(getUnlockedByName(unPacked), has(unPacked)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(packed) + "_from_" + getItemName(unPacked)));
         ShapelessRecipeBuilder.shapeless(unPackedCategory, unPacked, 9)
                 .requires(packed)
-                .unlockedBy("has_" + getItemName(packed), has(packed)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(unPacked) + "_from_" + getItemName(packed)));
+                .unlockedBy(getUnlockedByName(packed), has(packed)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(unPacked) + "_from_" + getItemName(packed)));
 
 
     }
@@ -288,26 +294,30 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                     .pattern("###")
                     .pattern("# #")
                     .define('#', ingredient)
-                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy(getUnlockedByName(ingredient), has(ingredient)).save(recipeOutput);
         if (chestplate != null)
             ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, chestplate, 1)
                     .pattern("# #")
                     .pattern("###")
                     .pattern("###")
                     .define('#', ingredient)
-                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy(getUnlockedByName(ingredient), has(ingredient)).save(recipeOutput);
         if (leggings != null)
             ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, leggings, 1)
                     .pattern("###")
                     .pattern("# #")
                     .pattern("# #")
                     .define('#', ingredient)
-                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy(getUnlockedByName(ingredient), has(ingredient)).save(recipeOutput);
         if (boots != null)
             ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, boots, 1)
                     .pattern("# #")
                     .pattern("# #")
                     .define('#', ingredient)
-                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy(getUnlockedByName(ingredient), has(ingredient)).save(recipeOutput);
+    }
+
+    private static String getUnlockedByName(ItemLike item) {
+        return "has_"+getItemName(item);
     }
 }

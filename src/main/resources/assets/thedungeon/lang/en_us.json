@@ -104,6 +104,7 @@
   "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
 
   "item.thedungeon.tooltip.soulbound_totem_equipped": "Returns Items When Dying In A Dungeon",
+  "item.thedungeon.tooltip.luminous_goggles_equipped": "Grants Night Vision",
 
   "item.thedungeon.tooltip.classes": "Viable Classes",
   "item.thedungeon.tooltip.effigy_classes": "Class",
