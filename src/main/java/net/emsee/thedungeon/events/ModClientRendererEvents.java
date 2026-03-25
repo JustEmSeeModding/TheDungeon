@@ -22,6 +22,11 @@ import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightModel;
 import net.emsee.thedungeon.entity.client.knight.deathKnight.DeathKnightRenderer;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightModel;
 import net.emsee.thedungeon.entity.client.knight.skeletonKnight.SkeletonKnightRenderer;
+import net.emsee.thedungeon.item.ModItems;
+import net.emsee.thedungeon.item.custom.armor.ModeledDungeonArmorItem;
+import net.emsee.thedungeon.item.custom.armor.client.ArmorClientExtension;
+import net.emsee.thedungeon.item.custom.armor.client.provider.IArmorModelProvider;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleItemGroup;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
@@ -30,9 +35,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = TheDungeon.MOD_ID)
+@EventBusSubscriber(modid = TheDungeon.MOD_ID, value = Dist.CLIENT)
 public class ModClientRendererEvents {
     public static void ClientEntityRendererSetup(FMLClientSetupEvent event) {
         //Entities
@@ -64,5 +71,15 @@ public class ModClientRendererEvents {
 
         //BlockEntities
         event.registerLayerDefinition(ModBlockEntityModelLayers.DUNGEON_PORTAL, DungeonPortalBlockEntityRenderer::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        registerArmorExtension(ModItems.ARCTIC_IRONCLAD_ARMOR_SET, event, ModItems.ARCTIC_IRONCLAD_ARMOR_SET.CHESTPLATE.get().createModelProvider());
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends ModeledDungeonArmorItem> void registerArmorExtension(SimpleItemGroup.ArmorSet<T> armorSet, RegisterClientExtensionsEvent event, IArmorModelProvider provider) {
+        event.registerItem(new ArmorClientExtension(provider), armorSet.getAll().toArray(DeferredItem[]::new));
     }
 }

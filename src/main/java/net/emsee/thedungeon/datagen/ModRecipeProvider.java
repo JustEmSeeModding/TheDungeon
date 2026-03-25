@@ -53,14 +53,12 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
 
         infusing(RecipeCategory.MISC, Items.CLOCK, ModItems.DUNGEON_CLOCK, recipeOutput);
 
-        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.INGOT, ModItems.INFERNAL_TIN.INGOT, ModItems.KOBALT.INGOT, recipeOutput);
-        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.INGOT, ModItems.INFERNAL_TIN.RAW, ModItems.KOBALT.INGOT, recipeOutput);
-        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.RAW, ModItems.INFERNAL_TIN.INGOT, ModItems.KOBALT.INGOT, recipeOutput);
-        goblin_forge(RecipeCategory.MISC, ModItems.GILDREAN.RAW, ModItems.INFERNAL_TIN.RAW, ModItems.KOBALT.INGOT, recipeOutput);
 
-
-        simpleIngotAndNuggetRecipes(recipeOutput,ModItems.KOBALT);
-        simpleBlockAndOreIngotRecipes(recipeOutput,ModBlocks.GILDREAN, ModItems.GILDREAN);
+        GoblinForgeRecipeBuilder.goblin_forge(RecipeCategory.MISC, ModItems.KOBALT.INGOT)
+                .addIngredient(ModItems.LAVINTINE.INGOT, ModItems.LAVINTINE.RAW)
+                .addIngredient(ModItems.INFERNAL_TIN.INGOT, ModItems.INFERNAL_TIN.RAW)
+                .unlockedBy("has_"+getItemName(ModItems.INFERNAL_TIN.INGOT), has(ModItems.INFERNAL_TIN.INGOT))
+                .save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.GILDREAN_APPLE.get(), 1)
                 .pattern("000")
@@ -146,17 +144,38 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                 .pattern(" # ")
                 .define('*', ItemTags.PLANKS)
                 .define('#', ModItems.KOBALT.INGOT)
-                .unlockedBy("has_"+getItemName(ModItems.KOBALT.INGOT), has(ModItems.KOBALT.INGOT)).save(recipeOutput);
+                .unlockedBy("has_" + getItemName(ModItems.KOBALT.INGOT), has(ModItems.KOBALT.INGOT)).save(recipeOutput);
 
 
         oreSmeltingAndBlasting(recipeOutput,
                 List.of(ModBlocks.INFUSED_SAND),
                 RecipeCategory.BUILDING_BLOCKS, ModBlocks.INFUSED_GLASS, 0.25f, 200, 100, "infused_glass");
 
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.INFUSED_WHEAT.get(), 1)
+                .requires(ModItems.DUNGEON_ESSENCE_SHARD, 1)
+                .requires(Items.WHEAT)
+                .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ModItems.INFUSED_BREAD.get(), 1)
+                .requires(ModItems.DUNGEON_ESSENCE_SHARD, 3)
+                .requires(Items.BREAD)
+                .unlockedBy("has_dungeon_essence_shard", has(ModItems.DUNGEON_ESSENCE_SHARD)).save(recipeOutput, TheDungeon.defaultResourceLocation(getItemName(ModItems.INFUSED_BREAD) + "alt"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, ModItems.INFUSED_BREAD, 1)
+                .pattern("###")
+                .define('#', ModItems.INFUSED_WHEAT)
+                .unlockedBy("has_" + getItemName(ModItems.INFUSED_WHEAT), has(ModItems.INFUSED_WHEAT)).save(recipeOutput);
+
+        infusing(RecipeCategory.MISC, Items.WHEAT, ModItems.INFUSED_WHEAT, recipeOutput);
+        infusing(RecipeCategory.FOOD, Items.BREAD, ModItems.INFUSED_BREAD, recipeOutput);
+
         simpleBlockAndOreItemRecipes(recipeOutput, ModBlocks.PYRITE_BLOCKS, ModItems.PYRITE.get());
+        simpleBlockAndOreIngotRecipes(recipeOutput, ModBlocks.GILDREAN, ModItems.GILDREAN);
         simpleBlockAndOreIngotRecipes(recipeOutput, ModBlocks.INFERNAL_TIN, ModItems.INFERNAL_TIN);
         simpleBlockAndOreIngotRecipes(recipeOutput, ModBlocks.ARCTIC_IRON, ModItems.ARCTIC_IRON);
         simpleBlockAndOreIngotRecipes(recipeOutput, ModBlocks.LAVINTINE, ModItems.LAVINTINE);
+        packedItemCrafting(recipeOutput, ModBlocks.KOBALT_BLOCK.get(), ModItems.KOBALT.INGOT.get(), RecipeCategory.BUILDING_BLOCKS, RecipeCategory.MISC);
+        simpleIngotAndNuggetRecipes(recipeOutput, ModItems.KOBALT);
 
         smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_HELMET, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.HELMET.get(), RecipeCategory.COMBAT, recipeOutput);
         smithing(ModItems.DUNGEON_ESSENCE_SHARD, Items.IRON_CHESTPLATE, ModItems.INFUSED_ALLOY_INGOT, ModItems.INFUSED_ARMOR_SET.CHESTPLATE.get(), RecipeCategory.COMBAT, recipeOutput);
@@ -166,19 +185,14 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
 
     private static void infusing(RecipeCategory category, ItemLike ingredient, ItemLike result, RecipeOutput recipeOutput) {
         InfusionRecipeBuilder.infuse(category, ingredient, result)
-                .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
 
     }
 
-    private static void goblin_forge(RecipeCategory category, ItemLike ingredientOne, ItemLike ingredientTwo, ItemLike result, RecipeOutput recipeOutput) {
-        GoblinForgeRecipeBuilder.goblin_forge(category, ingredientOne, ingredientTwo, result)
-                .unlockedBy("has_"+getItemName(ingredientOne), has(ingredientOne)).save(recipeOutput);
-
-    }
 
     private static void smithing(ItemLike template, ItemLike item, ItemLike ingredient, Item resultItem, RecipeCategory category, RecipeOutput recipeOutput) {
         SmithingTransformRecipeBuilder.smithing(Ingredient.of(template), Ingredient.of(item), Ingredient.of(ingredient), category, resultItem)
-                .unlocks("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID,getItemName(resultItem) + "_smithing"));
+                .unlocks("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(resultItem) + "_smithing"));
 
     }
 
@@ -187,7 +201,7 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         oreBlasting(recipeOutput, ingredients, category, result, experience, blastingTime, group);
     }
 
-    private static <I extends SimpleItemGroup.WithIngot, BG extends SimpleBlockGroup & SimpleBlockGroup.WithOres> void  simpleBlockAndOreIngotRecipes(RecipeOutput recipeOutput, BG blockGroup, I items) {
+    private static <I extends SimpleItemGroup.WithIngot, BG extends SimpleBlockGroup & SimpleBlockGroup.WithOres> void simpleBlockAndOreIngotRecipes(RecipeOutput recipeOutput, BG blockGroup, I items) {
         List<ItemLike> Ingredient = new ArrayList<>(blockGroup.getAllOresAsItems());
         if (items instanceof SimpleItemGroup.WithRaw withRaw)
             Ingredient.add(withRaw.getRaw());
@@ -195,26 +209,10 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
         oreSmeltingAndBlasting(recipeOutput, Ingredient, RecipeCategory.MISC, items.getIngot(), 0.25f, 200, 100, getItemName(items.getIngot()));
 
         if (blockGroup instanceof SimpleBlockGroup.WithPackedItemBlock withPackedBlock) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, withPackedBlock.getPackedItemBlock(), 1)
-                    .pattern("###")
-                    .pattern("###")
-                    .pattern("###")
-                    .define('#', items.getIngot())
-                    .unlockedBy("has_" + getItemName(items.getIngot()), has(items.getIngot())).save(recipeOutput);
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, items.getIngot(), 9)
-                    .requires(withPackedBlock.getPackedItemBlock())
-                    .unlockedBy("has_" + getItemName(withPackedBlock.getPackedItemBlock()), has(withPackedBlock.getPackedItemBlock())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(items.getIngot()) + "_from_block"));
+            packedItemCrafting(recipeOutput, withPackedBlock.getPackedItemBlock(), items.getIngot(), RecipeCategory.BUILDING_BLOCKS, RecipeCategory.MISC);
         }
         if (blockGroup instanceof SimpleBlockGroup.WithRawBlock withRawBlock && items instanceof SimpleItemGroup.WithRaw withRawItem) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, withRawBlock.getRawBlock(), 1)
-                    .pattern("###")
-                    .pattern("###")
-                    .pattern("###")
-                    .define('#', withRawItem.getRaw())
-                    .unlockedBy("has_"+getItemName(withRawItem.getRaw()), has(withRawItem.getRaw())).save(recipeOutput);
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, withRawItem.getRaw(),9)
-                    .requires(withRawBlock.getRawBlock())
-                    .unlockedBy("has_"+getItemName(withRawBlock.getRawBlock()), has(withRawBlock.getRawBlock())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(withRawItem.getRaw()) + "_from_block"));
+            packedItemCrafting(recipeOutput, withRawBlock.getRawBlock(), withRawItem.getRaw(), RecipeCategory.BUILDING_BLOCKS, RecipeCategory.MISC);
         }
         if (items instanceof SimpleItemGroup.WithNugget) {
             simpleIngotAndNuggetRecipes(recipeOutput, (SimpleItemGroup & SimpleItemGroup.WithIngot & SimpleItemGroup.WithNugget) items);
@@ -224,28 +222,25 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
     private static <BG extends SimpleBlockGroup & SimpleBlockGroup.WithOres> void simpleBlockAndOreItemRecipes(RecipeOutput recipeOutput, BG blockGroup, Item linkedItem) {
         oreSmeltingAndBlasting(recipeOutput, blockGroup.getAllOresAsItems(), RecipeCategory.MISC, linkedItem, 0.25f, 200, 100, getItemName(linkedItem));
         if (blockGroup instanceof SimpleBlockGroup.WithPackedItemBlock withPackedItem) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS,withPackedItem.getPackedItemBlock(), 1)
-                .pattern("###")
-                    .pattern("###")
-                    .pattern("###")
-                    .define('#', linkedItem)
-                    .unlockedBy("has_" + getItemName(linkedItem), has(linkedItem)).save(recipeOutput);
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, linkedItem, 9)
-                    .requires(withPackedItem.getPackedItemBlock())
-                    .unlockedBy("has_" + getItemName(withPackedItem.getPackedItemBlock()), has(withPackedItem.getPackedItemBlock())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(linkedItem) + "_from_block"));
+            packedItemCrafting(recipeOutput, withPackedItem.getPackedItemBlock(), linkedItem, RecipeCategory.BUILDING_BLOCKS, RecipeCategory.MISC);
         }
     }
 
     private static <I extends SimpleItemGroup & SimpleItemGroup.WithIngot & SimpleItemGroup.WithNugget> void simpleIngotAndNuggetRecipes(RecipeOutput recipeOutput, I itemGroup) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, itemGroup.getIngot(), 1)
+        packedItemCrafting(recipeOutput, itemGroup.getIngot(), itemGroup.getNugget(), RecipeCategory.MISC, RecipeCategory.MISC);
+    }
+
+    private static void packedItemCrafting(RecipeOutput recipeOutput, ItemLike packed, ItemLike unPacked, RecipeCategory packedCategory, RecipeCategory unPackedCategory) {
+        ShapedRecipeBuilder.shaped(packedCategory, packed, 1)
                 .pattern("###")
                 .pattern("###")
                 .pattern("###")
-                .define('#', itemGroup.getNugget())
-                .unlockedBy("has_"+getItemName(itemGroup.getNugget()), has(itemGroup.getNugget())).save(recipeOutput);
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, itemGroup.getNugget(),9)
-                .requires(itemGroup.getIngot())
-                .unlockedBy("has_"+getItemName(itemGroup.getIngot()), has(itemGroup.getIngot())).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(itemGroup.getNugget()) + "_from_ingot"));
+                .define('#', unPacked)
+                .unlockedBy("has_" + getItemName(unPacked), has(unPacked)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(packed) + "_from_" + getItemName(unPacked)));
+        ShapelessRecipeBuilder.shapeless(unPackedCategory, unPacked, 9)
+                .requires(packed)
+                .unlockedBy("has_" + getItemName(packed), has(packed)).save(recipeOutput, ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, getItemName(unPacked) + "_from_" + getItemName(packed)));
+
 
     }
 
@@ -293,26 +288,26 @@ public final class ModRecipeProvider extends RecipeProvider implements IConditio
                     .pattern("###")
                     .pattern("# #")
                     .define('#', ingredient)
-                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
         if (chestplate != null)
             ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, chestplate, 1)
                     .pattern("# #")
                     .pattern("###")
                     .pattern("###")
                     .define('#', ingredient)
-                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
         if (leggings != null)
             ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, leggings, 1)
                     .pattern("###")
                     .pattern("# #")
                     .pattern("# #")
                     .define('#', ingredient)
-                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
         if (boots != null)
             ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, boots, 1)
                     .pattern("# #")
                     .pattern("# #")
                     .define('#', ingredient)
-                    .unlockedBy("has_"+getItemName(ingredient), has(ingredient)).save(recipeOutput);
+                    .unlockedBy("has_" + getItemName(ingredient), has(ingredient)).save(recipeOutput);
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -43,6 +44,7 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
         blockAndOreGroupDrops(ModBlocks.INFERNAL_TIN,ModItems.INFERNAL_TIN.RAW, 2f, 3f);
         blockAndOreGroupDrops(ModBlocks.ARCTIC_IRON,ModItems.ARCTIC_IRON.RAW, 2f, 5f);
         blockAndOreGroupDrops(ModBlocks.LAVINTINE,ModItems.LAVINTINE.RAW, 1f, 2f);
+        dropSelf(ModBlocks.KOBALT_BLOCK.get());
 
 
         simpleItemDropWithSilk(ModBlocks.INFUSED_DIRT.get(), ModItems.DUNGEON_ESSENCE_SHARD);
@@ -83,12 +85,13 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
                 ::iterator;
     }
 
-    private void simpleItemDropWithSilk(Block block, ItemLike item) {
-        add(block, createSingleItemTableWithSilkTouch(block, item));
+    private void simpleItemDropWithSilk(Block block, ItemLike defaultDrop) {
+        add(block, createSingleItemTableWithSilkTouch(block, defaultDrop));
     }
 
-    private void simpleItemDropSelfWithSilk(Block block) {
-        simpleItemDropWithSilk(block, block);
+    private void simpleItemDropSelfOnlyWithSilk(Block block) {
+        add(block, createSilkTouchOnlyTable(block));
+
     }
 
     private void oreDrops(Block block, ItemLike item, float min, float max) {
@@ -114,8 +117,8 @@ public final class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     private void crystalClusterDrops(SimpleBlockGroup.CrystalClusterGroup group, ItemLike item) {
         oreDrops(group.CLUSTER.get(), item, 1f, 2f);
-        simpleItemDropSelfWithSilk(group.LARGE_BUD.get());
-        simpleItemDropSelfWithSilk(group.MEDIUM_BUD.get());
-        simpleItemDropSelfWithSilk(group.SMALL_BUD.get());
+        simpleItemDropSelfOnlyWithSilk(group.LARGE_BUD.get());
+        simpleItemDropSelfOnlyWithSilk(group.MEDIUM_BUD.get());
+        simpleItemDropSelfOnlyWithSilk(group.SMALL_BUD.get());
     }
 }

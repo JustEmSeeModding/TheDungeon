@@ -5,7 +5,7 @@ import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
 import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
 import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
 import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
-import net.emsee.thedungeon.entity.brain.DungeonMobBrain;
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
 import net.emsee.thedungeon.entity.client.animation.AnimationController;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
@@ -30,7 +30,7 @@ public abstract class AbstractGoblinEntity extends DungeonAnimatedMob {
             .withAttackAnimation(0,10) // right slash
             .withAttackAnimation(1,10) // left slash
             .withAttackAnimation(2,10); // both slash
-    protected final DungeonMobBrain<AbstractGoblinEntity> brain = new DungeonMobBrain<>(this);
+    protected final DungeonMobAttackBrain<AbstractGoblinEntity> brain = new DungeonMobAttackBrain<>(this);
 
 
 
@@ -41,6 +41,7 @@ public abstract class AbstractGoblinEntity extends DungeonAnimatedMob {
 
     protected void setupBrain() {
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 .5f,
                 0,
                 15,
@@ -48,6 +49,7 @@ public abstract class AbstractGoblinEntity extends DungeonAnimatedMob {
                 12,
                 AbstractAttackPattern.AttackHand.MAIN));
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 .5f,
                 1,
                 15,
@@ -55,6 +57,7 @@ public abstract class AbstractGoblinEntity extends DungeonAnimatedMob {
                 12,
                 AbstractAttackPattern.AttackHand.OFF));
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 1,
                 2,
                 30,
@@ -98,7 +101,7 @@ public abstract class AbstractGoblinEntity extends DungeonAnimatedMob {
         if (level().isClientSide) {
             animationController.tick(this);
         } else {
-            brain.tick(this);
+            brain.tick();
         }
     }
 

@@ -69,6 +69,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     protected void setupBrain() {
         // main hand slash
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 0.5f,
                 0,
                 15,
@@ -82,6 +83,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
                 new AbstractAttackPattern.HandPredicate.AlwaysTrue()));
         // offhand slash
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 0.5f,
                 1,
                 15,
@@ -93,6 +95,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
                         ModItems.KOBALT_DAGGER))));
         // both hand slash
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 1,
                 2,
                 30,
@@ -376,12 +379,12 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
 
     @Override
     protected ResourceKey<LootTable> getDefaultLootTable() {
-       return switch (getVariant()) {
-            case FIGHTER -> ModLootTables.HOB_GOBLIN_FIGHTER;
-            case FORGER -> ModLootTables.HOB_GOBLIN_FORGER;
-            case SCAVENGER -> ModLootTables.HOB_GOBLIN_SCAVENGER;
-            case MINER -> ModLootTables.HOB_GOBLIN_MINER;
-           case TOTEM_MAKER -> ModLootTables.HOB_GOBLIN_TOTEM_MAKER;
+        return switch (getVariant()) {
+            case FIGHTER -> ModLootTables.Entity.HOB_GOBLIN_FIGHTER;
+            case FORGER -> ModLootTables.Entity.HOB_GOBLIN_FORGER;
+            case SCAVENGER -> ModLootTables.Entity.HOB_GOBLIN_SCAVENGER;
+            case MINER -> ModLootTables.Entity.HOB_GOBLIN_MINER;
+            case TOTEM_MAKER -> ModLootTables.Entity.HOB_GOBLIN_TOTEM_MAKER;
         };
     }
 

@@ -35,6 +35,7 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.KOBALT_SHIELD);
                         acceptItemGroup(output, ModItems.INFUSED_ARMOR_SET);
                         acceptItemGroup(output, ModItems.SCHOLAR_ARMOR_SET);
+                        acceptItemGroup(output, ModItems.ARCTIC_IRONCLAD_ARMOR_SET);
                         acceptItemGroup(output, ModItems.KOBALT_ARMOR_SET);
                     }).build());
 
@@ -49,13 +50,14 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
-                        acceptItemGroup(output, ModItems.KOBALT);
+                        output.accept(ModItems.INFUSED_WHEAT);
                         output.accept(ModItems.PYRITE);
                         output.accept(ModItems.PYRITE_COIN);
                         acceptItemGroup(output, ModItems.GILDREAN);
                         acceptItemGroup(output, ModItems.INFERNAL_TIN);
                         acceptItemGroup(output, ModItems.ARCTIC_IRON);
                         acceptItemGroup(output, ModItems.LAVINTINE);
+                        acceptItemGroup(output, ModItems.KOBALT);
                         output.accept(ModItems.ROSELITH_CRYSTAL);
                         output.accept(ModItems.GARNETORE_PIECE);
                         output.accept(ModItems.VERDANTITE_CHUNK);
@@ -67,6 +69,7 @@ public final class ModCreativeModeTabs {
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_ingredients_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_food"))
                     .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModItems.INFUSED_BREAD);
                         output.accept(ModItems.GOBLIN_MEAT);
                         output.accept(ModItems.GILDREAN_APPLE);
                     }).build());
@@ -93,6 +96,7 @@ public final class ModCreativeModeTabs {
                         acceptBlockGroup(output,ModBlocks.INFERNAL_TIN);
                         acceptBlockGroup(output,ModBlocks.ARCTIC_IRON);
                         acceptBlockGroup(output,ModBlocks.LAVINTINE);
+                        output.accept(ModBlocks.KOBALT_BLOCK);
                         output.accept(ModBlocks.INFUSED_GRASS_BLOCK);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);

@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.ChestBlock;
 
 import java.util.List;
 

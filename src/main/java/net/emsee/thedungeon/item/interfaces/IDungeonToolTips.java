@@ -64,48 +64,11 @@ public interface IDungeonToolTips {
         modifiers.forEach(entry -> entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry));
 
         if (stack.getItem() instanceof DungeonCurio curioItem) {
-            Map<String, ISlotType> slots = CuriosApi.getItemStackSlots(stack, event.getContext().player());
-
-            for (String identifier : slots.keySet()) {
-                SlotContext slotContext = new SlotContext(identifier, event.getContext().player(), 0, false, true);
-                Multimap<Holder<Attribute>, AttributeModifier> attributes = CuriosApi.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack);
-
-                curioItem.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack).forEach((holder, modifier) ->
-                        entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY)));
-            }
+            addCurioToolTips(event, curioItem, stack, entries);
         }
 
         if (stack.getItem() instanceof IClassedItem classedItem) {
-            DungeonItemRank rank = classedItem.getItemRank();
-            DeferredHolder<DungeonClass,?>[] classes = classedItem.getLinkedClasses();
-            DeferredHolder<DungeonSubClass<?>,?>[] subClasses = classedItem.getLinkedSubClasses();
-
-            addFixedComponents(
-                    Util.make(new LinkedHashMap<>(), map -> {
-                        if (classes.length>0 || subClasses.length>0) {
-                            Component classTitle = Component.translatable("item.thedungeon.tooltip.classes");
-                            if (classedItem instanceof EffigyCurio effigyCurio) {
-                                // different title for effigies (as they give the class)
-                                classTitle = Component.translatable("item.thedungeon.tooltip.effigy_classes");
-                            }
-                            map.put(classTitle, Util.make(new Component[classes.length + subClasses.length], array -> {
-                                int i = 0;
-                                for (DeferredHolder<DungeonClass,?> dClass : classes) {
-                                    array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
-                                    i++;
-                                }
-                                for (DeferredHolder<DungeonSubClass<?>,?> dClass : subClasses) {
-                                    array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
-                                    i++;
-                                }
-                            }));
-                        } else {
-                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), new Component[]{Component.translatable("item.thedungeon.tooltip.classes.anyclass").withStyle(CLASS_FORMATTING)});
-                        }
-
-                        map.put(Component.translatable("item.thedungeon.tooltip.rank"), new Component[]{rank.getTranslatable().withStyle(RANK_FORMATTING)});
-                    }), event
-            );
+            addClassedItemTooltips(event, classedItem);
         }
 
         // add prefix component
@@ -138,6 +101,51 @@ public interface IDungeonToolTips {
 
         // add suffix components
         addFixedComponents(getSuffixComponents(stack), event);
+    }
+
+    private static void addCurioToolTips(AddAttributeTooltipsEvent event, DungeonCurio curioItem, ItemStack stack, Map<SlotType, List<ItemAttributeModifiers.Entry>> entries) {
+        Map<String, ISlotType> slots = CuriosApi.getItemStackSlots(stack, event.getContext().player());
+
+        for (String identifier : slots.keySet()) {
+            SlotContext slotContext = new SlotContext(identifier, event.getContext().player(), 0, false, true);
+            Multimap<Holder<Attribute>, AttributeModifier> attributes = CuriosApi.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack);
+
+            curioItem.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack).forEach((holder, modifier) ->
+                    entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY)));
+        }
+    }
+
+    private static void addClassedItemTooltips(AddAttributeTooltipsEvent event, IClassedItem classedItem) {
+        DungeonItemRank rank = classedItem.getItemRank();
+        DeferredHolder<DungeonClass,?>[] classes = classedItem.getLinkedClasses();
+        DeferredHolder<DungeonSubClass<?>,?>[] subClasses = classedItem.getLinkedSubClasses();
+
+        addFixedComponents(
+                Util.make(new LinkedHashMap<>(), map -> {
+                    if (classes.length>0 || subClasses.length>0) {
+                        Component classTitle = Component.translatable("item.thedungeon.tooltip.classes");
+                        if (classedItem instanceof EffigyCurio effigyCurio) {
+                            // different title for effigies (as they give the class)
+                            classTitle = Component.translatable("item.thedungeon.tooltip.effigy_classes");
+                        }
+                        map.put(classTitle, Util.make(new Component[classes.length + subClasses.length], array -> {
+                            int i = 0;
+                            for (DeferredHolder<DungeonClass,?> dClass : classes) {
+                                array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
+                                i++;
+                            }
+                            for (DeferredHolder<DungeonSubClass<?>,?> dClass : subClasses) {
+                                array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
+                                i++;
+                            }
+                        }));
+                    } else {
+                        map.put(Component.translatable("item.thedungeon.tooltip.classes"), new Component[]{Component.translatable("item.thedungeon.tooltip.classes.anyclass").withStyle(CLASS_FORMATTING)});
+                    }
+
+                    map.put(Component.translatable("item.thedungeon.tooltip.rank"), new Component[]{rank.getTranslatable().withStyle(RANK_FORMATTING)});
+                }), event
+        );
     }
 
     static void addAttributeList(SlotType slot, Component title, List<ItemAttributeModifiers.Entry> list, Component[] otherComponents, AddAttributeTooltipsEvent event) {

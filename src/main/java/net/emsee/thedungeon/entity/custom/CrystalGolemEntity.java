@@ -6,7 +6,7 @@ import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
 import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
 import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
 import net.emsee.thedungeon.entity.attack.SimpleMeleeAttack;
-import net.emsee.thedungeon.entity.brain.DungeonMobBrain;
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
 import net.emsee.thedungeon.entity.client.animation.AnimationController;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.emsee.thedungeon.loot.ModLootTables;
@@ -39,7 +39,7 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
     public AnimationController animationController =  new AnimationController()
             .withIdleAnimation(23)
             .withAttackAnimation(0,12);
-    protected DungeonMobBrain<CrystalGolemEntity> brain = new DungeonMobBrain<>(this);
+    protected DungeonMobAttackBrain<CrystalGolemEntity> brain = new DungeonMobAttackBrain<>(this);
 
     protected static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(CrystalGolemEntity.class, EntityDataSerializers.INT);
@@ -56,7 +56,14 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
     }
 
     protected void setupBrain() {
-        brain.addAttack(new SimpleMeleeAttack<>(2, 0, 12, 15, 6, AbstractAttackPattern.AttackHand.BOTH));
+        brain.addAttack(new SimpleMeleeAttack<>(
+                this,
+                2,
+                0,
+                12,
+                15,
+                6,
+                AbstractAttackPattern.AttackHand.BOTH));
     }
 
     @Override
@@ -135,7 +142,7 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
         if (level().isClientSide) {
             animationController.tick(this);
         } else {
-            brain.tick(this);
+            brain.tick();
         }
     }
 
@@ -157,13 +164,13 @@ public class CrystalGolemEntity extends DungeonAnimatedMob {
     @Override
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return switch (getVariant()) {
-            case AMETHYST -> ModLootTables.CRYSTAL_GOLEM_AMETHYST;
-            case ROSELITH -> ModLootTables.CRYSTAL_GOLEM_ROSELITH;
-            case GARNETORE -> ModLootTables.CRYSTAL_GOLEM_GARNETORE;
-            case VERDANTITE -> ModLootTables.CRYSTAL_GOLEM_VERDANTITE;
-            case LUMANITE -> ModLootTables.CRYSTAL_GOLEM_LUMANITE;
-            case DIAMOND -> ModLootTables.CRYSTAL_GOLEM_DIAMOND;
-            case EMERALD -> ModLootTables.CRYSTAL_GOLEM_EMERALD;
+            case AMETHYST -> ModLootTables.Entity.CRYSTAL_GOLEM_AMETHYST;
+            case ROSELITH -> ModLootTables.Entity.CRYSTAL_GOLEM_ROSELITH;
+            case GARNETORE -> ModLootTables.Entity.CRYSTAL_GOLEM_GARNETORE;
+            case VERDANTITE -> ModLootTables.Entity.CRYSTAL_GOLEM_VERDANTITE;
+            case LUMANITE -> ModLootTables.Entity.CRYSTAL_GOLEM_LUMANITE;
+            case DIAMOND -> ModLootTables.Entity.CRYSTAL_GOLEM_DIAMOND;
+            case EMERALD -> ModLootTables.Entity.CRYSTAL_GOLEM_EMERALD;
         };
     }
 

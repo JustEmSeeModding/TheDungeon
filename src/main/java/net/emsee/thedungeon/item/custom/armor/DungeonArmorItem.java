@@ -1,4 +1,4 @@
-package net.emsee.thedungeon.item.custom;
+package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
@@ -52,7 +52,11 @@ public class DungeonArmorItem extends ArmorItem implements ICanTakeItemToDungeon
         super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 
-    private static boolean playerHasFullArmorOn(Player player) {
+    protected boolean playerHasFullArmorOnOnlyTriggerChest(Player player) {
+        return this.getType() == Type.CHESTPLATE && playerHasFullArmorOn(player);
+    }
+
+    public boolean playerHasFullArmorOn(Player player) {
         if (!playerHasFullSetOfArmor(player))
             return false;
 
@@ -67,7 +71,7 @@ public class DungeonArmorItem extends ArmorItem implements ICanTakeItemToDungeon
         ArmorItem chestplate = (ArmorItem) player.getInventory().getArmor(2).getItem();
         ArmorItem helmet = (ArmorItem) player.getInventory().getArmor(3).getItem();
 
-        return boots.getMaterial() == helmet.getMaterial() && leggings.getMaterial() == helmet.getMaterial() && chestplate.getMaterial() == helmet.getMaterial();
+        return boots.getClass() == helmet.getClass() && leggings.getClass() == helmet.getClass() && chestplate.getClass() == helmet.getClass();
     }
 
     private static boolean playerHadFullArmorOn(Player player, ItemStack removedStack, EquipmentSlot slot) {
@@ -122,8 +126,6 @@ public class DungeonArmorItem extends ArmorItem implements ICanTakeItemToDungeon
 
     public final void swapHandItem(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
         if (entity instanceof Player player) {
-            if (playerHasFullArmorOn(player))
-                onFullSetHandItemSwitched(entity, oldHandItem, newHandItem, handSlot, armorItem, armorSlot);
             onPieceHandItemSwitched(entity, oldHandItem, newHandItem, handSlot, armorItem, armorSlot);
         }
     }
@@ -145,17 +147,17 @@ public class DungeonArmorItem extends ArmorItem implements ICanTakeItemToDungeon
     }
 
     public final void EntityPreDamaged(LivingDamageEvent.Pre event) {
-        preWearerDamaged(event);
+        onPreWearerDamaged(event);
     }
 
     public final void EntityPostDamaged(LivingDamageEvent.Post event) {
-        postWearerDamaged(event);
+        onPostWearerDamaged(event);
     }
 
-    protected void preWearerDamaged(LivingDamageEvent.Pre event) {
+    protected void onPreWearerDamaged(LivingDamageEvent.Pre event) {
     }
 
-    protected void postWearerDamaged(LivingDamageEvent.Post event) {
+    protected void onPostWearerDamaged(LivingDamageEvent.Post event) {
     }
 
     protected void onFullSetTick(LivingEntity entity) {
@@ -167,16 +169,19 @@ public class DungeonArmorItem extends ArmorItem implements ICanTakeItemToDungeon
     protected void onPieceUnEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
     }
 
+    /**
+     * triggers when the player starts wearing the full set
+     */
     protected void onFullSetEquipped(LivingEntity entity) {
     }
 
+    /**
+     * triggers when the player starts wearing the full set
+     */
     protected void onFullSetUnEquipped(LivingEntity entity) {
     }
 
     protected void onPieceHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
-    }
-
-    protected void onFullSetHandItemSwitched(LivingEntity entity, ItemStack oldHandItem, ItemStack newHandItem, EquipmentSlot handSlot, ItemStack armorItem, EquipmentSlot armorSlot) {
     }
 
     @Override

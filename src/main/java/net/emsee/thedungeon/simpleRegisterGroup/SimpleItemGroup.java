@@ -2,7 +2,7 @@ package net.emsee.thedungeon.simpleRegisterGroup;
 
 import com.mojang.datafixers.util.Function3;
 import net.emsee.thedungeon.item.ModItems;
-import net.emsee.thedungeon.item.custom.DungeonArmorItem;
+import net.emsee.thedungeon.item.custom.armor.DungeonArmorItem;
 import net.emsee.thedungeon.item.custom.DungeonItem;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -13,6 +13,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public abstract class SimpleItemGroup {
     public final String name;
@@ -123,6 +124,18 @@ public abstract class SimpleItemGroup {
         public final DeferredItem<A> CHESTPLATE;
         public final DeferredItem<A> LEGGINGS;
         public final DeferredItem<A> BOOTS;
+
+        public ArmorSet(String name, int durabilityFactor, BiFunction<ArmorItem.Type,Item.Properties, A> aNew, Item.Properties baseProperties) {
+            super(name);
+            HELMET= ModItems.ITEMS.register(name + "_helmet",
+                    () -> aNew.apply(ArmorItem.Type.HELMET, baseProperties.durability(ArmorItem.Type.BOOTS.getDurability(durabilityFactor))));
+            CHESTPLATE = ModItems.ITEMS.register(name + "_chestplate",
+                    () ->aNew.apply(ArmorItem.Type.CHESTPLATE, baseProperties.durability(ArmorItem.Type.CHESTPLATE.getDurability(durabilityFactor))));
+            LEGGINGS = ModItems.ITEMS.register(name + "_leggings",
+                    () ->aNew.apply(ArmorItem.Type.LEGGINGS, baseProperties.durability(ArmorItem.Type.LEGGINGS.getDurability(durabilityFactor))));
+            BOOTS = ModItems.ITEMS.register(name + "_boots",
+                    () ->aNew.apply(ArmorItem.Type.BOOTS, baseProperties.durability(ArmorItem.Type.BOOTS.getDurability(durabilityFactor))));
+        }
 
         public ArmorSet(String name, Holder<ArmorMaterial> material, int durabilityFactor, Function3<Holder<ArmorMaterial>,ArmorItem.Type,Item.Properties, A> aNew, Item.Properties baseProperties) {
             super(name);

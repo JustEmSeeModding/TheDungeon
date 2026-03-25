@@ -8,6 +8,7 @@ import net.emsee.thedungeon.item.custom.DungeonCurio;
 import net.emsee.thedungeon.item.custom.armor.DungeonScholarArmorItem;
 import net.emsee.thedungeon.item.custom.armor.InfusedAlloyArmorItem;
 import net.emsee.thedungeon.item.custom.armor.KobaltArmorItem;
+import net.emsee.thedungeon.item.custom.armor.ArcticIroncladArmorItem;
 import net.emsee.thedungeon.simpleRegisterGroup.SimpleItemGroup;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -37,7 +38,6 @@ public final class ModItems {
 
     public static final DeferredItem<DungeonItem> INFUSED_ALLOY_INGOT = ITEMS.register("infused_alloy_ingot",
             () -> new DungeonItem(new Item.Properties()));
-
 
     public static final SimpleItemGroup.IngotAndNugget KOBALT = new SimpleItemGroup.IngotAndNugget("kobalt");
     public static final DeferredItem<DungeonItem> PYRITE = ITEMS.register("pyrite",
@@ -83,6 +83,10 @@ public final class ModItems {
     public static final DeferredItem<DungeonToolItem> GOBLINS_FORGEHAMMER = ITEMS.register("goblins_forgehammer",
             () ->new DungeonToolItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, false,ModTiers.KOBALT, DungeonItemRank.D, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonToolItem.createAttributes(ModTiers.KOBALT, 8f, -3.2f))));
 
+
+    public static final DeferredItem<DungeonWeaponItem> ARCTIC_IRON_SWORD = ITEMS.register("arctic_iron_sword",
+            () -> new DungeonWeaponItem(DungeonWeaponItem.WeaponType.SINGLE_HANDED, true,ModTiers.ARCTIC_IRON, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}, new Item.Properties().attributes(DungeonWeaponItem.createAttributes(ModTiers.ARCTIC_IRON, 3.5f, -2F))));
+
     public static final DeferredItem<DungeonShieldItem> KOBALT_SHIELD = ITEMS.register("kobalt_shield",
             () ->new DungeonShieldItem(new Item.Properties().durability(400), 2, 0, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{}));
 
@@ -92,6 +96,12 @@ public final class ModItems {
 
     public static final DeferredItem<DungeonItem> GOBLIN_MEAT = ITEMS.register("goblin_meat",
             () -> new DungeonItem((new Item.Properties().food(new FoodProperties(2,1,false, 2, Optional.empty(), List.of())))));
+
+    public static final DeferredItem<DungeonItem>INFUSED_BREAD = ITEMS.register("infused_bread",
+            () -> new DungeonItem((new Item.Properties().food(new FoodProperties(5,6,false, 1.6f, Optional.empty(), List.of())))));
+
+    public static final DeferredItem<DungeonItem>INFUSED_WHEAT = ITEMS.register("infused_wheat",
+            () -> new DungeonItem((new Item.Properties())));
 
     public static final DeferredItem<EffigyCurio> HEAVY_EFFIGY = ITEMS.register("heavy_effigy",
             () -> new EffigyCurio(new Item.Properties(),DungeonItemRank.F, ModClasses.TANK, null));
@@ -106,7 +116,6 @@ public final class ModItems {
 
     public static final SimpleItemGroup.ArmorSet<InfusedAlloyArmorItem> INFUSED_ARMOR_SET = new SimpleItemGroup.ArmorSet<>(
             "infused_alloy",
-            ModArmorMaterials.INFUSED_ALLOY,
             30,
             InfusedAlloyArmorItem::new,
             new Item.Properties()
@@ -114,7 +123,6 @@ public final class ModItems {
 
     public static final SimpleItemGroup.ArmorSet<DungeonScholarArmorItem> SCHOLAR_ARMOR_SET = new SimpleItemGroup.ArmorSet<>(
             "scholar",
-            ModArmorMaterials.DUNGEON_SCHOLAR,
             10,
             DungeonScholarArmorItem::new,
             new Item.Properties()
@@ -122,11 +130,18 @@ public final class ModItems {
 
     public static final SimpleItemGroup.ArmorSet<KobaltArmorItem> KOBALT_ARMOR_SET = new SimpleItemGroup.ArmorSet<>(
             "kobalt",
-            ModArmorMaterials.KOBALT,
-            15,
+            40,
             KobaltArmorItem::new,
             new Item.Properties()
     );
+
+    public static final SimpleItemGroup.ArmorSet<ArcticIroncladArmorItem> ARCTIC_IRONCLAD_ARMOR_SET = new SimpleItemGroup.ArmorSet<>(
+            "arctic_ironclad",
+            28,
+            ArcticIroncladArmorItem::new,
+            new Item.Properties()
+    );
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
         ModSpawnEggs.register(eventBus);

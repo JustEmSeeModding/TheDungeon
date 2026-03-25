@@ -72,6 +72,15 @@
 
   "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
 
+  "thedungeon.itemrank.f" : "F",
+  "thedungeon.itemrank.e" : "E",
+  "thedungeon.itemrank.d" : "D",
+  "thedungeon.itemrank.c" : "C",
+  "thedungeon.itemrank.b" : "B",
+  "thedungeon.itemrank.a" : "A",
+  "thedungeon.itemrank.s" : "S",
+  "thedungeon.itemrank.ss" : "SS",
+
   "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
   "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
   "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
@@ -86,6 +95,7 @@
   "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
   "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
   "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
+  "item.thedungeon.tooltip.tool.mining_level": "Mining Level: %s",
   "item.thedungeon.tooltip.tool_type" : "Tool Type:",
   "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
   "item.thedungeon.tooltip.curio_type": "Curio Slot:",
@@ -93,21 +103,12 @@
   "item.thedungeon.tooltip.curio_type.effigy": "Effigy",
   "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
 
-  "item.thedungeon.tooltip.soulbound_totem_equipped": "Returns items on death",
+  "item.thedungeon.tooltip.soulbound_totem_equipped": "Returns Items When Dying In A Dungeon",
 
   "item.thedungeon.tooltip.classes": "Viable Classes",
   "item.thedungeon.tooltip.effigy_classes": "Class",
   "item.thedungeon.tooltip.rank": "Rank",
   "item.thedungeon.tooltip.classes.anyclass": "Any Class",
-
-  "thedungeon.itemrank.f" : "F",
-  "thedungeon.itemrank.e" : "E",
-  "thedungeon.itemrank.d" : "D",
-  "thedungeon.itemrank.c" : "C",
-  "thedungeon.itemrank.b" : "B",
-  "thedungeon.itemrank.a" : "A",
-  "thedungeon.itemrank.s" : "S",
-  "thedungeon.itemrank.ss" : "SS",
 
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
@@ -131,6 +132,11 @@
   "item.thedungeon.kobalt_leggings" : "Kobalt Leggings",
   "item.thedungeon.kobalt_boots" : "Kobalt Boots",
 
+  "item.thedungeon.arctic_ironclad_helmet" : "Arctic Ironclad Helmet",
+  "item.thedungeon.arctic_ironclad_chestplate" : "Arctic Ironclad Chestplate",
+  "item.thedungeon.arctic_ironclad_leggings" : "Arctic Ironclad Leggings",
+  "item.thedungeon.arctic_ironclad_boots" : "Arctic Ironclad Boots",
+
   "item.thedungeon.shattered_catalyst_core": "Shattered Catalyst Core",
   "item.thedungeon.catalyst_core": "Catalyst Core",
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
@@ -147,6 +153,8 @@
   "item.thedungeon.raw_gildrean": "Raw Gildrean",
   "item.thedungeon.gildrean_apple": "Gildrean Apple",
   "item.thedungeon.goblin_meat": "Goblin Meat",
+  "item.thedungeon.infused_wheat" : "Infused Wheat",
+  "item.thedungeon.infused_bread": "Infused Bread",
   "item.thedungeon.verdantite_chunk": "Verdantite Chunk",
   "item.thedungeon.lumanite_fragment": "Lumanite Fragment",
 
@@ -193,6 +201,8 @@
   "block.thedungeon.raw_lavintine_block": "Raw Lavintine Block",
   "block.thedungeon.lavintine_ore": "Lavintine Ore",
   "block.thedungeon.deepslate_lavintine_ore": "Deepslate Lavintine Ore",
+
+  "block.thedungeon.kobalt_block": "Block of Kobalt",
 
   "block.thedungeon.infused_grass_block" : "Infused Grass Block",
   "block.thedungeon.infused_dirt" : "Infused Dirt",
@@ -272,6 +282,7 @@
   "attribute.thedungeon.name.generic.max_perception" : "Aggro for increased perception",
 
   "attribute.thedungeon.extra.hob_goblin_friendly" : "Hob Goblin's Friend",
+  "attribute.thedungeon.extra.slow_bonus_on_hit": "Slows Attacker On Hit",
 
   "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable",
   "container.thedungeon.goblin_forge_block": "Goblin's Alloy Forge"

@@ -26,12 +26,6 @@ Goblin Dungeon
         Large Crystal Golem: Mini-boss. Slow, tanky, made of Quartz/Amethyst. Reflects projectile damage.
         Shardling: Small, aggressive crystal shard creatures
 
-    magma Biome:
-        More dificult biome
-        no portals
-        needs special gear to survive the heat?
-        Goblin forges (mainly HobGoblins)
-
     Sculk Biome?
 
     Cave Lurker: Giant, blind cave-dwelling insect (like a centipede/crustacean hybrid). Relies on vibration/scent. Ambushes from ceilings/walls. Tough carapace. Drops Chitin Plates (armor).

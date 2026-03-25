@@ -24,8 +24,8 @@ public class StoneToIceCaveProcessor extends BlockPaletteReplacementProcessor {
                     map.put(new ReplaceInstance(Blocks.PACKED_ICE::defaultBlockState), 500);
                     map.put(new ReplaceInstance(Blocks.BLUE_ICE::defaultBlockState), 350);
                     map.put(new ReplaceInstance(Blocks.SNOW_BLOCK::defaultBlockState), 500);
-                    map.put(new ReplaceInstance(()->ModBlocks.ARCTIC_IRON.ORE.get().defaultBlockState()), 100);
-                    map.put(new ReplaceInstance(()->ModBlocks.ARCTIC_IRON.RAW_BLOCK.get().defaultBlockState()), 5);
+                    map.put(new ReplaceInstance(()->ModBlocks.ARCTIC_IRON.ORE.get().defaultBlockState()), 30);
+                    map.put(new ReplaceInstance(()->ModBlocks.ARCTIC_IRON.RAW_BLOCK.get().defaultBlockState()), 2);
                 });
 
         return Util.make(Maps.newHashMap(), (map) -> {

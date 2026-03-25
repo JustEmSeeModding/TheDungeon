@@ -5,7 +5,7 @@ import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
 import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
 import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
 import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
-import net.emsee.thedungeon.entity.brain.DungeonMobBrain;
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
 import net.emsee.thedungeon.entity.client.animation.AnimationController;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
@@ -27,7 +27,7 @@ public abstract class AbstractKnightEntity extends DungeonAnimatedMob{
             .withIdleAnimation(59)
             .withAttackAnimation(0,20) // slash
             .withAttackAnimation(1,10); // quick slash
-    protected final DungeonMobBrain<AbstractKnightEntity> brain = new DungeonMobBrain<>(this);
+    protected final DungeonMobAttackBrain<AbstractKnightEntity> brain = new DungeonMobAttackBrain<>(this);
 
 
 
@@ -38,6 +38,7 @@ public abstract class AbstractKnightEntity extends DungeonAnimatedMob{
 
     protected  void setupBrain() {
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 1,
                 0,
                 20,
@@ -45,6 +46,7 @@ public abstract class AbstractKnightEntity extends DungeonAnimatedMob{
                 15,
                 AbstractAttackPattern.AttackHand.MAIN));
         brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
                 1,
                 1,
                 10,
@@ -86,7 +88,7 @@ public abstract class AbstractKnightEntity extends DungeonAnimatedMob{
         if (level().isClientSide) {
             animationController.tick(this);
         } else {
-            brain.tick(this);
+            brain.tick();
         }
     }
 

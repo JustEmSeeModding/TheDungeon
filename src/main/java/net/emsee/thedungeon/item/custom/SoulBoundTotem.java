@@ -7,8 +7,10 @@ import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.ModItems;
+import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -21,7 +23,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
-public class SoulBoundTotem extends DungeonCurio{
+public class SoulBoundTotem extends DungeonCurio {
     private static final boolean WORKS_IN_INVENTORY = false;
 
 
@@ -50,6 +52,7 @@ public class SoulBoundTotem extends DungeonCurio{
             return true;
         }
 
+
         Optional<ICuriosItemHandler> originalCurioInventoryO = CuriosApi.getCuriosInventory(player);
         if (originalCurioInventoryO.isEmpty()) {
             return false;
@@ -63,7 +66,7 @@ public class SoulBoundTotem extends DungeonCurio{
     }
 
     private boolean validateUsability(Player player) {
-        return true;
+        return player.level().dimension() == ModDimensions.DUNGEON_LEVEL_KEY;
     }
 
     public static void addPlayerData(Player player) {

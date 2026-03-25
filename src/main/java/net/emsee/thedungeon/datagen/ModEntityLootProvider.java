@@ -57,7 +57,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
 
             this.add(ModEntities.HOB_GOBLIN.get(),
-                    ModLootTables.HOB_GOBLIN_FIGHTER,
+                    ModLootTables.Entity.HOB_GOBLIN_FIGHTER,
                     LootTable.lootTable()
                             .withPool(baseGoblinMeatPool)
                             .withPool(baseGoblinCoinPool)
@@ -70,7 +70,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                                     .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.05f, 0.025f)))
             );
             this.add(ModEntities.HOB_GOBLIN.get(),
-                    ModLootTables.HOB_GOBLIN_FORGER,
+                    ModLootTables.Entity.HOB_GOBLIN_FORGER,
                     LootTable.lootTable()
                             .withPool(baseGoblinMeatPool)
                             .withPool(baseGoblinCoinPool)
@@ -83,7 +83,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                                     .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.01f, 0.005f)))
             );
             this.add(ModEntities.HOB_GOBLIN.get(),
-                    ModLootTables.HOB_GOBLIN_SCAVENGER,
+                    ModLootTables.Entity.HOB_GOBLIN_SCAVENGER,
                     LootTable.lootTable()
                             .withPool(baseGoblinMeatPool)
                             .withPool(baseGoblinCoinPool)
@@ -96,7 +96,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                                     .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, .005f, .001f)))
             );
             this.add(ModEntities.HOB_GOBLIN.get(),
-                    ModLootTables.HOB_GOBLIN_MINER,
+                    ModLootTables.Entity.HOB_GOBLIN_MINER,
                     LootTable.lootTable()
                             .withPool(baseGoblinMeatPool)
                             .withPool(baseGoblinCoinPool)
@@ -120,7 +120,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                                             .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0f, 1.0f)))))
             );
             this.add(ModEntities.HOB_GOBLIN.get(),
-                    ModLootTables.HOB_GOBLIN_TOTEM_MAKER,
+                    ModLootTables.Entity.HOB_GOBLIN_TOTEM_MAKER,
                     LootTable.lootTable()
                             .withPool(baseGoblinMeatPool)
                             .withPool(baseGoblinCoinPool)
@@ -156,7 +156,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                                             this.registries, 0.2f, 0.75f)));
             this.add(ModEntities.CRYSTAL_GOLEM.get(), LootTable.lootTable());
             this.add(ModEntities.CRYSTAL_GOLEM.get(),
-                    ModLootTables.CRYSTAL_GOLEM_AMETHYST,
+                    ModLootTables.Entity.CRYSTAL_GOLEM_AMETHYST,
                     LootTable.lootTable()
                             .withPool(baseCrystalGolemPool)
                             .withPool(LootPool.lootPool()
@@ -169,7 +169,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
             );
             this.add(ModEntities.CRYSTAL_GOLEM.get(),
-                    ModLootTables.CRYSTAL_GOLEM_ROSELITH,
+                    ModLootTables.Entity.CRYSTAL_GOLEM_ROSELITH,
                     LootTable.lootTable()
                             .withPool(baseCrystalGolemPool)
                             .withPool(LootPool.lootPool()
@@ -182,7 +182,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
             );
             this.add(ModEntities.CRYSTAL_GOLEM.get(),
-                    ModLootTables.CRYSTAL_GOLEM_GARNETORE,
+                    ModLootTables.Entity.CRYSTAL_GOLEM_GARNETORE,
                     LootTable.lootTable()
                             .withPool(baseCrystalGolemPool)
                             .withPool(LootPool.lootPool()
@@ -195,7 +195,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
             );
             this.add(ModEntities.CRYSTAL_GOLEM.get(),
-                    ModLootTables.CRYSTAL_GOLEM_VERDANTITE,
+                    ModLootTables.Entity.CRYSTAL_GOLEM_VERDANTITE,
                     LootTable.lootTable()
                             .withPool(baseCrystalGolemPool)
                             .withPool(LootPool.lootPool()
@@ -208,7 +208,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
             );
             this.add(ModEntities.CRYSTAL_GOLEM.get(),
-                    ModLootTables.CRYSTAL_GOLEM_LUMANITE,
+                    ModLootTables.Entity.CRYSTAL_GOLEM_LUMANITE,
                     LootTable.lootTable()
                             .withPool(baseCrystalGolemPool)
                             .withPool(LootPool.lootPool()
@@ -221,7 +221,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
             );
             this.add(ModEntities.CRYSTAL_GOLEM.get(),
-                    ModLootTables.CRYSTAL_GOLEM_DIAMOND,
+                    ModLootTables.Entity.CRYSTAL_GOLEM_DIAMOND,
                     LootTable.lootTable()
                             .withPool(baseCrystalGolemPool)
                             .withPool(LootPool.lootPool()
@@ -235,7 +235,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
             );
 
             this.add(ModEntities.CRYSTAL_GOLEM.get(),
-                    ModLootTables.CRYSTAL_GOLEM_EMERALD,
+                    ModLootTables.Entity.CRYSTAL_GOLEM_EMERALD,
                     LootTable.lootTable()
                             .withPool(baseCrystalGolemPool)
                             .withPool(LootPool.lootPool()

@@ -2,12 +2,9 @@ package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
-import net.emsee.thedungeon.dungeonClass.DungeonClass;
-import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.dungeonClass.ModClasses;
-import net.emsee.thedungeon.dungeonClass.mainClass.TankClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
-import net.emsee.thedungeon.item.custom.DungeonArmorItem;
+import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -18,13 +15,13 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class InfusedAlloyArmorItem extends DungeonArmorItem {
-    private final double speedPenalty = -.006d;
-    private final double aggroBoost = 25;
-    private final double setHealthBonus = 4;
+    private static final double speedPenalty = -.006d;
+    private static final double aggroBoost = 25;
+    private static final double setHealthBonus = 4;
 
 
-    public InfusedAlloyArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
-        super(material, type, properties, DungeonItemRank.F, new DeferredHolder[]{ModClasses.TANK}, new DeferredHolder[]{});
+    public InfusedAlloyArmorItem(Type type, Properties properties) {
+        super(ModArmorMaterials.INFUSED_ALLOY, type, properties, DungeonItemRank.F, new DeferredHolder[]{ModClasses.TANK}, new DeferredHolder[]{});
     }
 
     @Override

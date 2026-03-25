@@ -48,6 +48,9 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 
         tag(CuriosTags.createItemTag("effigy"))
                 .add(ModItems.HEAVY_EFFIGY.get());
+
+        tag(ItemTags.TRIMMABLE_ARMOR)
+                .addAll(ModItems.SCHOLAR_ARMOR_SET.getAllAsResourceKey());
     }
 
 

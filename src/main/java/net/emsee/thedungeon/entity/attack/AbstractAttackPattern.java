@@ -1,5 +1,7 @@
 package net.emsee.thedungeon.entity.attack;
 
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
+import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -10,27 +12,32 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class AbstractAttackPattern<E extends PathfinderMob> {
+public abstract class AbstractAttackPattern<E extends DungeonAnimatedMob> {
+    final E entity;
+
+    protected AbstractAttackPattern(E entity) {
+        this.entity = entity;
+    }
 
     /**
      * Called when the attack starts
      */
-    public abstract void start(E entity, LivingEntity target);
+    public abstract void start(LivingEntity target);
 
     /**
      * Called every tick while the attack is in progress
      */
-    public abstract void tick(E entity, LivingEntity target);
+    public abstract void tick(LivingEntity target);
 
     /**
      * Called every tick even if this is not the used attack (for cooldowns etc...)
      */
-    public abstract void passiveTick(E entity);
+    public abstract void passiveTick();
 
     /**
      * Whether the attack finished
      */
-    public abstract boolean isFinished(E entity);
+    public abstract boolean isFinished();
 
     public abstract float getDamage();
     /**
@@ -52,7 +59,7 @@ public abstract class AbstractAttackPattern<E extends PathfinderMob> {
         return true;
     }
 
-    public boolean canUseNow() {
+    public boolean canUseNow(E entity) {
         return true;
     }
 

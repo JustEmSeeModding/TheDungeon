@@ -29,8 +29,9 @@ public class EffigyCurio extends DungeonCurio {
     }
 
     @Override
-    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        super.onEquip(slotContext, prevStack, stack);
+    public final void onEquip(SlotContext slotContext, ItemStack oldStack, ItemStack stack) {
+        equipEvent(slotContext, oldStack, stack);
+        super.onEquip(slotContext, oldStack, stack);
         if (!(slotContext.entity() instanceof Player player)) return;
         ModClasses.setClassForPlayer(player, classes[0]);
         if (subClasses.length == 1) {
@@ -42,11 +43,10 @@ public class EffigyCurio extends DungeonCurio {
     }
 
     @Override
-    public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
+    public final void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
+        unequipEvent(slotContext, newStack, stack);
         super.onUnequip(slotContext, newStack, stack);
-        if (!(slotContext.entity() instanceof Player player)) {
-            return;
-        }
+        if (!(slotContext.entity() instanceof Player player)) return;
         ModClasses.removeClassForPlayer(player);
         ModSubClasses.removeClassForPlayer(player);
     }
@@ -75,4 +75,7 @@ public class EffigyCurio extends DungeonCurio {
         CuriosApi.addSlotModifier(map, "trinket", resourceLocation, 1, AttributeModifier.Operation.ADD_VALUE);
         return map;
     }
+
+    protected void unequipEvent(SlotContext slotContext, ItemStack oldStack, ItemStack thisStack) {}
+    protected void equipEvent(SlotContext slotContext, ItemStack newStack, ItemStack thisStack) {}
 }

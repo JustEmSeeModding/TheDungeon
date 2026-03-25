@@ -1,6 +1,7 @@
 package net.emsee.thedungeon.entity.attack;
 
 
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 
 import net.minecraft.nbt.CompoundTag;
@@ -23,7 +24,8 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AbstractAtt
     protected int remainingCooldown = 0;
     protected boolean hasHurt = false;
 
-    public SimpleMeleeAttack(float damage, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands) {
+    public SimpleMeleeAttack(E entity,float damage, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands) {
+        super(entity);
         this.damage = damage;
         this.animationID = animationID;
         this.duration = duration;
@@ -34,7 +36,8 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AbstractAtt
         this.offHandPredicate = new HandPredicate.AlwaysTrue();
     }
 
-    public SimpleMeleeAttack(float damage, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands, HandPredicate mainHandPredicate, HandPredicate offHandPredicate) {
+    public SimpleMeleeAttack(E entity,float damage, int animationID, int duration, int cooldown, int hurtDelay, AttackHand hands, HandPredicate mainHandPredicate, HandPredicate offHandPredicate) {
+        super(entity);
         this.damage = damage;
         this.animationID = animationID;
         this.duration = duration;
@@ -46,7 +49,7 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AbstractAtt
     }
 
     @Override
-    public void start(E entity, LivingEntity target) {
+    public void start(LivingEntity target) {
         remainingDuration = duration;
         remainingCooldown = cooldown;
         hasHurt = false;
@@ -65,27 +68,27 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AbstractAtt
     }
 
     @Override
-    public void tick(E entity, LivingEntity target) {
+    public void tick(LivingEntity target) {
         remainingDuration--;
         if (remainingDuration <= duration-hurtDelay && !hasHurt) {
             if (target!= null && entity.isWithinMeleeAttackRange(target)) {
-                applyDamage(entity, target);
+                applyDamage(target);
             }
             hasHurt = true;
         }
     }
 
-    protected void applyDamage(E entity, LivingEntity target) {
+    protected void applyDamage(LivingEntity target) {
         target.hurt(entity.damageSources().mobAttack(entity), damage);
     }
 
     @Override
-    public void passiveTick(E entity) {
+    public void passiveTick() {
         remainingCooldown--;
     }
 
     @Override
-    public boolean isFinished(E entity) {
+    public boolean isFinished() {
         return remainingDuration <= 0;
     }
 
@@ -107,7 +110,7 @@ public class SimpleMeleeAttack<E extends DungeonAnimatedMob> extends AbstractAtt
     }
 
     @Override
-    public boolean canUseNow() {
+    public boolean canUseNow(E entity) {
         return remainingCooldown <= 0;
     }
 

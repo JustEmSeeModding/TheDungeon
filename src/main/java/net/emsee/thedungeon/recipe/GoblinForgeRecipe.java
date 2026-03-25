@@ -14,13 +14,12 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
 public record GoblinForgeRecipe (Ingredient inputItemOne, Ingredient inputItemTwo, ItemStack output) implements Recipe<GoblinForgeRecipeInput> {
-    public static final Boolean ALLOW_SWAP_ITEMS = true;
 
     public boolean canInputInOne(ItemStack stack) {
-        return inputItemOne.test(stack) || (ALLOW_SWAP_ITEMS && inputItemTwo.test(stack));
+        return inputItemOne.test(stack) || inputItemTwo.test(stack);
     }
     public boolean canInputInTwo(ItemStack stack) {
-        return inputItemTwo.test(stack) || (ALLOW_SWAP_ITEMS && inputItemOne.test(stack));
+        return inputItemTwo.test(stack) || inputItemOne.test(stack);
     }
 
     @Override
@@ -35,7 +34,7 @@ public record GoblinForgeRecipe (Ingredient inputItemOne, Ingredient inputItemTw
     public boolean matches(GoblinForgeRecipeInput input, Level level) {
         if (level.isClientSide) return false;
         boolean matches = inputItemOne.test(input.getItem(0)) && inputItemTwo.test(input.getItem(1));
-        boolean matchesInverse = ALLOW_SWAP_ITEMS && inputItemOne.test(input.getItem(1)) && inputItemTwo.test(input.getItem(0));
+        boolean matchesInverse = inputItemOne.test(input.getItem(1)) && inputItemTwo.test(input.getItem(0));
         return matches || matchesInverse;
     }
 

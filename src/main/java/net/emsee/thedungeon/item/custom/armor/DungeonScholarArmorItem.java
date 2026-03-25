@@ -1,10 +1,8 @@
 package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeonClass.DungeonClass;
-import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
-import net.emsee.thedungeon.item.custom.DungeonArmorItem;
+import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -16,13 +14,13 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class DungeonScholarArmorItem extends DungeonArmorItem {
-    private final double movementSpeedBonus = .005d;
-    private final double setMovementSpeedBonus = .0075d;
-    private final double bootsStepBonus = .5d;
+    private static final double movementSpeedBonus = .005d;
+    private static final double setMovementSpeedBonus = .0075d;
+    private static final double bootsStepBonus = .5d;
 
 
-    public DungeonScholarArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
-        super(material, type, properties, DungeonItemRank.F, new DeferredHolder[]{},  new DeferredHolder[]{});
+    public DungeonScholarArmorItem(Type type, Properties properties) {
+        super(ModArmorMaterials.DUNGEON_SCHOLAR, type, properties, DungeonItemRank.F, new DeferredHolder[]{},  new DeferredHolder[]{});
     }
 
     @Override

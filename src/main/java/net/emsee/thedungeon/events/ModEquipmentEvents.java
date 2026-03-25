@@ -1,13 +1,10 @@
 package net.emsee.thedungeon.events;
 
 
-import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.dungeonClass.DungeonClass;
-import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.dungeonClass.ModSubClasses;
-import net.emsee.thedungeon.item.custom.DungeonArmorItem;
+import net.emsee.thedungeon.item.custom.armor.DungeonArmorItem;
 import net.emsee.thedungeon.item.custom.DungeonToolItem;
 import net.emsee.thedungeon.item.custom.DungeonWeaponItem;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
@@ -26,25 +23,18 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 
 @EventBusSubscriber(modid = TheDungeon.MOD_ID)
 public final class ModEquipmentEvents {
-    static int checkCount = 0;
-    static final int CHECK_INTERVAL = 10;
 
     @SubscribeEvent
     public static void entityEquipmentChanged(LivingEquipmentChangeEvent event) {
-        checkCount++;
-        if (checkCount >= CHECK_INTERVAL) {
-            if (event.getEntity().level().isClientSide) return;
-            armorSwapChanges(event);
-            handleSwapChanges(event);
-            handleWeaponChanges(event);
-            checkCount = 0;
-        }
+        armorSwapChanges(event);
+        handleSwapChanges(event);
+        handleWeaponChanges(event);
     }
 
     private static void armorSwapChanges(LivingEquipmentChangeEvent event) {
         if (!event.getSlot().isArmor()) return;
         if (event.getFrom().getItem() instanceof DungeonArmorItem dungeonArmorItem)
-            // handle the unEquipped item
+            // handle the unequipped item
             dungeonArmorItem.unEquip(event.getEntity(), event.getFrom(), event.getSlot());
         if (event.getTo().getItem() instanceof IClassedItem classedItem && event.getEntity() instanceof Player player &&
                 (playerLacksClassForItem(player, classedItem))) {

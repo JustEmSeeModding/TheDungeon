@@ -30,6 +30,7 @@ public final class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockGroup(ModBlocks.INFERNAL_TIN);
         simpleBlockGroup(ModBlocks.ARCTIC_IRON);
         simpleBlockGroup(ModBlocks.LAVINTINE);
+        blockWithItem(ModBlocks.KOBALT_BLOCK);
 
         blockWithItem(ModBlocks.INFUSED_DIRT);
         blockWithItem(ModBlocks.INFUSED_CLAY);

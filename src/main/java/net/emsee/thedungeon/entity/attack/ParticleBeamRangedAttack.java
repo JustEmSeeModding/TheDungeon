@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.entity.attack;
 
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.emsee.thedungeon.utils.ParticleUtils;
 import net.minecraft.core.particles.ParticleOptions;
@@ -31,7 +32,8 @@ public class ParticleBeamRangedAttack<E extends DungeonAnimatedMob>  extends Abs
 
     private final ParticleOptions particleOptions;
 
-    public ParticleBeamRangedAttack(float damage, float minRange, float maxRange, ParticleOptions particleOptions, double particleDensity , int animationID, int duration, int cooldown, int hurtDelay) {
+    public ParticleBeamRangedAttack(E entity, float damage, float minRange, float maxRange, ParticleOptions particleOptions, double particleDensity , int animationID, int duration, int cooldown, int hurtDelay) {
+        super(entity);
         this.damage = damage;
         this.animationID = animationID;
         this.duration = duration;
@@ -45,7 +47,8 @@ public class ParticleBeamRangedAttack<E extends DungeonAnimatedMob>  extends Abs
         this.particleDensity = particleDensity;
     }
 
-    public ParticleBeamRangedAttack(float damage, float minRange, float maxRange, ParticleOptions particleOptions, double particleDensity , int animationID, int duration, int cooldown, int hurtDelay, HandPredicate mainHandPredicate, HandPredicate offHandPredicate) {
+    public ParticleBeamRangedAttack(E entity, float damage, float minRange, float maxRange, ParticleOptions particleOptions, double particleDensity , int animationID, int duration, int cooldown, int hurtDelay, HandPredicate mainHandPredicate, HandPredicate offHandPredicate) {
+        super(entity);
         this.damage = damage;
         this.animationID = animationID;
         this.duration = duration;
@@ -60,32 +63,32 @@ public class ParticleBeamRangedAttack<E extends DungeonAnimatedMob>  extends Abs
     }
 
     @Override
-    public void start(E entity, LivingEntity target) {
+    public void start(LivingEntity target) {
         remainingDuration = duration;
         remainingCooldown = cooldown;
         hasHurt = false;
     }
 
     @Override
-    public void tick(E entity, LivingEntity target) {
+    public void tick(LivingEntity target) {
         remainingDuration--;
         if (remainingDuration <= duration-hurtDelay && !hasHurt) {
             if (target != null && isInRange(entity, target) && hasLineOfSight(entity, target)) {
-                applyDamage(entity, target);
-                drawLine(entity, target);
+                applyDamage(target);
+                drawLine(target);
             } else {
-                drawMissLine(entity);
+                drawMissLine();
             }
             hasHurt = true;
         }
     }
 
 
-    protected void applyDamage(E entity, LivingEntity target) {
+    protected void applyDamage(LivingEntity target) {
         target.hurt(entity.damageSources().mobAttack(entity), damage);
     }
 
-    private void drawLine (E entity, LivingEntity target) {
+    private void drawLine (LivingEntity target) {
         if (!(entity.level() instanceof ServerLevel level)) return;
 
         Vec3 start = entity.position().add(0,entity.getBbHeight()/2,0);
@@ -96,7 +99,7 @@ public class ParticleBeamRangedAttack<E extends DungeonAnimatedMob>  extends Abs
         ParticleUtils.line(start.x, start.y, start.z, direction, length, level, particleOptions, 0d, 0d, 0d, particleDensity);
     }
 
-    private void drawMissLine (E entity) {
+    private void drawMissLine () {
         if (!(entity.level() instanceof ServerLevel level)) return;
 
         Vec3 start = entity.position();
@@ -132,12 +135,12 @@ public class ParticleBeamRangedAttack<E extends DungeonAnimatedMob>  extends Abs
     }
 
     @Override
-    public void passiveTick(E entity) {
+    public void passiveTick() {
         remainingCooldown--;
     }
 
     @Override
-    public boolean isFinished(E entity) {
+    public boolean isFinished() {
         return remainingDuration <= 0;
     }
 
@@ -174,7 +177,7 @@ public class ParticleBeamRangedAttack<E extends DungeonAnimatedMob>  extends Abs
     }
 
     @Override
-    public boolean canUseNow() {
+    public boolean canUseNow(E entity) {
         return remainingCooldown <= 0;
     }
 

@@ -1,5 +1,6 @@
 package net.emsee.thedungeon.block;
 
+import com.mojang.blaze3d.systems.TimerQuery;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.custom.*;
 import net.emsee.thedungeon.block.custom.dungeonBlockCopies.*;
@@ -142,7 +143,7 @@ public final class ModBlocks {
 
     public static final SimpleBlockGroup.ItemBlockAndRawAndOreAndDeepslateOre GILDREAN = new SimpleBlockGroup.ItemBlockAndRawAndOreAndDeepslateOre("gildrean",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK)),
-            () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK)),
+            () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK), Blocks.BEDROCK::defaultBlockState),
             () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK), Blocks.STONE::defaultBlockState),
             () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_GOLD_ORE), Blocks.DEEPSLATE::defaultBlockState));
 
@@ -152,22 +153,25 @@ public final class ModBlocks {
     public static final SimpleBlockGroup.ItemBlockAndRawAndOre INFERNAL_TIN = new SimpleBlockGroup.ItemBlockAndRawAndOre(
             "infernal_tin",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)),
-            () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK)),
+            () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK), Blocks.MAGMA_BLOCK::defaultBlockState),
             () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE), Blocks.BLACKSTONE::defaultBlockState)
     );
     public static final SimpleBlockGroup.ItemBlockAndRawAndOre ARCTIC_IRON = new SimpleBlockGroup.ItemBlockAndRawAndOre(
             "arctic_iron",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)),
-            () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK)),
+            () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK), Blocks.BLUE_ICE::defaultBlockState),
             () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.BLUE_ICE), Blocks.BLUE_ICE::defaultBlockState)
     );
     public static final SimpleBlockGroup.ItemBlockAndRawAndOreAndDeepslateOre LAVINTINE = new SimpleBlockGroup.ItemBlockAndRawAndOreAndDeepslateOre(
             "lavintine",
             () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)),
-            () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK)),
+            () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK), Blocks.BEDROCK::defaultBlockState),
             () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE), Blocks.STONE::defaultBlockState),
             () -> new SimpleMinableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE), Blocks.DEEPSLATE::defaultBlockState)
     );
+
+    public static final DeferredBlock<DungeonBlock> KOBALT_BLOCK = registerBlock("kobalt_block",
+            () -> new DungeonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK)));
 
     public static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

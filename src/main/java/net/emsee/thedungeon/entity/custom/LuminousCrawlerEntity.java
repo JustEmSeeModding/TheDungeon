@@ -6,7 +6,7 @@ import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
 import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
 import net.emsee.thedungeon.entity.attack.ParticleBeamRangedAttack;
 import net.emsee.thedungeon.entity.attack.SimpleMeleeAttack;
-import net.emsee.thedungeon.entity.brain.DungeonMobBrain;
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
 import net.emsee.thedungeon.entity.client.animation.AnimationController;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.emsee.thedungeon.particle.ModParticleTypes;
@@ -29,9 +29,11 @@ public class LuminousCrawlerEntity extends DungeonAnimatedMob {
             .withAttackAnimation(0,10); // BITE attack
             //.withAttackAnimation(1,10)
             //.withAttackAnimation(2,10);
-    protected final DungeonMobBrain<LuminousCrawlerEntity> brain =
-                    new DungeonMobBrain<>(this)
+    protected final DungeonMobAttackBrain<LuminousCrawlerEntity> brain =
+                    new DungeonMobAttackBrain<>(this)
+                            .withGlobalAttackEndCooldown(10)
                             .withAttack(new SimpleMeleeAttack<>(
+                                    this,
                                     4,
                                     0,
                                     10,
@@ -39,6 +41,7 @@ public class LuminousCrawlerEntity extends DungeonAnimatedMob {
                                     7,
                                     null))
                             .withAttack(new ParticleBeamRangedAttack<>(
+                                    this,
                                     3,
                                     2.6f,
                                     10,
@@ -59,7 +62,7 @@ public class LuminousCrawlerEntity extends DungeonAnimatedMob {
     public static AttributeSupplier.Builder createAttributes() {
         return LivingEntity.createLivingAttributes()
                 .add(Attributes.FOLLOW_RANGE, 50.0)
-                .add(Attributes.MAX_HEALTH, 50)
+                .add(Attributes.MAX_HEALTH, 15)
                 .add(Attributes.ARMOR, 6)
                 .add(Attributes.ATTACK_DAMAGE,4)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5)
@@ -93,7 +96,7 @@ public class LuminousCrawlerEntity extends DungeonAnimatedMob {
         if (level().isClientSide) {
             animationController.tick(this);
         } else {
-            brain.tick(this);
+            brain.tick();
         }
     }
 
