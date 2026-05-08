@@ -1,0 +1,58 @@
+The Dungeon - Minecraft NeoForge Mod
+Copyright (c) 2024-2026 Just_EmSee
+
+ALL RIGHTS RESERVED
+
+This software and all related documentation, code, artwork, models, textures,
+and content constituting "The Dungeon" Minecraft mod (hereinafter "The Work")
+are protected by copyright law.
+
+TERMS OF USE:
+
+1. OWNERSHIP
+   All rights, title, and interest in and to The Work are owned exclusively
+   by Just_EmSee. This includes, but is not limited to, all intellectual
+   property rights.
+
+2. LICENSE GRANT
+   You are granted a limited, non-exclusive, non-transferable license to:
+   - Download and install The Work for personal, non-commercial use only
+   - Play The Work in Minecraft for your own enjoyment
+   - View and read the source code for educational purposes only
+
+3. RESTRICTIONS
+   You may NOT:
+   - Distribute, reproduce, or redistribute The Work without explicit permission
+   - Create derivative works, modifications, or forks for distribution
+   - Sell, rent, lease, or transfer The Work or any part thereof
+   - Use The Work for commercial purposes without explicit written permission
+   - Include The Work or substantial portions of it in other projects
+   - Decompile, reverse-engineer, or disassemble The Work
+   - Remove or alter any copyright, trademark, or proprietary notices
+
+4. ATTRIBUTION
+   If you reference or discuss The Work, you must provide clear attribution
+   to Just_EmSee as the original author.
+
+5. DISCLAIMER
+   THE WORK IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL
+   THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+   IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+   CONNECTION WITH THE WORK OR THE USE OR OTHER DEALINGS IN THE WORK.
+
+6. TERMINATION
+   This license is effective until terminated. Your rights will terminate
+   automatically without notice if you fail to comply with any provision of
+   this license. Upon termination, you must cease all use of The Work and
+   destroy all copies in your possession.
+
+7. GOVERNING LAW
+   This license is governed by and construed in accordance with the laws
+   of the jurisdiction in which the author resides, without regard to its
+   conflict of law provisions.
+
+For permissions beyond the scope of this license, contact Just_EmSee.
+
+Last Updated: May 8, 2026

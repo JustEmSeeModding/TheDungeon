@@ -70,7 +70,9 @@ public final class GoblinCavesGridRoomCollection extends GridRoomCollection {
                         .withStructureProcessor(StoneCaveOreProcessor.INSTANCE)
                         .withStructureProcessor(GildedCaveOreProcessor.INSTANCE)
                         .setOverrideEndChance(0)
-                        .setGenerationPriority(1).build())
+                        .setGenerationPriority(1)
+                        .build()
+                )
 
                 // deep to crystal
                 .addRequiredRoom(0, 1, GridRoomBasic.builder("goblin_caves/convert/stone_deep", 11, 11)

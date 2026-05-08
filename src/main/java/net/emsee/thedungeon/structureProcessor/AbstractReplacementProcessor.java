@@ -75,10 +75,16 @@ public abstract class AbstractReplacementProcessor extends StructureProcessor {
     protected BlockState copyAllProperties(BlockState from, BlockState to) {
         to = copyProperty(from, to, StairBlock.FACING);
         to = copyProperty(from, to, StairBlock.HALF);
+        to = copyProperty(from, to, StairBlock.SHAPE);
         to = copyProperty(from, to, SlabBlock.TYPE);
         to = copyProperty(from, to, RotatedPillarBlock.AXIS);
         to = copyProperty(from, to, HorizontalDirectionalBlock.FACING);
         to = copyProperty(from, to, WaterloggedTransparentBlock.WATERLOGGED);
+        to = copyProperty(from, to, WallBlock.NORTH_WALL);
+        to = copyProperty(from, to, WallBlock.EAST_WALL);
+        to = copyProperty(from, to, WallBlock.SOUTH_WALL);
+        to = copyProperty(from, to, WallBlock.WEST_WALL);
+        to = copyProperty(from, to, WallBlock.UP);
         return to;
     }
 
