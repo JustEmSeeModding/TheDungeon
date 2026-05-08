@@ -13,17 +13,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
-public class DeathKnightEntity extends AbstractKnightEntity{
+public class DeathKnightEntity extends AbstractKnightEntity {
     public DeathKnightEntity(EntityType<? extends DungeonPathfinderMob> entityType, Level level) {
         super(entityType, level);
     }
+
 
     public static AttributeSupplier.Builder createAttributes() {
         return LivingEntity.createLivingAttributes()
                 .add(Attributes.FOLLOW_RANGE, 48.0)
                 .add(Attributes.MAX_HEALTH, 40)
                 .add(Attributes.ARMOR, 18)
-                .add(Attributes.ATTACK_DAMAGE,4)
+                .add(Attributes.ATTACK_DAMAGE, 4)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.0)
                 .add(Attributes.MOVEMENT_SPEED, .22)
                 .add(Attributes.KNOCKBACK_RESISTANCE, .5)

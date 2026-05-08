@@ -1,15 +1,16 @@
 package net.emsee.thedungeon.entity.custom.goblin.hobGoblin;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.attribute.ModAttributes;
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
-import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
+import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
+import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
 import net.emsee.thedungeon.entity.custom.goblin.AbstractGoblinEntity;
 import net.emsee.thedungeon.item.ModItems;
+import net.emsee.thedungeon.loot.ModLootTables;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.minecraft.Util;
@@ -19,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -33,20 +35,20 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
-    private static final EntityDataAccessor<Integer> VARIANT =
+    protected static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(HobGoblinEntity.class, EntityDataSerializers.INT);
 
     private static final WeightedMap.Int<Variant> variants = Util.make(new WeightedMap.Int<>(), map -> {
@@ -64,25 +66,58 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     }
 
     @Override
+    protected void setupBrain() {
+        // main hand slash
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                0.5f,
+                0,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.MAIN,
+                new AbstractAttackPattern.HandPredicate.ItemListOrEmpty(List.of(
+                                ModItems.KOBALT_DAGGER,
+                                ModItems.INFUSED_CHISEL,
+                                ModItems.GOBLINS_FORGEHAMMER)),
+                new AbstractAttackPattern.HandPredicate.AlwaysTrue()));
+        // offhand slash
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                0.5f,
+                1,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.OFF,
+                new AbstractAttackPattern.HandPredicate.AlwaysTrue(),
+                new AbstractAttackPattern.HandPredicate.ItemList(List.of(
+                        ModItems.KOBALT_DAGGER))));
+        // both hand slash
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                1,
+                2,
+                30,
+                60,
+                12,
+                AbstractAttackPattern.AttackHand.BOTH,
+                new AbstractAttackPattern.HandPredicate.ItemListOrEmpty(List.of(
+                        ModItems.KOBALT_DAGGER,
+                        ModItems.INFUSED_CHISEL)),
+                new AbstractAttackPattern.HandPredicate.ItemList(List.of(
+                        ModItems.KOBALT_DAGGER,
+                        ModItems.INFUSED_CHISEL))));
+
+    }
+
+    @Override
     protected void addTargetGoals() {
         this.targetSelector.addGoal(1,
                 new DungeonTargetSelectorGoal(this, true)
                         .addPredicate(player -> !isFriendlyToPlayer(player))
         );
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-    }
-
-    @Override
-    protected void setupAttackGoal() {
-        this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                // default attacks
-                .withAttack(0, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.GOBLINS_DAGGER.get(), Items.AIR),List.of()),3)
-                .withAttack(1, 12,8,h -> h.withKnockbackMultiplier(.75f).withRequiredItems(List.of(),List.of(ModItems.GOBLINS_DAGGER.get())),2)
-                .withAttack(2,12,18, h -> h.withDamageMultiplier(2f).withKnockbackMultiplier(.75f).withRequiredItems(List.of(ModItems.GOBLINS_DAGGER.get()),List.of(ModItems.GOBLINS_DAGGER.get())), 1 )
-
-                // hammer attacks
-                .withAttack(0, 12,23,h -> h.withRequiredItems(List.of(ModItems.GOBLINS_FORGEHAMMER.get()),List.of()),3)
-        );
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -106,24 +141,32 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         switch (getVariant()) {
             case FIGHTER -> {
                 if (rDouble>.67) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
                 }
                 else if (rDouble>.33){
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-                    this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
                 } else {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                    this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
                     this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_SHIELD.get()));
                 }
             }
             case FORGER -> {
                 this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_FORGEHAMMER.get()));
             }
-            case SCAVENGER -> {}
+            case SCAVENGER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+            }
+            case MINER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.INFUSED_CHISEL.get()));
+            }
+            case TOTEM_MAKER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.SOUL_BOUND_TOTEM.get()));
+            }
             default -> {
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+                this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
             }
         }
 
@@ -206,7 +249,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
     }
 
     @Override
-    public void overrideXp(int i) {    }
+    public void overrideXp(int i) {}
 
     @Override
     public boolean showProgressBar() {
@@ -277,6 +320,7 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         }
     }
 
+
     @Override
     public Entity changeDimension(DimensionTransition transition) {
         this.stopTrading();
@@ -333,11 +377,23 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
+    @Override
+    protected ResourceKey<LootTable> getDefaultLootTable() {
+        return switch (getVariant()) {
+            case FIGHTER -> ModLootTables.Entity.HOB_GOBLIN_FIGHTER;
+            case FORGER -> ModLootTables.Entity.HOB_GOBLIN_FORGER;
+            case SCAVENGER -> ModLootTables.Entity.HOB_GOBLIN_SCAVENGER;
+            case MINER -> ModLootTables.Entity.HOB_GOBLIN_MINER;
+            case TOTEM_MAKER -> ModLootTables.Entity.HOB_GOBLIN_TOTEM_MAKER;
+        };
+    }
+
     public enum Variant {
         FIGHTER(0, 100, "fighter"),
-        FORGER(1,50, "forge_worker"),
-        SCAVENGER(2,10, "scavenger")
-        ;
+        FORGER(1, 50, "forge_worker"),
+        SCAVENGER(2, 5, "scavenger"),
+        MINER(3, 30, "miner"),
+        TOTEM_MAKER(4, 4, "totem_maker");
 
         private static final Variant[] BY_ID = Arrays.stream(values()).sorted(
                 Comparator.comparingInt(Variant::getId)).toArray(Variant[]::new);
@@ -346,12 +402,14 @@ public class HobGoblinEntity extends AbstractGoblinEntity implements Merchant {
         private final String resource;
 
         Variant(int id, int weight, String resource) {
-            this.id=id;
-            this.weight=weight;
+            this.id = id;
+            this.weight = weight;
             this.resource = resource;
         }
 
-        public int getId() {return id;}
+        public int getId() {
+            return id;
+        }
 
         public static Variant getById(int id) {
             return BY_ID[id % BY_ID.length];

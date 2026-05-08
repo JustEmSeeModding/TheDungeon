@@ -1,15 +1,20 @@
 package net.emsee.thedungeon.item.interfaces;
 
+import com.google.common.collect.Multimap;
 import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.custom.DungeonCurio;
+import net.emsee.thedungeon.item.custom.EffigyCurio;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -17,6 +22,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.neoforge.client.event.AddAttributeTooltipsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.ISlotType;
 
 import java.util.*;
 
@@ -53,42 +61,14 @@ public interface IDungeonToolTips {
         List<ItemAttributeModifiers.Entry> modifiers = stack.getAttributeModifiers().modifiers();
 
         // add every modifier to the list of the correct slot
-        modifiers.forEach(entry -> {
-            entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry);
-        });
+        modifiers.forEach(entry -> entries.get(SlotType.fromDefaultSlotGroup(entry.slot())).add(entry));
 
         if (stack.getItem() instanceof DungeonCurio curioItem) {
-            curioItem.getAttributeModifiers(stack).forEach((holder, modifier) -> {
-                entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY));
-            });
+            addCurioToolTips(event, curioItem, stack, entries);
         }
 
         if (stack.getItem() instanceof IClassedItem classedItem) {
-            DungeonItemRank rank = classedItem.getItemRank();
-            DeferredHolder<DungeonClass,?>[] classes = classedItem.getLinkedClasses();
-            DeferredHolder<DungeonSubClass<?>,?>[] subClasses = classedItem.getLinkedSubClasses();
-
-            addFixedComponents(
-                    Util.make(new LinkedHashMap<>(), map -> {
-                        if (classes.length>0 || subClasses.length>0) {
-                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), Util.make(new Component[classes.length + subClasses.length], array -> {
-                                int i = 0;
-                                for (DeferredHolder<DungeonClass,?> dClass : classes) {
-                                    array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
-                                    i++;
-                                }
-                                for (DeferredHolder<DungeonSubClass<?>,?> dClass : subClasses) {
-                                    array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
-                                    i++;
-                                }
-                            }));
-                        } else {
-                            map.put(Component.translatable("item.thedungeon.tooltip.classes"), new Component[]{Component.translatable("item.thedungeon.tooltip.classes.anyclass").withStyle(CLASS_FORMATTING)});
-                        }
-
-                        map.put(Component.translatable("item.thedungeon.tooltip.rank"), new Component[]{rank.getTranslatable().withStyle(RANK_FORMATTING)});
-                    }), event
-            );
+            addClassedItemTooltips(event, classedItem);
         }
 
         // add prefix component
@@ -121,6 +101,51 @@ public interface IDungeonToolTips {
 
         // add suffix components
         addFixedComponents(getSuffixComponents(stack), event);
+    }
+
+    private static void addCurioToolTips(AddAttributeTooltipsEvent event, DungeonCurio curioItem, ItemStack stack, Map<SlotType, List<ItemAttributeModifiers.Entry>> entries) {
+        Map<String, ISlotType> slots = CuriosApi.getItemStackSlots(stack, event.getContext().player());
+
+        for (String identifier : slots.keySet()) {
+            SlotContext slotContext = new SlotContext(identifier, event.getContext().player(), 0, false, true);
+            Multimap<Holder<Attribute>, AttributeModifier> attributes = CuriosApi.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack);
+
+            curioItem.getAttributeModifiers(slotContext, CuriosApi.getSlotId(slotContext), stack).forEach((holder, modifier) ->
+                    entries.get(SlotType.CURIO).add(new ItemAttributeModifiers.Entry(holder, modifier, EquipmentSlotGroup.ANY)));
+        }
+    }
+
+    private static void addClassedItemTooltips(AddAttributeTooltipsEvent event, IClassedItem classedItem) {
+        DungeonItemRank rank = classedItem.getItemRank();
+        DeferredHolder<DungeonClass,?>[] classes = classedItem.getLinkedClasses();
+        DeferredHolder<DungeonSubClass<?>,?>[] subClasses = classedItem.getLinkedSubClasses();
+
+        addFixedComponents(
+                Util.make(new LinkedHashMap<>(), map -> {
+                    if (classes.length>0 || subClasses.length>0) {
+                        Component classTitle = Component.translatable("item.thedungeon.tooltip.classes");
+                        if (classedItem instanceof EffigyCurio effigyCurio) {
+                            // different title for effigies (as they give the class)
+                            classTitle = Component.translatable("item.thedungeon.tooltip.effigy_classes");
+                        }
+                        map.put(classTitle, Util.make(new Component[classes.length + subClasses.length], array -> {
+                            int i = 0;
+                            for (DeferredHolder<DungeonClass,?> dClass : classes) {
+                                array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
+                                i++;
+                            }
+                            for (DeferredHolder<DungeonSubClass<?>,?> dClass : subClasses) {
+                                array[i] = dClass.get().getTranslatable().withStyle(CLASS_FORMATTING);
+                                i++;
+                            }
+                        }));
+                    } else {
+                        map.put(Component.translatable("item.thedungeon.tooltip.classes"), new Component[]{Component.translatable("item.thedungeon.tooltip.classes.anyclass").withStyle(CLASS_FORMATTING)});
+                    }
+
+                    map.put(Component.translatable("item.thedungeon.tooltip.rank"), new Component[]{rank.getTranslatable().withStyle(RANK_FORMATTING)});
+                }), event
+        );
     }
 
     static void addAttributeList(SlotType slot, Component title, List<ItemAttributeModifiers.Entry> list, Component[] otherComponents, AddAttributeTooltipsEvent event) {
@@ -282,8 +307,7 @@ public interface IDungeonToolTips {
         FULL_BODY;
 
         static SlotType fromDefaultSlotGroup(EquipmentSlotGroup slotGroup) {
-            SlotType toReturn = UNASSIGNED;
-            toReturn = switch (slotGroup) {
+            return switch (slotGroup) {
                 case ANY,ARMOR -> UNASSIGNED;
                 case MAINHAND ->  MAIN_HAND;
                 case OFFHAND -> OFFHAND;
@@ -291,7 +315,6 @@ public interface IDungeonToolTips {
                 case HEAD, CHEST, LEGS, FEET ->  EQUIPPED;
                 case BODY ->  FULL_BODY;
             };
-            return toReturn;
         }
     }
 

@@ -21,6 +21,7 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
     private int maxFloorHeight = 999999;
     private boolean canGenerateDown = true;
     private boolean fillWithFallbackWhenDone = false;
+    private int stepIntervalBetweenForcesRequirementTries = 0;
 
     private RoomGenerationPickMethod pickMethod = RoomGenerationPickMethod.FIRST;
 
@@ -58,9 +59,9 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
     /**
      * sets the max number of floors the dungeon is allowed to have (including the main floor)
      * <p>
-     * = when a scaled room goes below the lowest or above the highest floor it can generate but any connections below the main floor will not be continued
+     * - when a scaled room goes below the lowest or above the highest floor it can generate but any connections below the main floor will not be continued
      * <p>
-     * = in case allowDownGeneration is false use "setMaxFloorHeightOneWay()" instead
+     * - in case allowDownGeneration is false use "setMaxFloorHeightOneWay()" instead
      */
     public GridDungeon setMaxFloorHeight(int maxFloors) {
         if (maxFloors % 2 != 1)
@@ -97,6 +98,14 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
      */
     public GridDungeon setFillWithFallback(boolean doFill) {
         fillWithFallbackWhenDone = doFill;
+        return this;
+    }
+
+    /**
+     * the amount of steps until the dungeon tries to force a required room (ignored if 0)
+     */
+    public GridDungeon setStepIntervalBetweenForcesRequirementTries(int interval) {
+        stepIntervalBetweenForcesRequirementTries = interval;
         return this;
     }
 
@@ -152,5 +161,9 @@ public class GridDungeon extends Dungeon<GridDungeon, GridDungeonInstance> {
     @Override
     public GridDungeonInstance createInstance() {
         return new GridDungeonInstance(this);
+    }
+
+    public int getStepIntervalBetweenForcesRequirementTries() {
+        return stepIntervalBetweenForcesRequirementTries;
     }
 }

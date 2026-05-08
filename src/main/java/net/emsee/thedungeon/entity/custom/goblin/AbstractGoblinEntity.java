@@ -1,14 +1,16 @@
 package net.emsee.thedungeon.entity.custom.goblin;
 
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
-import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
-import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
+import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
+import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
+import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
+import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
+import net.emsee.thedungeon.entity.client.animation.AnimationController;
+import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
-import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
 import net.emsee.thedungeon.item.ModItems;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -22,57 +24,67 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public class AbstractGoblinEntity extends DungeonPathfinderMob implements IMultiAttackAnimatedEntity {
-    protected static final EntityDataAccessor<Boolean> RUNNING =
-            SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
-            SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_VERSION =
-            SynchedEntityData.defineId(AbstractGoblinEntity.class, EntityDataSerializers.BYTE);
+public abstract class AbstractGoblinEntity extends DungeonAnimatedMob {
+    public final AnimationController animationController = new AnimationController()
+            .withIdleAnimation(50)
+            .withAttackAnimation(0,10) // right slash
+            .withAttackAnimation(1,10) // left slash
+            .withAttackAnimation(2,10); // both slash
+    protected final DungeonMobAttackBrain<AbstractGoblinEntity> brain = new DungeonMobAttackBrain<>(this);
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    protected int idleAnimationTimeout = 0;
-    public final AnimationState basicAttackAnimationStateLeft = new AnimationState();
-    public final AnimationState basicAttackAnimationStateRight = new AnimationState();
-    public int attackAnimationTimeout = 0;
-    protected int animationNetworkVersion = -1;
 
 
     public AbstractGoblinEntity(EntityType<? extends DungeonPathfinderMob> entityType, Level level) {
         super(entityType, level);
+        setupBrain();
+    }
+
+    protected void setupBrain() {
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                .5f,
+                0,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.MAIN));
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                .5f,
+                1,
+                15,
+                30,
+                12,
+                AbstractAttackPattern.AttackHand.OFF));
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                1,
+                2,
+                30,
+                60,
+                12,
+                AbstractAttackPattern.AttackHand.BOTH));
     }
 
     @Override
-    protected void registerGoals() {
+    protected void addBehaviourGoals() {
+        this.goalSelector.addGoal(0, new DungeonRunToTargetGoal(this,1.3f,15, 4f, true));
+        this.goalSelector.addGoal(1, new DungeonWalkToTargetGoal(this,1f,1, 0, true));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        this.addBehaviourGoals();
-        this.addTargetGoals();
-        this.setupAttackGoal();
     }
 
-    protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.3f,15, 4f, true));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
-    }
-
+    @Override
     protected void addTargetGoals() {
         this.targetSelector.addGoal(1, new DungeonTargetSelectorGoal(this, true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
     }
 
-    protected void setupAttackGoal() {
-        this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack(0,12,8, h -> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.75f), 3)
-                .withAttack(1,12,8, h -> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.75f), 3)
-                .withAttack(2,12,18, h -> h, 1)
-        );
-    }
-
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.GOBLINS_DAGGER.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.KOBALT_DAGGER.get()));
     }
 
     @Override
@@ -81,95 +93,29 @@ public class AbstractGoblinEntity extends DungeonPathfinderMob implements IMulti
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
-    protected void SetupAnimations() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = 49;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
-
-        if (this.isAttacking() && getAnimationID() > -1 && this.attackAnimationTimeout <= 0 && animationNetworkVersion != getAnimationVersion()) {
-            switch (getAnimationID()) {
-                case 0: {
-                    this.attackAnimationTimeout = 9;
-                    this.basicAttackAnimationStateRight.start(this.tickCount);
-                    break;
-                }
-                case 1: {
-                    this.attackAnimationTimeout = 9;
-                    this.basicAttackAnimationStateLeft.start(this.tickCount);
-                    break;
-                }
-                case 2: {
-                    this.attackAnimationTimeout = 19;
-                    this.basicAttackAnimationStateLeft.start(this.tickCount);
-                    this.basicAttackAnimationStateRight.start(this.tickCount);
-                    break;
-                }
-            }
-            animationNetworkVersion = getAnimationVersion();
-        } else {
-            --this.attackAnimationTimeout;
-        }
-    }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.level().isClientSide) {
-            this.SetupAnimations();
+
+        if (level().isClientSide) {
+            animationController.tick(this);
+        } else {
+            brain.tick();
         }
     }
 
     @Override
-    public boolean isPlayingAttackAnimation() {
-        return attackAnimationTimeout >0;
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.put("CustomBrain", brain.toSaveTag());
     }
 
     @Override
-    public void startRunning() {
-        this.entityData.set(RUNNING, true);
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        brain.fromSaveTag(tag.getCompound("CustomBrain"));
     }
 
-    @Override
-    public void stopRunning() {
-        this.entityData.set(RUNNING, false);
-    }
-
-    void setAnimationID(int id, byte version) {
-        this.entityData.set(ATTACK_ANIMATION_ID, id);
-        this.entityData.set(ATTACK_ANIMATION_VERSION, version);
-    }
-
-    int getAnimationID() {
-        return this.entityData.get(ATTACK_ANIMATION_ID);
-    }
-    int getAnimationVersion() {
-        return this.entityData.get(ATTACK_ANIMATION_VERSION);
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(RUNNING, false);
-        builder.define(ATTACK_ANIMATION_ID, -1);
-        builder.define(ATTACK_ANIMATION_VERSION, (byte)-1);
-    }
-
-    @Override
-    public boolean isRunning() {
-        return this.entityData.get(RUNNING);
-    }
-
-    @Override
-    public void attackAnimation(int id, byte version) {
-        setAnimationID(id, version);
-    }
-
-    @Override
-    public boolean isAttacking() {
-        return getAnimationID() >-1;
-    }
 }
 

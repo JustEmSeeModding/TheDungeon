@@ -29,6 +29,7 @@ public final class ModAttributes {
      */
     /** the amount of player agro the enemies see towards the player (0 means invisible to dungeon mobs)*/
     public static final Holder<Attribute> PLAYER_DUNGEON_AGGRO_TO_ENEMY = register("dungeon.aggro_to_enemy", () -> new RangedAttribute("attribute.thedungeon.name.generic.aggro_to_enemy", 500, 0, Integer.MAX_VALUE).setSyncable(true).setSentiment(Attribute.Sentiment.NEGATIVE));
+    //public static final Holder<Attribute> TRINKET_SLOTS = register("dungeon.trinket_slots", () -> new RangedAttribute("attribute.thedungeon.name.generic.trinket_slots", 0, 0, Integer.MAX_VALUE).setSyncable(true).setSentiment(Attribute.Sentiment.NEGATIVE));
 
     public static void register(IEventBus eventBus) {
         ATTRIBUTES.register(eventBus);

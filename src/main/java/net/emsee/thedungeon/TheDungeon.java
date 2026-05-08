@@ -6,7 +6,6 @@ import net.emsee.thedungeon.block.ModBlocks;
 import net.emsee.thedungeon.block.entity.ModBlockEntities;
 import net.emsee.thedungeon.component.ModDataComponentTypes;
 import net.emsee.thedungeon.criterion.ModCriteriaTriggerTypes;
-import net.emsee.thedungeon.dungeon.registry.ModCleanupDungeons;
 import net.emsee.thedungeon.dungeon.registry.ModDungeons;
 import net.emsee.thedungeon.dungeonClass.ModClasses;
 import net.emsee.thedungeon.dungeonClass.ModSubClasses;
@@ -16,7 +15,9 @@ import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.emsee.thedungeon.item.ModCreativeModeTabs;
 import net.emsee.thedungeon.item.ModItems;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
+import net.emsee.thedungeon.particle.ModParticleTypes;
 import net.emsee.thedungeon.recipe.ModRecipes;
+import net.emsee.thedungeon.screen.ModMenuTypes;
 import net.emsee.thedungeon.villager.ModVillagers;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -27,13 +28,12 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 @Mod(TheDungeon.MOD_ID)
 public final class TheDungeon
 {
     public static final String MOD_ID = "thedungeon";
-    public static boolean doUpdateForcedChunks = false; //TODO set to true once in production
+    public static boolean doUpdateForcedChunks = false; //TODO set to true once in production (if its still even required by then)
 
     public TheDungeon(IEventBus modEventBus, ModContainer modContainer)
     {
@@ -47,15 +47,20 @@ public final class TheDungeon
 
         ModAttributes.register(modEventBus);
 
-        ModItems.register(modEventBus);
-        ModArmorMaterials.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+
+        ModItems.register(modEventBus);
+        ModArmorMaterials.register(modEventBus);
+
+        ModParticleTypes.register(modEventBus);
+
         ModMobEffects.register(modEventBus);
 
         ModDataComponentTypes.register(modEventBus);
 
         ModEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         ModAttachmentTypes.register(modEventBus);
         ModRecipes.register(modEventBus);

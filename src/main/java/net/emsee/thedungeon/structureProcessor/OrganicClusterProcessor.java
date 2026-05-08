@@ -1,6 +1,5 @@
 package net.emsee.thedungeon.structureProcessor;
 
-import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.DungeonInstance;
 import net.emsee.thedungeon.utils.WeightedMap;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
@@ -75,19 +74,24 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
 
         if (level instanceof ServerLevel serverLevel) {
 
+
+
             BlockPos worldPos = relativeBlockInfo.pos();
             Block currentBlock = relativeBlockInfo.state().getBlock();
-            Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = getReplacements();
 
-            if (!replacements.containsKey(currentBlock)) {
+            if (hasNoReplacementFor(currentBlock)) return relativeBlockInfo;
+
+            Map<Block, WeightedMap.Int<ReplaceInstance>> replacements = getReplacements(level, offset, pos, blockInfo, relativeBlockInfo, settings, template);
+
+            if (!replacements.containsKey(currentBlock) || replacements.get(currentBlock) == null || replacements.get(currentBlock).isEmpty()) {
                 return relativeBlockInfo;
             }
 
             int gridSize = getGridSize();
             // Calculate cluster grid coordinates (world-based, not chunk-based)
             int gridX = Math.floorDiv(worldPos.getX(), gridSize);
+            int gridY = Math.floorDiv(worldPos.getY(), gridSize);
             int gridZ = Math.floorDiv(worldPos.getZ(), gridSize);
-            int gridY = Math.floorDiv(worldPos.getY(), gridSize); // Use same grid for Y
 
             // Unique seed for cluster center (shared across all blocks in this grid cell)
             long centerSeed = calculateCenterSeed(getSeed(serverLevel.getServer()), gridX, gridY, gridZ);
@@ -121,20 +125,11 @@ public abstract class OrganicClusterProcessor extends AbstractReplacementProcess
 
         Block currentBlock = relativeBlockInfo.state().getBlock();
         RandomSource random = RandomSource.create(seed);
-        WeightedMap.Int<ReplaceInstance> allOptions = replacements.get(currentBlock);
+        WeightedMap.Int<ReplaceInstance> options = replacements.get(currentBlock);
 
-        if (allOptions == null || allOptions.isEmpty()) return relativeBlockInfo;
+        if (options==null || options.isEmpty() || options.totalWeight() <= 0) return relativeBlockInfo;
 
-        final WeightedMap.Int<Supplier<BlockState>> options = new WeightedMap.Int<>();
-
-        allOptions.forEach((instance, weight) -> {
-            if (instance.test(level, offset, pos, blockInfo ,relativeBlockInfo, settings, template))
-                options.put(instance.stateSupplier, weight);
-        });
-
-        if (options.isEmpty()) return relativeBlockInfo;
-
-        Supplier<BlockState> newStateSupplier = options.getRandom(random);
+        Supplier<BlockState> newStateSupplier = options.getRandom(random).stateSupplier;
         if (newStateSupplier == null) return relativeBlockInfo;
 
         BlockState newBlockState = newStateSupplier.get();

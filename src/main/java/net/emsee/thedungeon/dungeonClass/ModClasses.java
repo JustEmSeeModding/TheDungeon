@@ -49,4 +49,16 @@ public class ModClasses {
         }
         return toReturn;
     }
+
+    public static void setClassForPlayer(Player player, DeferredHolder<DungeonClass, ?> toSet) {
+        DungeonClass oldClass = getClassForPlayer(player);
+        oldClass.onRemoveClass();
+        player.setData(ModAttachmentTypes.PLAYER_CLASS, toSet.getId().getPath());
+        DungeonClass newClass = toSet.get();
+        newClass.onRemoveClass();
+    }
+
+    public static void removeClassForPlayer(Player player) {
+        setClassForPlayer(player, CLASSLESS);
+    }
 }

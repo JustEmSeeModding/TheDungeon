@@ -2,6 +2,8 @@ package net.emsee.thedungeon.item;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleBlockGroup;
+import net.emsee.thedungeon.simpleRegisterGroup.SimpleItemGroup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,66 +26,78 @@ public final class ModCreativeModeTabs {
                         output.accept(ModItems.DUNGEON_DEBUG_TOOL);//TODO comment out at release
                         output.accept(ModItems.DUNGEON_CLOCK);
                         output.accept(ModItems.PYRITE_COMPASS);
+                        output.accept(ModItems.SOUL_BOUND_TOTEM);
+                        output.accept(ModItems.LUMINOUS_GOGGLES);
                         output.accept(ModItems.TEST_DUMMY);
                         output.accept(ModItems.INFUSED_DAGGER);
                         output.accept(ModItems.INFUSED_CHISEL);
-                        output.accept(ModItems.GOBLINS_DAGGER);
+                        output.accept(ModItems.KOBALT_DAGGER);
                         output.accept(ModItems.GOBLINS_FORGEHAMMER);
                         output.accept(ModItems.KOBALT_SHIELD);
-                        output.accept(ModItems.INFUSED_ALLOY_HELMET);
-                        output.accept(ModItems.INFUSED_ALLOY_CHESTPLATE);
-                        output.accept(ModItems.INFUSED_ALLOY_LEGGINGS);
-                        output.accept(ModItems.INFUSED_ALLOY_BOOTS);
-                        output.accept(ModItems.SCHOLAR_HELMET);
-                        output.accept(ModItems.SCHOLAR_CHESTPLATE);
-                        output.accept(ModItems.SCHOLAR_LEGGINGS);
-                        output.accept(ModItems.SCHOLAR_BOOTS);
-                        output.accept(ModItems.KOBALT_HELMET);
-                        output.accept(ModItems.KOBALT_CHESTPLATE);
-                        output.accept(ModItems.KOBALT_LEGGINGS);
-                        output.accept(ModItems.KOBALT_BOOTS);
+                        acceptItemGroup(output, ModItems.INFUSED_ARMOR_SET);
+                        acceptItemGroup(output, ModItems.SCHOLAR_ARMOR_SET);
+                        acceptItemGroup(output, ModItems.ARCTIC_IRONCLAD_ARMOR_SET);
+                        acceptItemGroup(output, ModItems.KOBALT_ARMOR_SET);
                     }).build());
 
+
     public static final Supplier<CreativeModeTab> DUNGEON_INGREDIENTS_TAB = CREATIVE_MODE_TAB.register("dungeon_ingredients_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.PORTAL_CORE.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.CATALYST_CORE.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_tools_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_ingredients"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModItems.PORTAL_CORE);
-                        output.accept(ModItems.SHATTERED_PORTAL_CORE);
+                        output.accept(ModItems.CATALYST_CORE);
+                        output.accept(ModItems.SHATTERED_CATALYST_CORE);
                         output.accept(ModItems.DUNGEON_ESSENCE_SHARD);
                         output.accept(ModBlocks.INFUSED_THREAD);
                         output.accept(ModItems.INFUSED_ALLOY_INGOT);
-                        output.accept(ModItems.RAW_KOBALT);
-                        output.accept(ModItems.KOBALT_INGOT);
+                        output.accept(ModItems.INFUSED_WHEAT);
                         output.accept(ModItems.PYRITE);
+                        output.accept(ModItems.PYRITE_COIN);
+                        acceptItemGroup(output, ModItems.GILDREAN);
+                        acceptItemGroup(output, ModItems.INFERNAL_TIN);
+                        acceptItemGroup(output, ModItems.ARCTIC_IRON);
+                        acceptItemGroup(output, ModItems.LAVINTINE);
+                        acceptItemGroup(output, ModItems.KOBALT);
+                        output.accept(ModItems.ROSELITH_CRYSTAL);
+                        output.accept(ModItems.GARNETORE_PIECE);
+                        output.accept(ModItems.VERDANTITE_CHUNK);
+                        output.accept(ModItems.LUMANITE_FRAGMENT);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_FOOD_TAB = CREATIVE_MODE_TAB.register("dungeon_food_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.GOBLIN_MEAT.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModItems.GILDREAN_APPLE.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_ingredients_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_food"))
                     .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModItems.INFUSED_BREAD);
                         output.accept(ModItems.GOBLIN_MEAT);
+                        output.accept(ModItems.GILDREAN_APPLE);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_BLOCKS_TAB = CREATIVE_MODE_TAB.register("dungeon_blocks_tab",
-            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.DUNGEON_PORTAL_F.get()))
+            () -> CreativeModeTab.builder().icon(()-> new ItemStack(ModBlocks.PYRITE_BLOCKS.BLOCK.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(TheDungeon.MOD_ID, "dungeon_food_tab"))
                     .title(Component.translatable("creativetab.thedungeon.dungeon_blocks"))
                     .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModBlocks.DUNGEON_PORTAL_F);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_E);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_D);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_C);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_B);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_A);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_S);
-                        //output.accept(ModBlocks.DUNGEON_PORTAL_SS);
-                        output.accept(ModBlocks.DUNGEON_PORTAL_EXIT); //TODO comment out at release
-                        output.accept(ModBlocks.DUNGEON_PORTAL_UNSTABLE);
-                        output.accept(ModBlocks.PYRITE_ORE);
-                        output.accept(ModBlocks.DEEPSLATE_PYRITE_ORE);
+                        output.accept(ModBlocks.DUNGEON_PORTAL);
+                        output.accept(ModBlocks.CATALYST_BROKEN);
+                        output.accept(ModBlocks.CATALYST_F);
+                        output.accept(ModBlocks.CATALYST_E);
+                        //output.accept(ModBlocks.CATALYST_D);
+                        //output.accept(ModBlocks.CATALYST_C);
+                        //output.accept(ModBlocks.CATALYST_B);
+                        //output.accept(ModBlocks.CATALYST_A);
+                        //output.accept(ModBlocks.CATALYST_S);
+                        //output.accept(ModBlocks.CATALYST_SS);
+                        output.accept(ModBlocks.GOBLIN_FORGE);
+                        acceptBlockGroup(output,ModBlocks.PYRITE_BLOCKS);
+                        acceptBlockGroup(output,ModBlocks.GILDREAN);
+                        output.accept(ModBlocks.INGILDERD_BLACKSTONE);
+                        acceptBlockGroup(output,ModBlocks.INFERNAL_TIN);
+                        acceptBlockGroup(output,ModBlocks.ARCTIC_IRON);
+                        acceptBlockGroup(output,ModBlocks.LAVINTINE);
+                        output.accept(ModBlocks.KOBALT_BLOCK);
                         output.accept(ModBlocks.INFUSED_GRASS_BLOCK);
                         output.accept(ModBlocks.INFUSED_DIRT);
                         output.accept(ModBlocks.INFUSED_CLAY);
@@ -98,12 +112,10 @@ public final class ModCreativeModeTabs {
                         output.accept(ModBlocks.INFUSED_END_STONE);
                         output.accept(ModBlocks.INFUSED_END_STONE_BRICKS);
                         output.accept(ModBlocks.INFUSED_GLASS);
-                        output.accept(ModBlocks.ROSE_QUARTZ_BLOCK);
-                        output.accept(ModBlocks.BUDDING_ROSE_QUARTZ);
-                        output.accept(ModBlocks.SMALL_ROSE_QUARTZ_BUD);
-                        output.accept(ModBlocks.MEDIUM_ROSE_QUARTZ_BUD);
-                        output.accept(ModBlocks.LARGE_ROSE_QUARTZ_BUD);
-                        output.accept(ModBlocks.ROSE_QUARTZ_CLUSTER);
+                        acceptBlockGroup(output,ModBlocks.ROSELITH_CRYSTAL_GROUP);
+                        acceptBlockGroup(output,ModBlocks.GARNETORE_CRYSTAL_GROUP);
+                        acceptBlockGroup(output,ModBlocks.VERDANTITE_CRYSTAL_GROUP);
+                        acceptBlockGroup(output,ModBlocks.LUMANITE_CRYSTAL_GROUP);
                     }).build());
 
     public static final Supplier<CreativeModeTab> DUNGEON_SPAWN_EGGS_TAB = CREATIVE_MODE_TAB.register("dungeon_spawn_eggs_tab",
@@ -116,7 +128,17 @@ public final class ModCreativeModeTabs {
                         output.accept(ModSpawnEggs.CAVE_GOBLIN_SPAWN_EGG);
                         output.accept(ModSpawnEggs.SHADOW_GOBLIN_SPAWN_EGG);
                         output.accept(ModSpawnEggs.HOB_GOBLIN_SPAWN_EGG);
+                        output.accept(ModSpawnEggs.CRYSTAL_GOLEM_SPAWN_EGG);
+                        output.accept(ModSpawnEggs.LUMINOUS_CRAWLER_SPAWN_EGG);
                     }).build());
+
+    private static void acceptItemGroup(CreativeModeTab.Output output, SimpleItemGroup group) {
+        group.getAllAsItem().forEach(output::accept);
+    }
+
+    private static void acceptBlockGroup(CreativeModeTab.Output output, SimpleBlockGroup group) {
+        group.getAllAsBlock().forEach(output::accept);
+    }
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TAB.register(eventBus);

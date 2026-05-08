@@ -11,10 +11,8 @@ import net.emsee.thedungeon.dungeon.src.types.Dungeon;
 import net.emsee.thedungeon.dungeon.src.types.grid.GridDungeon;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
@@ -32,7 +30,7 @@ public class ModDungeons {
     public static final DeferredRegister<Dungeon<?,?>> DUNGEONS =
             DeferredRegister.create(DUNGEON_REGISTRY,TheDungeon.MOD_ID);
 
-    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> TEST = register("test", ()-> new GridDungeon(
+    public static final Supplier<GridDungeon> TEST = register("test", ()-> new GridDungeon(
             "dungeon.the_dungeon.test",
             DungeonRank.F,
             0,
@@ -44,7 +42,7 @@ public class ModDungeons {
     );
 
 
-    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> THE_LIBRARY = register("library", ()->new GridDungeon(
+    public static final Supplier<GridDungeon> THE_LIBRARY = register("library", ()->new GridDungeon(
             "dungeon.the_dungeon.library",
             DungeonRank.SS,
             0 /* disabled for now as this will not be in first release*/,
@@ -56,9 +54,9 @@ public class ModDungeons {
             .setMaxFloorHeight(3)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> CASTLE = register("castle", ()->new GridDungeon(
+    public static final Supplier<GridDungeon> CASTLE = register("castle", ()->new GridDungeon(
             "dungeon.the_dungeon.castle",
-            DungeonRank.D,
+            DungeonRank.E,
             1,
             9,
             9,
@@ -68,19 +66,20 @@ public class ModDungeons {
             .setMaxFloorHeight(7)
             .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
 
-    public static final DeferredHolder<Dungeon<?,?>, GridDungeon> GOBLIN_CAVES = register("goblin_caves", ()->new GridDungeon(
+    public static final Supplier<GridDungeon> GOBLIN_CAVES = register("goblin_caves", ()->new GridDungeon(
             "dungeon.the_dungeon.goblin_caves",
             DungeonRank.F,
             1,
             11,
             11,
             new GoblinCavesGridRoomCollection())
-            .setDepth(30)
-            .setRoomEndChance(.01f)
+            .setDepth(22)
+            .setRoomEndChance(.005f)
             .setMaxFloorHeight(11)
-            .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM));
+            .setRoomPickMethod(GridDungeon.RoomGenerationPickMethod.RANDOM)
+            .setStepIntervalBetweenForcesRequirementTries(25));
 
-    protected static <T extends Dungeon<?,?>> DeferredHolder<Dungeon<?,?>, T> register(String name, Supplier<T> dungeon) {
+    protected static <T extends Dungeon<?,?>> Supplier<T> register(String name, Supplier<T> dungeon) {
         DebugLog.logInfo(DebugLog.DebugType.INSTANCE_SETUP, "Registering Dungeon :{}", name);
         return DUNGEONS.register(name, dungeon);
     }

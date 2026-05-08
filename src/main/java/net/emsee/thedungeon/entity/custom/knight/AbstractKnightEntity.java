@@ -1,14 +1,15 @@
 package net.emsee.thedungeon.entity.custom.knight;
 
 import net.emsee.thedungeon.entity.ai.DungeonTargetSelectorGoal;
-import net.emsee.thedungeon.entity.ai.MultiAnimatedAttackGoal;
-import net.emsee.thedungeon.entity.ai.RunToTargetGoal;
+import net.emsee.thedungeon.entity.ai.DungeonWalkToTargetGoal;
+import net.emsee.thedungeon.entity.ai.DungeonRunToTargetGoal;
+import net.emsee.thedungeon.entity.attack.AbstractAttackPattern;
+import net.emsee.thedungeon.entity.attack.SimpleMeleeAttackDamageAttributeMultiplier;
+import net.emsee.thedungeon.entity.brain.DungeonMobAttackBrain;
+import net.emsee.thedungeon.entity.client.animation.AnimationController;
+import net.emsee.thedungeon.entity.custom.abstracts.DungeonAnimatedMob;
 import net.emsee.thedungeon.entity.custom.abstracts.DungeonPathfinderMob;
-import net.emsee.thedungeon.entity.custom.interfaces.IBasicAnimatedEntity;
-import net.emsee.thedungeon.entity.custom.interfaces.IMultiAttackAnimatedEntity;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -21,50 +22,52 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractKnightEntity extends DungeonPathfinderMob implements IMultiAttackAnimatedEntity {
-    protected static final EntityDataAccessor<Boolean> RUNNING =
-            SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<Integer> ATTACK_ANIMATION_ID =
-            SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Byte> ATTACK_ANIMATION_VERSION =
-            SynchedEntityData.defineId(AbstractKnightEntity.class, EntityDataSerializers.BYTE);
+public abstract class AbstractKnightEntity extends DungeonAnimatedMob{
+    public final AnimationController animationController = new AnimationController()
+            .withIdleAnimation(59)
+            .withAttackAnimation(0,20) // slash
+            .withAttackAnimation(1,10); // quick slash
+    protected final DungeonMobAttackBrain<AbstractKnightEntity> brain = new DungeonMobAttackBrain<>(this);
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    protected int idleAnimationTimeout = 0;
-    public final AnimationState basicAttackAnimationState = new AnimationState();
-    public final AnimationState quickAttackAnimationState = new AnimationState();
-    public int attackAnimationTimeout = 0;
-    protected int animationNetworkVersion = -1;
 
 
     public AbstractKnightEntity(EntityType<? extends DungeonPathfinderMob> entityType, Level level) {
         super(entityType, level);
+        setupBrain();
+    }
+
+    protected  void setupBrain() {
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                1,
+                0,
+                20,
+                40,
+                15,
+                AbstractAttackPattern.AttackHand.MAIN));
+        brain.addAttack(new SimpleMeleeAttackDamageAttributeMultiplier<>(
+                this,
+                1,
+                1,
+                10,
+                30,
+                7,
+                AbstractAttackPattern.AttackHand.OFF));
     }
 
     @Override
-    protected void registerGoals() {
+    protected void addBehaviourGoals() {
+        this.goalSelector.addGoal(0, new DungeonRunToTargetGoal(this,1.2f,10, 3.5f, true));
+        this.goalSelector.addGoal(1, new DungeonWalkToTargetGoal(this,1f,1, 0, true));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        this.addBehaviourGoals();
-        this.addTargetGoals();
-        this.setupAttackGoal();
     }
 
-    protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(0, new RunToTargetGoal(this,1.2f,10, 3.5f, true));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
-    }
-
+    @Override
     protected void addTargetGoals() {
         this.targetSelector.addGoal(1, new DungeonTargetSelectorGoal(this, true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-    }
-
-    protected void setupAttackGoal() {
-        this.goalSelector.addGoal(1, new MultiAnimatedAttackGoal<>(this, 1.2, true)
-                .withAttack(0,15,5,h -> h, 1)
-                .withAttack(1,7,3,h-> h.withDamageMultiplier(.5f).withKnockbackMultiplier(.25f).withReachMultiplier(.9f),1)
-        );
     }
 
     @Override
@@ -78,87 +81,26 @@ public abstract class AbstractKnightEntity extends DungeonPathfinderMob implemen
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
-    protected void setupAnimations() {
-        if (this.idleAnimationTimeout<=0) {
-            this.idleAnimationTimeout = 59;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
-        if(this.isAttacking() && getAnimationID()>-1 && this.attackAnimationTimeout <=0 && animationNetworkVersion!= getAnimationVersion()){
-            switch (getAnimationID()) {
-                case 0: {
-                    this.attackAnimationTimeout = 19;
-                    this.basicAttackAnimationState.start(this.tickCount);
-                    break;
-                }
-                case 1: {
-                    this.attackAnimationTimeout = 9;
-                    this.quickAttackAnimationState.start(this.tickCount);
-                    break;
-                }
-            }
-            animationNetworkVersion = getAnimationVersion();
-        } else {
-            --this.attackAnimationTimeout;
-        }
-    }
-
     @Override
     public void tick() {
         super.tick();
-        if (this.level().isClientSide) {
-            this.setupAnimations();
+
+        if (level().isClientSide) {
+            animationController.tick(this);
+        } else {
+            brain.tick();
         }
     }
 
     @Override
-    public boolean isPlayingAttackAnimation() {
-        return attackAnimationTimeout >0;
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.put("CustomBrain", brain.toSaveTag());
     }
 
     @Override
-    public void startRunning() {
-        this.entityData.set(RUNNING, true);
-    }
-
-    @Override
-    public void stopRunning() {
-        this.entityData.set(RUNNING, false);
-    }
-
-    protected final void setAnimationID(int id, byte version) {
-        this.entityData.set(ATTACK_ANIMATION_ID, id);
-        this.entityData.set(ATTACK_ANIMATION_VERSION, version);
-    }
-
-    protected final int getAnimationID() {
-        return this.entityData.get(ATTACK_ANIMATION_ID);
-    }
-    protected final int getAnimationVersion() {
-        return this.entityData.get(ATTACK_ANIMATION_VERSION);
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(RUNNING, false);
-        builder.define(ATTACK_ANIMATION_ID, -1);
-        builder.define(ATTACK_ANIMATION_VERSION, (byte)-1);
-    }
-
-    @Override
-    public boolean isRunning() {
-        return this.entityData.get(RUNNING);
-    }
-
-    @Override
-    public void attackAnimation(int id, byte version) {
-        setAnimationID(id, version);
-    }
-
-    @Override
-    public boolean isAttacking() {
-        return getAnimationID() >-1;
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        brain.fromSaveTag(tag.getCompound("CustomBrain"));
     }
 }

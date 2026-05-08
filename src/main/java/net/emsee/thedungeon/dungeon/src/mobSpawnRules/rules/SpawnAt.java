@@ -8,7 +8,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.block.Rotation;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class SpawnAt<T extends Entity> extends MobSpawnRule {
@@ -36,16 +40,23 @@ public class SpawnAt<T extends Entity> extends MobSpawnRule {
 
 
     @Override
-    public void spawn(ServerLevel level, GeneratedRoom room) {
+    public List<UUID> spawn(ServerLevel level, BlockPos roomCenter, BlockPos minCorner, BlockPos maxCorner, Rotation roomRotation) {
+        List<UUID> uuids = new ArrayList<>();
         RandomSource random = level.random;
-        if (chance == 1 || chance > random.nextFloat()) {
+        if (tryChance(random)) {
             int tempCount = count;
             while (tempCount > 0) {
-                Entity spawned = entity.get().spawn(level, room.getPlacedWorldPos().offset(pos.rotate(room.getPlacedWorldRotation())), MobSpawnType.STRUCTURE);
-                if (spawned==null) return;
-                spawned.setYRot(spawnRotation+spawned.rotate(room.getPlacedWorldRotation()));
+                Entity spawned = entity.get().spawn(level, roomCenter.offset(pos.rotate(roomRotation)), MobSpawnType.STRUCTURE);
+                if (spawned==null) return uuids;
+                spawned.setYRot(spawnRotation+spawned.rotate(roomRotation));
+                uuids.add(spawned.getUUID());
                 tempCount--;
             }
         }
+        return uuids;
+    }
+
+    protected boolean tryChance(RandomSource random) {
+        return chance >= 1f || random.nextFloat() < chance;
     }
 }

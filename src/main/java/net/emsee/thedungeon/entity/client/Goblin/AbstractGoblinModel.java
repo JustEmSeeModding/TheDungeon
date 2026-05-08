@@ -29,6 +29,7 @@ public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends Hierarc
         this.lower_right_arm = right_arm.getChild("lower_right_arm");
     }
 
+
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -48,7 +49,7 @@ public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends Hierarc
 
         PartDefinition left_ear2 = head.addOrReplaceChild("left_ear2", CubeListBuilder.create().texOffs(24, 10).addBox(3.0F, 1.0F, -3.0F, 0.0F, 5.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, -10.0F, 0.0F));
 
-        PartDefinition left_arm = body.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(30, 24).mirror().addBox(-0.5F, -2.0F, -1.5F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
+        PartDefinition left_arm = body.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(30, 24).addBox(-0.5F, -2.0F, -1.5F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(18, 40).mirror().addBox(-0.5F, -2.0F, -1.5F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offset(3.5F, -7.5F, 0.0F));
 
         PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(30, 32).mirror().addBox(-1.5F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
@@ -59,6 +60,11 @@ public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends Hierarc
 
         PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(18, 32).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(30, 48).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.1F)), PartPose.offset(-1.0F, 3.0F, 0.0F));
+
+        PartDefinition Back = body.addOrReplaceChild("Back", CubeListBuilder.create().texOffs(0, 48).addBox(-3.0F, -9.0F, 1.65F, 6.0F, 7.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 57).addBox(-3.0F, -9.0F, 1.65F, 6.0F, 7.0F, 2.0F, new CubeDeformation(0.1F))
+                .texOffs(0, 66).addBox(-4.0F, -9.0F, 1.65F, 8.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 78).addBox(-4.0F, -9.0F, 1.65F, 8.0F, 8.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition left_leg = base.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(42, 24).mirror().addBox(-1.5F, 0.0F, -1.5F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(42, 52).mirror().addBox(-1.5F, 0.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.3F)).mirror(false)
@@ -78,15 +84,17 @@ public class AbstractGoblinModel<T extends AbstractGoblinEntity> extends Hierarc
     }
 
     @Override
-    public void setupAnim(AbstractGoblinEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.base.getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(netHeadYaw, headPitch);
 
         this.applyStatic(GoblinAnimations.ANIM_GOBLIN_POSE);
         this.animateWalk(entity.isRunning()? GoblinAnimations.ANIM_GOBLIN_RUN:GoblinAnimations.ANIM_GOBLIN_WALK, limbSwing, limbSwingAmount, 4f, 2.5f);
-        this.animate(entity.idleAnimationState, GoblinAnimations.ANIM_GOBLIN_IDLE, ageInTicks, 1);
-        this.animate(entity.basicAttackAnimationStateRight, GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_RIGHT, ageInTicks, 1);
-        this.animate(entity.basicAttackAnimationStateLeft, GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
+        this.animate(entity.animationController.idleAnimationState, GoblinAnimations.ANIM_GOBLIN_IDLE, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(0).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_RIGHT, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(1).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(2).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_RIGHT, ageInTicks, 1);
+        this.animate(entity.animationController.attackAnimationStates.get(2).state(), GoblinAnimations.ANIM_GOBLIN_BASIC_ATTACK_LEFT, ageInTicks, 1);
     }
 
     private void applyHeadRotation(float headYaw, float headPitch) {

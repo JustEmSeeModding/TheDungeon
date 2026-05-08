@@ -26,9 +26,9 @@ import java.util.List;
 
 public class DungeonCurio extends DungeonItem implements IDungeonToolTips, ICurioItem, IClassedItem
 {
-    private final DungeonItemRank rank;
-    private final DeferredHolder<DungeonClass,?>[] classes;
-    private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
+    protected final DungeonItemRank rank;
+    protected final DeferredHolder<DungeonClass,?>[] classes;
+    protected final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
     public DungeonCurio(Properties properties, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses) {
         super(properties.stacksTo(1));
@@ -38,23 +38,19 @@ public class DungeonCurio extends DungeonItem implements IDungeonToolTips, ICuri
     }
 
     @Override
-    public List<Component> getSlotsTooltip(List<Component> tooltips, Item.TooltipContext context, ItemStack stack) {
+    public final List<Component> getSlotsTooltip(List<Component> tooltips, Item.TooltipContext context, ItemStack stack) {
+        return new ArrayList<>();
+    }
+    @Override
+    public final List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         return new ArrayList<>();
     }
 
     @Override
-    public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public final Multimap<Holder<Attribute>, AttributeModifier>  getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
-         return getAttributeModifiers(stack);
-    }
-
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier>  getAttributeModifiers(SlotContext slotContext, ResourceLocation resourceLocation, ItemStack stack) {
         return LinkedHashMultimap.create();
     }
+
 
     @Override
     public LinkedHashMap<Component, Component[]> getPrefixComponents(ItemStack stack) {

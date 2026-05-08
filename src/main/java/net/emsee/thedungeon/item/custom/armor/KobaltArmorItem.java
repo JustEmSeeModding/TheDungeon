@@ -2,20 +2,17 @@ package net.emsee.thedungeon.item.custom.armor;
 
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.attribute.ModAttributes;
-import net.emsee.thedungeon.dungeonClass.DungeonClass;
-import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
+import net.emsee.thedungeon.dungeonClass.ModSubClasses;
 import net.emsee.thedungeon.item.DungeonItemRank;
-import net.emsee.thedungeon.item.custom.DungeonArmorItem;
+import net.emsee.thedungeon.item.ModArmorMaterials;
 import net.emsee.thedungeon.mobEffect.ModMobEffects;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -24,11 +21,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import java.util.LinkedHashMap;
 
 public class KobaltArmorItem extends DungeonArmorItem {
-    private final double aggroBoost = -5;
+    private static final double aggroBoost = -5;
 
 
-    public KobaltArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
-        super(material, type, properties, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{});
+    public KobaltArmorItem(Type type, Properties properties) {
+        super(ModArmorMaterials.KOBALT, type, properties, DungeonItemRank.F, new DeferredHolder[]{}, new DeferredHolder[]{});
     }
 
     @Override
@@ -54,6 +51,6 @@ public class KobaltArmorItem extends DungeonArmorItem {
 
     @Override
     protected void onFullSetTick(LivingEntity entity) {
-        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 100, 1, true, false));
+        entity.addEffect(new MobEffectInstance(ModMobEffects.HOB_GOBLIN_TRADEABLE, 100, 0, true, false));
     }
 }

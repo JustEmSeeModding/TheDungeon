@@ -4,7 +4,7 @@ import net.emsee.thedungeon.dungeonClass.DungeonClass;
 import net.emsee.thedungeon.dungeonClass.DungeonSubClass;
 import net.emsee.thedungeon.item.DungeonItemRank;
 import net.emsee.thedungeon.item.interfaces.IClassedItem;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.emsee.thedungeon.item.interfaces.IDungeonToolTips;
 import net.emsee.thedungeon.item.interfaces.IDungeonWeapon;
 import net.minecraft.ChatFormatting;
@@ -33,7 +33,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, IDungeonToolTips, IDungeonWeapon, IClassedItem {
+public class DungeonWeaponItem extends SwordItem implements ICanTakeItemToDungeon, IDungeonToolTips, IDungeonWeapon, IClassedItem {
     private static final float TWO_HAND_OCCUPIED_DAMAGE_REDUCTION_MULTIPLIER = -.30f;
     private static final float TWO_HAND_OCCUPIED_SPEED_REDUCTION_MULTIPLIER = -.35f;
 
@@ -41,14 +41,14 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     public static final ResourceLocation WEAPON_TYPE_CHANGE_ATTACK_DAMAGE_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_damage");
     public static final ResourceLocation  WEAPON_TYPE_CHANGE_ATTACK_SPEED_ID = ResourceLocation.withDefaultNamespace("weapon_type_attack_speed");
 
-    private final WeaponType weaponType;
-    private final boolean isSweeping;
-    private final DungeonItemRank rank;
-    private final DeferredHolder<DungeonClass,?>[] classes;
-    private final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
+    protected final WeaponType weaponType;
+    protected final boolean isSweeping;
+    protected final DungeonItemRank rank;
+    protected final DeferredHolder<DungeonClass,?>[] classes;
+    protected final DeferredHolder<DungeonSubClass<?>,?>[] subClasses;
 
     public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Properties properties) {
-        super(tier, properties.rarity(Rarity.RARE), createToolProperties());
+        super(tier, properties.rarity(ICanTakeItemToDungeon.DUNGEON_ITEM_RARITY), createToolProperties());
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
         this.rank = rank;
@@ -57,7 +57,7 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
     }
 
     public DungeonWeaponItem(WeaponType weaponType, boolean isSweeping, Tier tier, DungeonItemRank rank, DeferredHolder<DungeonClass,?>[] classes, DeferredHolder<DungeonSubClass<?>,?>[] subClasses, Item.Properties properties, Tool toolComponentData) {
-        super(tier, properties.rarity(Rarity.RARE), toolComponentData);
+        super(tier, properties.rarity(ICanTakeItemToDungeon.DUNGEON_ITEM_RARITY), toolComponentData);
         this.weaponType = weaponType;
         this.isSweeping = isSweeping;
         this.rank = rank;
@@ -170,12 +170,10 @@ public class DungeonWeaponItem extends SwordItem implements IDungeonCarryItem, I
 
     @Override
     public LinkedHashMap<Component, Component[]> getPrefixComponents(ItemStack stack) {
-        return Util.make(new LinkedHashMap<>(), map -> {
-            map.put(Component.translatable("item.thedungeon.tooltip.weapon_type"),
-                    new Component[]{
-                            weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN)
-                    });
-        });
+        return Util.make(new LinkedHashMap<>(), map -> map.put(Component.translatable("item.thedungeon.tooltip.weapon_type"),
+                new Component[]{
+                        weaponType.getTranslatable().copy().withStyle(ChatFormatting.GREEN)
+                }));
     }
 
     @Override

@@ -5,8 +5,9 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringRepresentable;
 
-public enum DungeonRank {
+public enum DungeonRank implements StringRepresentable {
     F(new BlockPos(0, 150, 0)),
     E(new BlockPos(3000, 150, 3000)),
     D(new BlockPos(-3000, 150, 3000)),
@@ -78,4 +79,9 @@ public enum DungeonRank {
             return ops.createString(value.getName());
         }
     };
+
+    @Override
+    public String getSerializedName() {
+        return getName().toLowerCase();
+    }
 }

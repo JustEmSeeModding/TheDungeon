@@ -2,6 +2,7 @@ package net.emsee.thedungeon.compat.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.registration.*;
 import net.emsee.thedungeon.TheDungeon;
 import net.emsee.thedungeon.block.ModBlocks;
@@ -28,6 +29,7 @@ public final class JEITheDungeonPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new DungeonInWorldInfusionRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new DungeonInfusionRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new GoblinForgeRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -44,11 +46,16 @@ public final class JEITheDungeonPlugin implements IModPlugin {
 
         registration.addRecipes(DungeonInWorldInfusionRecipeCategory.IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE, blockDungeonInfusionRecipes);
         registration.addRecipes(DungeonInfusionRecipeCategory.DUNGEON_INFUSION_RECIPE_RECIPE_TYPE, dungeonInfusionRecipes);
+
+        registration.addRecipes(GoblinForgeRecipeCategory.GOBLIN_FORGE_RECIPE_TYPE, new ArrayList<>(recipeManager
+                .getAllRecipesFor(ModRecipes.GOBLIN_FORGE_TYPE.get()).stream().map(RecipeHolder::value).toList()));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(ModBlocks.DUNGEON_PORTAL_UNSTABLE, DungeonInWorldInfusionRecipeCategory.IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE);
+        registration.addRecipeCatalyst(ModBlocks.DUNGEON_PORTAL, DungeonInWorldInfusionRecipeCategory.IN_WORLD_DUNGEON_INFUSION_RECIPE_RECIPE_TYPE);
         registration.addRecipeCatalyst(Blocks.DIRT, DungeonInfusionRecipeCategory.DUNGEON_INFUSION_RECIPE_RECIPE_TYPE);
+        registration.addRecipeCatalyst(ModBlocks.GOBLIN_FORGE, GoblinForgeRecipeCategory.GOBLIN_FORGE_RECIPE_TYPE);
+        registration.addRecipeCatalyst(ModBlocks.GOBLIN_FORGE, RecipeTypes.FUELING);
     }
 }

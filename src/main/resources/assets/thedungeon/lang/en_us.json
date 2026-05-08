@@ -1,4 +1,7 @@
 {
+  "curios.identifier.effigy" : "Effigy",
+  "curios.identifier.trinket" : "Trinket",
+
   "thedungeon.configuration.dungeon_auto_cycling": "Dungeon Auto Cycle",
   "thedungeon.configuration.calculator_steps_per_tick": "Steps Per Tick Calculator",
   "thedungeon.configuration.placer_steps_per_tick": "Steps Per Tick Placer",
@@ -28,6 +31,7 @@
 
   "jei.thedungeon.infusion_in_world_recipe_title" : "In World Infusion",
   "jei.thedungeon.infusion_recipe_title" : "Infusion",
+  "jei.thedungeon.goblin_forge_title": "Goblin's Alloy Forge",
 
   "advancements.thedungeon.root.title" : "The Dungeon",
   "advancements.thedungeon.root.description" : "All things dungeneering",
@@ -37,6 +41,8 @@
   "advancements.thedungeon.infused_alloy.description" : "A strong metal but quite heavy",
   "advancements.thedungeon.failed_portal_travel.title" : "YOU SHALL NOT PASS!",
   "advancements.thedungeon.failed_portal_travel.description" : "Only the Attuned may pass. The dungeon devours all else.",
+  "advancements.thedungeon.enter_rank_f.title" : "To The Caves",
+  "advancements.thedungeon.enter_rank_f.description" : "Enter the first dungeon, the goblin caves.",
 
   "creativetab.thedungeon.dungeon_tools" : "Dungeon Tools And Armor",
   "creativetab.thedungeon.dungeon_ingredients" : "Dungeon Ingredients",
@@ -59,31 +65,12 @@
   "entity.thedungeon.hob_goblin.fighter" : "Hob Goblin Fighter",
   "entity.thedungeon.hob_goblin.forge_worker" : "Hob Goblin Forge Worker",
   "entity.thedungeon.hob_goblin.scavenger" : "Hob Goblin Scavenger",
+  "entity.thedungeon.hob_goblin.miner" : "Hob Goblin Miner",
+  "entity.thedungeon.hob_goblin.totem_maker" : "Hob Goblin Totem Maker",
+  "entity.thedungeon.crystal_golem" : "Crystal Golem",
+  "entity.thedungeon.luminous_crawler" : "Luminous Crawler",
 
   "entity.minecraft.villager.thedungeon.dungeon_scholar" : "Dungeon Scholar",
-
-  "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
-  "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
-  "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
-  "item.thedungeon.shadow_goblin_spawn_egg" :"Shadow Goblin Spawn Egg",
-  "item.thedungeon.hob_goblin_spawn_egg" :"Hob Goblin Spawn Egg",
-
-  "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
-
-  "item.thedungeon.tooltip.full_set_bonus": "Full Set Bonus:",
-  "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
-  "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
-  "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
-  "item.thedungeon.tooltip.tool_type" : "Tool Type:",
-  "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
-  "item.thedungeon.tooltip.curio_type": "Curio Slot:",
-  "item.thedungeon.tooltip.curio_type.any": "Any",
-  "item.thedungeon.tooltip.curio_type.effigy": "Effigy",
-  "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
-
-  "item.thedungeon.tooltip.classes": "Viable Classes",
-  "item.thedungeon.tooltip.rank": "Rank",
-  "item.thedungeon.tooltip.classes.anyclass": "Any Class",
 
   "thedungeon.itemrank.f" : "F",
   "thedungeon.itemrank.e" : "E",
@@ -94,11 +81,42 @@
   "thedungeon.itemrank.s" : "S",
   "thedungeon.itemrank.ss" : "SS",
 
+  "item.thedungeon.death_knight_spawn_egg" :"Death Knight Spawn Egg",
+  "item.thedungeon.skeleton_knight_spawn_egg" :"Skeleton Knight Spawn Egg",
+  "item.thedungeon.cave_goblin_spawn_egg" :"Cave Goblin Spawn Egg",
+  "item.thedungeon.shadow_goblin_spawn_egg" :"Shadow Goblin Spawn Egg",
+  "item.thedungeon.hob_goblin_spawn_egg" :"Hob Goblin Spawn Egg",
+  "item.thedungeon.crystal_golem_spawn_egg" :"Crystal Golem Spawn Egg",
+  "item.thedungeon.luminous_crawler_spawn_egg" :"Luminous Crawler Spawn Egg",
+
+  "item.thedungeon.tooltip.dungeon_item": "Dungeon Attuned Item",
+
+  "item.thedungeon.tooltip.full_set_bonus": "Full Set Bonus:",
+  "item.thedungeon.tooltip.weapon_type": "Weapon Type:",
+  "item.thedungeon.tooltip.weapon_type.single_hand": "Single Handed",
+  "item.thedungeon.tooltip.weapon_type.two_hand": "Two Handed",
+  "item.thedungeon.tooltip.tool.mining_level": "Mining Level: %s",
+  "item.thedungeon.tooltip.tool_type" : "Tool Type:",
+  "item.thedungeon.tooltip.tool_type.pickaxe" : "Pickaxe",
+  "item.thedungeon.tooltip.curio_type": "Curio Slot:",
+  "item.thedungeon.tooltip.curio_type.any": "Any",
+  "item.thedungeon.tooltip.curio_type.effigy": "Effigy",
+  "item.thedungeon.tooltip.curio_type.trinket": "Trinket",
+
+  "item.thedungeon.tooltip.soulbound_totem_equipped": "Returns Items When Dying In A Dungeon",
+  "item.thedungeon.tooltip.luminous_goggles_equipped": "Grants Night Vision",
+
+  "item.thedungeon.tooltip.classes": "Viable Classes",
+  "item.thedungeon.tooltip.effigy_classes": "Class",
+  "item.thedungeon.tooltip.rank": "Rank",
+  "item.thedungeon.tooltip.classes.anyclass": "Any Class",
+
   "item.thedungeon.infused_dagger": "Infused Dagger",
   "item.thedungeon.infused_chisel": "Infused Chisel",
-  "item.thedungeon.goblins_dagger": "Goblin's Dagger",
+  "item.thedungeon.kobalt_dagger": "Kobalt Dagger",
   "item.thedungeon.goblins_forgehammer": "Goblin's Forgehammer",
   "item.thedungeon.kobalt_shield": "Kobalt Shield",
+  "item.thedungeon.soul_bound_totem": "Soul Bound Totem",
 
   "item.thedungeon.infused_alloy_helmet": "Infused Alloy Helmet",
   "item.thedungeon.infused_alloy_chestplate": "Infused Alloy Chestplate",
@@ -115,14 +133,42 @@
   "item.thedungeon.kobalt_leggings" : "Kobalt Leggings",
   "item.thedungeon.kobalt_boots" : "Kobalt Boots",
 
-  "item.thedungeon.shattered_portal_core": "Shattered Portal Core",
-  "item.thedungeon.portal_core": "Portal Core",
+  "item.thedungeon.arctic_ironclad_helmet" : "Arctic Ironclad Helmet",
+  "item.thedungeon.arctic_ironclad_chestplate" : "Arctic Ironclad Chestplate",
+  "item.thedungeon.arctic_ironclad_leggings" : "Arctic Ironclad Leggings",
+  "item.thedungeon.arctic_ironclad_boots" : "Arctic Ironclad Boots",
+
+  "item.thedungeon.shattered_catalyst_core": "Shattered Catalyst Core",
+  "item.thedungeon.catalyst_core": "Catalyst Core",
   "item.thedungeon.dungeon_essence_shard": "Shard Of Dungeon Essence",
+
   "item.thedungeon.infused_alloy_ingot": "Infused Alloy Ingot",
   "item.thedungeon.pyrite": "Pyrite",
-  "item.thedungeon.raw_kobalt": "Raw Kobalt",
+  "item.thedungeon.pyrite_coin": "Pyrite Coin",
+  "item.thedungeon.roselith_crystal": "Roselith Crystal",
+  "item.thedungeon.garnetore_piece": "Garnetore Piece",
   "item.thedungeon.kobalt_ingot": "Kobalt Ingot",
+  "item.thedungeon.kobalt_nugget": "Kobalt Nugget",
+  "item.thedungeon.gildrean_ingot": "Gildrean Ingot",
+  "item.thedungeon.gildrean_nugget": "Gildrean Nugget",
+  "item.thedungeon.raw_gildrean": "Raw Gildrean",
+  "item.thedungeon.gildrean_apple": "Gildrean Apple",
   "item.thedungeon.goblin_meat": "Goblin Meat",
+  "item.thedungeon.infused_wheat" : "Infused Wheat",
+  "item.thedungeon.infused_bread": "Infused Bread",
+  "item.thedungeon.verdantite_chunk": "Verdantite Chunk",
+  "item.thedungeon.lumanite_fragment": "Lumanite Fragment",
+
+  "item.thedungeon.infernal_tin_ingot": "Infernal Tin Ingot",
+  "item.thedungeon.raw_infernal_tin": "Raw Infernal Tin",
+
+  "item.thedungeon.arctic_iron_ingot": "Arctic Iron Ingot",
+  "item.thedungeon.raw_arctic_iron": "Raw Arctic Iron",
+
+  "item.thedungeon.lavintine_ingot": "Lavintine Ingot",
+  "item.thedungeon.raw_lavintine": "Raw Lavintine",
+
+  "item.thedungeon.heavy_effigy": "Heavy Effigy",
 
   "item.thedungeon.dungeon_clock": "Dungeon Clock",
   "item.thedungeon.pyrite_compass": "Pyrite Compass",
@@ -133,19 +179,31 @@
   "item.thedungeon.dungeon_debug_tool.use_busy": "Dungeon generator is busy",
   "item.thedungeon.dungeon_debug_tool.select": "Selected Dungeon: %s",
 
-  "block.thedungeon.dungeon_portal_f" : "F Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_e" : "E Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_d" : "D Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_c" : "C Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_b" : "B Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_a" : "A Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_s" : "S Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_ss" : "SS Rank Dungeon Portal",
-  "block.thedungeon.dungeon_portal_exit" : "Dungeon Exit Portal",
-  "block.thedungeon.dungeon_portal_unstable" : "Unstable Dungeon Portal",
+  "block.thedungeon.dungeon_portal" : "Dungeon Portal",
 
+  "block.thedungeon.pyrite_block" : "Block of Pyrite",
   "block.thedungeon.pyrite_ore" : "Pyrite Ore",
   "block.thedungeon.deepslate_pyrite_ore" : "Deepslate Pyrite Ore",
+  "block.thedungeon.gildrean_block": "Block of Gildrean",
+  "block.thedungeon.raw_gildrean_block": "Raw Gildrean Block",
+  "block.thedungeon.gildrean_ore": "Gildrean Ore",
+  "block.thedungeon.deepslate_gildrean_ore": "Deepslate Gildrean Ore",
+  "block.thedungeon.ingilderd_blackstone": "Ingilderd Blackstone",
+
+  "block.thedungeon.infernal_tin_block": "Block of Infernal Tin",
+  "block.thedungeon.raw_infernal_tin_block": "Raw Infernal Tin Block",
+  "block.thedungeon.infernal_tin_ore": "Infernal Tin Ore",
+
+  "block.thedungeon.arctic_iron_block": "Block of Arctic Iron",
+  "block.thedungeon.raw_arctic_iron_block": "Raw Arctic Iron Block",
+  "block.thedungeon.arctic_iron_ore": "Arctic Iron Ore",
+
+  "block.thedungeon.lavintine_block": "Block of Lavintine",
+  "block.thedungeon.raw_lavintine_block": "Raw Lavintine Block",
+  "block.thedungeon.lavintine_ore": "Lavintine Ore",
+  "block.thedungeon.deepslate_lavintine_ore": "Deepslate Lavintine Ore",
+
+  "block.thedungeon.kobalt_block": "Block of Kobalt",
 
   "block.thedungeon.infused_grass_block" : "Infused Grass Block",
   "block.thedungeon.infused_dirt" : "Infused Dirt",
@@ -167,12 +225,45 @@
   "block.thedungeon.infused_glass" : "Infused Glass",
   "block.thedungeon.infused_thread": "Infused Thread",
 
-  "block.thedungeon.rose_quartz_block": "Block of Rose Quartz",
-  "block.thedungeon.budding_rose_quartz": "Budding Rose Quartz",
-  "block.thedungeon.rose_quartz_cluster": "Rose Quartz Cluster",
-  "block.thedungeon.large_rose_quartz_bud": "Large Rose Quartz Bud",
-  "block.thedungeon.medium_rose_quartz_bud": "Medium Rose Quartz Bud",
-  "block.thedungeon.small_rose_quartz_bud": "Small Rose Quartz Bud",
+  "block.thedungeon.roselith_block": "Block of Roselith",
+  "block.thedungeon.budding_roselith": "Budding Roselith",
+  "block.thedungeon.roselith_cluster": "Roselith Cluster",
+  "block.thedungeon.large_roselith_bud": "Large Roselith Bud",
+  "block.thedungeon.medium_roselith_bud": "Medium Roselith Bud",
+  "block.thedungeon.small_roselith_bud": "Small Roselith Bud",
+
+  "block.thedungeon.garnetore_block": "Block of Garnetore",
+  "block.thedungeon.budding_garnetore": "Budding Garnetore",
+  "block.thedungeon.garnetore_cluster": "Garnetore Cluster",
+  "block.thedungeon.large_garnetore_bud": "Large Garnetore Bud",
+  "block.thedungeon.medium_garnetore_bud": "Medium Garnetore Bud",
+  "block.thedungeon.small_garnetore_bud": "Small Garnetore Bud",
+
+  "block.thedungeon.verdantite_block": "Block of Verdantite",
+  "block.thedungeon.budding_verdantite": "Budding Verdantite",
+  "block.thedungeon.verdantite_cluster": "Verdantite Cluster",
+  "block.thedungeon.large_verdantite_bud": "Large Verdantite Bud",
+  "block.thedungeon.medium_verdantite_bud": "Medium Verdantite Bud",
+  "block.thedungeon.small_verdantite_bud": "Small Verdantite Bud",
+
+  "block.thedungeon.lumanite_block": "Block of Lumanite",
+  "block.thedungeon.budding_lumanite": "Budding Lumanite",
+  "block.thedungeon.lumanite_cluster": "Lumanite Cluster",
+  "block.thedungeon.large_lumanite_bud": "Large Lumanite Bud",
+  "block.thedungeon.medium_lumanite_bud": "Medium Lumanite Bud",
+  "block.thedungeon.small_lumanite_bud": "Small Lumanite Bud",
+
+  "block.thedungeon.goblin_forge": "Goblin's Alloy Forge",
+  "block.thedungeon.test_fight": "Test Fight Room",
+  "block.thedungeon.catalyst_f": "Dungeon Catalyst (F)",
+  "block.thedungeon.catalyst_e": "Dungeon Catalyst (E)",
+  "block.thedungeon.catalyst_d": "Dungeon Catalyst (D)",
+  "block.thedungeon.catalyst_c": "Dungeon Catalyst (C)",
+  "block.thedungeon.catalyst_b": "Dungeon Catalyst (B)",
+  "block.thedungeon.catalyst_a": "Dungeon Catalyst (A)",
+  "block.thedungeon.catalyst_s": "Dungeon Catalyst (S)",
+  "block.thedungeon.catalyst_ss": "Dungeon Catalyst (SS)",
+  "block.thedungeon.catalyst_broken": "Broken Catalyst",
 
   "death.attack.thedungeon.unstable_portal":"%1$s tried to use an unstable portal",
   "death.attack.thedungeon.dungeon_reset":"%1$s was consumed by the dungeon",
@@ -192,6 +283,8 @@
   "attribute.thedungeon.name.generic.max_perception" : "Aggro for increased perception",
 
   "attribute.thedungeon.extra.hob_goblin_friendly" : "Hob Goblin's Friend",
+  "attribute.thedungeon.extra.slow_bonus_on_hit": "Slows Attacker On Hit",
 
-  "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable"
+  "effect.thedungeon.hob_goblin_tradeable" : "Hob Goblin Tradeable",
+  "container.thedungeon.goblin_forge_block": "Goblin's Alloy Forge"
 }

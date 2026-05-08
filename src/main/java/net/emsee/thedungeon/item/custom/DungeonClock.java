@@ -1,12 +1,8 @@
 package net.emsee.thedungeon.item.custom;
 
 import net.emsee.thedungeon.Config;
-import net.emsee.thedungeon.dungeon.src.Biome.DungeonBiomeRegistry;
-import net.emsee.thedungeon.dungeon.src.Biome.GridDungeonBiomeRegistry;
 import net.emsee.thedungeon.dungeon.src.DungeonRank;
-import net.emsee.thedungeon.gameRule.GameruleRegistry;
-import net.emsee.thedungeon.gameRule.ModGamerules;
-import net.emsee.thedungeon.item.interfaces.IDungeonCarryItem;
+import net.emsee.thedungeon.item.interfaces.ICanTakeItemToDungeon;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.emsee.thedungeon.worldgen.dimention.ModDimensions;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -24,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
+public class DungeonClock extends DungeonItem implements ICanTakeItemToDungeon {
     public DungeonClock(Properties pProperties) {
         super(pProperties.stacksTo(1));
     }
@@ -60,6 +56,7 @@ public class DungeonClock extends DungeonItem implements IDungeonCarryItem {
     }
 
     public static boolean isInNextToCollapseOrOutside(LivingEntity livingEntity, ClientLevel clientLevel) {
+        if (clientLevel==null) return false;
         if (clientLevel.dimension() != ModDimensions.DUNGEON_LEVEL_KEY) return true;
         if (DungeonSaveData.GetClient() == null) return false;
         if (livingEntity==null) return true;

@@ -1,7 +1,7 @@
 package net.emsee.thedungeon.entity.client.knight.skeletonKnight;
 
 import net.emsee.thedungeon.TheDungeon;
-import net.emsee.thedungeon.entity.client.ModModelLayers;
+import net.emsee.thedungeon.entity.client.ModEntityModelLayers;
 import net.emsee.thedungeon.entity.custom.knight.SkeletonKnightEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SkeletonKnightRenderer extends MobRenderer<SkeletonKnightEntity, SkeletonKnightModel> {
     public SkeletonKnightRenderer(EntityRendererProvider.Context context) {
-        super(context, new SkeletonKnightModel(context.bakeLayer(ModModelLayers.SKELETON_KNIGHT)), .5f);
+        super(context, new SkeletonKnightModel(context.bakeLayer(ModEntityModelLayers.SKELETON_KNIGHT)), .5f);
         this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
     }
 

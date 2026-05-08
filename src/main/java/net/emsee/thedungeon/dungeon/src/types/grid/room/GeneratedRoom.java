@@ -2,7 +2,9 @@ package net.emsee.thedungeon.dungeon.src.types.grid.room;
 
 import net.emsee.thedungeon.DebugLog;
 import net.emsee.thedungeon.dungeon.src.Connection;
+import net.emsee.thedungeon.dungeon.src.DungeonRank;
 import net.emsee.thedungeon.dungeon.src.DungeonUtils;
+import net.emsee.thedungeon.dungeon.src.GlobalDungeonManager;
 import net.emsee.thedungeon.dungeon.src.generators.GridDungeonGenerator;
 import net.emsee.thedungeon.dungeon.src.mobSpawnRules.MobSpawnRule;
 import net.emsee.thedungeon.dungeon.src.types.grid.array.GridArray;
@@ -11,7 +13,11 @@ import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.utils.PriorityMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
@@ -160,7 +166,7 @@ public final class GeneratedRoom {
         GridCell parent = generator.getOccupationArray().insertRoomAt(this, placedGridPos, false);
 
         Vec3i min = new Vec3i(-(room.getRotatedEastPlacementOffset(placedRotation) - 1),0, -(room.getRotatedNorthPlacementOffset(placedRotation) - 1)).offset(placedGridPos);
-        Vec3i max = new Vec3i((room.getRotatedEastPlacementOffset(placedRotation) - 1), room.getHeightScale(), (room.getRotatedNorthPlacementOffset(placedRotation) - 1)).offset(placedGridPos);
+        Vec3i max = new Vec3i((room.getRotatedEastPlacementOffset(placedRotation) - 1), room.getHeightScale()-1, (room.getRotatedNorthPlacementOffset(placedRotation) - 1)).offset(placedGridPos);
         generator.getOccupationArray().insertChildren(parent, min, max);
         generator.setBiomeAt(min, max, room.getBiome());
 
@@ -187,6 +193,10 @@ public final class GeneratedRoom {
 
     public boolean hasPostProcessing() {
         return room.hasPostProcessing();
+    }
+
+    public boolean hasPortalPosition() {
+        return room.hasPortalPosition();
     }
 
     private boolean checkOccupation(GridArray occupationArray, boolean skipBorderCheck, Rotation rotation) {
@@ -331,7 +341,15 @@ public final class GeneratedRoom {
         while (triesLeft > 0) {
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: trying placement, tries left: {}", this, triesLeft);
 
-            AbstractGridRoom targetGridRoom = generator.GetRandomRoomByConnection(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), random);
+
+            AbstractGridRoom targetGridRoom = null;
+            if (generator.hasToTryRequiredRoom()) {
+                targetGridRoom= generator.GetRandomRequiredRoomByConnection(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), random, placedGridPos.offset(offsets));
+            }
+            if (targetGridRoom == null){
+                targetGridRoom = generator.GetRandomRoomByConnection(connection.getOpposite(), room.getConnectionTag(connection, placedRotation), random, placedGridPos.offset(offsets));
+
+            }
             if (targetGridRoom == null) {
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: found no new room for connection", this);
                 triesLeft--;
@@ -405,7 +423,14 @@ public final class GeneratedRoom {
         while (triesLeft > 0) {
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: trying placement, tries left: {}", this, triesLeft);
 
-            AbstractGridRoom targetGridRoom = generator.GetRandomRoomByConnection(Connection.DOWN, room.getConnectionTag(Connection.UP, placedRotation), random);
+
+            AbstractGridRoom targetGridRoom = null;
+            if (generator.hasToTryRequiredRoom()) {
+                targetGridRoom= generator.GetRandomRequiredRoomByConnection(Connection.DOWN, room.getConnectionTag(Connection.UP, placedRotation), random, placedGridPos.offset(offsets));
+            }
+            if (targetGridRoom == null) {
+                targetGridRoom = generator.GetRandomRoomByConnection(Connection.DOWN, room.getConnectionTag(Connection.UP, placedRotation), random, placedGridPos.offset(offsets));
+            }
             if (targetGridRoom == null) {
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: found no new room", this);
                 triesLeft--;
@@ -481,8 +506,16 @@ public final class GeneratedRoom {
 
         while (triesLeft > 0) {
             DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: trying placement, tries left: {}", this, triesLeft);
-            AbstractGridRoom targetGridRoom = generator.GetRandomRoomByConnection(Connection.UP, room.getConnectionTag(Connection.DOWN, placedRotation), random);
 
+
+            AbstractGridRoom targetGridRoom = null;
+            if (generator.hasToTryRequiredRoom()) {
+                targetGridRoom =generator.GetRandomRequiredRoomByConnection(Connection.UP, room.getConnectionTag(Connection.DOWN, placedRotation), random, placedGridPos.offset(offsets));
+
+            }
+            if (targetGridRoom==null) {
+                targetGridRoom = generator.GetRandomRoomByConnection(Connection.UP, room.getConnectionTag(Connection.DOWN, placedRotation), random, placedGridPos.offset(offsets));
+            }
             if (generator.getDungeon().getRaw().isDownGenerationDisabled() || !generator.getOccupationArray().isInsideFloorLimit(placedGridPos.offset(0,-targetGridRoom.getHeightScale(),0))) {
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS_DETAILS, "{}: tried to generate room outside of floor limit", this);
                 triesLeft--;
@@ -534,6 +567,13 @@ public final class GeneratedRoom {
         for (MobSpawnRule rule : room.getSpawnRules()) {
             rule.spawn(level, this);
         }
+    }
+
+    public void registerPortal(MinecraftServer server, DungeonRank rank) {
+        BlockPos offset = new BlockPos(room.data.portalPosition);
+        BlockPos roomWorldPos = getPlacedWorldPos();
+        BlockPos portalPos = roomWorldPos.offset(offset.rotate(getPlacedWorldRotation()));
+        GlobalDungeonManager.addPortalLocation(server, portalPos, rank);
     }
 
     public boolean hasMobSpawns() {

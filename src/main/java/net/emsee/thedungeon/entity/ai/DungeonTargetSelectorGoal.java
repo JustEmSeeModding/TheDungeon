@@ -24,16 +24,16 @@ public class DungeonTargetSelectorGoal extends NearestAttackableTargetGoal<Playe
 
     }
 
-    public DungeonTargetSelectorGoal(Mob mob, boolean mustSee, Predicate<LivingEntity> targetPredicate) {
-        super(mob, Player.class, mustSee, targetPredicate);
+    public DungeonTargetSelectorGoal(Mob mob, boolean mustSee, Predicate<LivingEntity> extraPredicate) {
+        super(mob, Player.class, mustSee, extraPredicate);
     }
 
     public DungeonTargetSelectorGoal(Mob mob, boolean mustSee, boolean mustReach) {
         super(mob, Player.class, mustSee, mustReach);
     }
 
-    public DungeonTargetSelectorGoal(Mob mob, int randomInterval, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> targetPredicate) {
-        super(mob, Player.class, randomInterval, mustSee, mustReach, targetPredicate);
+    public DungeonTargetSelectorGoal(Mob mob, int randomInterval, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> extraPredicate) {
+        super(mob, Player.class, randomInterval, mustSee, mustReach, extraPredicate);
     }
 
     public DungeonTargetSelectorGoal addPredicate(Predicate<Player> predicate) {

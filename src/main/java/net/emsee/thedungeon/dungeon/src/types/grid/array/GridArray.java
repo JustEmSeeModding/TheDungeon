@@ -57,7 +57,7 @@ public final class GridArray {
         if (pos.getY()<0 && !doGenerateDown)
             return false;
         else
-            return !(Math.abs(pos.getY()) > maxFloorHeight);
+            return !(Math.abs(pos.getY()) >= maxFloorHeight/2-1);
     }
 
     public boolean isAtBorder(Vec3i pos, boolean checkFloorLimit) {
@@ -81,7 +81,7 @@ public final class GridArray {
     }
 
     public void insertChildren(GridCell parent, Vec3i from, Vec3i to) {
-        for (int y = from.getY(); y < to.getY(); y++) {
+        for (int y = from.getY(); y <= to.getY(); y++) {
             for (int x = from.getX(); x <= to.getX(); x++) {
                 for (int z = from.getZ(); z <= to.getZ(); z++) {
                     if (getCellAt(new Vec3i(x,y,z)) == parent) continue;

@@ -16,8 +16,6 @@ import net.emsee.thedungeon.dungeon.src.connectionRules.ConnectionRule;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.GeneratedRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.room.AbstractGridRoom;
 import net.emsee.thedungeon.dungeon.src.types.grid.roomCollection.GridRoomCollectionInstance;
-import net.emsee.thedungeon.gameRule.GameruleRegistry;
-import net.emsee.thedungeon.gameRule.ModGamerules;
 import net.emsee.thedungeon.utils.ListAndArrayUtils;
 import net.emsee.thedungeon.worldSaveData.DungeonSaveData;
 import net.minecraft.core.BlockPos;
@@ -29,7 +27,7 @@ import net.minecraft.world.level.block.Rotation;
 import java.util.*;
 
 public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
-    public enum GenerationTask {
+        public enum GenerationTask {
         UN_STARTED,
         CALCULATING,
         CHECK_REQUIREMENTS,
@@ -39,6 +37,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         PLACING_FAIL_RULES,
         POST_PROCESSING_ROOMS,
         FILLING_WITH_MOBS,
+        REGISTERING_PORTAL_LOCATIONS,
         SAVING_ADDITIONAL,
         DONE
     }
@@ -56,6 +55,12 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
     protected final Queue<FailRule.Instance> toPlaceFailRules = new LinkedList<>();
     protected final Queue<GeneratedRoom> toPostProcessRooms = new LinkedList<>();
     protected final Queue<GeneratedRoom> toSpawnMobsRooms = new LinkedList<>();
+    protected final Queue<GeneratedRoom> toRegisterPortals = new LinkedList<>();
+
+    protected final ServerLevel cashedServerLevel;
+
+    protected int requirementStepInterval = 0;
+    protected final int STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES;
 
 
     public List<ConnectionRule> getConnectionRules() {
@@ -69,20 +74,26 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
             toSpawnMobsRooms.add(room);
         if (room.hasPostProcessing() || dungeon.getRoomCollection().getRaw().hasPostProcessing())
             toPostProcessRooms.add(room);
+        if (room.hasPortalPosition()) {
+            toRegisterPortals.add(room);
+        }
     }
 
-    public GridDungeonGenerator(GridDungeonInstance dungeon, long seed) {
+    public GridDungeonGenerator(GridDungeonInstance dungeon, long seed, ServerLevel serverLevel) {
         this.seed = seed;
         this.random = new Random(seed);
         this.dungeon = dungeon;
         this.collection = dungeon.getRoomCollection();
         this.occupationArray = new GridArray(dungeon.getRaw().getDungeonDepth(), dungeon.getRaw().getMaxFloorHeight(), !dungeon.getRaw().isDownGenerationDisabled());
         this.biomeRegistry = new GridDungeonBiomeRegistry(collection.getRaw().getGridCellWidth(),collection.getRaw().getGridCellHeight(), dungeon.getRaw().getCenterPos());
+        this.STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES = dungeon.getRaw().getStepIntervalBetweenForcesRequirementTries();
+
+        this.cashedServerLevel = serverLevel;
 
         // select the starting room
         AbstractGridRoom startingRoom = dungeon.getRaw().getStartingRoom();
         if (startingRoom == null)
-            startingRoom = dungeon.getRoomCollection().getRandomRoom(random);
+            startingRoom = dungeon.getRoomCollection().getRandomRoom(random, new AbstractGridRoom.PlacementPredicateData(serverLevel, dungeon.getRaw().getCenterPos(), this));
         if (startingRoom == null)
             throw new IllegalStateException("error finding dungeon starting room");
 
@@ -109,6 +120,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         else if (currentTask == GenerationTask.PLACING_FAIL_RULES) placeFailRuleStep(serverLevel);
         else if (currentTask == GenerationTask.POST_PROCESSING_ROOMS) postProcessRoomsStep(serverLevel);
         else if (currentTask == GenerationTask.FILLING_WITH_MOBS) fillWithMobsStep(serverLevel);
+        else if (currentTask == GenerationTask.REGISTERING_PORTAL_LOCATIONS) registerPortalLocations(serverLevel);
         else if (currentTask == GenerationTask.SAVING_ADDITIONAL) saveAdditional(serverLevel);
     }
 
@@ -123,14 +135,12 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
 
             List<GeneratedRoom> nextGenerationOptions = getPossibleRoomSelection();
 
-            final GeneratedRoom roomToDo;
-
             // selects a room to generate its connection according to the dungeon rules
-            switch (dungeon.getRaw().getRoomPickMethod()) {
-                case LAST -> roomToDo = nextGenerationOptions.getLast();
-                case RANDOM -> roomToDo = ListAndArrayUtils.getRandomFromList(nextGenerationOptions, random);
-                default -> roomToDo = nextGenerationOptions.getFirst();
-            }
+            final GeneratedRoom roomToDo = switch (dungeon.getRaw().getRoomPickMethod()) {
+                case LAST -> nextGenerationOptions.getLast();
+                case RANDOM -> ListAndArrayUtils.getRandomFromList(nextGenerationOptions, random);
+                default -> nextGenerationOptions.getFirst();
+            };
             if (roomToDo == null)
                 throw new IllegalStateException("the room to generate its next connection was NULL");
 
@@ -140,9 +150,13 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
                 todoRooms.remove(roomToDo);
             if (newRoom != null) {
                 // if placement was success add the room to all required lists
-                collection.updatePlacedRequirements(newRoom.getRoom());
+                boolean wasRequirement = collection.updatePlacedRequirements(newRoom.getRoom());
+                if (wasRequirement) {
+                    requirementStepInterval=0;
+                }
                 addRoomToLists(newRoom);
             }
+            requirementStepInterval++;
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Dungeon calculation tick completed");
     }
@@ -164,6 +178,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         }
         return toReturn;
     }
+
 
     protected void checkRequirementStep(MinecraftServer server) {
         if (!collection.requiredRoomsDone()) {
@@ -206,13 +221,13 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
      */
     protected boolean FillUnoccupied() {
         int depth = dungeon.getRaw().getDungeonDepth();
-        int maxFloorHeight = dungeon.getRaw().getMaxFloorHeight();
+        int maxFloorHeight = dungeon.getRaw().getMaxFloorHeightFromCenterOffset()+1;
         int gridCellWidth = collection.getRaw().getGridCellWidth();
         int gridCellHeight = collection.getRaw().getGridCellHeight();
         BlockPos centerPos = dungeon.getRaw().getCenterPos();
 
         // Determine Y bounds based on whether down generation is disabled
-        int minY = dungeon.getRaw().isDownGenerationDisabled() ? 0 : -depth;
+        int minY = dungeon.getRaw().isDownGenerationDisabled() ? 0 : -Math.min(depth, maxFloorHeight);
         int maxY = Math.min(depth, maxFloorHeight);
 
         // Resume from last position
@@ -329,7 +344,7 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         for (int i = 0; i < Config.SPAWNER_STEPS_PER_TICK.getAsInt(); i++) {
             if (toSpawnMobsRooms.isEmpty()) {
                 // if all mobs spawned, start the next task
-                currentTask = GenerationTask.SAVING_ADDITIONAL;
+                currentTask = GenerationTask.REGISTERING_PORTAL_LOCATIONS;
                 DebugLog.logInfo(DebugLog.DebugType.GENERATING_STEPS,"Mob Spawning Complete");
                 return;
             }
@@ -339,6 +354,18 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
             toSpawnMobs.spawnMobs(serverLevel);
         }
         DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Mob spawn tick complete");
+    }
+
+    protected void registerPortalLocations(ServerLevel level) {
+        DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Registering Portal Locations");
+
+        while (!toRegisterPortals.isEmpty()) {
+            GeneratedRoom toRegisterPortal = toRegisterPortals.remove();
+            toRegisterPortal.registerPortal(level.getServer(), dungeon.getRank());
+        }
+
+        DebugLog.logInfo(DebugLog.DebugType.GENERATING_TICKS,"Registered Portal Locations");
+        currentTask = GenerationTask.SAVING_ADDITIONAL;
     }
 
     protected void saveAdditional(ServerLevel serverLevel) {
@@ -408,8 +435,12 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
         return dungeon;
     }
 
-    public AbstractGridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random) {
-        return collection.getRandomRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random);
+    public AbstractGridRoom GetRandomRoomByConnection(Connection connection, String fromTag, Random random, Vec3i originArrayPos) {
+        return collection.getRandomRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PlacementPredicateData(cashedServerLevel, originArrayPos, this));
+    }
+
+    public AbstractGridRoom GetRandomRequiredRoomByConnection(Connection connection, String fromTag, Random random, Vec3i originArrayPos) {
+        return collection.getRandomRequiredRoomByConnection(connection, fromTag, collection.getRaw().getConnectionRules(), random, new AbstractGridRoom.PlacementPredicateData(cashedServerLevel, originArrayPos, this));
     }
 
     public boolean isDone() {
@@ -422,5 +453,10 @@ public class GridDungeonGenerator extends DungeonGenerator<GridDungeon> {
 
     public GenerationTask currentStep() {
         return currentTask;
+    }
+
+    public boolean hasToTryRequiredRoom() {
+        if (STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES <= 0) return false;
+        return requirementStepInterval >= STEP_INTERVAL_BETWEEN_FORCED_REQUIREMENT_TRIES;
     }
 }
